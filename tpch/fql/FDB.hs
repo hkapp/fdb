@@ -14,7 +14,7 @@ readT = undefined
 filterQ :: (a -> Bool) -> Q a -> Q a
 filterQ = undefined
 
-groupByQ :: (a -> k) -> Q a -> Q (Q a)
+groupByQ :: (Ord k) => (a -> k) -> Q a -> Q (Q a)
 groupByQ = undefined
 
 subqMap :: (a -> SQ b) -> Q a -> Q b
@@ -43,3 +43,9 @@ instance Applicative SQ where
 
 instance Monad SQ where
   (>>=) = undefined
+
+groupByWithKey :: (Ord k) => (a -> k) -> Q a -> Q (k, Q a)
+groupByWithKey = undefined
+
+orderBy :: (Ord b) => (a -> b) -> Q a -> Q a
+orderBy = undefined
