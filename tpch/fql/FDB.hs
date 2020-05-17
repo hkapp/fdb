@@ -46,13 +46,23 @@ instance Applicative SQ where
 instance Monad SQ where
   (>>=) = undefined
 
+instance Functor Q where
+  fmap = undefined
+
+instance Applicative Q where
+  pure = undefined
+  (<*>) = undefined
+
+instance Monad Q where
+  (>>=) = undefined
+
 groupByWithKey :: (Ord k) => (a -> k) -> Q a -> Q (k, Q a)
 groupByWithKey = undefined
 
 orderBy :: (Ord b) => (a -> b) -> Q a -> Q a
 orderBy = undefined
 
-eqFilter :: (Eq b) => (a -> b) -> (a -> b) -> Q a -> Q a
+eqFilter :: (Eq b) => (a -> b) -> b -> Q a -> Q a
 eqFilter = undefined
 
 class NatJoin a b where
@@ -77,3 +87,9 @@ minAgg = undefined
 
 equiJoin :: (Eq c) => (a -> c) -> (b -> c) -> Q a -> Q b -> Q (a, b)
 equiJoin = undefined
+
+(<-|><|-) :: (NatJoin a b) => Q a -> Q b -> Q a
+(<-|><|-) = undefined
+
+mapToQ :: (a -> Q b) -> SQ a -> Q b
+mapToQ = undefined
