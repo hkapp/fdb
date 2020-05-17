@@ -1,6 +1,6 @@
 
 ALL_PRODS = $(shell ls -1 q*.hs | sed 's/\.hs/.o/')
-GHC_FLAGS = -no-hs-main -no-link
+GHC_FLAGS = -no-hs-main -no-link -XMultiParamTypeClasses
 
 all: $(ALL_PRODS)
 

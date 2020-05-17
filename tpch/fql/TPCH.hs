@@ -47,6 +47,9 @@ data PartSupp = PartSupp {
   ps_comment    :: String
 }
 
+partsupps :: Table PartSupp
+partsupps = undefined
+
 type CustomerKey = GeneratedKey
 
 data Customer = Customer {
@@ -124,3 +127,32 @@ data Region = Region {
 
 regions :: Table Region
 regions = undefined
+
+-- Natural joins
+
+instance NatJoin Supplier Nation where
+  (|><|) = equiJoin s_nationkey n_nationkey
+
+instance NatJoin PartSupp Part where
+  (|><|) = equiJoin ps_partkey p_partkey
+
+instance NatJoin PartSupp Supplier where
+  (|><|) = equiJoin ps_suppkey s_suppkey
+
+instance NatJoin Customer Nation where
+  (|><|) = equiJoin c_nationkey n_nationkey
+
+instance NatJoin Order Customer where
+  (|><|) = equiJoin o_custkey c_custkey
+
+instance NatJoin LineItem Order where
+  (|><|) = equiJoin l_orderkey o_orderkey
+
+instance NatJoin LineItem Part where
+  (|><|) = equiJoin l_partkey p_partkey
+
+instance NatJoin LineItem Supplier where
+  (|><|) = equiJoin l_suppkey s_suppkey
+
+instance NatJoin Nation Region where
+  (|><|) = equiJoin n_regionkey r_regionkey
