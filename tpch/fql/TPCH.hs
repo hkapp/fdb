@@ -1,8 +1,11 @@
 module TPCH where
 
 import MoreTypes
+import FDB
 
 type GeneratedKey = Integer
+
+-- Tables
 
 type PartKey = GeneratedKey
 
@@ -57,6 +60,9 @@ data Customer = Customer {
   c_comment    :: String
 }
 
+customers :: Table Customer
+customers = undefined
+
 type OrderKey = GeneratedKey
 
 data Order = Order {
@@ -70,6 +76,9 @@ data Order = Order {
   o_shippriority  :: Int,
   o_comment       :: String
 }
+
+orders :: Table Order
+orders = undefined
 
 data LineItem = LineItem {
   l_orderkey      :: OrderKey,
@@ -90,6 +99,9 @@ data LineItem = LineItem {
   l_comment       :: String
 }
 
+lineitems :: Table LineItem
+lineitems = undefined
+
 type NationKey = GeneratedKey
 
 data Nation = Nation {
@@ -99,6 +111,9 @@ data Nation = Nation {
   n_comment   :: String
 }
 
+nations :: Table Nation
+nations = undefined
+
 type RegionKey = GeneratedKey
 
 data Region = Region {
@@ -106,3 +121,6 @@ data Region = Region {
   r_name      :: String,
   r_comment   :: String
 }
+
+regions :: Table Region
+regions = undefined

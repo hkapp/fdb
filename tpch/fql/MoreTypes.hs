@@ -1,12 +1,17 @@
 module MoreTypes where
 
-type Date = ()
+type Date = ()  -- should import from Data.Dates (in dates-0.2.3.0 package though)
 
-fromString :: String -> Date
-fromString = undefined
+dateFromString :: String -> Date
+dateFromString = undefined
 
-tryFromString :: String -> Maybe Date
-tryFromString = undefined
+tryDateFromString :: String -> Maybe Date
+tryDateFromString = undefined
+
+data DateInterval = Day Int
+
+minusInterval :: Date -> DateInterval -> Date
+minusInterval = undefined
 
 type Decimal = Double  -- should import Data.Decimal instead
 
