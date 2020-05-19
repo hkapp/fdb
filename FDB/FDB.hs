@@ -93,3 +93,22 @@ equiJoin = undefined
 
 mapToQ :: (a -> Q b) -> SQ a -> Q b
 mapToQ = undefined
+
+type TableRef a = RowRef a
+
+rowRef :: Row a -> RowRef a
+rowRef = undefined
+
+newtype Row a = Row a
+data RowRef a = RowRef RowId a
+
+type RowId = Integer
+
+instance Eq (RowRef a) where
+  (RowRef lid _) == (RowRef rid _) = (lid == rid)
+
+toQ :: SQ a -> Q a
+toQ = undefined
+
+emptyQ :: Q a
+emptyQ = undefined
