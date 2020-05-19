@@ -1,4 +1,4 @@
-module FDB where
+module FDB.FDB where
 
 import Data.Functor.Identity
 

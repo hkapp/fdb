@@ -1,8 +1,9 @@
-module Q1 where
+module TPCH.Relational.Q1 where
 
-import MoreTypes
-import TPCH
-import FDB
+import TPCH.Relational.Schema
+
+import FDB.MoreTypes
+import FDB.FDB
 
 q1 = orderBy fst . q1Unordered
 

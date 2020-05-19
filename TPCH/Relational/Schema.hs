@@ -1,7 +1,7 @@
-module TPCH where
+module TPCH.Relational.Schema where
 
-import MoreTypes
-import FDB
+import FDB.MoreTypes
+import FDB.FDB
 
 type GeneratedKey = Integer
 

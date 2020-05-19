@@ -1,4 +1,4 @@
-module MoreTypes where
+module FDB.MoreTypes where
 
 type Date = ()  -- should import from Data.Dates (in dates-0.2.3.0 package though)
 

@@ -1,8 +1,9 @@
-module Q2 where
+module TPCH.Relational.Q2 where
 
-import FDB
-import TPCH
-import MoreTypes
+import TPCH.Relational.Schema
+
+import FDB.FDB
+import FDB.MoreTypes
 
 q2 = undefined
 
