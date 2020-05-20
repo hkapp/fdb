@@ -5,71 +5,87 @@ import TPCH.Functional.Schema
 import FDB.FDB
 import FDB.MoreTypes
 
-q2 = undefined
+import Data.Ord
 
+q2 partSize partTypeSuffix regionName =
+  mapQ fieldsOfInterest $
+    orderBy orderByClause $
+      filterQ partsOfInterest $
+        filterQ mustBeInRegion $
+          (cheapestPartSupplierNationIn region)
+  where
+    region = findRegion regionName
+    partsOfInterest (p, _, _) = correctPart partSize partTypeSuffix p
+    mustBeInRegion  (_, _, n) = nationIsIn region n
+
+fieldsOfInterest (part, supplier, nation) = (
+  s_acctbal supplier,
+  s_name supplier,
+  n_name nation,
+  --p_partref part,
+  p_mfgr part,
+  s_address supplier,
+  s_phone supplier,
+  s_comment supplier
+  )
+
+orderByClause (part, supplier, nation) = (
+  Down $ s_acctbal supplier,
+  n_name nation,
+  s_name supplier--,
+  --p_partref part
+  )
+
+correctPart :: Int -> String -> Part -> Bool
+correctPart partSize partTypeSuffix p = correctPartSize && correctPartType
+  where
+    correctPartSize = p_size p == partSize
+    correctPartType = suffixEquals (p_type p) partTypeSuffix
+    suffixEquals str suffix = take (length suffix) (reverse str) == (reverse suffix)
+
+nationIsIn :: Region -> Nation -> Bool
+nationIsIn region nation = n_region nation == region
+
+cheapestPartSupplierNationIn :: Region -> Q (Part, Supplier, Nation)
+cheapestPartSupplierNationIn region =
+  subqMap getPartAndSupplierAndNation (cheapestPartSuppliersIn region)
+
+getPartAndSupplierAndNation :: PartSupp -> SQ (Part, Supplier, Nation)
+getPartAndSupplierAndNation partSupp = do
+  part <- fetchForeign $ ps_partref partSupp
+  supplier <- fetchForeign $ ps_suppref partSupp
+  let nation = s_nation supplier
+  return (part, supplier, nation)
+
+-- Subquery
+
+cheapestPartSuppliersIn :: Region -> Q PartSupp
+cheapestPartSuppliersIn region = subqFilter (isCheapestInRegion region)
+                                            (readT partsupps)
+
+isCheapestInRegion :: Region -> PartSupp -> SQ Bool
+isCheapestInRegion region partSupplier = do
+  partRow     <- fetchRow $ ps_partref partSupplier
+  lowestPrice <- lowestPriceInRegion partRow region
+  return (ps_supplycost partSupplier == lowestPrice)
+
+lowestPriceInRegion :: Row Part -> Region -> SQ Decimal
+lowestPriceInRegion part region =
+  mapAgg minAgg ps_supplycost
+         (partSuppliersForPartInRegion part region)
+
+partSuppliersForPartInRegion :: Row Part -> Region -> Q PartSupp
+partSuppliersForPartInRegion part region =
+  subqFilter (supplierIsLocatedIn region)
+             (partSuppliersFor part)
 
 partSuppliersFor :: Row Part -> Q PartSupp
 partSuppliersFor part = eqFilter ps_partref (rowRef part) (readT partsupps)
 
-
-fetchRow :: RowRef a -> SQ (Row a)
-fetchRow = undefined
-
-fetchForeign :: TableRef a -> SQ a
-fetchForeign = undefined
-
-nationIsIn :: Nation -> Region -> Bool
-nationIsIn nation region = n_region nation == region
-
-supplierIsIn :: Region -> Supplier -> Bool
-supplierIsIn region supplier = nationIsIn (s_nation supplier) region
-
-supplierIsLocatedInRegion :: Region -> PartSupp -> SQ Bool
-supplierIsLocatedInRegion region partSupplier =
+supplierIsLocatedIn :: Region -> PartSupp -> SQ Bool
+supplierIsLocatedIn region partSupplier =
   do supplier <- fetchForeign $ ps_suppref partSupplier
      return $ supplierIsIn region supplier
 
-partSuppliersLocatedIn :: Region -> Q PartSupp -> Q PartSupp
-partSuppliersLocatedIn region = subqFilter (supplierIsLocatedInRegion region)
-
-lowestPriceInRegion :: Row Part -> Region -> SQ Decimal
-lowestPriceInRegion part region =
-  let ps = partSuppliersLocatedIn region (partSuppliersFor part)
-  in mapAgg minAgg ps_supplycost ps
-
-isCheapestInRegion :: Region -> PartSupp -> SQ Bool
-isCheapestInRegion region partSupplier = do
-  partRow <- fetchRow $ ps_partref partSupplier
-  lowestPrice <- lowestPriceInRegion partRow region
-  return (ps_supplycost partSupplier == lowestPrice)
-
-cheapestPartSuppliersIn :: Region -> Q PartSupp
-cheapestPartSuppliersIn region = subqFilter (isCheapestInRegion region) (readT partsupps)
-
-suppliersLocatedIn :: Region -> Q Supplier -> Q Supplier
-suppliersLocatedIn region = filterQ (supplierIsIn region)
-
-q2AllFields partSize partTypeSuffix regionName =
-  let
-    correctPart part = correctPartSize part && correctPartType part
-    correctPartSize p = p_size p == partSize
-    correctPartType p = suffixEquals (p_type p) partTypeSuffix
-    suffixEquals str suffix = take (length suffix) (reverse str) == (reverse suffix)
-
-    region = findRegion regionName
-
-    finish partSupplier part
-      | (correctPart part) = finish2 partSupplier part
-      | otherwise = emptyQ
-
-    finish2 partSupplier part = mapToQ (finish3 part) (fetchForeign $ ps_suppref partSupplier)
-
-    finish3 part supplier =
-      let nation = s_nation supplier
-      in if nationIsIn nation region
-           then return (part, supplier, nation)
-           else emptyQ
-  in do
-    partSupplier <- cheapestPartSuppliersIn region
-    let part = fetchForeign $ ps_partref partSupplier
-    mapToQ (finish partSupplier) part
+supplierIsIn :: Region -> Supplier -> Bool
+supplierIsIn region supplier = nationIsIn region (s_nation supplier)

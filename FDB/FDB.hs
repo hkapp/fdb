@@ -24,6 +24,15 @@ data Agg a b s = Agg (s -> a -> s) s (s -> b)
 type Fold a b = Agg a b b
 type Fold1 a = Agg a a a
 
+mapQ :: (a -> b) -> Q a -> Q b
+mapQ = undefined
+
+fetchRow :: RowRef a -> SQ (Row a)
+fetchRow = undefined
+
+fetchForeign :: TableRef a -> SQ a
+fetchForeign = undefined
+
 mapAgg :: Agg b c s -> (a -> b) -> Q a -> SQ c
 mapAgg = undefined
 
