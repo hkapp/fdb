@@ -1,5 +1,8 @@
 module FDB.FDB where
 
+-- Temporary
+import qualified FDB.TreeDisp
+
 import Data.Functor.Identity
 
 newtype Table a = Table a
