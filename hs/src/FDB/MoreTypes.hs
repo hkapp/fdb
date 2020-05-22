@@ -8,10 +8,13 @@ dateFromString = undefined
 tryDateFromString :: String -> Maybe Date
 tryDateFromString = undefined
 
-data DateInterval = Day Int
+data DateInterval = Days Int | Weeks Int | Months Int
 
 minusInterval :: Date -> DateInterval -> Date
 minusInterval = undefined
+
+plusInterval :: Date -> DateInterval -> Date
+plusInterval = undefined
 
 type Decimal = Double  -- should import Data.Decimal instead
 

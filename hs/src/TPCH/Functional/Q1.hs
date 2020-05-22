@@ -9,7 +9,7 @@ q1 = orderBy fst . q1Unordered
 
 q1Unordered shipDaysBefore = subqMap computeAggs (groupByItemState $ itemsShippedBefore maxShipDate)
   where
-    maxShipDate = dateFromString "1998-12-01" `minusInterval` Day shipDaysBefore
+    maxShipDate = dateFromString "1998-12-01" `minusInterval` Days shipDaysBefore
 
     computeAggs ((returnflag, linestatus), itemsSubset) = do
       sum_qty        <- sumOf l_quantity

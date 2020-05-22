@@ -11,11 +11,23 @@ newtype SQ a = SQ a
 readT :: Table a -> Q a
 readT = undefined
 
+rows :: Table a -> Q (Row a)
+rows = undefined
+
+values :: Table a -> Q a
+values t = mapQ rowVal (rows t)
+
 filterQ :: (a -> Bool) -> Q a -> Q a
 filterQ = undefined
 
 groupByQ :: (Ord k) => (a -> k) -> Q a -> Q (Q a)
 groupByQ = undefined
+
+groupQ :: (Ord a) => Q a -> Q (Q a)
+groupQ = undefined
+
+groupWithKey :: (Ord a) => Q a -> Q (a, Q a)
+groupWithKey = undefined
 
 subqMap :: (a -> SQ b) -> Q a -> Q b
 subqMap = undefined
@@ -105,15 +117,21 @@ mapToQ = undefined
 
 type TableRef a = RowRef a
 
-rowRef :: Row a -> RowRef a
-rowRef = undefined
-
-newtype Row a = Row a
+data Row a = Row (RowRef a) a
 data RowRef a = RowRef TableId RowId
 
 type FDBId = Integer
 type RowId = FDBId
 type TableId = FDBId
+
+rowRef :: Row a -> RowRef a
+rowRef = undefined
+
+rowVal :: Row a -> a
+rowVal = undefined
+
+rowId :: Row a -> RowId
+rowId = asRowId . rowRef
 
 asRowId :: RowRef a -> RowId
 asRowId = undefined
