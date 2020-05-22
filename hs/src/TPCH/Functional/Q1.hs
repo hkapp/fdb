@@ -14,8 +14,8 @@ q1Unordered shipDaysBefore = subqMap computeAggs (groupByItemState $ itemsShippe
     computeAggs ((returnflag, linestatus), itemsSubset) = do
       sum_qty        <- sumOf l_quantity
       sum_base_price <- sumOf l_extendedprice
-      sum_disc_price <- sumOf disc_price
-      sum_charge     <- sumOf charge_price
+      sum_disc_price <- sumOf l_discounted_price
+      sum_charge     <- sumOf l_charged_price
       avg_qty        <- avgOf l_quantity
       avg_price      <- avgOf l_extendedprice
       avg_disc       <- avgOf l_discount
@@ -34,9 +34,6 @@ q1Unordered shipDaysBefore = subqMap computeAggs (groupByItemState $ itemsShippe
       where
         sumOf f = mapAgg sumAgg f itemsSubset
         avgOf f = mapAgg avgAgg f itemsSubset
-
-        disc_price li = (l_extendedprice li) * (1 - (l_discount li))
-        charge_price li = (disc_price li) * (1 + l_tax li)
 
 groupByItemState :: Q LineItem -> Q ((Char, Char), Q LineItem)
 groupByItemState = groupByWithKey (\li -> (l_returnflag li, l_linestatus li))

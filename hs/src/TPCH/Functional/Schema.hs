@@ -5,7 +5,6 @@ import FDB.FDB
 
 -- Tables
 
-
 data Part = Part {
   p_name        :: String,
   p_mfgr        :: String,
@@ -93,6 +92,21 @@ data LineItem = LineItem {
   l_shipmode      :: String,
   l_comment       :: String
 }
+
+l_orderkey :: LineItem -> RowId
+l_orderkey = asRowId . l_orderref
+
+l_partkey :: LineItem -> RowId
+l_partkey = asRowId . l_partref
+
+l_suppkey :: LineItem -> RowId
+l_suppkey = asRowId . l_suppref
+
+l_discounted_price :: LineItem -> Decimal
+l_discounted_price item = (l_extendedprice item) * (1 - (l_discount item))
+
+l_charged_price :: LineItem -> Decimal
+l_charged_price item = (l_discounted_price item) * (1 + l_tax item)
 
 lineitems :: Table LineItem
 lineitems = findTable "LineItems"

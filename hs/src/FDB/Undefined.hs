@@ -109,9 +109,14 @@ rowRef :: Row a -> RowRef a
 rowRef = undefined
 
 newtype Row a = Row a
-data RowRef a = RowRef RowId a
+data RowRef a = RowRef TableId RowId
 
-type RowId = Integer
+type FDBId = Integer
+type RowId = FDBId
+type TableId = FDBId
+
+asRowId :: RowRef a -> RowId
+asRowId = undefined
 
 instance Eq (RowRef a) where
   (RowRef lid _) == (RowRef rid _) = (lid == rid)
