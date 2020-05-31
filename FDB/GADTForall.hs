@@ -3,6 +3,7 @@ module FDB.GADTForall where
 
 import FDB.Utils ((.:), (<&>))
 import Data.Word (Word64, Word16)
+import Utils.Dot
 
 -- Table type
 
