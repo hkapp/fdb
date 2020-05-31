@@ -3,7 +3,8 @@ module FDB.GADTForall where
 
 import FDB.Utils ((.:), (<&>))
 import Data.Word (Word64, Word16)
-import Utils.Dot
+import qualified Utils.Dot as Dot
+import Utils.AbstractGraph as Abstract
 
 -- Table type
 
@@ -188,3 +189,22 @@ rowVal (Row _ val) = val
 
 rowRef :: Row a -> RowRef a
 rowRef (Row ref _) = ref
+
+-- Dot utilities
+
+type QVertex = String
+type QEdge = ()
+
+toAbstractTree :: Q a -> Abstract.Tree QVertex QEdge
+-- buildTree :: (t -> v) -> (t -> [(e, t)]) -> t -> Tree v e
+toAbstractTree = Abstract.buildTree opName (\q -> [((), getSubquery q)])
+
+toAbstractTreeWithId :: Q a -> Abstract.Tree (QVertex, Int) QEdge
+
+toAbstractGraphWithId :: Q a -> Abstract.Graph (QVertex, Int) QEdge
+
+toDotGraph :: Q a -> DotGraph
+
+opName :: Q a -> String
+
+getSubquery :: Q a -> Q b
