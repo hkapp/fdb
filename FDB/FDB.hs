@@ -49,4 +49,5 @@ module FDB.FDB
   ) where
 
 -- The currently used implementation for FDB
-import FDB.Undefined as FDBImpl
+import FDB.GADTForall as FDBImpl
+-- import FDB.Undefined as FDBImpl
