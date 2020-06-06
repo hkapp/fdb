@@ -12,6 +12,7 @@ import Utils.PrettyPrint ((+--+), quoted, emptyLine, formatStringList, indent)
 import Data.Bifunctor (second)
 import Data.Map (Map)
 import qualified Data.Map as Map
+import Data.Semigroup (Semigroup(..))
 import Data.Set (Set)
 import qualified Data.Set as Set
 
@@ -49,6 +50,16 @@ addNode (DotGraph kind name nodes edges config) newNode =
 addEdge :: DotGraph -> Edge -> DotGraph
 addEdge (DotGraph kind name nodes edges config) newEdge =
   DotGraph kind name nodes (newEdge : edges) config
+
+-- Instances
+
+instance Semigroup DotGraph where
+  (DotGraph lkind lname lnodes ledges lconfig) <> (DotGraph rkind rname rnodes redges rconfig) =
+    DotGraph lkind lname (lnodes ++ rnodes) (ledges ++ redges) (lconfig <> rconfig)
+
+instance Monoid DotGraph where
+  mempty = emptyDigraph
+  mappend = (<>)
 
 -- Pretty printing
 
@@ -93,10 +104,13 @@ lineEnding = ";"
 -- Graph primitives
 
 emptyDigraph :: DotGraph
-emptyDigraph = DotGraph Digraph defaultGraphName [] [] emptyGraphConfig
+emptyDigraph = mkGraph [] []
 
 defaultGraphName :: String
 defaultGraphName = "G"
+
+mkGraph :: [Node] -> [Edge] -> DotGraph
+mkGraph nodes edges = DotGraph Digraph defaultGraphName nodes edges emptyGraphConfig
 
 graphKind :: DotGraph -> GraphKind
 graphKind (DotGraph kind _ _ _ _) = kind
@@ -177,7 +191,7 @@ data NodeShape = BoxShape | Polygon | Ellipse | Oval |
                  Circle | Point | Egg | Triangle |
                  Pentagon | Hexagon | Octagon |
                  DoubleCircle  -- + missing
- 
+
 nodeShape :: NodeShape -> NodeConfig
 nodeShape shape = Map.singleton "shape" (strNodeShape shape)
 
