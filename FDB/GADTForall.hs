@@ -3,18 +3,18 @@ module FDB.GADTForall where
 
 import FDB.Utils ((.:), (<&>))
 
-import Control.Monad.Trans.State as State (State, evalState, get, put)
-
-import Data.Semigroup ((<>))
 import Data.Word (Word64, Word16)
 
-import Utils.Dot (DotGraph)
-import qualified Utils.Dot as Dot
 import Utils.AbstractGraph as Abstract
 
 -- Table type
 
 newtype Table a = Table String
+
+-- Table operators
+
+findTable :: String -> Table a
+findTable = Table
 
 -- Q type
 
@@ -195,61 +195,3 @@ rowVal (Row _ val) = val
 
 rowRef :: Row a -> RowRef a
 rowRef (Row ref _) = ref
-
--- Dot utilities
-
-type DotGraphBuilder = State Int (Dot.Node, DotGraph)
-
-toDotGraph :: Q a -> DotGraph
-toDotGraph q = snd $ evalState (buildDotGraph q) 0
-
-buildDotGraph :: Q a -> DotGraphBuilder
-buildDotGraph (Filter _ subq) = addNode "Filter" subq
-buildDotGraph (Map _ subq) = addNode "Map" subq
-buildDotGraph (Read tab) = buildReadLeaf tab
-
-addNode :: String -> Q b -> DotGraphBuilder
-addNode nodeLabel subq = do
-  (subqRoot, subqGraph) <- buildDotGraph subq
-  newRoot <- newNode nodeLabel
-  let edge = Dot.Edge newRoot subqRoot Dot.emptyConfig
-  let localGraph = (Dot.mkGraph [newRoot] [edge])
-  let totalGraph = localGraph <> subqGraph
-  return $ (newRoot, totalGraph)
-
-newNodeId :: State Int Dot.NodeId
-newNodeId = do
-  currId <- State.get
-  let nextId = currId + 1
-  State.put nextId
-  return $ show currId
-
-newNode :: String -> State Int Dot.Node
-newNode label = do
-  nodeId <- newNodeId
-  return $ Dot.nodeWithLabel nodeId label
-
-buildReadLeaf :: Table a -> DotGraphBuilder
-buildReadLeaf (Table name) = do
-  readNode <- newNode "Read"
-  tabNode  <- newNode name
-  let edge = Dot.Edge readNode tabNode Dot.emptyConfig
-  let graph = Dot.mkGraph [readNode, tabNode] [edge]
-  return (readNode, graph)
-
--- type QVertex = String
--- type QEdge = ()
-
--- toAbstractTree :: Q a -> Abstract.Tree QVertex QEdge
--- -- buildTree :: (t -> v) -> (t -> [(e, t)]) -> t -> Tree v e
--- toAbstractTree = Abstract.buildTree opName (\q -> [((), getSubquery q)])
-
--- toAbstractTreeWithId :: Q a -> Abstract.Tree (QVertex, Int) QEdge
-
--- toAbstractGraphWithId :: Q a -> Abstract.Graph (QVertex, Int) QEdge
-
--- toDotGraph :: Q a -> DotGraph
-
--- opName :: Q a -> String
-
--- getSubquery :: Q a -> Q b

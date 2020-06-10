@@ -4,6 +4,7 @@ module FDB.FDB
     Q,
     SQ,
 
+    findTable,
     readT,
     filterQ,
     groupByQ,

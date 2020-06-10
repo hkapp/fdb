@@ -1,7 +1,10 @@
 module Main where
 
 import FDB.FDB
-import FDB.GADTForall (toDotGraph, Table(..))
+import FDB.Dot (toDotGraph)
+import FDB.GADTForall (Table(..))
+
+import TPCH.Functional.Q1 (q1)
 
 import qualified Utils.Dot as Dot
 
@@ -14,4 +17,5 @@ text = Dot.prettyPrint dotGraph
 
 dotGraph = toDotGraph query
 
-query = mapQ id $ readT (Table "Employees")
+query = q1 13
+-- query = mapQ id $ readT (Table "Employees")

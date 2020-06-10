@@ -1,7 +1,7 @@
 
 BIN_DIR = bin
 GHC_FLAGS = -outputdir $(BIN_DIR) -XMultiParamTypeClasses
-TPCH_PRODS = $(shell ls -1 TPCH/*/q*.hs | sed 's/\.hs/.o/')
+TPCH_PRODS = $(shell ls -1 TPCH/*/Q*.hs | sed 's/\.hs/.o/')
 TPCH_FLAGS = -no-hs-main -no-link
 TEST_BIN = $(BIN_DIR)/fdb-test
 TEST_MAIN_O = $(BIN_DIR)/Test/Main.o
@@ -17,10 +17,10 @@ tpch: $(TPCH_PRODS)
 clean:
 	rm -v $(TPCH_PRODS)
 
-test: $(TEST_BIN)
+test: compile-test
 	$(TEST_BIN)
 
-$(TEST_BIN):
+compile-test:
 	ghc $(GHC_FLAGS) -o $(TEST_BIN) $(TEST_MAIN_HS)
 
 #$(TEST_BIN): $(TEST_MAIN_O)

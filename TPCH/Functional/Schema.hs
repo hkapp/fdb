@@ -95,7 +95,7 @@ data LineItem = LineItem {
 }
 
 lineitems :: Table LineItem
-lineitems = undefined
+lineitems = findTable "LineItems"
 
 
 data Nation = France | Germany -- | ...
