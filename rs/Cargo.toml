@@ -1,0 +1,12 @@
+[package]
+name = "fdb"
+version = "0.1.0"
+authors = ["Hugo Kapp <hugo.kapp@epfl.ch>"]
+edition = "2018"
+
+[lib]
+crate-type=["staticlib"]  # Allow linking with foreign languages
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]

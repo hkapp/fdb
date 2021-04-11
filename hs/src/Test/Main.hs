@@ -1,4 +1,3 @@
-{-# INCLUDE "cffi.h" #-}
 {-# LANGUAGE ForeignFunctionInterface #-}
 module Main where
 
@@ -15,8 +14,6 @@ main = ffiTest
 
 -- FFI test
 
-foreign import ccall "exp" c_exp :: Double -> Double
-foreign import ccall "foo" c_foo :: Double -> Double
 foreign import ccall "bar" rust_bar :: Double -> Double
 
 ffiTest = print $ rust_bar 2.0

@@ -2,4 +2,6 @@
 *.hi
 *.dot
 *.png
-bin/
+hs/bin/
+rs/target/
+*.lock

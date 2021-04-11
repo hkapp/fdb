@@ -1,14 +1,22 @@
 
-HS_DIR = hs
+RS_DIR = rs
+CARGO = cd $(RS_DIR) ; cargo
+RUST_LIB = $(RS_DIR)/target/debug/libfdb.a
 
-all:
-	make -C $(HS_DIR) all
+HS_DIR = hs
+HS_MAKE = make -C $(HS_DIR)
+
+all: test
 
 tpch:
-	make -C $(HS_DIR) tpch
+	$(HS_MAKE) tpch
 
 clean:
-	make -C $(HS_DIR) clean
+	$(HS_MAKE) clean
+	$(CARGO) clean
 
-test:
-	make -C $(HS_DIR) test
+test: rs-lib
+	$(HS_MAKE) test
+
+rs-lib:
+	$(CARGO) build
