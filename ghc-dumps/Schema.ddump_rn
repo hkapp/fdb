@@ -1,0 +1,611 @@
+[1 of 8] Compiling FDB.MoreTypes    ( FDB/MoreTypes.hs, FDB/MoreTypes.o )
+
+==================== Renamer ====================
+FDB.MoreTypes.dateFromString :: String -> FDB.MoreTypes.Date
+FDB.MoreTypes.dateFromString = undefined
+FDB.MoreTypes.tryDateFromString ::
+  String -> Maybe FDB.MoreTypes.Date
+FDB.MoreTypes.tryDateFromString = undefined
+FDB.MoreTypes.minusInterval ::
+  FDB.MoreTypes.Date
+  -> FDB.MoreTypes.DateInterval -> FDB.MoreTypes.Date
+FDB.MoreTypes.minusInterval = undefined
+
+type FDB.MoreTypes.Date = ()
+data FDB.MoreTypes.DateInterval = FDB.MoreTypes.Day Int
+type FDB.MoreTypes.Decimal = Double
+type FDB.MoreTypes.PhoneNumber = ()
+
+[2 of 8] Compiling FDB.Utils        ( FDB/Utils.hs, FDB/Utils.o )
+
+==================== Renamer ====================
+infixl 1 FDB.Utils.<&>
+
+FDB.Utils.compose2 f_a2zh g_a2zi x_a2zj y_a2zk
+  = f_a2zh (g_a2zi x_a2zj y_a2zk)
+f_a2zl FDB.Utils..: g_a2zm = f_a2zl `FDB.Utils.compose2` g_a2zm
+(FDB.Utils.<&>) ::
+  Functor f_a2ze =>
+  f_a2ze a_a2zf -> (a_a2zf -> b_a2zg) -> f_a2ze b_a2zg
+as_a2zn FDB.Utils.<&> f_a2zo = f_a2zo <$> as_a2zn
+
+[3 of 8] Compiling Utils.List       ( Utils/List.hs, Utils/List.o )
+
+==================== Renamer ====================
+Utils.List.noDuplicates :: (Ord a_a2FI) => [a_a2FI] -> [a_a2FI]
+Utils.List.noDuplicates = Set.toList . Set.fromList
+Utils.List.zipWithIndex :: [a_a2FH] -> [(Int, a_a2FH)]
+Utils.List.zipWithIndex = zip [0 .. ]
+Utils.List.zipWithIndexRight :: [a_a2FG] -> [(a_a2FG, Int)]
+Utils.List.zipWithIndexRight = map swap . Utils.List.zipWithIndex
+Utils.List.groupByKeyVal ::
+  (Eq k_a2FD) =>
+  (a_a2FE -> k_a2FD)
+  -> (a_a2FE -> v_a2FF) -> [a_a2FE] -> [(k_a2FD, [v_a2FF])]
+Utils.List.groupByKeyVal key_a2Re val_a2Rf xs_a2Rg
+  = map transformGroup_a2Ri naiveGroups_a2Rh
+  where
+      naiveGroups_a2Rh
+        = List.groupBy
+            (\ x1_a2TY x2_a2TZ -> (key_a2Re x1_a2TY) == (key_a2Re x2_a2TZ))
+            xs_a2Rg
+      transformGroup_a2Ri thisGroup_a2U0
+        = (thisGroupKey_a2U1, thisGroupVals_a2U2)
+        where
+            thisGroupKey_a2U1 = key_a2Re (head thisGroup_a2U0)
+            thisGroupVals_a2U2 = val_a2Rf <$> thisGroup_a2U0
+
+[4 of 8] Compiling Utils.Prelude    ( Utils/Prelude.hs, Utils/Prelude.o )
+
+==================== Renamer ====================
+infixl 1 Utils.Prelude.<&>
+
+Utils.Prelude.compose2 = (.) . (.)
+(Utils.Prelude..:) = Utils.Prelude.compose2
+(Utils.Prelude.<&>) ::
+  Functor f_a3gx =>
+  f_a3gx a_a3gy -> (a_a3gy -> b_a3gz) -> f_a3gx b_a3gz
+as_a3gA Utils.Prelude.<&> f_a3gB = f_a3gB <$> as_a3gA
+Utils.Prelude.doNothing :: IO ()
+Utils.Prelude.doNothing = return ()
+Utils.Prelude.ignore :: a_a3gw -> ()
+Utils.Prelude.ignore = const ()
+
+[5 of 8] Compiling Utils.AbstractGraph ( Utils/AbstractGraph.hs, Utils/AbstractGraph.o )
+
+==================== Renamer ====================
+Utils.AbstractGraph.graphFromTree ::
+  Utils.AbstractGraph.Tree v_a43x e_a43y
+  -> Utils.AbstractGraph.Graph v_a43x e_a43y
+Utils.AbstractGraph.graphFromTree
+  (Utils.AbstractGraph.Tree node_a43z children_a43A)
+  = let
+      edgeTriplets_a43B
+        = [(node_a43z, edge_a43E, Utils.AbstractGraph.getNode child_a43F) |
+             (edge_a43E, child_a43F) <- children_a43A]
+      subGraphs_a43C
+        = [Utils.AbstractGraph.graphFromTree child_a43G |
+             (_, child_a43G) <- children_a43A]
+      localGraph_a43D
+        = Utils.AbstractGraph.Graph [node_a43z] edgeTriplets_a43B
+    in localGraph_a43D <> (mconcat subGraphs_a43C)
+Utils.AbstractGraph.getNode ::
+  Utils.AbstractGraph.Tree v_a43v e_a43w -> v_a43v
+Utils.AbstractGraph.getNode (Utils.AbstractGraph.Tree node_a43H _)
+  = node_a43H
+Utils.AbstractGraph.singleton ::
+  v_a43t -> Utils.AbstractGraph.Graph v_a43t e_a43u
+Utils.AbstractGraph.singleton v_a43I
+  = Utils.AbstractGraph.Graph [v_a43I] []
+Utils.AbstractGraph.vertices ::
+  Utils.AbstractGraph.Graph v_a43r e_a43s -> [v_a43r]
+Utils.AbstractGraph.vertices (Utils.AbstractGraph.Graph vs_a43J _)
+  = vs_a43J
+Utils.AbstractGraph.edgeTriplets ::
+  Utils.AbstractGraph.Graph v_a43p e_a43q
+  -> [(v_a43p, e_a43q, v_a43p)]
+Utils.AbstractGraph.edgeTriplets
+  (Utils.AbstractGraph.Graph _ es_a43K)
+  = es_a43K
+Utils.AbstractGraph.mapVertices ::
+  (v_a43m -> w_a43n)
+  -> Utils.AbstractGraph.Graph v_a43m e_a43o
+     -> Utils.AbstractGraph.Graph w_a43n e_a43o
+Utils.AbstractGraph.mapVertices = first
+Utils.AbstractGraph.mapEdges ::
+  (e_a43j -> f_a43k)
+  -> Utils.AbstractGraph.Graph v_a43l e_a43j
+     -> Utils.AbstractGraph.Graph v_a43l f_a43k
+Utils.AbstractGraph.mapEdges = second
+Utils.AbstractGraph.mapEdgeTriplets ::
+  ((v_a43g, e_a43h, v_a43g) -> f_a43i)
+  -> Utils.AbstractGraph.Graph v_a43g e_a43h
+     -> Utils.AbstractGraph.Graph v_a43g f_a43i
+Utils.AbstractGraph.mapEdgeTriplets
+  f_a43L
+  (Utils.AbstractGraph.Graph vs_a43M es_a43N)
+  = Utils.AbstractGraph.Graph
+      vs_a43M
+      (es_a43N
+         <&>
+           (\ (s_a43O, e_a43P, d_a43Q)
+              -> (s_a43O, f_a43L (s_a43O, e_a43P, d_a43Q), d_a43Q)))
+Utils.AbstractGraph.mapGraphTriplets ::
+  (v1_a43c -> v2_a43d)
+  -> ((v1_a43c, e1_a43e, v1_a43c) -> e2_a43f)
+     -> Utils.AbstractGraph.Graph v1_a43c e1_a43e
+        -> Utils.AbstractGraph.Graph v2_a43d e2_a43f
+Utils.AbstractGraph.mapGraphTriplets
+  fv_a43R
+  fe_a43S
+  (Utils.AbstractGraph.Graph vs_a43T es_a43U)
+  = Utils.AbstractGraph.Graph
+      (map fv_a43R vs_a43T) (map fvev_a43V es_a43U)
+  where
+      fvev_a43V (s_a43W, e_a43X, d_a43Y)
+        = (fv_a43R s_a43W, fe_a43S (s_a43W, e_a43X, d_a43Y), 
+           fv_a43R d_a43Y)
+Utils.AbstractGraph.mapEdgeInTriplet ::
+  (e_a439 -> f_a43a)
+  -> (v_a43b, e_a439, v_a43b) -> (v_a43b, f_a43a, v_a43b)
+Utils.AbstractGraph.mapEdgeInTriplet
+  f_a43Z
+  (s_a440, e_a441, d_a442)
+  = (s_a440, f_a43Z e_a441, d_a442)
+Utils.AbstractGraph.mapEdgeFromTriplet ::
+  (e_a436 -> f_a437) -> (v_a438, e_a436, v_a438) -> f_a437
+Utils.AbstractGraph.mapEdgeFromTriplet f_a443 (_, e_a444, _)
+  = f_a443 e_a444
+Utils.AbstractGraph.assignUniqueIds ::
+  (Ord v_a3NP) =>
+  Utils.AbstractGraph.Graph v_a3NP e_a3NQ
+  -> (Utils.AbstractGraph.Graph (v_a3NP, Int) e_a3NQ, Map v_a3NP Int)
+Utils.AbstractGraph.assignUniqueIds g_a445
+  = let
+      idMap_a446
+        = Map.fromList
+            (zipWithIndexRight (Utils.AbstractGraph.vertices g_a445))
+      gWithIds_a447
+        = Utils.AbstractGraph.mapVertices
+            (\ v_a448 -> (v_a448, idMap_a446 ! v_a448)) g_a445
+    in (gWithIds_a447, idMap_a446)
+Utils.AbstractGraph.eliminateDuplicateVertices ::
+  (Ord v_a3NN) =>
+  Utils.AbstractGraph.Graph v_a3NN e_a3NO
+  -> Utils.AbstractGraph.Graph v_a3NN e_a3NO
+Utils.AbstractGraph.eliminateDuplicateVertices
+  (Utils.AbstractGraph.Graph vs_a449 es_a44a)
+  = Utils.AbstractGraph.Graph
+      (ListUtils.noDuplicates vs_a449) es_a44a
+Utils.AbstractGraph.buildTree ::
+  (t_a3NK -> v_a3NL)
+  -> (t_a3NK -> [(e_a3NM, t_a3NK)])
+     -> t_a3NK -> Utils.AbstractGraph.Tree v_a3NL e_a3NM
+Utils.AbstractGraph.buildTree toNode_a44b children_a44c root_a44d
+  = let
+      rootNode_a44e = toNode_a44b root_a44d
+      rootChildren_a44f = children_a44c root_a44d
+      subtrees_a44g
+        = [(edge_a44i, recBuildTree_a44h child_a44j) |
+             (edge_a44i, child_a44j) <- rootChildren_a44f]
+      recBuildTree_a44h
+        = Utils.AbstractGraph.buildTree toNode_a44b children_a44c
+    in Utils.AbstractGraph.Tree rootNode_a44e subtrees_a44g
+Utils.AbstractGraph.assignTreeIds ::
+  Utils.AbstractGraph.Tree v_a3NI e_a3NJ
+  -> Utils.AbstractGraph.Tree (v_a3NI, Int) e_a3NJ
+Utils.AbstractGraph.assignTreeIds root_a44k
+  = fst (recAssignIds_a44l 0 root_a44k)
+  where
+      recAssignIds_a44l ::
+        Int
+        -> Utils.AbstractGraph.Tree v_a44m e_a44n
+           -> (Utils.AbstractGraph.Tree (v_a44m, Int) e_a44n, Int)
+      recAssignIds_a44l
+        id_a44o
+        (Utils.AbstractGraph.Tree node_a44p children_a44q)
+        = (Utils.AbstractGraph.Tree
+             (node_a44p, id_a44o) childrenWithId_a44r, 
+           nextId_a44s)
+        where
+            (childrenWithId_a44r, nextId_a44s)
+              = assignInSequence_a44t (id_a44o + 1) children_a44q
+            assignInSequence_a44t ::
+              Int
+              -> [(e_a44u, Utils.AbstractGraph.Tree v_a44v e_a44u)]
+                 -> ([(e_a44u, Utils.AbstractGraph.Tree (v_a44v, Int) e_a44u)], Int)
+            assignInSequence_a44t
+              freeId_a44w
+              ((edge_a44x, thisSubtree_a44y) : remEdges_a44z)
+              = let
+                  (thisSubtreeWithId_a44A, idAfterThisSubtree_a44B)
+                    = recAssignIds_a44l freeId_a44w thisSubtree_a44y
+                  (remEdgesWithId_a44C, nextFreeId_a44D)
+                    = assignInSequence_a44t idAfterThisSubtree_a44B remEdges_a44z
+                in
+                  ((edge_a44x, thisSubtreeWithId_a44A) : remEdgesWithId_a44C, 
+                   nextFreeId_a44D)
+            assignInSequence_a44t freeId_a44E [] = ([], freeId_a44E)
+Utils.AbstractGraph.allTreeEdges ::
+  Utils.AbstractGraph.Tree v_a3NG e_a3NH
+  -> [(v_a3NG, e_a3NH, v_a3NG)]
+Utils.AbstractGraph.allTreeEdges
+  (Utils.AbstractGraph.Tree root_a44F children_a44G)
+  = rootEdges_a44H ++ subtreeEdges_a44I
+  where
+      rootEdges_a44H
+        = [(root_a44F, edge_a44J, 
+            (Utils.AbstractGraph.rootNode subtree_a44K)) |
+             (edge_a44J, subtree_a44K) <- children_a44G]
+      subtreeEdges_a44I
+        = do (_, subtree_a44L) <- children_a44G
+             Utils.AbstractGraph.allTreeEdges subtree_a44L
+Utils.AbstractGraph.allTreeNodes ::
+  Utils.AbstractGraph.Tree v_a3NE e_a3NF -> [v_a3NE]
+Utils.AbstractGraph.allTreeNodes t_a44M
+  = (Utils.AbstractGraph.rootNode t_a44M)
+      : (Utils.AbstractGraph.subtrees t_a44M
+           >>= Utils.AbstractGraph.allTreeNodes)
+Utils.AbstractGraph.rootNode ::
+  Utils.AbstractGraph.Tree v_a3NC e_a3ND -> v_a3NC
+Utils.AbstractGraph.rootNode (Utils.AbstractGraph.Tree root_a44N _)
+  = root_a44N
+Utils.AbstractGraph.subtrees ::
+  Utils.AbstractGraph.Tree v_a3NA e_a3NB
+  -> [Utils.AbstractGraph.Tree v_a3NA e_a3NB]
+Utils.AbstractGraph.subtrees
+  (Utils.AbstractGraph.Tree _ edges_a44O)
+  = map snd edges_a44O
+Utils.AbstractGraph.subtreeNodes ::
+  Utils.AbstractGraph.Tree v_a3Ny e_a3Nz -> [v_a3Ny]
+Utils.AbstractGraph.subtreeNodes
+  = map Utils.AbstractGraph.rootNode . Utils.AbstractGraph.subtrees
+Utils.AbstractGraph.mapTreeNodes ::
+  (v_a3Nv -> w_a3Nw)
+  -> Utils.AbstractGraph.Tree v_a3Nv e_a3Nx
+     -> Utils.AbstractGraph.Tree w_a3Nw e_a3Nx
+Utils.AbstractGraph.mapTreeNodes
+  f_a44P
+  (Utils.AbstractGraph.Tree root_a44Q edges_a44R)
+  = Utils.AbstractGraph.Tree
+      (f_a44P root_a44Q)
+      [(edge_a44S, 
+        Utils.AbstractGraph.mapTreeNodes f_a44P subtree_a44T) |
+         (edge_a44S, subtree_a44T) <- edges_a44R]
+
+data Utils.AbstractGraph.Graph v_a3Ni e_a3Nj
+  = Utils.AbstractGraph.Graph [v_a3Ni] [(v_a3Ni, e_a3Nj, v_a3Ni)]
+data Utils.AbstractGraph.Tree v_a3Ng e_a3Nh
+  = Utils.AbstractGraph.Tree v_a3Ng [(e_a3Nh,
+                                      Utils.AbstractGraph.Tree v_a3Ng e_a3Nh)]
+
+instance Monoid (Utils.AbstractGraph.Graph v_a3Nk e_a3Nl) where
+  mempty = Utils.AbstractGraph.Graph [] []
+  mappend = (<>)
+instance Semigroup (Utils.AbstractGraph.Graph v_a3Nm e_a3Nn) where
+  (Utils.AbstractGraph.Graph lv_a3No
+                             le_a3Np) <> (Utils.AbstractGraph.Graph rv_a3Nq re_a3Nr)
+    = Utils.AbstractGraph.Graph
+        (lv_a3No <> rv_a3Nq) (le_a3Np <> re_a3Nr)
+instance Bifunctor Utils.AbstractGraph.Graph where
+  bimap fv_a3Ns fe_a3Nt
+    = Utils.AbstractGraph.mapGraphTriplets
+        fv_a3Ns (Utils.AbstractGraph.mapEdgeFromTriplet fe_a3Nt)
+  second fe_a3Nu
+    = Utils.AbstractGraph.mapEdgeTriplets
+        (Utils.AbstractGraph.mapEdgeFromTriplet fe_a3Nu)
+
+[6 of 8] Compiling FDB.GADTForall   ( FDB/GADTForall.hs, FDB/GADTForall.o )
+
+==================== Renamer ====================
+FDB.GADTForall.findTable :: String -> FDB.GADTForall.Table a_a5jC
+FDB.GADTForall.findTable = FDB.GADTForall.Table
+FDB.GADTForall.pull :: FDB.GADTForall.Q a_a5jB -> a_a5jB
+FDB.GADTForall.pull rec_a5jD@(FDB.GADTForall.Filter p_a5jE q_a5jF)
+  = let x_a5jG = FDB.GADTForall.pull q_a5jF
+    in if p_a5jE x_a5jG then x_a5jG else FDB.GADTForall.pull rec_a5jD
+FDB.GADTForall.pull (FDB.GADTForall.Map f_a5jH q_a5jI)
+  = f_a5jH (FDB.GADTForall.pull q_a5jI)
+FDB.GADTForall.readT ::
+  FDB.GADTForall.Table a_a5jA -> FDB.GADTForall.Q a_a5jA
+FDB.GADTForall.readT = FDB.GADTForall.Read
+FDB.GADTForall.mapQ ::
+  (a_a5jy -> b_a5jz)
+  -> FDB.GADTForall.Q a_a5jy -> FDB.GADTForall.Q b_a5jz
+FDB.GADTForall.mapQ = FDB.GADTForall.Map
+FDB.GADTForall.filterQ ::
+  (a_a5jx -> Bool)
+  -> FDB.GADTForall.Q a_a5jx -> FDB.GADTForall.Q a_a5jx
+FDB.GADTForall.filterQ = FDB.GADTForall.Filter
+FDB.GADTForall.groupByWithKey ::
+  (Ord k_a5jv) =>
+  (a_a5jw -> k_a5jv)
+  -> FDB.GADTForall.Q a_a5jw
+     -> FDB.GADTForall.Q (k_a5jv, FDB.GADTForall.Q a_a5jw)
+FDB.GADTForall.groupByWithKey = FDB.GADTForall.GroupBy
+FDB.GADTForall.groupByQ ::
+  (Ord k_a5jt) =>
+  (a_a5ju -> k_a5jt)
+  -> FDB.GADTForall.Q a_a5ju
+     -> FDB.GADTForall.Q (FDB.GADTForall.Q a_a5ju)
+FDB.GADTForall.groupByQ
+  = FDB.GADTForall.mapQ snd .: FDB.GADTForall.groupByWithKey
+FDB.GADTForall.orderBy ::
+  (Ord b_a5jr) =>
+  (a_a5js -> b_a5jr)
+  -> FDB.GADTForall.Q a_a5js -> FDB.GADTForall.Q a_a5js
+FDB.GADTForall.orderBy = FDB.GADTForall.OrderBy
+FDB.GADTForall.takeQ ::
+  (Integral n_a5jp) =>
+  n_a5jp -> FDB.GADTForall.Q a_a5jq -> FDB.GADTForall.Q a_a5jq
+FDB.GADTForall.takeQ = FDB.GADTForall.Take
+FDB.GADTForall.emptyQ :: FDB.GADTForall.Q a_a5jo
+FDB.GADTForall.emptyQ = undefined
+FDB.GADTForall.eqFilter ::
+  (Eq b_a5jm) =>
+  (a_a5jn -> b_a5jm)
+  -> b_a5jm -> FDB.GADTForall.Q a_a5jn -> FDB.GADTForall.Q a_a5jn
+FDB.GADTForall.eqFilter = undefined
+FDB.GADTForall.equiJoin ::
+  (Eq c_a5jj) =>
+  (a_a5jk -> c_a5jj)
+  -> (b_a5jl -> c_a5jj)
+     -> FDB.GADTForall.Q a_a5jk
+        -> FDB.GADTForall.Q b_a5jl -> FDB.GADTForall.Q (a_a5jk, b_a5jl)
+FDB.GADTForall.equiJoin = undefined
+FDB.GADTForall.fetchRow ::
+  FDB.GADTForall.RowRef a_a5ji
+  -> FDB.GADTForall.SQ (FDB.GADTForall.Row a_a5ji)
+FDB.GADTForall.fetchRow = FDB.GADTForall.FetchRow
+FDB.GADTForall.fetchForeign ::
+  FDB.GADTForall.RowRef a_a5jh -> FDB.GADTForall.SQ a_a5jh
+FDB.GADTForall.fetchForeign ref_a5jJ
+  = FDB.GADTForall.fetchRow ref_a5jJ <&> FDB.GADTForall.rowVal
+FDB.GADTForall.subqMap ::
+  (a_a5jf -> FDB.GADTForall.SQ b_a5jg)
+  -> FDB.GADTForall.Q a_a5jf -> FDB.GADTForall.Q b_a5jg
+FDB.GADTForall.subqMap = FDB.GADTForall.MapSQ
+FDB.GADTForall.subqFilter ::
+  (a_a5je -> FDB.GADTForall.SQ Bool)
+  -> FDB.GADTForall.Q a_a5je -> FDB.GADTForall.Q a_a5je
+FDB.GADTForall.subqFilter = FDB.GADTForall.FilterSQ
+FDB.GADTForall.exists ::
+  FDB.GADTForall.Q a_a5jd -> FDB.GADTForall.SQ Bool
+FDB.GADTForall.exists q_a5jK
+  = do c_a5jL <- FDB.GADTForall.count $ FDB.GADTForall.takeQ 1 q_a5jK
+       return (c_a5jL > 0)
+FDB.GADTForall.mapToQ ::
+  (a_a5jb -> FDB.GADTForall.Q b_a5jc)
+  -> FDB.GADTForall.SQ a_a5jb -> FDB.GADTForall.Q b_a5jc
+FDB.GADTForall.mapToQ = undefined
+FDB.GADTForall.toQ ::
+  FDB.GADTForall.SQ a_a5ja -> FDB.GADTForall.Q a_a5ja
+FDB.GADTForall.toQ = undefined
+FDB.GADTForall.agg ::
+  FDB.GADTForall.Agg a_a5j7 b_a5j8 s_a5j9
+  -> FDB.GADTForall.Q a_a5j7 -> FDB.GADTForall.SQ b_a5j8
+FDB.GADTForall.agg = FDB.GADTForall.StateFold
+FDB.GADTForall.mapAgg ::
+  FDB.GADTForall.Agg b_a5j3 c_a5j4 s_a5j5
+  -> (a_a5j6 -> b_a5j3)
+     -> FDB.GADTForall.Q a_a5j6 -> FDB.GADTForall.SQ c_a5j4
+FDB.GADTForall.mapAgg g_a5jM f_a5jN q_a5jO
+  = FDB.GADTForall.agg g_a5jM (FDB.GADTForall.mapQ f_a5jN q_a5jO)
+FDB.GADTForall.sumAgg ::
+  (Num a_a5j2) => FDB.GADTForall.Fold1 a_a5j2
+FDB.GADTForall.sumAgg = undefined
+FDB.GADTForall.avgAgg ::
+  (Fractional a_a5j1) =>
+  FDB.GADTForall.Agg a_a5j1 a_a5j1 (a_a5j1, a_a5j1)
+FDB.GADTForall.avgAgg = undefined
+FDB.GADTForall.count ::
+  (Integral n_a5iZ) =>
+  FDB.GADTForall.Q a_a5j0 -> FDB.GADTForall.SQ n_a5iZ
+FDB.GADTForall.count = undefined
+FDB.GADTForall.minAgg ::
+  (Ord a_a5iY) => FDB.GADTForall.Fold1 a_a5iY
+FDB.GADTForall.minAgg = undefined
+(FDB.GADTForall.-|><|->) ::
+  (FDB.GADTForall.NatJoin a_a5iW b_a5iX) =>
+  FDB.GADTForall.Q a_a5iW
+  -> FDB.GADTForall.Q b_a5iX -> FDB.GADTForall.Q b_a5iX
+x_a5jP FDB.GADTForall.-|><|-> y_a5jQ
+  = FDB.GADTForall.mapQ snd (x_a5jP FDB.GADTForall.|><| y_a5jQ)
+(FDB.GADTForall.<-|><|-) ::
+  (FDB.GADTForall.NatJoin a_a5iU b_a5iV) =>
+  FDB.GADTForall.Q a_a5iU
+  -> FDB.GADTForall.Q b_a5iV -> FDB.GADTForall.Q a_a5iU
+a_a5jR FDB.GADTForall.<-|><|- b_a5jS
+  = FDB.GADTForall.mapQ fst (a_a5jR FDB.GADTForall.|><| b_a5jS)
+FDB.GADTForall.rowVal :: FDB.GADTForall.Row a_a5iT -> a_a5iT
+FDB.GADTForall.rowVal (FDB.GADTForall.Row _ val_a5jT) = val_a5jT
+FDB.GADTForall.rowRef ::
+  FDB.GADTForall.Row a_a5iS -> FDB.GADTForall.RowRef a_a5iS
+FDB.GADTForall.rowRef (FDB.GADTForall.Row ref_a5jU _) = ref_a5jU
+
+newtype FDB.GADTForall.Table a_a5iR = FDB.GADTForall.Table String
+data FDB.GADTForall.Agg a_a5iv b_a5iw s_a5ix
+  = FDB.GADTForall.Agg (s_a5ix -> a_a5iv -> s_a5ix) s_a5ix (s_a5ix
+                                                            -> b_a5iw)
+type FDB.GADTForall.Fold a_a5it b_a5iu =
+    FDB.GADTForall.Agg a_a5it b_a5iu b_a5iu
+type FDB.GADTForall.Fold1 a_a5is =
+    FDB.GADTForall.Agg a_a5is a_a5is a_a5is
+newtype FDB.GADTForall.RowId
+  = FDB.GADTForall.RowId Word64
+  deriving Eq
+newtype FDB.GADTForall.TableId
+  = FDB.GADTForall.TableId Word16
+  deriving Eq
+data FDB.GADTForall.RowRef a_a5in
+  = FDB.GADTForall.RowRef FDB.GADTForall.TableId FDB.GADTForall.RowId
+  deriving Eq
+data FDB.GADTForall.Row a_a5io
+  = FDB.GADTForall.Row (FDB.GADTForall.RowRef a_a5io) a_a5io
+type FDB.GADTForall.TableRef a_a5ip = FDB.GADTForall.RowRef a_a5ip
+data FDB.GADTForall.SQ a_a5iy
+  where
+    FDB.GADTForall.FetchRow :: FDB.GADTForall.RowRef a_a5iz
+                               -> FDB.GADTForall.SQ (FDB.GADTForall.Row a_a5iz)
+    FDB.GADTForall.StateFold :: FDB.GADTForall.Agg a_a5iA b_a5iB s_a5iC
+                                -> FDB.GADTForall.Q a_a5iA
+                                -> FDB.GADTForall.SQ b_a5iB
+data FDB.GADTForall.Q a_a5iD
+  where
+    FDB.GADTForall.Filter :: (a_a5iE -> Bool)
+                             -> FDB.GADTForall.Q a_a5iE
+                             -> FDB.GADTForall.Q a_a5iE
+    FDB.GADTForall.Map :: (b_a5iF -> a_a5iG)
+                          -> FDB.GADTForall.Q b_a5iF
+                          -> FDB.GADTForall.Q a_a5iG
+    FDB.GADTForall.Read :: FDB.GADTForall.Table a_a5iH
+                           -> FDB.GADTForall.Q a_a5iH
+    FDB.GADTForall.GroupBy :: (v_a5iI -> k_a5iJ)
+                              -> FDB.GADTForall.Q v_a5iI
+                              -> FDB.GADTForall.Q (k_a5iJ, FDB.GADTForall.Q v_a5iI)
+    FDB.GADTForall.MapSQ :: (v_a5iK -> FDB.GADTForall.SQ b_a5iL)
+                            -> FDB.GADTForall.Q v_a5iK
+                            -> FDB.GADTForall.Q b_a5iL
+    FDB.GADTForall.FilterSQ :: (a_a5iM -> FDB.GADTForall.SQ Bool)
+                               -> FDB.GADTForall.Q a_a5iM
+                               -> FDB.GADTForall.Q a_a5iM
+    FDB.GADTForall.OrderBy :: (Ord b_a5iN) =>
+                              (a_a5iO -> b_a5iN)
+                              -> FDB.GADTForall.Q a_a5iO
+                              -> FDB.GADTForall.Q a_a5iO
+    FDB.GADTForall.Take :: (Integral n_a5iP) =>
+                           n_a5iP -> FDB.GADTForall.Q a_a5iQ -> FDB.GADTForall.Q a_a5iQ
+class FDB.GADTForall.NatJoin a_a5iq b_a5ir where
+  (FDB.GADTForall.|><|) ::
+    FDB.GADTForall.Q a_a5iq
+    -> FDB.GADTForall.Q b_a5ir -> FDB.GADTForall.Q (a_a5iq, b_a5ir)
+
+instance Monad FDB.GADTForall.SQ where
+  (>>=) = undefined
+instance Applicative FDB.GADTForall.SQ where
+  pure = undefined
+  (<*>) = undefined
+instance Functor FDB.GADTForall.SQ where
+  fmap = undefined
+instance Monad FDB.GADTForall.Q where
+  (>>=) = undefined
+instance Applicative FDB.GADTForall.Q where
+  pure = undefined
+  (<*>) = undefined
+instance Functor FDB.GADTForall.Q where
+  fmap = FDB.GADTForall.Map
+
+[7 of 8] Compiling FDB.FDB          ( FDB/FDB.hs, FDB/FDB.o )
+
+==================== Renamer ====================
+
+[8 of 8] Compiling TPCH.Functional.Schema ( ghc-dumps/../TPCH/Functional/Schema.hs, ghc-dumps/../TPCH/Functional/Schema.o )
+
+==================== Renamer ====================
+TPCH.Functional.Schema.parts :: Table TPCH.Functional.Schema.Part
+TPCH.Functional.Schema.parts = undefined
+TPCH.Functional.Schema.suppliers ::
+  Table TPCH.Functional.Schema.Supplier
+TPCH.Functional.Schema.suppliers = undefined
+TPCH.Functional.Schema.partsupps ::
+  Table TPCH.Functional.Schema.PartSupp
+TPCH.Functional.Schema.partsupps = undefined
+TPCH.Functional.Schema.customers ::
+  Table TPCH.Functional.Schema.Customer
+TPCH.Functional.Schema.customers = undefined
+TPCH.Functional.Schema.orders :: Table TPCH.Functional.Schema.Order
+TPCH.Functional.Schema.orders = undefined
+TPCH.Functional.Schema.lineitems ::
+  Table TPCH.Functional.Schema.LineItem
+TPCH.Functional.Schema.lineitems = findTable "LineItems"
+TPCH.Functional.Schema.n_name ::
+  TPCH.Functional.Schema.Nation -> String
+TPCH.Functional.Schema.n_name = undefined
+TPCH.Functional.Schema.n_region ::
+  TPCH.Functional.Schema.Nation -> TPCH.Functional.Schema.Region
+TPCH.Functional.Schema.n_region = undefined
+TPCH.Functional.Schema.n_comment ::
+  TPCH.Functional.Schema.Nation -> String
+TPCH.Functional.Schema.n_comment = undefined
+TPCH.Functional.Schema.allNations ::
+  [TPCH.Functional.Schema.Nation]
+TPCH.Functional.Schema.allNations = undefined
+TPCH.Functional.Schema.r_name ::
+  TPCH.Functional.Schema.Region -> String
+TPCH.Functional.Schema.r_name = undefined
+TPCH.Functional.Schema.r_comment ::
+  TPCH.Functional.Schema.Region -> String
+TPCH.Functional.Schema.r_comment = undefined
+TPCH.Functional.Schema.allRegions ::
+  [TPCH.Functional.Schema.Region]
+TPCH.Functional.Schema.allRegions = undefined
+TPCH.Functional.Schema.findRegion ::
+  String -> TPCH.Functional.Schema.Region
+TPCH.Functional.Schema.findRegion = undefined
+TPCH.Functional.Schema.nationsIn ::
+  TPCH.Functional.Schema.Region -> [TPCH.Functional.Schema.Nation]
+TPCH.Functional.Schema.nationsIn = undefined
+
+data TPCH.Functional.Schema.Part
+  = TPCH.Functional.Schema.Part {p_name :: String,
+                                 p_mfgr :: String,
+                                 p_brand :: String,
+                                 p_type :: String,
+                                 p_size :: Int,
+                                 p_container :: String,
+                                 p_retailprice :: Decimal,
+                                 p_comment :: String}
+data TPCH.Functional.Schema.Nation
+  = TPCH.Functional.Schema.France | TPCH.Functional.Schema.Germany
+  deriving Eq
+data TPCH.Functional.Schema.Customer
+  = TPCH.Functional.Schema.Customer {c_name :: String,
+                                     c_address :: String,
+                                     c_nation :: TPCH.Functional.Schema.Nation,
+                                     c_phone :: PhoneNumber,
+                                     c_acctbal :: Decimal,
+                                     c_mktsegment :: String,
+                                     c_comment :: String}
+data TPCH.Functional.Schema.Order
+  = TPCH.Functional.Schema.Order {o_custref :: TableRef TPCH.Functional.Schema.Customer,
+                                  o_orderstatus :: Char,
+                                  o_totalprice :: Decimal,
+                                  o_orderdate :: Date,
+                                  o_orderpriority :: String,
+                                  o_clerk :: String,
+                                  o_shippriority :: Int,
+                                  o_comment :: String}
+data TPCH.Functional.Schema.Supplier
+  = TPCH.Functional.Schema.Supplier {s_name :: String,
+                                     s_address :: String,
+                                     s_nation :: TPCH.Functional.Schema.Nation,
+                                     s_phone :: PhoneNumber,
+                                     s_acctbal :: Decimal,
+                                     s_comment :: String}
+data TPCH.Functional.Schema.LineItem
+  = TPCH.Functional.Schema.LineItem {l_orderref :: TableRef TPCH.Functional.Schema.Order,
+                                     l_partref :: TableRef TPCH.Functional.Schema.Part,
+                                     l_suppref :: TableRef TPCH.Functional.Schema.Supplier,
+                                     l_linenumber :: Int,
+                                     l_quantity :: Decimal,
+                                     l_extendedprice :: Decimal,
+                                     l_discount :: Decimal,
+                                     l_tax :: Decimal,
+                                     l_returnflag :: Char,
+                                     l_linestatus :: Char,
+                                     l_shipdate :: Date,
+                                     l_commitdate :: Date,
+                                     l_receiptdate :: Date,
+                                     l_shipinstruct :: String,
+                                     l_shipmode :: String,
+                                     l_comment :: String}
+data TPCH.Functional.Schema.PartSupp
+  = TPCH.Functional.Schema.PartSupp {ps_partref :: TableRef TPCH.Functional.Schema.Part,
+                                     ps_suppref :: TableRef TPCH.Functional.Schema.Supplier,
+                                     ps_availqty :: Int,
+                                     ps_supplycost :: Decimal,
+                                     ps_comment :: String}
+data TPCH.Functional.Schema.Region
+  = TPCH.Functional.Schema.EMEA
+  deriving Eq
+

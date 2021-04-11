@@ -1,0 +1,5513 @@
+[1 of 8] Compiling FDB.MoreTypes    ( FDB/MoreTypes.hs, FDB/MoreTypes.o )
+
+==================== Tidy Core ====================
+Result size of Tidy Core
+  = {terms: 124, types: 47, coercions: 12, joins: 0/0}
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$trModule1_r2qx :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule1_r2qx = "main"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$trModule2_r2qQ :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule2_r2qQ = GHC.Types.TrNameS $trModule1_r2qx
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$trModule3_r2qR :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule3_r2qR = "FDB.MoreTypes"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$trModule4_r2qS :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule4_r2qS = GHC.Types.TrNameS $trModule3_r2qR
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+FDB.MoreTypes.$trModule :: GHC.Types.Module
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+FDB.MoreTypes.$trModule
+  = GHC.Types.Module $trModule2_r2qQ $trModule4_r2qS
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep_r2qT :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep_r2qT
+  = GHC.Types.KindRepTyConApp
+      GHC.Types.$tcInt (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tcDateInterval1_r2qU :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcDateInterval1_r2qU = "DateInterval"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tcDateInterval2_r2qV :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcDateInterval2_r2qV = GHC.Types.TrNameS $tcDateInterval1_r2qU
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.MoreTypes.$tcDateInterval :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.MoreTypes.$tcDateInterval
+  = GHC.Types.TyCon
+      18376018677496580262##
+      7294864336028437579##
+      FDB.MoreTypes.$trModule
+      $tcDateInterval2_r2qV
+      0#
+      GHC.Types.krep$*
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep1_r2qW :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep1_r2qW
+  = GHC.Types.KindRepTyConApp
+      FDB.MoreTypes.$tcDateInterval (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep2_r2qX :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep2_r2qX = GHC.Types.KindRepFun $krep_r2qT $krep1_r2qW
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'Day1_r2qY :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Day1_r2qY = "'Day"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'Day2_r2qZ :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Day2_r2qZ = GHC.Types.TrNameS $tc'Day1_r2qY
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.MoreTypes.$tc'Day :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.MoreTypes.$tc'Day
+  = GHC.Types.TyCon
+      2870245755353241826##
+      3795114783946290854##
+      FDB.MoreTypes.$trModule
+      $tc'Day2_r2qZ
+      0#
+      $krep2_r2qX
+
+-- RHS size: {terms: 20, types: 3, coercions: 0, joins: 0/0}
+$dIP_r2r0 :: GHC.Stack.Types.CallStack
+[GblId]
+$dIP_r2r0
+  = GHC.Stack.Types.pushCallStack
+      (GHC.CString.unpackCString# "undefined"#,
+       GHC.Stack.Types.SrcLoc
+         (GHC.CString.unpackCString# "main"#)
+         (GHC.CString.unpackCString# "FDB.MoreTypes"#)
+         (GHC.CString.unpackCString# "./FDB/MoreTypes.hs"#)
+         (GHC.Types.I# 6#)
+         (GHC.Types.I# 18#)
+         (GHC.Types.I# 6#)
+         (GHC.Types.I# 27#))
+      GHC.Stack.Types.emptyCallStack
+
+-- RHS size: {terms: 2, types: 3, coercions: 4, joins: 0/0}
+dateFromString :: String -> Date
+[GblId]
+dateFromString
+  = undefined
+      @ 'GHC.Types.LiftedRep
+      @ (String -> Date)
+      ($dIP_r2r0
+       `cast` (Sym (GHC.Classes.N:IP[0]
+                        <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+               :: GHC.Stack.Types.CallStack
+                  ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+-- RHS size: {terms: 20, types: 3, coercions: 0, joins: 0/0}
+$dIP1_r2r1 :: GHC.Stack.Types.CallStack
+[GblId]
+$dIP1_r2r1
+  = GHC.Stack.Types.pushCallStack
+      (GHC.CString.unpackCString# "undefined"#,
+       GHC.Stack.Types.SrcLoc
+         (GHC.CString.unpackCString# "main"#)
+         (GHC.CString.unpackCString# "FDB.MoreTypes"#)
+         (GHC.CString.unpackCString# "./FDB/MoreTypes.hs"#)
+         (GHC.Types.I# 9#)
+         (GHC.Types.I# 21#)
+         (GHC.Types.I# 9#)
+         (GHC.Types.I# 30#))
+      GHC.Stack.Types.emptyCallStack
+
+-- RHS size: {terms: 2, types: 4, coercions: 4, joins: 0/0}
+tryDateFromString :: String -> Maybe Date
+[GblId]
+tryDateFromString
+  = undefined
+      @ 'GHC.Types.LiftedRep
+      @ (String -> Maybe Date)
+      ($dIP1_r2r1
+       `cast` (Sym (GHC.Classes.N:IP[0]
+                        <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+               :: GHC.Stack.Types.CallStack
+                  ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+-- RHS size: {terms: 20, types: 3, coercions: 0, joins: 0/0}
+$dIP2_r2r2 :: GHC.Stack.Types.CallStack
+[GblId]
+$dIP2_r2r2
+  = GHC.Stack.Types.pushCallStack
+      (GHC.CString.unpackCString# "undefined"#,
+       GHC.Stack.Types.SrcLoc
+         (GHC.CString.unpackCString# "main"#)
+         (GHC.CString.unpackCString# "FDB.MoreTypes"#)
+         (GHC.CString.unpackCString# "./FDB/MoreTypes.hs"#)
+         (GHC.Types.I# 14#)
+         (GHC.Types.I# 17#)
+         (GHC.Types.I# 14#)
+         (GHC.Types.I# 26#))
+      GHC.Stack.Types.emptyCallStack
+
+-- RHS size: {terms: 2, types: 4, coercions: 4, joins: 0/0}
+minusInterval :: Date -> DateInterval -> Date
+[GblId]
+minusInterval
+  = undefined
+      @ 'GHC.Types.LiftedRep
+      @ (Date -> DateInterval -> Date)
+      ($dIP2_r2r2
+       `cast` (Sym (GHC.Classes.N:IP[0]
+                        <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+               :: GHC.Stack.Types.CallStack
+                  ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+
+
+[2 of 8] Compiling FDB.Utils        ( FDB/Utils.hs, FDB/Utils.o )
+
+==================== Tidy Core ====================
+Result size of Tidy Core
+  = {terms: 51, types: 100, coercions: 0, joins: 0/0}
+
+-- RHS size: {terms: 12, types: 15, coercions: 0, joins: 0/0}
+compose2
+  :: forall t1 t2 t3 t4.
+     (t1 -> t2) -> (t3 -> t4 -> t1) -> t3 -> t4 -> t2
+[GblId, Arity=4, Caf=NoCafRefs, Unf=OtherCon []]
+compose2
+  = \ (@ t_a2AR)
+      (@ t1_a2AT)
+      (@ t2_a2AV)
+      (@ t3_a2AZ)
+      (f_a2zh :: t_a2AR -> t1_a2AT)
+      (g_a2zi :: t2_a2AV -> t3_a2AZ -> t_a2AR)
+      (x_a2zj :: t2_a2AV)
+      (y_a2zk :: t3_a2AZ) ->
+      f_a2zh (g_a2zi x_a2zj y_a2zk)
+
+-- RHS size: {terms: 12, types: 15, coercions: 0, joins: 0/0}
+.:
+  :: forall t1 t2 t3 t4.
+     (t1 -> t2) -> (t3 -> t4 -> t1) -> t3 -> t4 -> t2
+[GblId, Arity=4, Caf=NoCafRefs, Unf=OtherCon []]
+.:
+  = \ (@ t_a2Bo)
+      (@ t1_a2Bp)
+      (@ t2_a2Bq)
+      (@ t3_a2Br)
+      (f_a2zl :: t_a2Bo -> t1_a2Bp)
+      (g_a2zm :: t2_a2Bq -> t3_a2Br -> t_a2Bo)
+      (x_a2zj :: t2_a2Bq)
+      (y_a2zk :: t3_a2Br) ->
+      f_a2zl (g_a2zm x_a2zj y_a2zk)
+
+-- RHS size: {terms: 10, types: 17, coercions: 0, joins: 0/0}
+<&>
+  :: forall (f :: * -> *) a b. Functor f => f a -> (a -> b) -> f b
+[GblId, Arity=3, Unf=OtherCon []]
+<&>
+  = \ (@ (f_a2Ap :: * -> *))
+      (@ a_a2Aq)
+      (@ b_a2Ar)
+      ($dFunctor_a2At :: Functor f_a2Ap)
+      (as_a2zn :: f_a2Ap a_a2Aq)
+      (f1_a2zo :: a_a2Aq -> b_a2Ar) ->
+      <$> @ f_a2Ap @ a_a2Aq @ b_a2Ar $dFunctor_a2At f1_a2zo as_a2zn
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$trModule1_r2A9 :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule1_r2A9 = "main"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$trModule2_r2BR :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule2_r2BR = GHC.Types.TrNameS $trModule1_r2A9
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$trModule3_r2BS :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule3_r2BS = "FDB.Utils"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$trModule4_r2BT :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule4_r2BT = GHC.Types.TrNameS $trModule3_r2BS
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+FDB.Utils.$trModule :: GHC.Types.Module
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+FDB.Utils.$trModule
+  = GHC.Types.Module $trModule2_r2BR $trModule4_r2BT
+
+
+
+[3 of 8] Compiling Utils.List       ( Utils/List.hs, Utils/List.o )
+
+==================== Tidy Core ====================
+Result size of Tidy Core
+  = {terms: 62, types: 119, coercions: 0, joins: 0/0}
+
+-- RHS size: {terms: 6, types: 12, coercions: 0, joins: 0/0}
+noDuplicates :: forall a. Ord a => [a] -> [a]
+[GblId, Arity=1, Unf=OtherCon []]
+noDuplicates
+  = \ (@ a_a3cK) ($dOrd_a3cM :: Ord a_a3cK) ->
+      . @ (Set.Set a_a3cK)
+        @ [a_a3cK]
+        @ [a_a3cK]
+        (Set.toList @ a_a3cK)
+        (Set.fromList @ a_a3cK $dOrd_a3cM)
+
+-- RHS size: {terms: 6, types: 5, coercions: 0, joins: 0/0}
+zipWithIndex :: forall a. [a] -> [(Int, a)]
+[GblId]
+zipWithIndex
+  = \ (@ a_a30Z) ->
+      zip
+        @ Int
+        @ a_a30Z
+        (enumFrom @ Int GHC.Enum.$fEnumInt (GHC.Types.I# 0#))
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+zipWithIndexRight :: forall a. [a] -> [(a, Int)]
+[GblId]
+zipWithIndexRight
+  = \ (@ a_a3cv) ->
+      . @ [(Int, a_a3cv)]
+        @ [(a_a3cv, Int)]
+        @ [a_a3cv]
+        (map @ (Int, a_a3cv) @ (a_a3cv, Int) (swap @ Int @ a_a3cv))
+        (zipWithIndex @ a_a3cv)
+
+-- RHS size: {terms: 27, types: 33, coercions: 0, joins: 0/0}
+groupByKeyVal
+  :: forall k a v. Eq k => (a -> k) -> (a -> v) -> [a] -> [(k, [v])]
+[GblId, Arity=4, Unf=OtherCon []]
+groupByKeyVal
+  = \ (@ k_a2ZZ)
+      (@ a_a300)
+      (@ v_a301)
+      ($dEq_a303 :: Eq k_a2ZZ)
+      (key_a2Re :: a_a300 -> k_a2ZZ)
+      (val_a2Rf :: a_a300 -> v_a301)
+      (xs_a2Rg :: [a_a300]) ->
+      map
+        @ [a_a300]
+        @ (k_a2ZZ, [v_a301])
+        (\ (thisGroup_a2U0 :: [a_a300]) ->
+           (key_a2Re (head @ a_a300 thisGroup_a2U0),
+            <$>
+              @ []
+              @ a_a300
+              @ v_a301
+              GHC.Base.$fFunctor[]
+              val_a2Rf
+              thisGroup_a2U0))
+        (List.groupBy
+           @ a_a300
+           (\ (x1_a2TY :: a_a300) (x2_a2TZ :: a_a300) ->
+              == @ k_a2ZZ $dEq_a303 (key_a2Re x1_a2TY) (key_a2Re x2_a2TZ))
+           xs_a2Rg)
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$trModule1_r3cr :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule1_r3cr = "main"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$trModule2_r3df :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule2_r3df = GHC.Types.TrNameS $trModule1_r3cr
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$trModule3_r3dg :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule3_r3dg = "Utils.List"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$trModule4_r3dh :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule4_r3dh = GHC.Types.TrNameS $trModule3_r3dg
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+Utils.List.$trModule :: GHC.Types.Module
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+Utils.List.$trModule
+  = GHC.Types.Module $trModule2_r3df $trModule4_r3dh
+
+
+
+[4 of 8] Compiling Utils.Prelude    ( Utils/Prelude.hs, Utils/Prelude.o )
+
+==================== Tidy Core ====================
+Result size of Tidy Core
+  = {terms: 43, types: 110, coercions: 0, joins: 0/0}
+
+-- RHS size: {terms: 7, types: 28, coercions: 0, joins: 0/0}
+compose2
+  :: forall b c a1 a2. (b -> c) -> (a1 -> a2 -> b) -> a1 -> a2 -> c
+[GblId]
+compose2
+  = \ (@ b_a3i3) (@ c_a3i4) (@ a_a3i2) (@ a1_a3i5) ->
+      . @ ((a1_a3i5 -> b_a3i3) -> a1_a3i5 -> c_a3i4)
+        @ ((a_a3i2 -> a1_a3i5 -> b_a3i3) -> a_a3i2 -> a1_a3i5 -> c_a3i4)
+        @ (b_a3i3 -> c_a3i4)
+        (. @ (a1_a3i5 -> b_a3i3) @ (a1_a3i5 -> c_a3i4) @ a_a3i2)
+        (. @ b_a3i3 @ c_a3i4 @ a1_a3i5)
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+.:
+  :: forall b c a1 a2. (b -> c) -> (a1 -> a2 -> b) -> a1 -> a2 -> c
+[GblId]
+.: = compose2
+
+-- RHS size: {terms: 10, types: 17, coercions: 0, joins: 0/0}
+<&>
+  :: forall (f :: * -> *) a b. Functor f => f a -> (a -> b) -> f b
+[GblId, Arity=3, Unf=OtherCon []]
+<&>
+  = \ (@ (f_a3hL :: * -> *))
+      (@ a_a3hM)
+      (@ b_a3hN)
+      ($dFunctor_a3hP :: Functor f_a3hL)
+      (as_a3gA :: f_a3hL a_a3hM)
+      (f1_a3gB :: a_a3hM -> b_a3hN) ->
+      <$> @ f_a3hL @ a_a3hM @ b_a3hN $dFunctor_a3hP f1_a3gB as_a3gA
+
+-- RHS size: {terms: 3, types: 4, coercions: 0, joins: 0/0}
+ignore :: forall a. a -> ()
+[GblId]
+ignore = \ (@ a_a3hr) -> const @ () @ a_a3hr GHC.Tuple.()
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$trModule1_r3hF :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule1_r3hF = "main"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$trModule2_r3iT :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule2_r3iT = GHC.Types.TrNameS $trModule1_r3hF
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$trModule3_r3iU :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule3_r3iU = "Utils.Prelude"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$trModule4_r3iV :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule4_r3iV = GHC.Types.TrNameS $trModule3_r3iU
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+Utils.Prelude.$trModule :: GHC.Types.Module
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+Utils.Prelude.$trModule
+  = GHC.Types.Module $trModule2_r3iT $trModule4_r3iV
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+doNothing :: IO ()
+[GblId]
+doNothing = return @ IO GHC.Base.$fMonadIO @ () GHC.Tuple.()
+
+
+
+[5 of 8] Compiling Utils.AbstractGraph ( Utils/AbstractGraph.hs, Utils/AbstractGraph.o )
+
+==================== Tidy Core ====================
+Result size of Tidy Core
+  = {terms: 722, types: 1,755, coercions: 0, joins: 0/11}
+
+-- RHS size: {terms: 19, types: 44, coercions: 0, joins: 0/0}
+$c<>_r4wo :: forall v e. Graph v e -> Graph v e -> Graph v e
+[GblId, Arity=2, Unf=OtherCon []]
+$c<>_r4wo
+  = \ (@ v_a4lL)
+      (@ e_a4lM)
+      (ds_d4Aa :: Graph v_a4lL e_a4lM)
+      (ds1_d4Ab :: Graph v_a4lL e_a4lM) ->
+      case ds_d4Aa of { Graph lv_a3No le_a3Np ->
+      case ds1_d4Ab of { Graph rv_a3Nq re_a3Nr ->
+      Utils.AbstractGraph.Graph
+        @ v_a4lL
+        @ e_a4lM
+        (<> @ [v_a4lL] (GHC.Base.$fSemigroup[] @ v_a4lL) lv_a3No rv_a3Nq)
+        (<>
+           @ [(v_a4lL, e_a4lM, v_a4lL)]
+           (GHC.Base.$fSemigroup[] @ (v_a4lL, e_a4lM, v_a4lL))
+           le_a3Np
+           re_a3Nr)
+      }
+      }
+
+Rec {
+-- RHS size: {terms: 6, types: 13, coercions: 0, joins: 0/0}
+Utils.AbstractGraph.$fSemigroupGraph [InlPrag=NOUSERINLINE CONLIKE]
+  :: forall v e. Semigroup (Graph v e)
+[GblId[DFunId]]
+Utils.AbstractGraph.$fSemigroupGraph
+  = \ (@ v_a4lL) (@ e_a4lM) ->
+      GHC.Base.C:Semigroup
+        @ (Graph v_a4lL e_a4lM)
+        ($c<>_r4wo @ v_a4lL @ e_a4lM)
+        ($csconcat_r4D8 @ v_a4lL @ e_a4lM)
+        ($cstimes_r4D9 @ v_a4lL @ e_a4lM)
+
+-- RHS size: {terms: 4, types: 9, coercions: 0, joins: 0/0}
+$csconcat_r4D8
+  :: forall v e. GHC.Base.NonEmpty (Graph v e) -> Graph v e
+[GblId]
+$csconcat_r4D8
+  = \ (@ v_a4lL) (@ e_a4lM) ->
+      GHC.Base.$dmsconcat
+        @ (Graph v_a4lL e_a4lM)
+        (Utils.AbstractGraph.$fSemigroupGraph @ v_a4lL @ e_a4lM)
+
+-- RHS size: {terms: 7, types: 14, coercions: 0, joins: 0/0}
+$cstimes_r4D9
+  :: forall v e b. Integral b => b -> Graph v e -> Graph v e
+[GblId, Arity=1, Unf=OtherCon []]
+$cstimes_r4D9
+  = \ (@ v_a4lL)
+      (@ e_a4lM)
+      (@ b_a4vg)
+      ($dIntegral_a4vi :: Integral b_a4vg) ->
+      GHC.Base.$dmstimes
+        @ (Graph v_a4lL e_a4lM)
+        (Utils.AbstractGraph.$fSemigroupGraph @ v_a4lL @ e_a4lM)
+        @ b_a4vg
+        $dIntegral_a4vi
+end Rec }
+
+-- RHS size: {terms: 5, types: 11, coercions: 0, joins: 0/0}
+$cmempty_r4Da :: forall v e. Graph v e
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$cmempty_r4Da
+  = \ (@ v_a4lk) (@ e_a4ll) ->
+      Utils.AbstractGraph.Graph
+        @ v_a4lk
+        @ e_a4ll
+        (GHC.Types.[] @ v_a4lk)
+        (GHC.Types.[] @ (v_a4lk, e_a4ll, v_a4lk))
+
+Rec {
+-- RHS size: {terms: 7, types: 15, coercions: 0, joins: 0/0}
+Utils.AbstractGraph.$fMonoidGraph [InlPrag=NOUSERINLINE CONLIKE]
+  :: forall v e. Monoid (Graph v e)
+[GblId[DFunId]]
+Utils.AbstractGraph.$fMonoidGraph
+  = \ (@ v_a4lk) (@ e_a4ll) ->
+      GHC.Base.C:Monoid
+        @ (Graph v_a4lk e_a4ll)
+        (Utils.AbstractGraph.$fSemigroupGraph @ v_a4lk @ e_a4ll)
+        ($cmempty_r4Da @ v_a4lk @ e_a4ll)
+        ($c<>_r4wo @ v_a4lk @ e_a4ll)
+        ($cmconcat_r4Db @ v_a4lk @ e_a4ll)
+
+-- RHS size: {terms: 4, types: 9, coercions: 0, joins: 0/0}
+$cmconcat_r4Db :: forall v e. [Graph v e] -> Graph v e
+[GblId]
+$cmconcat_r4Db
+  = \ (@ v_a4lk) (@ e_a4ll) ->
+      GHC.Base.$dmmconcat
+        @ (Graph v_a4lk e_a4ll)
+        (Utils.AbstractGraph.$fMonoidGraph @ v_a4lk @ e_a4ll)
+end Rec }
+
+-- RHS size: {terms: 7, types: 17, coercions: 0, joins: 0/0}
+getNode :: forall v e. Tree v e -> v
+[GblId, Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+getNode
+  = \ (@ v_a4kz) (@ e_a4kA) (ds_d4zB :: Tree v_a4kz e_a4kA) ->
+      case ds_d4zB of { Tree node_a43H ds1_d4zH -> node_a43H }
+
+Rec {
+-- RHS size: {terms: 58, types: 159, coercions: 0, joins: 0/2}
+graphFromTree [Occ=LoopBreaker]
+  :: forall v e. Tree v e -> Graph v e
+[GblId, Arity=1, Unf=OtherCon []]
+graphFromTree
+  = \ (@ v_a4kC) (@ e_a4kD) (ds_d4zI :: Tree v_a4kC e_a4kD) ->
+      case ds_d4zI of { Tree node_a43z children_a43A ->
+      case $cmconcat_r4Db
+             @ v_a4kC
+             @ e_a4kD
+             (letrec {
+                ds1_d4zT [Occ=LoopBreaker]
+                  :: [(e_a4kD, Tree v_a4kC e_a4kD)] -> [Graph v_a4kC e_a4kD]
+                [LclId, Arity=1, Unf=OtherCon []]
+                ds1_d4zT
+                  = \ (ds2_d4zU :: [(e_a4kD, Tree v_a4kC e_a4kD)]) ->
+                      case ds2_d4zU of {
+                        [] -> GHC.Types.[] @ (Graph v_a4kC e_a4kD);
+                        : ds4_d4zV ds5_d4zW ->
+                          case ds4_d4zV of { (ds6_d4A2, child_a43G) ->
+                          GHC.Types.:
+                            @ (Graph v_a4kC e_a4kD)
+                            (graphFromTree @ v_a4kC @ e_a4kD child_a43G)
+                            (ds1_d4zT ds5_d4zW)
+                          }
+                      }; } in
+              ds1_d4zT children_a43A)
+      of
+      { Graph rv_a3Nq re_a3Nr ->
+      Utils.AbstractGraph.Graph
+        @ v_a4kC
+        @ e_a4kD
+        (<>
+           @ [v_a4kC]
+           (GHC.Base.$fSemigroup[] @ v_a4kC)
+           (GHC.Types.: @ v_a4kC node_a43z (GHC.Types.[] @ v_a4kC))
+           rv_a3Nq)
+        (<>
+           @ [(v_a4kC, e_a4kD, v_a4kC)]
+           (GHC.Base.$fSemigroup[] @ (v_a4kC, e_a4kD, v_a4kC))
+           (letrec {
+              ds1_d4zK [Occ=LoopBreaker]
+                :: [(e_a4kD, Tree v_a4kC e_a4kD)] -> [(v_a4kC, e_a4kD, v_a4kC)]
+              [LclId, Arity=1, Unf=OtherCon []]
+              ds1_d4zK
+                = \ (ds2_d4zL :: [(e_a4kD, Tree v_a4kC e_a4kD)]) ->
+                    case ds2_d4zL of {
+                      [] -> GHC.Types.[] @ (v_a4kC, e_a4kD, v_a4kC);
+                      : ds4_d4zM ds5_d4zN ->
+                        case ds4_d4zM of { (edge_a43E, child_a43F) ->
+                        GHC.Types.:
+                          @ (v_a4kC, e_a4kD, v_a4kC)
+                          (node_a43z, edge_a43E,
+                           case child_a43F of { Tree node1_a43H ds6_d4zH -> node1_a43H })
+                          (ds1_d4zK ds5_d4zN)
+                        }
+                    }; } in
+            ds1_d4zK children_a43A)
+           re_a3Nr)
+      }
+      }
+end Rec }
+
+-- RHS size: {terms: 8, types: 13, coercions: 0, joins: 0/0}
+singleton :: forall v e. v -> Graph v e
+[GblId, Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+singleton
+  = \ (@ v_a4ku) (@ e_a4kv) (v1_a43I :: v_a4ku) ->
+      Utils.AbstractGraph.Graph
+        @ v_a4ku
+        @ e_a4kv
+        (GHC.Types.: @ v_a4ku v1_a43I (GHC.Types.[] @ v_a4ku))
+        (GHC.Types.[] @ (v_a4ku, e_a4kv, v_a4ku))
+
+-- RHS size: {terms: 7, types: 17, coercions: 0, joins: 0/0}
+vertices :: forall v e. Graph v e -> [v]
+[GblId, Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+vertices
+  = \ (@ v_a4jE) (@ e_a4jF) (ds_d4zl :: Graph v_a4jE e_a4jF) ->
+      case ds_d4zl of { Graph vs_a43J ds1_d4zr -> vs_a43J }
+
+-- RHS size: {terms: 7, types: 17, coercions: 0, joins: 0/0}
+edgeTriplets :: forall v e. Graph v e -> [(v, e, v)]
+[GblId, Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+edgeTriplets
+  = \ (@ v_a4jB) (@ e_a4jC) (ds_d4ze :: Graph v_a4jB e_a4jC) ->
+      case ds_d4ze of { Graph ds1_d4zk es_a43K -> es_a43K }
+
+-- RHS size: {terms: 25, types: 52, coercions: 0, joins: 0/0}
+mapEdgeTriplets
+  :: forall v e f. ((v, e, v) -> f) -> Graph v e -> Graph v f
+[GblId, Arity=2, Unf=OtherCon []]
+mapEdgeTriplets
+  = \ (@ v_a4iX)
+      (@ e_a4iY)
+      (@ f_a4iZ)
+      (f1_a43L :: (v_a4iX, e_a4iY, v_a4iX) -> f_a4iZ)
+      (ds_d4z1 :: Graph v_a4iX e_a4iY) ->
+      case ds_d4z1 of { Graph vs_a43M es_a43N ->
+      Utils.AbstractGraph.Graph
+        @ v_a4iX
+        @ f_a4iZ
+        vs_a43M
+        (<&>
+           @ []
+           @ (v_a4iX, e_a4iY, v_a4iX)
+           @ (v_a4iX, f_a4iZ, v_a4iX)
+           GHC.Base.$fFunctor[]
+           es_a43N
+           (\ (ds1_d4z2 :: (v_a4iX, e_a4iY, v_a4iX)) ->
+              case ds1_d4z2 of { (s_a43O, e1_a43P, d_a43Q) ->
+              (s_a43O, f1_a43L (s_a43O, e1_a43P, d_a43Q), d_a43Q)
+              }))
+      }
+
+-- RHS size: {terms: 30, types: 57, coercions: 0, joins: 0/0}
+mapGraphTriplets
+  :: forall v1 v2 e1 e2.
+     (v1 -> v2) -> ((v1, e1, v1) -> e2) -> Graph v1 e1 -> Graph v2 e2
+[GblId, Arity=3, Unf=OtherCon []]
+mapGraphTriplets
+  = \ (@ v1_a4iv)
+      (@ v2_a4iw)
+      (@ e1_a4ix)
+      (@ e2_a4iy)
+      (fv_a43R :: v1_a4iv -> v2_a4iw)
+      (fe_a43S :: (v1_a4iv, e1_a4ix, v1_a4iv) -> e2_a4iy)
+      (ds_d4yQ :: Graph v1_a4iv e1_a4ix) ->
+      case ds_d4yQ of { Graph vs_a43T es_a43U ->
+      Utils.AbstractGraph.Graph
+        @ v2_a4iw
+        @ e2_a4iy
+        (map @ v1_a4iv @ v2_a4iw fv_a43R vs_a43T)
+        (map
+           @ (v1_a4iv, e1_a4ix, v1_a4iv)
+           @ (v2_a4iw, e2_a4iy, v2_a4iw)
+           (\ (ds1_d4yV :: (v1_a4iv, e1_a4ix, v1_a4iv)) ->
+              case ds1_d4yV of { (s_a43W, e_a43X, d_a43Y) ->
+              (fv_a43R s_a43W, fe_a43S (s_a43W, e_a43X, d_a43Y), fv_a43R d_a43Y)
+              })
+           es_a43U)
+      }
+
+-- RHS size: {terms: 13, types: 22, coercions: 0, joins: 0/0}
+mapEdgeInTriplet
+  :: forall e f v. (e -> f) -> (v, e, v) -> (v, f, v)
+[GblId, Arity=2, Caf=NoCafRefs, Unf=OtherCon []]
+mapEdgeInTriplet
+  = \ (@ e_a4ir)
+      (@ f_a4is)
+      (@ v_a4it)
+      (f1_a43Z :: e_a4ir -> f_a4is)
+      (ds_d4yK :: (v_a4it, e_a4ir, v_a4it)) ->
+      case ds_d4yK of { (s_a440, e1_a441, d_a442) ->
+      (s_a440, f1_a43Z e1_a441, d_a442)
+      }
+
+-- RHS size: {terms: 10, types: 19, coercions: 0, joins: 0/0}
+mapEdgeFromTriplet :: forall e f v. (e -> f) -> (v, e, v) -> f
+[GblId, Arity=2, Caf=NoCafRefs, Unf=OtherCon []]
+mapEdgeFromTriplet
+  = \ (@ e_a4in)
+      (@ f_a4io)
+      (@ v_a4ip)
+      (f1_a443 :: e_a4in -> f_a4io)
+      (ds_d4yA :: (v_a4ip, e_a4in, v_a4ip)) ->
+      case ds_d4yA of { (ds1_d4yI, e1_a444, ds2_d4yJ) ->
+      f1_a443 e1_a444
+      }
+
+-- RHS size: {terms: 27, types: 51, coercions: 0, joins: 0/0}
+$cbimap_r4Dc
+  :: forall a b c d. (a -> b) -> (c -> d) -> Graph a c -> Graph b d
+[GblId, Arity=3, Unf=OtherCon []]
+$cbimap_r4Dc
+  = \ (@ a_a4vx)
+      (@ b_a4vy)
+      (@ c_a4vz)
+      (@ d_a4vA)
+      (fv_a3Ns :: a_a4vx -> b_a4vy)
+      (fe_a3Nt :: c_a4vz -> d_a4vA)
+      (ds_d4yQ :: Graph a_a4vx c_a4vz) ->
+      case ds_d4yQ of { Graph vs_a43T es_a43U ->
+      Utils.AbstractGraph.Graph
+        @ b_a4vy
+        @ d_a4vA
+        (map @ a_a4vx @ b_a4vy fv_a3Ns vs_a43T)
+        (map
+           @ (a_a4vx, c_a4vz, a_a4vx)
+           @ (b_a4vy, d_a4vA, b_a4vy)
+           (\ (ds1_d4yV :: (a_a4vx, c_a4vz, a_a4vx)) ->
+              case ds1_d4yV of { (s_a43W, e_a43X, d1_a43Y) ->
+              (fv_a3Ns s_a43W, fe_a3Nt e_a43X, fv_a3Ns d1_a43Y)
+              })
+           es_a43U)
+      }
+
+-- RHS size: {terms: 22, types: 46, coercions: 0, joins: 0/0}
+mapEdges :: forall e f v. (e -> f) -> Graph v e -> Graph v f
+[GblId, Arity=2, Unf=OtherCon []]
+mapEdges
+  = \ (@ b_a4w3)
+      (@ c_a4w4)
+      (@ a_a4w5)
+      (fe_a3Nu :: b_a4w3 -> c_a4w4)
+      (ds_d4z1 :: Graph a_a4w5 b_a4w3) ->
+      case ds_d4z1 of { Graph vs_a43M es_a43N ->
+      Utils.AbstractGraph.Graph
+        @ a_a4w5
+        @ c_a4w4
+        vs_a43M
+        (<&>
+           @ []
+           @ (a_a4w5, b_a4w3, a_a4w5)
+           @ (a_a4w5, c_a4w4, a_a4w5)
+           GHC.Base.$fFunctor[]
+           es_a43N
+           (\ (ds1_d4z2 :: (a_a4w5, b_a4w3, a_a4w5)) ->
+              case ds1_d4z2 of { (s_a43O, e_a43P, d_a43Q) ->
+              (s_a43O, fe_a3Nu e_a43P, d_a43Q)
+              }))
+      }
+
+Rec {
+-- RHS size: {terms: 4, types: 1, coercions: 0, joins: 0/0}
+Utils.AbstractGraph.$fBifunctorGraph [InlPrag=NOUSERINLINE CONLIKE]
+  :: Bifunctor Graph
+[GblId[DFunId]]
+Utils.AbstractGraph.$fBifunctorGraph
+  = Data.Bifunctor.C:Bifunctor
+      @ Graph $cbimap_r4Dc mapVertices mapEdges
+
+-- RHS size: {terms: 5, types: 10, coercions: 0, joins: 0/0}
+mapVertices [Occ=LoopBreaker]
+  :: forall v w e. (v -> w) -> Graph v e -> Graph w e
+[GblId]
+mapVertices
+  = \ (@ a_a4vQ) (@ b_a4vR) (@ c_a4vS) ->
+      Data.Bifunctor.$dmfirst
+        @ Graph
+        Utils.AbstractGraph.$fBifunctorGraph
+        @ a_a4vQ
+        @ b_a4vR
+        @ c_a4vS
+end Rec }
+
+-- RHS size: {terms: 23, types: 43, coercions: 0, joins: 0/1}
+assignUniqueIds
+  :: forall v e. Ord v => Graph v e -> (Graph (v, Int) e, Map v Int)
+[GblId, Arity=2, Unf=OtherCon []]
+assignUniqueIds
+  = \ (@ v_a4jH)
+      (@ e_a4jI)
+      ($dOrd_a4jK :: Ord v_a4jH)
+      (g_a445 :: Graph v_a4jH e_a4jI) ->
+      let {
+        idMap_a446 :: Map v_a4jH Int
+        [LclId]
+        idMap_a446
+          = Map.fromList
+              @ v_a4jH
+              @ Int
+              $dOrd_a4jK
+              (zipWithIndexRight
+                 @ v_a4jH
+                 (case g_a445 of { Graph vs_a43J ds_d4zr -> vs_a43J })) } in
+      (mapVertices
+         @ v_a4jH
+         @ (v_a4jH, Int)
+         @ e_a4jI
+         (\ (v1_a448 :: v_a4jH) ->
+            (v1_a448, ! @ v_a4jH @ Int $dOrd_a4jK idMap_a446 v1_a448))
+         g_a445,
+       idMap_a446)
+
+-- RHS size: {terms: 12, types: 22, coercions: 0, joins: 0/0}
+eliminateDuplicateVertices
+  :: forall v e. Ord v => Graph v e -> Graph v e
+[GblId, Arity=2, Unf=OtherCon []]
+eliminateDuplicateVertices
+  = \ (@ v_a4ie)
+      (@ e_a4if)
+      ($dOrd_a4ih :: Ord v_a4ie)
+      (ds_d4yu :: Graph v_a4ie e_a4if) ->
+      case ds_d4yu of { Graph vs_a449 es_a44a ->
+      Utils.AbstractGraph.Graph
+        @ v_a4ie
+        @ e_a4if
+        (ListUtils.noDuplicates @ v_a4ie $dOrd_a4ih vs_a449)
+        es_a44a
+      }
+
+Rec {
+-- RHS size: {terms: 31, types: 63, coercions: 0, joins: 0/1}
+buildTree [Occ=LoopBreaker]
+  :: forall t v e. (t -> v) -> (t -> [(e, t)]) -> t -> Tree v e
+[GblId, Arity=3, Caf=NoCafRefs, Unf=OtherCon []]
+buildTree
+  = \ (@ t_a4hy)
+      (@ v_a4hz)
+      (@ e_a4hA)
+      (toNode_a44b :: t_a4hy -> v_a4hz)
+      (children_a44c :: t_a4hy -> [(e_a4hA, t_a4hy)])
+      (root_a44d :: t_a4hy) ->
+      Utils.AbstractGraph.Tree
+        @ v_a4hz
+        @ e_a4hA
+        (toNode_a44b root_a44d)
+        (letrec {
+           ds_d4yi [Occ=LoopBreaker]
+             :: [(e_a4hA, t_a4hy)] -> [(e_a4hA, Tree v_a4hz e_a4hA)]
+           [LclId, Arity=1, Unf=OtherCon []]
+           ds_d4yi
+             = \ (ds1_d4yj :: [(e_a4hA, t_a4hy)]) ->
+                 case ds1_d4yj of {
+                   [] -> GHC.Types.[] @ (e_a4hA, Tree v_a4hz e_a4hA);
+                   : ds3_d4yk ds4_d4yl ->
+                     case ds3_d4yk of { (edge_a44i, child_a44j) ->
+                     GHC.Types.:
+                       @ (e_a4hA, Tree v_a4hz e_a4hA)
+                       (edge_a44i,
+                        buildTree
+                          @ t_a4hy @ v_a4hz @ e_a4hA toNode_a44b children_a44c child_a44j)
+                       (ds_d4yi ds4_d4yl)
+                     }
+                 }; } in
+         ds_d4yi (children_a44c root_a44d))
+end Rec }
+
+-- RHS size: {terms: 79, types: 292, coercions: 0, joins: 0/5}
+assignTreeIds :: forall v e. Tree v e -> Tree (v, Int) e
+[GblId, Arity=1, Unf=OtherCon []]
+assignTreeIds
+  = \ (@ v_a4fJ) (@ e_a4fK) (root_a44k :: Tree v_a4fJ e_a4fK) ->
+      letrec {
+        recAssignIds_a44l [Occ=LoopBreaker]
+          :: forall v1 e1. Int -> Tree v1 e1 -> (Tree (v1, Int) e1, Int)
+        [LclId, Arity=2, Unf=OtherCon []]
+        recAssignIds_a44l
+          = \ (@ v1_a4g6)
+              (@ e1_a4g7)
+              (id_a44o :: Int)
+              (ds_d4xy :: Tree v1_a4g6 e1_a4g7) ->
+              case ds_d4xy of { Tree node_a44p children_a44q ->
+              letrec {
+                assignInSequence_a44t [Occ=LoopBreaker]
+                  :: forall e2 v2.
+                     Int -> [(e2, Tree v2 e2)] -> ([(e2, Tree (v2, Int) e2)], Int)
+                [LclId, Arity=2, Unf=OtherCon []]
+                assignInSequence_a44t
+                  = \ (@ e2_a4gu)
+                      (@ v2_a4gv)
+                      (freeId_a44w :: Int)
+                      (ds1_d4xN :: [(e2_a4gu, Tree v2_a4gv e2_a4gu)]) ->
+                      case ds1_d4xN of {
+                        [] ->
+                          (GHC.Types.[] @ (e2_a4gu, Tree (v2_a4gv, Int) e2_a4gu),
+                           freeId_a44w);
+                        : ds2_d4yg remEdges_a44z ->
+                          case ds2_d4yg of { (edge_a44x, thisSubtree_a44y) ->
+                          let {
+                            ds3_d4xZ :: (Tree (v2_a4gv, Int) e2_a4gu, Int)
+                            [LclId]
+                            ds3_d4xZ
+                              = recAssignIds_a44l
+                                  @ v2_a4gv @ e2_a4gu freeId_a44w thisSubtree_a44y } in
+                          let {
+                            ds4_d4xP :: ([(e2_a4gu, Tree (v2_a4gv, Int) e2_a4gu)], Int)
+                            [LclId]
+                            ds4_d4xP
+                              = assignInSequence_a44t
+                                  @ e2_a4gu
+                                  @ v2_a4gv
+                                  (case ds3_d4xZ of
+                                   { (thisSubtreeWithId_a4gD, idAfterThisSubtree_a4gF) ->
+                                   idAfterThisSubtree_a4gF
+                                   })
+                                  remEdges_a44z } in
+                          (GHC.Types.:
+                             @ (e2_a4gu, Tree (v2_a4gv, Int) e2_a4gu)
+                             (edge_a44x,
+                              case ds3_d4xZ of
+                              { (thisSubtreeWithId_a4gD, idAfterThisSubtree_a4gF) ->
+                              thisSubtreeWithId_a4gD
+                              })
+                             (case ds4_d4xP of { (remEdgesWithId_a4gS, nextFreeId_a4gU) ->
+                              remEdgesWithId_a4gS
+                              }),
+                           case ds4_d4xP of { (remEdgesWithId_a4gS, nextFreeId_a4gU) ->
+                           nextFreeId_a4gU
+                           })
+                          }
+                      }; } in
+              let {
+                ds1_d4xE :: ([(e1_a4g7, Tree (v1_a4g6, Int) e1_a4g7)], Int)
+                [LclId]
+                ds1_d4xE
+                  = assignInSequence_a44t
+                      @ e1_a4g7
+                      @ v1_a4g6
+                      (+ @ Int GHC.Num.$fNumInt id_a44o (GHC.Types.I# 1#))
+                      children_a44q } in
+              (Utils.AbstractGraph.Tree
+                 @ (v1_a4g6, Int)
+                 @ e1_a4g7
+                 (node_a44p, id_a44o)
+                 (case ds1_d4xE of { (childrenWithId_a4ha, nextId_a4hc) ->
+                  childrenWithId_a4ha
+                  }),
+               case ds1_d4xE of { (childrenWithId_a4ha, nextId_a4hc) ->
+               nextId_a4hc
+               })
+              }; } in
+      fst
+        @ (Tree (v_a4fJ, Int) e_a4fK)
+        @ Int
+        (recAssignIds_a44l @ v_a4fJ @ e_a4fK (GHC.Types.I# 0#) root_a44k)
+
+-- RHS size: {terms: 7, types: 17, coercions: 0, joins: 0/0}
+rootNode :: forall v e. Tree v e -> v
+[GblId, Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+rootNode
+  = \ (@ v_a4eF) (@ e_a4eG) (ds_d4x2 :: Tree v_a4eF e_a4eG) ->
+      case ds_d4x2 of { Tree root_a44N ds1_d4x8 -> root_a44N }
+
+Rec {
+-- RHS size: {terms: 38, types: 111, coercions: 0, joins: 0/1}
+allTreeEdges [Occ=LoopBreaker]
+  :: forall v e. Tree v e -> [(v, e, v)]
+[GblId, Arity=1, Unf=OtherCon []]
+allTreeEdges
+  = \ (@ v_a4fb) (@ e_a4fc) (ds_d4xb :: Tree v_a4fb e_a4fc) ->
+      case ds_d4xb of { Tree root_a44F children_a44G ->
+      ++
+        @ (v_a4fb, e_a4fc, v_a4fb)
+        (letrec {
+           ds1_d4xg [Occ=LoopBreaker]
+             :: [(e_a4fc, Tree v_a4fb e_a4fc)] -> [(v_a4fb, e_a4fc, v_a4fb)]
+           [LclId, Arity=1, Unf=OtherCon []]
+           ds1_d4xg
+             = \ (ds2_d4xh :: [(e_a4fc, Tree v_a4fb e_a4fc)]) ->
+                 case ds2_d4xh of {
+                   [] -> GHC.Types.[] @ (v_a4fb, e_a4fc, v_a4fb);
+                   : ds4_d4xi ds5_d4xj ->
+                     case ds4_d4xi of { (edge_a44J, subtree_a44K) ->
+                     GHC.Types.:
+                       @ (v_a4fb, e_a4fc, v_a4fb)
+                       (root_a44F, edge_a44J,
+                        case subtree_a44K of { Tree root1_a44N ds6_d4x8 -> root1_a44N })
+                       (ds1_d4xg ds5_d4xj)
+                     }
+                 }; } in
+         ds1_d4xg children_a44G)
+        (>>=
+           @ []
+           GHC.Base.$fMonad[]
+           @ (e_a4fc, Tree v_a4fb e_a4fc)
+           @ (v_a4fb, e_a4fc, v_a4fb)
+           children_a44G
+           (\ (ds1_d4xp :: (e_a4fc, Tree v_a4fb e_a4fc)) ->
+              case ds1_d4xp of { (ds2_d4xv, subtree_a44L) ->
+              allTreeEdges @ v_a4fb @ e_a4fc subtree_a44L
+              }))
+      }
+end Rec }
+
+-- RHS size: {terms: 9, types: 29, coercions: 0, joins: 0/0}
+subtrees :: forall v e. Tree v e -> [Tree v e]
+[GblId, Arity=1, Unf=OtherCon []]
+subtrees
+  = \ (@ v_a4ew) (@ e_a4ex) (ds_d4wV :: Tree v_a4ew e_a4ex) ->
+      case ds_d4wV of { Tree ds1_d4x1 edges_a44O ->
+      map
+        @ (e_a4ex, Tree v_a4ew e_a4ex)
+        @ (Tree v_a4ew e_a4ex)
+        (snd @ e_a4ex @ (Tree v_a4ew e_a4ex))
+        edges_a44O
+      }
+
+-- RHS size: {terms: 6, types: 21, coercions: 0, joins: 0/0}
+subtreeNodes :: forall v e. Tree v e -> [v]
+[GblId]
+subtreeNodes
+  = \ (@ v_a4eI) (@ e_a4eJ) ->
+      . @ [Tree v_a4eI e_a4eJ]
+        @ [v_a4eI]
+        @ (Tree v_a4eI e_a4eJ)
+        (map @ (Tree v_a4eI e_a4eJ) @ v_a4eI (rootNode @ v_a4eI @ e_a4eJ))
+        (subtrees @ v_a4eI @ e_a4eJ)
+
+Rec {
+-- RHS size: {terms: 17, types: 47, coercions: 0, joins: 0/0}
+allTreeNodes [Occ=LoopBreaker] :: forall v e. Tree v e -> [v]
+[GblId, Arity=1, Unf=OtherCon []]
+allTreeNodes
+  = \ (@ v_a4eU) (@ e_a4eV) (t_a44M :: Tree v_a4eU e_a4eV) ->
+      GHC.Types.:
+        @ v_a4eU
+        (case t_a44M of { Tree root_a44N ds_d4x8 -> root_a44N })
+        (>>=
+           @ []
+           GHC.Base.$fMonad[]
+           @ (Tree v_a4eU e_a4eV)
+           @ v_a4eU
+           (case t_a44M of { Tree ds_d4x1 edges_a44O ->
+            map
+              @ (e_a4eV, Tree v_a4eU e_a4eV)
+              @ (Tree v_a4eU e_a4eV)
+              (snd @ e_a4eV @ (Tree v_a4eU e_a4eV))
+              edges_a44O
+            })
+           (allTreeNodes @ v_a4eU @ e_a4eV))
+end Rec }
+
+Rec {
+-- RHS size: {terms: 31, types: 84, coercions: 0, joins: 0/1}
+mapTreeNodes [Occ=LoopBreaker]
+  :: forall v w e. (v -> w) -> Tree v e -> Tree w e
+[GblId, Arity=2, Caf=NoCafRefs, Unf=OtherCon []]
+mapTreeNodes
+  = \ (@ v_a4em)
+      (@ w_a4en)
+      (@ e_a4eo)
+      (f_a44P :: v_a4em -> w_a4en)
+      (ds_d4wI :: Tree v_a4em e_a4eo) ->
+      case ds_d4wI of { Tree root_a44Q edges_a44R ->
+      Utils.AbstractGraph.Tree
+        @ w_a4en
+        @ e_a4eo
+        (f_a44P root_a44Q)
+        (letrec {
+           ds1_d4wJ [Occ=LoopBreaker]
+             :: [(e_a4eo, Tree v_a4em e_a4eo)] -> [(e_a4eo, Tree w_a4en e_a4eo)]
+           [LclId, Arity=1, Unf=OtherCon []]
+           ds1_d4wJ
+             = \ (ds2_d4wK :: [(e_a4eo, Tree v_a4em e_a4eo)]) ->
+                 case ds2_d4wK of {
+                   [] -> GHC.Types.[] @ (e_a4eo, Tree w_a4en e_a4eo);
+                   : ds4_d4wL ds5_d4wM ->
+                     case ds4_d4wL of { (edge_a44S, subtree_a44T) ->
+                     GHC.Types.:
+                       @ (e_a4eo, Tree w_a4en e_a4eo)
+                       (edge_a44S,
+                        mapTreeNodes @ v_a4em @ w_a4en @ e_a4eo f_a44P subtree_a44T)
+                       (ds1_d4wJ ds5_d4wM)
+                     }
+                 }; } in
+         ds1_d4wJ edges_a44R)
+      }
+end Rec }
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$trModule1_r4Dd :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule1_r4Dd = "main"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$trModule2_r4De :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule2_r4De = GHC.Types.TrNameS $trModule1_r4Dd
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$trModule3_r4Df :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule3_r4Df = "Utils.AbstractGraph"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$trModule4_r4Dg :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule4_r4Dg = GHC.Types.TrNameS $trModule3_r4Df
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+Utils.AbstractGraph.$trModule :: GHC.Types.Module
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+Utils.AbstractGraph.$trModule
+  = GHC.Types.Module $trModule2_r4De $trModule4_r4Dg
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$krep_r4Dh :: GHC.Types.KindRep
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep_r4Dh = GHC.Types.KindRepVar 1#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$krep1_r4Di :: GHC.Types.KindRep
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep1_r4Di = GHC.Types.KindRepVar 0#
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep2_r4Dj :: [GHC.Types.KindRep]
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep2_r4Dj
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep1_r4Di (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep3_r4Dk :: [GHC.Types.KindRep]
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep3_r4Dk
+  = GHC.Types.: @ GHC.Types.KindRep $krep_r4Dh $krep2_r4Dj
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep4_r4Dl :: [GHC.Types.KindRep]
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep4_r4Dl
+  = GHC.Types.: @ GHC.Types.KindRep $krep1_r4Di $krep3_r4Dk
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep5_r4Dm :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep5_r4Dm
+  = GHC.Types.KindRepTyConApp GHC.Tuple.$tc(,,) $krep4_r4Dl
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep6_r4Dn :: [GHC.Types.KindRep]
+[GblId, Unf=OtherCon []]
+$krep6_r4Dn
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep5_r4Dm (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep7_r4Do :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep7_r4Do = GHC.Types.KindRepTyConApp GHC.Types.$tc[] $krep6_r4Dn
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep8_r4Dp :: [GHC.Types.KindRep]
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep8_r4Dp
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep1_r4Di (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep9_r4Dq :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep9_r4Dq = GHC.Types.KindRepTyConApp GHC.Types.$tc[] $krep8_r4Dp
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tcGraph1_r4Dr :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcGraph1_r4Dr = "Graph"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tcGraph2_r4Ds :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcGraph2_r4Ds = GHC.Types.TrNameS $tcGraph1_r4Dr
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+Utils.AbstractGraph.$tcGraph :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+Utils.AbstractGraph.$tcGraph
+  = GHC.Types.TyCon
+      11750601768977025181##
+      11539868905161674652##
+      Utils.AbstractGraph.$trModule
+      $tcGraph2_r4Ds
+      0#
+      GHC.Types.krep$*->*->*
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep10_r4Dt :: [GHC.Types.KindRep]
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep10_r4Dt
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep_r4Dh (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep11_r4Du :: [GHC.Types.KindRep]
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep11_r4Du
+  = GHC.Types.: @ GHC.Types.KindRep $krep1_r4Di $krep10_r4Dt
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep12_r4Dv :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep12_r4Dv
+  = GHC.Types.KindRepTyConApp
+      Utils.AbstractGraph.$tcGraph $krep11_r4Du
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep13_r4Dw :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep13_r4Dw = GHC.Types.KindRepFun $krep7_r4Do $krep12_r4Dv
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep14_r4Dx :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep14_r4Dx = GHC.Types.KindRepFun $krep9_r4Dq $krep13_r4Dw
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'Graph1_r4Dy :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Graph1_r4Dy = "'Graph"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'Graph2_r4Dz :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Graph2_r4Dz = GHC.Types.TrNameS $tc'Graph1_r4Dy
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+Utils.AbstractGraph.$tc'Graph :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+Utils.AbstractGraph.$tc'Graph
+  = GHC.Types.TyCon
+      17329342475042821334##
+      15132150088727508783##
+      Utils.AbstractGraph.$trModule
+      $tc'Graph2_r4Dz
+      2#
+      $krep14_r4Dx
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tcTree1_r4DA :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcTree1_r4DA = "Tree"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tcTree2_r4DB :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcTree2_r4DB = GHC.Types.TrNameS $tcTree1_r4DA
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+Utils.AbstractGraph.$tcTree :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+Utils.AbstractGraph.$tcTree
+  = GHC.Types.TyCon
+      6515252302738829926##
+      7116435001695257579##
+      Utils.AbstractGraph.$trModule
+      $tcTree2_r4DB
+      0#
+      GHC.Types.krep$*->*->*
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep15_r4DC :: [GHC.Types.KindRep]
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep15_r4DC
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep_r4Dh (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep16_r4DD :: [GHC.Types.KindRep]
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep16_r4DD
+  = GHC.Types.: @ GHC.Types.KindRep $krep1_r4Di $krep15_r4DC
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep17_r4DE :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep17_r4DE
+  = GHC.Types.KindRepTyConApp
+      Utils.AbstractGraph.$tcTree $krep16_r4DD
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep18_r4DF :: [GHC.Types.KindRep]
+[GblId, Unf=OtherCon []]
+$krep18_r4DF
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep17_r4DE (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep19_r4DG :: [GHC.Types.KindRep]
+[GblId, Unf=OtherCon []]
+$krep19_r4DG
+  = GHC.Types.: @ GHC.Types.KindRep $krep_r4Dh $krep18_r4DF
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep20_r4DH :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep20_r4DH
+  = GHC.Types.KindRepTyConApp GHC.Tuple.$tc(,) $krep19_r4DG
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep21_r4DI :: [GHC.Types.KindRep]
+[GblId, Unf=OtherCon []]
+$krep21_r4DI
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep20_r4DH (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep22_r4DJ :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep22_r4DJ
+  = GHC.Types.KindRepTyConApp GHC.Types.$tc[] $krep21_r4DI
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep23_r4DK :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep23_r4DK = GHC.Types.KindRepFun $krep22_r4DJ $krep17_r4DE
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep24_r4DL :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep24_r4DL = GHC.Types.KindRepFun $krep1_r4Di $krep23_r4DK
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'Tree1_r4DM :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Tree1_r4DM = "'Tree"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'Tree2_r4DN :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Tree2_r4DN = GHC.Types.TrNameS $tc'Tree1_r4DM
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+Utils.AbstractGraph.$tc'Tree :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+Utils.AbstractGraph.$tc'Tree
+  = GHC.Types.TyCon
+      1962891149104463300##
+      12402799480339590078##
+      Utils.AbstractGraph.$trModule
+      $tc'Tree2_r4DN
+      2#
+      $krep24_r4DL
+
+
+
+[6 of 8] Compiling FDB.GADTForall   ( FDB/GADTForall.hs, FDB/GADTForall.o )
+
+==================== Tidy Core ====================
+Result size of Tidy Core
+  = {terms: 1,465, types: 1,469, coercions: 119, joins: 0/1}
+
+-- RHS size: {terms: 4, types: 7, coercions: 3, joins: 0/0}
+|><| [InlPrag=INLINE]
+  :: forall a b. NatJoin a b => Q a -> Q b -> Q (a, b)
+[GblId[ClassOp],
+ Arity=1,
+ Caf=NoCafRefs,
+ Str=<S,U>,
+ Unf=Unf{Src=InlineStable, TopLvl=True, Value=True, ConLike=True,
+         WorkFree=True, Expandable=True,
+         Guidance=ALWAYS_IF(arity=1,unsat_ok=False,boring_ok=True)
+         Tmpl= \ (@ a_a5iq)
+                 (@ b_a5ir)
+                 (v_B1 [Occ=Once] :: NatJoin a_a5iq b_a5ir) ->
+                 v_B1
+                 `cast` (FDB.GADTForall.N:NatJoin[0] <a_a5iq>_N <b_a5ir>_N
+                         :: NatJoin a_a5iq b_a5ir
+                            ~R# (Q a_a5iq -> Q b_a5ir -> Q (a_a5iq, b_a5ir)))}]
+|><|
+  = \ (@ a_a5iq) (@ b_a5ir) (v_B1 :: NatJoin a_a5iq b_a5ir) ->
+      v_B1
+      `cast` (FDB.GADTForall.N:NatJoin[0] <a_a5iq>_N <b_a5ir>_N
+              :: NatJoin a_a5iq b_a5ir
+                 ~R# (Q a_a5iq -> Q b_a5ir -> Q (a_a5iq, b_a5ir)))
+
+-- RHS size: {terms: 7, types: 10, coercions: 0, joins: 0/0}
+FDB.GADTForall.$WMap [InlPrag=INLINE[2]]
+  :: forall b a. (b -> a) -> Q b -> Q a
+[GblId[DataConWrapper],
+ Arity=2,
+ Caf=NoCafRefs,
+ Str=<L,U><L,U>,
+ Unf=Unf{Src=InlineStable, TopLvl=True, Value=True, ConLike=True,
+         WorkFree=True, Expandable=True,
+         Guidance=ALWAYS_IF(arity=2,unsat_ok=True,boring_ok=True)
+         Tmpl= \ (@ b_X5iG)
+                 (@ a_a5iG)
+                 (dt_a5pK [Occ=Once] :: b_X5iG -> a_a5iG)
+                 (dt_a5pL [Occ=Once] :: Q b_X5iG) ->
+                 FDB.GADTForall.Map @ a_a5iG @ b_X5iG dt_a5pK dt_a5pL}]
+FDB.GADTForall.$WMap
+  = \ (@ b_X5iG)
+      (@ a_a5iG)
+      (dt_a5pK [Occ=Once] :: b_X5iG -> a_a5iG)
+      (dt_a5pL [Occ=Once] :: Q b_X5iG) ->
+      FDB.GADTForall.Map @ a_a5iG @ b_X5iG dt_a5pK dt_a5pL
+
+-- RHS size: {terms: 7, types: 14, coercions: 4, joins: 0/0}
+FDB.GADTForall.$WGroupBy [InlPrag=INLINE[2]]
+  :: forall v k. (v -> k) -> Q v -> Q (k, Q v)
+[GblId[DataConWrapper],
+ Arity=2,
+ Caf=NoCafRefs,
+ Str=<L,U><L,U>,
+ Unf=Unf{Src=InlineStable, TopLvl=True, Value=True, ConLike=True,
+         WorkFree=True, Expandable=True,
+         Guidance=ALWAYS_IF(arity=2,unsat_ok=True,boring_ok=False)
+         Tmpl= \ (@ v_X5iJ)
+                 (@ k_X5iL)
+                 (dt_a5pY [Occ=Once] :: v_X5iJ -> k_X5iL)
+                 (dt_a5pZ [Occ=Once] :: Q v_X5iJ) ->
+                 FDB.GADTForall.GroupBy
+                   @ (k_X5iL, Q v_X5iJ)
+                   @ v_X5iJ
+                   @ k_X5iL
+                   @~ (<(k_X5iL, Q v_X5iJ)>_N
+                       :: (k_X5iL, Q v_X5iJ) GHC.Prim.~# (k_X5iL, Q v_X5iJ))
+                   dt_a5pY
+                   dt_a5pZ}]
+FDB.GADTForall.$WGroupBy
+  = \ (@ v_X5iJ)
+      (@ k_X5iL)
+      (dt_a5pY [Occ=Once] :: v_X5iJ -> k_X5iL)
+      (dt_a5pZ [Occ=Once] :: Q v_X5iJ) ->
+      FDB.GADTForall.GroupBy
+        @ (k_X5iL, Q v_X5iJ)
+        @ v_X5iJ
+        @ k_X5iL
+        @~ (<(k_X5iL, Q v_X5iJ)>_N
+            :: (k_X5iL, Q v_X5iJ) GHC.Prim.~# (k_X5iL, Q v_X5iJ))
+        dt_a5pY
+        dt_a5pZ
+
+-- RHS size: {terms: 7, types: 11, coercions: 0, joins: 0/0}
+FDB.GADTForall.$WMapSQ [InlPrag=INLINE[2]]
+  :: forall v b. (v -> SQ b) -> Q v -> Q b
+[GblId[DataConWrapper],
+ Arity=2,
+ Caf=NoCafRefs,
+ Str=<L,U><L,U>,
+ Unf=Unf{Src=InlineStable, TopLvl=True, Value=True, ConLike=True,
+         WorkFree=True, Expandable=True,
+         Guidance=ALWAYS_IF(arity=2,unsat_ok=True,boring_ok=True)
+         Tmpl= \ (@ v_X5iL)
+                 (@ b_a5iL)
+                 (dt_a5q7 [Occ=Once] :: v_X5iL -> SQ b_a5iL)
+                 (dt_a5q8 [Occ=Once] :: Q v_X5iL) ->
+                 FDB.GADTForall.MapSQ @ b_a5iL @ v_X5iL dt_a5q7 dt_a5q8}]
+FDB.GADTForall.$WMapSQ
+  = \ (@ v_X5iL)
+      (@ b_a5iL)
+      (dt_a5q7 [Occ=Once] :: v_X5iL -> SQ b_a5iL)
+      (dt_a5q8 [Occ=Once] :: Q v_X5iL) ->
+      FDB.GADTForall.MapSQ @ b_a5iL @ v_X5iL dt_a5q7 dt_a5q8
+
+-- RHS size: {terms: 9, types: 12, coercions: 0, joins: 0/0}
+FDB.GADTForall.$WOrderBy [InlPrag=INLINE[2]]
+  :: forall b a. Ord b => (a -> b) -> Q a -> Q a
+[GblId[DataConWrapper],
+ Arity=3,
+ Caf=NoCafRefs,
+ Str=<L,U><L,U><L,U>,
+ Unf=Unf{Src=InlineStable, TopLvl=True, Value=True, ConLike=True,
+         WorkFree=True, Expandable=True,
+         Guidance=ALWAYS_IF(arity=3,unsat_ok=True,boring_ok=True)
+         Tmpl= \ (@ b_X5iO)
+                 (@ a_a5iO)
+                 (dt_a5qp [Occ=Once] :: Ord b_X5iO)
+                 (dt_a5qq [Occ=Once] :: a_a5iO -> b_X5iO)
+                 (dt_a5qr [Occ=Once] :: Q a_a5iO) ->
+                 FDB.GADTForall.OrderBy @ a_a5iO @ b_X5iO dt_a5qp dt_a5qq dt_a5qr}]
+FDB.GADTForall.$WOrderBy
+  = \ (@ b_X5iO)
+      (@ a_a5iO)
+      (dt_a5qp [Occ=Once] :: Ord b_X5iO)
+      (dt_a5qq [Occ=Once] :: a_a5iO -> b_X5iO)
+      (dt_a5qr [Occ=Once] :: Q a_a5iO) ->
+      FDB.GADTForall.OrderBy @ a_a5iO @ b_X5iO dt_a5qp dt_a5qq dt_a5qr
+
+-- RHS size: {terms: 9, types: 11, coercions: 0, joins: 0/0}
+FDB.GADTForall.$WTake [InlPrag=INLINE[2]]
+  :: forall n a. Integral n => n -> Q a -> Q a
+[GblId[DataConWrapper],
+ Arity=3,
+ Caf=NoCafRefs,
+ Str=<L,U><L,U><L,U>,
+ Unf=Unf{Src=InlineStable, TopLvl=True, Value=True, ConLike=True,
+         WorkFree=True, Expandable=True,
+         Guidance=ALWAYS_IF(arity=3,unsat_ok=True,boring_ok=True)
+         Tmpl= \ (@ n_X5iQ)
+                 (@ a_a5iQ)
+                 (dt_a5qH [Occ=Once] :: Integral n_X5iQ)
+                 (dt_a5qI [Occ=Once] :: n_X5iQ)
+                 (dt_a5qJ [Occ=Once] :: Q a_a5iQ) ->
+                 FDB.GADTForall.Take @ a_a5iQ @ n_X5iQ dt_a5qH dt_a5qI dt_a5qJ}]
+FDB.GADTForall.$WTake
+  = \ (@ n_X5iQ)
+      (@ a_a5iQ)
+      (dt_a5qH [Occ=Once] :: Integral n_X5iQ)
+      (dt_a5qI [Occ=Once] :: n_X5iQ)
+      (dt_a5qJ [Occ=Once] :: Q a_a5iQ) ->
+      FDB.GADTForall.Take @ a_a5iQ @ n_X5iQ dt_a5qH dt_a5qI dt_a5qJ
+
+-- RHS size: {terms: 4, types: 7, coercions: 2, joins: 0/0}
+FDB.GADTForall.$WFetchRow [InlPrag=INLINE[2]]
+  :: forall a. RowRef a -> SQ (Row a)
+[GblId[DataConWrapper],
+ Arity=1,
+ Caf=NoCafRefs,
+ Str=<L,U>,
+ Unf=Unf{Src=InlineStable, TopLvl=True, Value=True, ConLike=True,
+         WorkFree=True, Expandable=True,
+         Guidance=ALWAYS_IF(arity=1,unsat_ok=True,boring_ok=False)
+         Tmpl= \ (@ a_X5iA) (dt_a5pm [Occ=Once] :: RowRef a_X5iA) ->
+                 FDB.GADTForall.FetchRow
+                   @ (Row a_X5iA)
+                   @ a_X5iA
+                   @~ (<Row a_X5iA>_N :: Row a_X5iA GHC.Prim.~# Row a_X5iA)
+                   dt_a5pm}]
+FDB.GADTForall.$WFetchRow
+  = \ (@ a_X5iA) (dt_a5pm [Occ=Once] :: RowRef a_X5iA) ->
+      FDB.GADTForall.FetchRow
+        @ (Row a_X5iA)
+        @ a_X5iA
+        @~ (<Row a_X5iA>_N :: Row a_X5iA GHC.Prim.~# Row a_X5iA)
+        dt_a5pm
+
+-- RHS size: {terms: 8, types: 15, coercions: 0, joins: 0/0}
+FDB.GADTForall.$WStateFold [InlPrag=INLINE[2]]
+  :: forall a b s. Agg a b s -> Q a -> SQ b
+[GblId[DataConWrapper],
+ Arity=2,
+ Caf=NoCafRefs,
+ Str=<L,U><L,U>,
+ Unf=Unf{Src=InlineStable, TopLvl=True, Value=True, ConLike=True,
+         WorkFree=True, Expandable=True,
+         Guidance=ALWAYS_IF(arity=2,unsat_ok=True,boring_ok=True)
+         Tmpl= \ (@ a_X5iB)
+                 (@ b_a5iB)
+                 (@ s_X5iE)
+                 (dt_a5pw [Occ=Once] :: Agg a_X5iB b_a5iB s_X5iE)
+                 (dt_a5px [Occ=Once] :: Q a_X5iB) ->
+                 FDB.GADTForall.StateFold
+                   @ b_a5iB @ a_X5iB @ s_X5iE dt_a5pw dt_a5px}]
+FDB.GADTForall.$WStateFold
+  = \ (@ a_X5iB)
+      (@ b_a5iB)
+      (@ s_X5iE)
+      (dt_a5pw [Occ=Once] :: Agg a_X5iB b_a5iB s_X5iE)
+      (dt_a5px [Occ=Once] :: Q a_X5iB) ->
+      FDB.GADTForall.StateFold @ b_a5iB @ a_X5iB @ s_X5iE dt_a5pw dt_a5px
+
+Rec {
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+FDB.GADTForall.$fFunctorQ [InlPrag=NOUSERINLINE CONLIKE]
+  :: Functor Q
+[GblId[DFunId]]
+FDB.GADTForall.$fFunctorQ
+  = GHC.Base.C:Functor @ Q FDB.GADTForall.$WMap $c<$_r5Nb
+
+-- RHS size: {terms: 4, types: 7, coercions: 0, joins: 0/0}
+$c<$_r5Nb :: forall a b. a -> Q b -> Q a
+[GblId]
+$c<$_r5Nb
+  = \ (@ a_a5ME) (@ b_a5MF) ->
+      GHC.Base.$dm<$ @ Q FDB.GADTForall.$fFunctorQ @ a_a5ME @ b_a5MF
+end Rec }
+
+-- RHS size: {terms: 20, types: 3, coercions: 0, joins: 0/0}
+$dIP_r5T0 :: GHC.Stack.Types.CallStack
+[GblId]
+$dIP_r5T0
+  = GHC.Stack.Types.pushCallStack
+      (GHC.CString.unpackCString# "undefined"#,
+       GHC.Stack.Types.SrcLoc
+         (GHC.CString.unpackCString# "main"#)
+         (GHC.CString.unpackCString# "FDB.GADTForall"#)
+         (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+         (GHC.Types.I# 82#)
+         (GHC.Types.I# 11#)
+         (GHC.Types.I# 82#)
+         (GHC.Types.I# 20#))
+      GHC.Stack.Types.emptyCallStack
+
+-- RHS size: {terms: 4, types: 12, coercions: 4, joins: 0/0}
+$c<*>_r5T1 :: forall a b. Q (a -> b) -> Q a -> Q b
+[GblId]
+$c<*>_r5T1
+  = \ (@ a_a5LL) (@ b_a5LM) ->
+      undefined
+        @ 'GHC.Types.LiftedRep
+        @ (Q (a_a5LL -> b_a5LM) -> Q a_a5LL -> Q b_a5LM)
+        ($dIP_r5T0
+         `cast` (Sym (GHC.Classes.N:IP[0]
+                          <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                 :: GHC.Stack.Types.CallStack
+                    ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+-- RHS size: {terms: 20, types: 3, coercions: 0, joins: 0/0}
+$dIP1_r5T2 :: GHC.Stack.Types.CallStack
+[GblId]
+$dIP1_r5T2
+  = GHC.Stack.Types.pushCallStack
+      (GHC.CString.unpackCString# "undefined"#,
+       GHC.Stack.Types.SrcLoc
+         (GHC.CString.unpackCString# "main"#)
+         (GHC.CString.unpackCString# "FDB.GADTForall"#)
+         (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+         (GHC.Types.I# 81#)
+         (GHC.Types.I# 10#)
+         (GHC.Types.I# 81#)
+         (GHC.Types.I# 19#))
+      GHC.Stack.Types.emptyCallStack
+
+-- RHS size: {terms: 3, types: 6, coercions: 4, joins: 0/0}
+$cpure_r5T3 :: forall a. a -> Q a
+[GblId]
+$cpure_r5T3
+  = \ (@ a_a5LC) ->
+      undefined
+        @ 'GHC.Types.LiftedRep
+        @ (a_a5LC -> Q a_a5LC)
+        ($dIP1_r5T2
+         `cast` (Sym (GHC.Classes.N:IP[0]
+                          <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                 :: GHC.Stack.Types.CallStack
+                    ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+Rec {
+-- RHS size: {terms: 7, types: 1, coercions: 0, joins: 0/0}
+FDB.GADTForall.$fApplicativeQ [InlPrag=NOUSERINLINE CONLIKE]
+  :: Applicative Q
+[GblId[DFunId]]
+FDB.GADTForall.$fApplicativeQ
+  = GHC.Base.C:Applicative
+      @ Q
+      FDB.GADTForall.$fFunctorQ
+      $cpure_r5T3
+      $c<*>_r5T1
+      $cliftA2_r5T6
+      $c*>_r5T4
+      $c<*_r5T5
+
+-- RHS size: {terms: 4, types: 7, coercions: 0, joins: 0/0}
+$c*>_r5T4 :: forall a b. Q a -> Q b -> Q b
+[GblId]
+$c*>_r5T4
+  = \ (@ a_a5M8) (@ b_a5M9) ->
+      GHC.Base.$dm*> @ Q FDB.GADTForall.$fApplicativeQ @ a_a5M8 @ b_a5M9
+
+-- RHS size: {terms: 4, types: 7, coercions: 0, joins: 0/0}
+$c<*_r5T5 :: forall a b. Q a -> Q b -> Q a
+[GblId]
+$c<*_r5T5
+  = \ (@ a_a5Mj) (@ b_a5Mk) ->
+      GHC.Base.$dm<* @ Q FDB.GADTForall.$fApplicativeQ @ a_a5Mj @ b_a5Mk
+
+-- RHS size: {terms: 5, types: 10, coercions: 0, joins: 0/0}
+$cliftA2_r5T6 :: forall a b c. (a -> b -> c) -> Q a -> Q b -> Q c
+[GblId]
+$cliftA2_r5T6
+  = \ (@ a_a5LV) (@ b_a5LW) (@ c_a5LX) ->
+      GHC.Base.$dmliftA2
+        @ Q FDB.GADTForall.$fApplicativeQ @ a_a5LV @ b_a5LW @ c_a5LX
+end Rec }
+
+-- RHS size: {terms: 20, types: 3, coercions: 0, joins: 0/0}
+$dIP2_r5T7 :: GHC.Stack.Types.CallStack
+[GblId]
+$dIP2_r5T7
+  = GHC.Stack.Types.pushCallStack
+      (GHC.CString.unpackCString# "undefined"#,
+       GHC.Stack.Types.SrcLoc
+         (GHC.CString.unpackCString# "main"#)
+         (GHC.CString.unpackCString# "FDB.GADTForall"#)
+         (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+         (GHC.Types.I# 85#)
+         (GHC.Types.I# 11#)
+         (GHC.Types.I# 85#)
+         (GHC.Types.I# 20#))
+      GHC.Stack.Types.emptyCallStack
+
+-- RHS size: {terms: 4, types: 12, coercions: 4, joins: 0/0}
+$c>>=_r5T8 :: forall a b. Q a -> (a -> Q b) -> Q b
+[GblId]
+$c>>=_r5T8
+  = \ (@ a_a5KT) (@ b_a5KU) ->
+      undefined
+        @ 'GHC.Types.LiftedRep
+        @ (Q a_a5KT -> (a_a5KT -> Q b_a5KU) -> Q b_a5KU)
+        ($dIP2_r5T7
+         `cast` (Sym (GHC.Classes.N:IP[0]
+                          <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                 :: GHC.Stack.Types.CallStack
+                    ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+Rec {
+-- RHS size: {terms: 6, types: 1, coercions: 0, joins: 0/0}
+FDB.GADTForall.$fMonadQ [InlPrag=NOUSERINLINE CONLIKE] :: Monad Q
+[GblId[DFunId]]
+FDB.GADTForall.$fMonadQ
+  = GHC.Base.C:Monad
+      @ Q
+      FDB.GADTForall.$fApplicativeQ
+      $c>>=_r5T8
+      $c>>_r5Tb
+      $creturn_r5T9
+      $cfail_r5Ta
+
+-- RHS size: {terms: 3, types: 4, coercions: 0, joins: 0/0}
+$creturn_r5T9 :: forall a. a -> Q a
+[GblId]
+$creturn_r5T9
+  = \ (@ a_a5Le) ->
+      GHC.Base.$dmreturn @ Q FDB.GADTForall.$fMonadQ @ a_a5Le
+
+-- RHS size: {terms: 3, types: 4, coercions: 0, joins: 0/0}
+$cfail_r5Ta :: forall a. String -> Q a
+[GblId]
+$cfail_r5Ta
+  = \ (@ a_a5Ln) ->
+      GHC.Base.$dmfail @ Q FDB.GADTForall.$fMonadQ @ a_a5Ln
+
+-- RHS size: {terms: 4, types: 7, coercions: 0, joins: 0/0}
+$c>>_r5Tb :: forall a b. Q a -> Q b -> Q b
+[GblId]
+$c>>_r5Tb
+  = \ (@ a_a5L3) (@ b_a5L4) ->
+      GHC.Base.$dm>> @ Q FDB.GADTForall.$fMonadQ @ a_a5L3 @ b_a5L4
+end Rec }
+
+-- RHS size: {terms: 20, types: 3, coercions: 0, joins: 0/0}
+$dIP3_r5Tc :: GHC.Stack.Types.CallStack
+[GblId]
+$dIP3_r5Tc
+  = GHC.Stack.Types.pushCallStack
+      (GHC.CString.unpackCString# "undefined"#,
+       GHC.Stack.Types.SrcLoc
+         (GHC.CString.unpackCString# "main"#)
+         (GHC.CString.unpackCString# "FDB.GADTForall"#)
+         (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+         (GHC.Types.I# 104#)
+         (GHC.Types.I# 10#)
+         (GHC.Types.I# 104#)
+         (GHC.Types.I# 19#))
+      GHC.Stack.Types.emptyCallStack
+
+-- RHS size: {terms: 4, types: 11, coercions: 4, joins: 0/0}
+$cfmap_r5Td :: forall a b. (a -> b) -> SQ a -> SQ b
+[GblId]
+$cfmap_r5Td
+  = \ (@ a_a5Kn) (@ b_a5Ko) ->
+      undefined
+        @ 'GHC.Types.LiftedRep
+        @ ((a_a5Kn -> b_a5Ko) -> SQ a_a5Kn -> SQ b_a5Ko)
+        ($dIP3_r5Tc
+         `cast` (Sym (GHC.Classes.N:IP[0]
+                          <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                 :: GHC.Stack.Types.CallStack
+                    ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+Rec {
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+FDB.GADTForall.$fFunctorSQ [InlPrag=NOUSERINLINE CONLIKE]
+  :: Functor SQ
+[GblId[DFunId]]
+FDB.GADTForall.$fFunctorSQ
+  = GHC.Base.C:Functor @ SQ $cfmap_r5Td $c<$1_r5Te
+
+-- RHS size: {terms: 4, types: 7, coercions: 0, joins: 0/0}
+$c<$1_r5Te :: forall a b. a -> SQ b -> SQ a
+[GblId]
+$c<$1_r5Te
+  = \ (@ a_a5KC) (@ b_a5KD) ->
+      GHC.Base.$dm<$ @ SQ FDB.GADTForall.$fFunctorSQ @ a_a5KC @ b_a5KD
+end Rec }
+
+-- RHS size: {terms: 20, types: 3, coercions: 0, joins: 0/0}
+$dIP4_r5Tf :: GHC.Stack.Types.CallStack
+[GblId]
+$dIP4_r5Tf
+  = GHC.Stack.Types.pushCallStack
+      (GHC.CString.unpackCString# "undefined"#,
+       GHC.Stack.Types.SrcLoc
+         (GHC.CString.unpackCString# "main"#)
+         (GHC.CString.unpackCString# "FDB.GADTForall"#)
+         (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+         (GHC.Types.I# 108#)
+         (GHC.Types.I# 11#)
+         (GHC.Types.I# 108#)
+         (GHC.Types.I# 20#))
+      GHC.Stack.Types.emptyCallStack
+
+-- RHS size: {terms: 4, types: 12, coercions: 4, joins: 0/0}
+$c<*>1_r5Tg :: forall a b. SQ (a -> b) -> SQ a -> SQ b
+[GblId]
+$c<*>1_r5Tg
+  = \ (@ a_a5Jj) (@ b_a5Jk) ->
+      undefined
+        @ 'GHC.Types.LiftedRep
+        @ (SQ (a_a5Jj -> b_a5Jk) -> SQ a_a5Jj -> SQ b_a5Jk)
+        ($dIP4_r5Tf
+         `cast` (Sym (GHC.Classes.N:IP[0]
+                          <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                 :: GHC.Stack.Types.CallStack
+                    ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+-- RHS size: {terms: 20, types: 3, coercions: 0, joins: 0/0}
+$dIP5_r5Th :: GHC.Stack.Types.CallStack
+[GblId]
+$dIP5_r5Th
+  = GHC.Stack.Types.pushCallStack
+      (GHC.CString.unpackCString# "undefined"#,
+       GHC.Stack.Types.SrcLoc
+         (GHC.CString.unpackCString# "main"#)
+         (GHC.CString.unpackCString# "FDB.GADTForall"#)
+         (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+         (GHC.Types.I# 107#)
+         (GHC.Types.I# 10#)
+         (GHC.Types.I# 107#)
+         (GHC.Types.I# 19#))
+      GHC.Stack.Types.emptyCallStack
+
+-- RHS size: {terms: 3, types: 6, coercions: 4, joins: 0/0}
+$cpure1_r5Ti :: forall a. a -> SQ a
+[GblId]
+$cpure1_r5Ti
+  = \ (@ a_a5J8) ->
+      undefined
+        @ 'GHC.Types.LiftedRep
+        @ (a_a5J8 -> SQ a_a5J8)
+        ($dIP5_r5Th
+         `cast` (Sym (GHC.Classes.N:IP[0]
+                          <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                 :: GHC.Stack.Types.CallStack
+                    ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+Rec {
+-- RHS size: {terms: 7, types: 1, coercions: 0, joins: 0/0}
+FDB.GADTForall.$fApplicativeSQ [InlPrag=NOUSERINLINE CONLIKE]
+  :: Applicative SQ
+[GblId[DFunId]]
+FDB.GADTForall.$fApplicativeSQ
+  = GHC.Base.C:Applicative
+      @ SQ
+      FDB.GADTForall.$fFunctorSQ
+      $cpure1_r5Ti
+      $c<*>1_r5Tg
+      $cliftA1_r5Tl
+      $c*>1_r5Tj
+      $c<*1_r5Tk
+
+-- RHS size: {terms: 4, types: 7, coercions: 0, joins: 0/0}
+$c*>1_r5Tj :: forall a b. SQ a -> SQ b -> SQ b
+[GblId]
+$c*>1_r5Tj
+  = \ (@ a_a5JS) (@ b_a5JT) ->
+      GHC.Base.$dm*>
+        @ SQ FDB.GADTForall.$fApplicativeSQ @ a_a5JS @ b_a5JT
+
+-- RHS size: {terms: 4, types: 7, coercions: 0, joins: 0/0}
+$c<*1_r5Tk :: forall a b. SQ a -> SQ b -> SQ a
+[GblId]
+$c<*1_r5Tk
+  = \ (@ a_a5K8) (@ b_a5K9) ->
+      GHC.Base.$dm<*
+        @ SQ FDB.GADTForall.$fApplicativeSQ @ a_a5K8 @ b_a5K9
+
+-- RHS size: {terms: 5, types: 10, coercions: 0, joins: 0/0}
+$cliftA1_r5Tl
+  :: forall a b c. (a -> b -> c) -> SQ a -> SQ b -> SQ c
+[GblId]
+$cliftA1_r5Tl
+  = \ (@ a_a5JA) (@ b_a5JB) (@ c_a5JC) ->
+      GHC.Base.$dmliftA2
+        @ SQ FDB.GADTForall.$fApplicativeSQ @ a_a5JA @ b_a5JB @ c_a5JC
+end Rec }
+
+-- RHS size: {terms: 20, types: 3, coercions: 0, joins: 0/0}
+$dIP6_r5Tm :: GHC.Stack.Types.CallStack
+[GblId]
+$dIP6_r5Tm
+  = GHC.Stack.Types.pushCallStack
+      (GHC.CString.unpackCString# "undefined"#,
+       GHC.Stack.Types.SrcLoc
+         (GHC.CString.unpackCString# "main"#)
+         (GHC.CString.unpackCString# "FDB.GADTForall"#)
+         (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+         (GHC.Types.I# 111#)
+         (GHC.Types.I# 11#)
+         (GHC.Types.I# 111#)
+         (GHC.Types.I# 20#))
+      GHC.Stack.Types.emptyCallStack
+
+-- RHS size: {terms: 4, types: 12, coercions: 4, joins: 0/0}
+$c>>=1_r5Tn :: forall a b. SQ a -> (a -> SQ b) -> SQ b
+[GblId]
+$c>>=1_r5Tn
+  = \ (@ a_a5Ie) (@ b_a5If) ->
+      undefined
+        @ 'GHC.Types.LiftedRep
+        @ (SQ a_a5Ie -> (a_a5Ie -> SQ b_a5If) -> SQ b_a5If)
+        ($dIP6_r5Tm
+         `cast` (Sym (GHC.Classes.N:IP[0]
+                          <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                 :: GHC.Stack.Types.CallStack
+                    ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+Rec {
+-- RHS size: {terms: 6, types: 1, coercions: 0, joins: 0/0}
+FDB.GADTForall.$fMonadSQ [InlPrag=NOUSERINLINE CONLIKE] :: Monad SQ
+[GblId[DFunId]]
+FDB.GADTForall.$fMonadSQ
+  = GHC.Base.C:Monad
+      @ SQ
+      FDB.GADTForall.$fApplicativeSQ
+      $c>>=1_r5Tn
+      $c>>1_r5Tq
+      $creturn1_r5To
+      $cfail1_r5Tp
+
+-- RHS size: {terms: 3, types: 4, coercions: 0, joins: 0/0}
+$creturn1_r5To :: forall a. a -> SQ a
+[GblId]
+$creturn1_r5To
+  = \ (@ a_a5IG) ->
+      GHC.Base.$dmreturn @ SQ FDB.GADTForall.$fMonadSQ @ a_a5IG
+
+-- RHS size: {terms: 3, types: 4, coercions: 0, joins: 0/0}
+$cfail1_r5Tp :: forall a. String -> SQ a
+[GblId]
+$cfail1_r5Tp
+  = \ (@ a_a5IS) ->
+      GHC.Base.$dmfail @ SQ FDB.GADTForall.$fMonadSQ @ a_a5IS
+
+-- RHS size: {terms: 4, types: 7, coercions: 0, joins: 0/0}
+$c>>1_r5Tq :: forall a b. SQ a -> SQ b -> SQ b
+[GblId]
+$c>>1_r5Tq
+  = \ (@ a_a5It) (@ b_a5Iu) ->
+      GHC.Base.$dm>> @ SQ FDB.GADTForall.$fMonadSQ @ a_a5It @ b_a5Iu
+end Rec }
+
+-- RHS size: {terms: 2, types: 1, coercions: 0, joins: 0/0}
+$c/=_r5Tr :: Word16 -> Word16 -> Bool
+[GblId]
+$c/=_r5Tr = /= @ Word16 GHC.Word.$fEqWord16
+
+-- RHS size: {terms: 2, types: 1, coercions: 0, joins: 0/0}
+$c==_r5Ts :: Word16 -> Word16 -> Bool
+[GblId]
+$c==_r5Ts = == @ Word16 GHC.Word.$fEqWord16
+
+-- RHS size: {terms: 3, types: 1, coercions: 14, joins: 0/0}
+FDB.GADTForall.$fEqTableId [InlPrag=NOUSERINLINE CONLIKE]
+  :: Eq TableId
+[GblId[DFunId]]
+FDB.GADTForall.$fEqTableId
+  = GHC.Classes.C:Eq
+      @ TableId
+      ($c==_r5Ts
+       `cast` (Sym (FDB.GADTForall.N:TableId[0])
+               ->_R Sym (FDB.GADTForall.N:TableId[0])
+               ->_R <Bool>_R
+               :: (Word16 -> Word16 -> Bool) ~R# (TableId -> TableId -> Bool)))
+      ($c/=_r5Tr
+       `cast` (Sym (FDB.GADTForall.N:TableId[0])
+               ->_R Sym (FDB.GADTForall.N:TableId[0])
+               ->_R <Bool>_R
+               :: (Word16 -> Word16 -> Bool) ~R# (TableId -> TableId -> Bool)))
+
+-- RHS size: {terms: 2, types: 1, coercions: 0, joins: 0/0}
+$c/=1_r5Tt :: Word64 -> Word64 -> Bool
+[GblId]
+$c/=1_r5Tt = /= @ Word64 GHC.Word.$fEqWord64
+
+-- RHS size: {terms: 2, types: 1, coercions: 0, joins: 0/0}
+$c==1_r5Tu :: Word64 -> Word64 -> Bool
+[GblId]
+$c==1_r5Tu = == @ Word64 GHC.Word.$fEqWord64
+
+-- RHS size: {terms: 3, types: 1, coercions: 14, joins: 0/0}
+FDB.GADTForall.$fEqRowId [InlPrag=NOUSERINLINE CONLIKE] :: Eq RowId
+[GblId[DFunId]]
+FDB.GADTForall.$fEqRowId
+  = GHC.Classes.C:Eq
+      @ RowId
+      ($c==1_r5Tu
+       `cast` (Sym (FDB.GADTForall.N:RowId[0])
+               ->_R Sym (FDB.GADTForall.N:RowId[0])
+               ->_R <Bool>_R
+               :: (Word64 -> Word64 -> Bool) ~R# (RowId -> RowId -> Bool)))
+      ($c/=1_r5Tt
+       `cast` (Sym (FDB.GADTForall.N:RowId[0])
+               ->_R Sym (FDB.GADTForall.N:RowId[0])
+               ->_R <Bool>_R
+               :: (Word64 -> Word64 -> Bool) ~R# (RowId -> RowId -> Bool)))
+
+-- RHS size: {terms: 16, types: 14, coercions: 4, joins: 0/0}
+$c==2_r5Tv :: forall a. RowRef a -> RowRef a -> Bool
+[GblId, Arity=2, Unf=OtherCon []]
+$c==2_r5Tv
+  = \ (@ a_a5HP)
+      (ds_d5QW :: RowRef a_a5HP)
+      (ds1_d5QX :: RowRef a_a5HP) ->
+      case ds_d5QW of { RowRef a1_a5sv a2_a5sw ->
+      case ds1_d5QX of { RowRef b1_a5sx b2_a5sy ->
+      &&
+        ($c==_r5Ts
+           (a1_a5sv
+            `cast` (FDB.GADTForall.N:TableId[0] :: TableId ~R# Word16))
+           (b1_a5sx
+            `cast` (FDB.GADTForall.N:TableId[0] :: TableId ~R# Word16)))
+        ($c==1_r5Tu
+           (a2_a5sw `cast` (FDB.GADTForall.N:RowId[0] :: RowId ~R# Word64))
+           (b2_a5sy `cast` (FDB.GADTForall.N:RowId[0] :: RowId ~R# Word64)))
+      }
+      }
+
+Rec {
+-- RHS size: {terms: 4, types: 6, coercions: 0, joins: 0/0}
+FDB.GADTForall.$fEqRowRef [InlPrag=NOUSERINLINE CONLIKE]
+  :: forall a. Eq (RowRef a)
+[GblId[DFunId]]
+FDB.GADTForall.$fEqRowRef
+  = \ (@ a_a5HP) ->
+      GHC.Classes.C:Eq
+        @ (RowRef a_a5HP) ($c==2_r5Tv @ a_a5HP) ($c/=2_r5Tw @ a_a5HP)
+
+-- RHS size: {terms: 3, types: 5, coercions: 0, joins: 0/0}
+$c/=2_r5Tw :: forall a. RowRef a -> RowRef a -> Bool
+[GblId]
+$c/=2_r5Tw
+  = \ (@ a_a5HP) ->
+      GHC.Classes.$dm/=
+        @ (RowRef a_a5HP) (FDB.GADTForall.$fEqRowRef @ a_a5HP)
+end Rec }
+
+-- RHS size: {terms: 3, types: 3, coercions: 0, joins: 0/0}
+findTable1_r5Tx :: forall a. String -> String
+[GblId, Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+findTable1_r5Tx = \ (@ a_a5FX) (v_B1 :: String) -> v_B1
+
+-- RHS size: {terms: 1, types: 0, coercions: 8, joins: 0/0}
+findTable :: forall a. String -> Table a
+[GblId, Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+findTable
+  = findTable1_r5Tx
+    `cast` (forall (a :: <*>_N).
+            <String>_R ->_R Sym (FDB.GADTForall.N:Table[0] <a>_P)
+            :: (forall a. String -> String) ~R# (forall a. String -> Table a))
+
+Rec {
+-- RHS size: {terms: 23, types: 23, coercions: 0, joins: 0/1}
+pull [Occ=LoopBreaker] :: forall a. Q a -> a
+[GblId, Arity=1, Unf=OtherCon []]
+pull
+  = \ (@ a_a5FN) (rec_a5jD :: Q a_a5FN) ->
+      case rec_a5jD of wild_X3s {
+        __DEFAULT ->
+          Control.Exception.Base.patError
+            @ 'GHC.Types.LiftedRep
+            @ a_a5FN
+            "FDB/GADTForall.hs:(36,1)-(41,27)|function pull"#;
+        Filter p_a5jE q_a5jF ->
+          let {
+            x_a5jG :: a_a5FN
+            [LclId]
+            x_a5jG = pull @ a_a5FN q_a5jF } in
+          case p_a5jE x_a5jG of {
+            False -> pull @ a_a5FN wild_X3s;
+            True -> x_a5jG
+          };
+        Map @ b_a5FV f_a5jH q_a5jI -> f_a5jH (pull @ b_a5FV q_a5jI)
+      }
+end Rec }
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+readT :: forall a. Table a -> Q a
+[GblId, Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+readT = FDB.GADTForall.Read
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+mapQ :: forall a b. (a -> b) -> Q a -> Q b
+[GblId, Arity=2, Caf=NoCafRefs, Unf=OtherCon []]
+mapQ = FDB.GADTForall.$WMap
+
+-- RHS size: {terms: 10, types: 17, coercions: 3, joins: 0/0}
+-|><|-> :: forall a b. NatJoin a b => Q a -> Q b -> Q b
+[GblId, Arity=3, Unf=OtherCon []]
+-|><|->
+  = \ (@ a_a5Fm)
+      (@ b_a5Fn)
+      ($dNatJoin_a5Fp :: NatJoin a_a5Fm b_a5Fn)
+      (x_a5jP :: Q a_a5Fm)
+      (y_a5jQ :: Q b_a5Fn) ->
+      FDB.GADTForall.Map
+        @ b_a5Fn
+        @ (a_a5Fm, b_a5Fn)
+        (snd @ a_a5Fm @ b_a5Fn)
+        (($dNatJoin_a5Fp
+          `cast` (FDB.GADTForall.N:NatJoin[0] <a_a5Fm>_N <b_a5Fn>_N
+                  :: NatJoin a_a5Fm b_a5Fn
+                     ~R# (Q a_a5Fm -> Q b_a5Fn -> Q (a_a5Fm, b_a5Fn))))
+           x_a5jP y_a5jQ)
+
+-- RHS size: {terms: 10, types: 17, coercions: 3, joins: 0/0}
+<-|><|- :: forall a b. NatJoin a b => Q a -> Q b -> Q a
+[GblId, Arity=3, Unf=OtherCon []]
+<-|><|-
+  = \ (@ a_a5Fy)
+      (@ b_a5Fz)
+      ($dNatJoin_a5FB :: NatJoin a_a5Fy b_a5Fz)
+      (a1_a5jR :: Q a_a5Fy)
+      (b1_a5jS :: Q b_a5Fz) ->
+      FDB.GADTForall.Map
+        @ a_a5Fy
+        @ (a_a5Fy, b_a5Fz)
+        (fst @ a_a5Fy @ b_a5Fz)
+        (($dNatJoin_a5FB
+          `cast` (FDB.GADTForall.N:NatJoin[0] <a_a5Fy>_N <b_a5Fz>_N
+                  :: NatJoin a_a5Fy b_a5Fz
+                     ~R# (Q a_a5Fy -> Q b_a5Fz -> Q (a_a5Fy, b_a5Fz))))
+           a1_a5jR b1_a5jS)
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+filterQ :: forall a. (a -> Bool) -> Q a -> Q a
+[GblId, Arity=2, Caf=NoCafRefs, Unf=OtherCon []]
+filterQ = FDB.GADTForall.Filter
+
+-- RHS size: {terms: 4, types: 8, coercions: 0, joins: 0/0}
+groupByWithKey
+  :: forall k a. Ord k => (a -> k) -> Q a -> Q (k, Q a)
+[GblId, Arity=3, Caf=NoCafRefs, Unf=OtherCon []]
+groupByWithKey
+  = \ (@ k_a5EH) (@ a_a5EI) _ [Occ=Dead] ->
+      FDB.GADTForall.$WGroupBy @ a_a5EI @ k_a5EH
+
+-- RHS size: {terms: 9, types: 34, coercions: 0, joins: 0/0}
+groupByQ :: forall k a. Ord k => (a -> k) -> Q a -> Q (Q a)
+[GblId, Arity=1, Unf=OtherCon []]
+groupByQ
+  = \ (@ k_a5EW) (@ a_a5EX) _ [Occ=Dead] ->
+      .:
+        @ (Q (k_a5EW, Q a_a5EX))
+        @ (Q (Q a_a5EX))
+        @ (a_a5EX -> k_a5EW)
+        @ (Q a_a5EX)
+        (\ (dt_a5pL :: Q (k_a5EW, Q a_a5EX)) ->
+           FDB.GADTForall.Map
+             @ (Q a_a5EX)
+             @ (k_a5EW, Q a_a5EX)
+             (snd @ k_a5EW @ (Q a_a5EX))
+             dt_a5pL)
+        (FDB.GADTForall.$WGroupBy @ a_a5EX @ k_a5EW)
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+orderBy :: forall b a. Ord b => (a -> b) -> Q a -> Q a
+[GblId, Arity=3, Caf=NoCafRefs, Unf=OtherCon []]
+orderBy = FDB.GADTForall.$WOrderBy
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+takeQ :: forall n a. Integral n => n -> Q a -> Q a
+[GblId, Arity=3, Caf=NoCafRefs, Unf=OtherCon []]
+takeQ = FDB.GADTForall.$WTake
+
+-- RHS size: {terms: 20, types: 3, coercions: 0, joins: 0/0}
+$dIP7_r5Ty :: GHC.Stack.Types.CallStack
+[GblId]
+$dIP7_r5Ty
+  = GHC.Stack.Types.pushCallStack
+      (GHC.CString.unpackCString# "undefined"#,
+       GHC.Stack.Types.SrcLoc
+         (GHC.CString.unpackCString# "main"#)
+         (GHC.CString.unpackCString# "FDB.GADTForall"#)
+         (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+         (GHC.Types.I# 65#)
+         (GHC.Types.I# 10#)
+         (GHC.Types.I# 65#)
+         (GHC.Types.I# 19#))
+      GHC.Stack.Types.emptyCallStack
+
+-- RHS size: {terms: 3, types: 5, coercions: 4, joins: 0/0}
+emptyQ :: forall a. Q a
+[GblId]
+emptyQ
+  = \ (@ a_a5DU) ->
+      undefined
+        @ 'GHC.Types.LiftedRep
+        @ (Q a_a5DU)
+        ($dIP7_r5Ty
+         `cast` (Sym (GHC.Classes.N:IP[0]
+                          <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                 :: GHC.Stack.Types.CallStack
+                    ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+-- RHS size: {terms: 24, types: 17, coercions: 4, joins: 0/0}
+eqFilter :: forall b a. Eq b => (a -> b) -> b -> Q a -> Q a
+[GblId, Arity=1, Unf=OtherCon []]
+eqFilter
+  = \ (@ b_a5DM) (@ a_a5DN) _ [Occ=Dead] ->
+      undefined
+        @ 'GHC.Types.LiftedRep
+        @ ((a_a5DN -> b_a5DM) -> b_a5DM -> Q a_a5DN -> Q a_a5DN)
+        ((GHC.Stack.Types.pushCallStack
+            (GHC.CString.unpackCString# "undefined"#,
+             GHC.Stack.Types.SrcLoc
+               (GHC.CString.unpackCString# "main"#)
+               (GHC.CString.unpackCString# "FDB.GADTForall"#)
+               (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+               (GHC.Types.I# 70#)
+               (GHC.Types.I# 12#)
+               (GHC.Types.I# 70#)
+               (GHC.Types.I# 21#))
+            GHC.Stack.Types.emptyCallStack)
+         `cast` (Sym (GHC.Classes.N:IP[0]
+                          <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                 :: GHC.Stack.Types.CallStack
+                    ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+-- RHS size: {terms: 25, types: 24, coercions: 4, joins: 0/0}
+equiJoin
+  :: forall c a b.
+     Eq c =>
+     (a -> c) -> (b -> c) -> Q a -> Q b -> Q (a, b)
+[GblId, Arity=1, Unf=OtherCon []]
+equiJoin
+  = \ (@ c_a5DD) (@ a_a5DE) (@ b_a5DF) _ [Occ=Dead] ->
+      undefined
+        @ 'GHC.Types.LiftedRep
+        @ ((a_a5DE -> c_a5DD)
+           -> (b_a5DF -> c_a5DD)
+           -> Q a_a5DE
+           -> Q b_a5DF
+           -> Q (a_a5DE, b_a5DF))
+        ((GHC.Stack.Types.pushCallStack
+            (GHC.CString.unpackCString# "undefined"#,
+             GHC.Stack.Types.SrcLoc
+               (GHC.CString.unpackCString# "main"#)
+               (GHC.CString.unpackCString# "FDB.GADTForall"#)
+               (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+               (GHC.Types.I# 73#)
+               (GHC.Types.I# 12#)
+               (GHC.Types.I# 73#)
+               (GHC.Types.I# 21#))
+            GHC.Stack.Types.emptyCallStack)
+         `cast` (Sym (GHC.Classes.N:IP[0]
+                          <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                 :: GHC.Stack.Types.CallStack
+                    ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+fetchRow :: forall a. RowRef a -> SQ (Row a)
+[GblId, Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+fetchRow = FDB.GADTForall.$WFetchRow
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+subqMap :: forall a b. (a -> SQ b) -> Q a -> Q b
+[GblId, Arity=2, Caf=NoCafRefs, Unf=OtherCon []]
+subqMap = FDB.GADTForall.$WMapSQ
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+subqFilter :: forall a. (a -> SQ Bool) -> Q a -> Q a
+[GblId, Arity=2, Caf=NoCafRefs, Unf=OtherCon []]
+subqFilter = FDB.GADTForall.FilterSQ
+
+-- RHS size: {terms: 20, types: 3, coercions: 0, joins: 0/0}
+$dIP8_r5Tz :: GHC.Stack.Types.CallStack
+[GblId]
+$dIP8_r5Tz
+  = GHC.Stack.Types.pushCallStack
+      (GHC.CString.unpackCString# "undefined"#,
+       GHC.Stack.Types.SrcLoc
+         (GHC.CString.unpackCString# "main"#)
+         (GHC.CString.unpackCString# "FDB.GADTForall"#)
+         (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+         (GHC.Types.I# 130#)
+         (GHC.Types.I# 10#)
+         (GHC.Types.I# 130#)
+         (GHC.Types.I# 19#))
+      GHC.Stack.Types.emptyCallStack
+
+-- RHS size: {terms: 4, types: 12, coercions: 4, joins: 0/0}
+mapToQ :: forall a b. (a -> Q b) -> SQ a -> Q b
+[GblId]
+mapToQ
+  = \ (@ a_a5Dc) (@ b_a5Dd) ->
+      undefined
+        @ 'GHC.Types.LiftedRep
+        @ ((a_a5Dc -> Q b_a5Dd) -> SQ a_a5Dc -> Q b_a5Dd)
+        ($dIP8_r5Tz
+         `cast` (Sym (GHC.Classes.N:IP[0]
+                          <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                 :: GHC.Stack.Types.CallStack
+                    ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+-- RHS size: {terms: 20, types: 3, coercions: 0, joins: 0/0}
+$dIP9_r5TA :: GHC.Stack.Types.CallStack
+[GblId]
+$dIP9_r5TA
+  = GHC.Stack.Types.pushCallStack
+      (GHC.CString.unpackCString# "undefined"#,
+       GHC.Stack.Types.SrcLoc
+         (GHC.CString.unpackCString# "main"#)
+         (GHC.CString.unpackCString# "FDB.GADTForall"#)
+         (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+         (GHC.Types.I# 133#)
+         (GHC.Types.I# 7#)
+         (GHC.Types.I# 133#)
+         (GHC.Types.I# 16#))
+      GHC.Stack.Types.emptyCallStack
+
+-- RHS size: {terms: 3, types: 7, coercions: 4, joins: 0/0}
+toQ :: forall a. SQ a -> Q a
+[GblId]
+toQ
+  = \ (@ a_a5D6) ->
+      undefined
+        @ 'GHC.Types.LiftedRep
+        @ (SQ a_a5D6 -> Q a_a5D6)
+        ($dIP9_r5TA
+         `cast` (Sym (GHC.Classes.N:IP[0]
+                          <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                 :: GHC.Stack.Types.CallStack
+                    ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+agg :: forall a b s. Agg a b s -> Q a -> SQ b
+[GblId, Arity=2, Caf=NoCafRefs, Unf=OtherCon []]
+agg = FDB.GADTForall.$WStateFold
+
+-- RHS size: {terms: 12, types: 21, coercions: 0, joins: 0/0}
+mapAgg :: forall b c s a. Agg b c s -> (a -> b) -> Q a -> SQ c
+[GblId, Arity=3, Caf=NoCafRefs, Unf=OtherCon []]
+mapAgg
+  = \ (@ b_a5Fc)
+      (@ c_a5Fd)
+      (@ s_a5Fe)
+      (@ a_a5Ff)
+      (g_a5jM :: Agg b_a5Fc c_a5Fd s_a5Fe)
+      (f_a5jN :: a_a5Ff -> b_a5Fc)
+      (q_a5jO :: Q a_a5Ff) ->
+      FDB.GADTForall.StateFold
+        @ c_a5Fd
+        @ b_a5Fc
+        @ s_a5Fe
+        g_a5jM
+        (FDB.GADTForall.Map @ b_a5Fc @ a_a5Ff f_a5jN q_a5jO)
+
+-- RHS size: {terms: 23, types: 12, coercions: 4, joins: 0/0}
+sumAgg :: forall a. Num a => Fold1 a
+[GblId, Arity=1, Unf=OtherCon []]
+sumAgg
+  = \ (@ a_a5CS) _ [Occ=Dead] ->
+      undefined
+        @ 'GHC.Types.LiftedRep
+        @ (Agg a_a5CS a_a5CS a_a5CS)
+        ((GHC.Stack.Types.pushCallStack
+            (GHC.CString.unpackCString# "undefined"#,
+             GHC.Stack.Types.SrcLoc
+               (GHC.CString.unpackCString# "main"#)
+               (GHC.CString.unpackCString# "FDB.GADTForall"#)
+               (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+               (GHC.Types.I# 148#)
+               (GHC.Types.I# 10#)
+               (GHC.Types.I# 148#)
+               (GHC.Types.I# 19#))
+            GHC.Stack.Types.emptyCallStack)
+         `cast` (Sym (GHC.Classes.N:IP[0]
+                          <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                 :: GHC.Stack.Types.CallStack
+                    ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+-- RHS size: {terms: 23, types: 14, coercions: 4, joins: 0/0}
+avgAgg :: forall a. Fractional a => Agg a a (a, a)
+[GblId, Arity=1, Unf=OtherCon []]
+avgAgg
+  = \ (@ a_a5CL) _ [Occ=Dead] ->
+      undefined
+        @ 'GHC.Types.LiftedRep
+        @ (Agg a_a5CL a_a5CL (a_a5CL, a_a5CL))
+        ((GHC.Stack.Types.pushCallStack
+            (GHC.CString.unpackCString# "undefined"#,
+             GHC.Stack.Types.SrcLoc
+               (GHC.CString.unpackCString# "main"#)
+               (GHC.CString.unpackCString# "FDB.GADTForall"#)
+               (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+               (GHC.Types.I# 151#)
+               (GHC.Types.I# 10#)
+               (GHC.Types.I# 151#)
+               (GHC.Types.I# 19#))
+            GHC.Stack.Types.emptyCallStack)
+         `cast` (Sym (GHC.Classes.N:IP[0]
+                          <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                 :: GHC.Stack.Types.CallStack
+                    ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+-- RHS size: {terms: 24, types: 14, coercions: 4, joins: 0/0}
+count :: forall n a. Integral n => Q a -> SQ n
+[GblId, Arity=1, Unf=OtherCon []]
+count
+  = \ (@ n_a5CD) (@ a_a5CE) _ [Occ=Dead] ->
+      undefined
+        @ 'GHC.Types.LiftedRep
+        @ (Q a_a5CE -> SQ n_a5CD)
+        ((GHC.Stack.Types.pushCallStack
+            (GHC.CString.unpackCString# "undefined"#,
+             GHC.Stack.Types.SrcLoc
+               (GHC.CString.unpackCString# "main"#)
+               (GHC.CString.unpackCString# "FDB.GADTForall"#)
+               (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+               (GHC.Types.I# 154#)
+               (GHC.Types.I# 9#)
+               (GHC.Types.I# 154#)
+               (GHC.Types.I# 18#))
+            GHC.Stack.Types.emptyCallStack)
+         `cast` (Sym (GHC.Classes.N:IP[0]
+                          <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                 :: GHC.Stack.Types.CallStack
+                    ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+-- RHS size: {terms: 16, types: 18, coercions: 0, joins: 0/0}
+exists :: forall a. Q a -> SQ Bool
+[GblId, Arity=1, Unf=OtherCon []]
+exists
+  = \ (@ a_a5E8) (q_a5jK :: Q a_a5E8) ->
+      $c>>=1_r5Tn
+        @ Integer
+        @ Bool
+        ($ @ 'GHC.Types.LiftedRep
+           @ (Q a_a5E8)
+           @ (SQ Integer)
+           (count @ Integer @ a_a5E8 GHC.Real.$fIntegralInteger)
+           (FDB.GADTForall.Take
+              @ a_a5E8 @ Integer GHC.Real.$fIntegralInteger 1 q_a5jK))
+        (\ (c_a5jL :: Integer) ->
+           $creturn1_r5To
+             @ Bool
+             (> @ Integer
+                integer-gmp-1.0.2.0:GHC.Integer.Type.$fOrdInteger
+                c_a5jL
+                0))
+
+-- RHS size: {terms: 23, types: 12, coercions: 4, joins: 0/0}
+minAgg :: forall a. Ord a => Fold1 a
+[GblId, Arity=1, Unf=OtherCon []]
+minAgg
+  = \ (@ a_a5Cw) _ [Occ=Dead] ->
+      undefined
+        @ 'GHC.Types.LiftedRep
+        @ (Agg a_a5Cw a_a5Cw a_a5Cw)
+        ((GHC.Stack.Types.pushCallStack
+            (GHC.CString.unpackCString# "undefined"#,
+             GHC.Stack.Types.SrcLoc
+               (GHC.CString.unpackCString# "main"#)
+               (GHC.CString.unpackCString# "FDB.GADTForall"#)
+               (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+               (GHC.Types.I# 157#)
+               (GHC.Types.I# 10#)
+               (GHC.Types.I# 157#)
+               (GHC.Types.I# 19#))
+            GHC.Stack.Types.emptyCallStack)
+         `cast` (Sym (GHC.Classes.N:IP[0]
+                          <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                 :: GHC.Stack.Types.CallStack
+                    ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+-- RHS size: {terms: 6, types: 9, coercions: 0, joins: 0/0}
+rowVal :: forall a. Row a -> a
+[GblId, Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+rowVal
+  = \ (@ a_a5Cu) (ds_d5Po :: Row a_a5Cu) ->
+      case ds_d5Po of { Row ds1_d5Pu val_a5jT -> val_a5jT }
+
+-- RHS size: {terms: 7, types: 10, coercions: 0, joins: 0/0}
+fetchForeign :: forall a. RowRef a -> SQ a
+[GblId, Arity=1, Unf=OtherCon []]
+fetchForeign
+  = \ (@ a_a5Du) (ref_a5jJ :: RowRef a_a5Du) ->
+      <&>
+        @ SQ
+        @ (Row a_a5Du)
+        @ a_a5Du
+        FDB.GADTForall.$fFunctorSQ
+        (FDB.GADTForall.$WFetchRow @ a_a5Du ref_a5jJ)
+        (rowVal @ a_a5Du)
+
+-- RHS size: {terms: 6, types: 9, coercions: 0, joins: 0/0}
+rowRef :: forall a. Row a -> RowRef a
+[GblId, Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+rowRef
+  = \ (@ a_a5Cs) (ds_d5Ph :: Row a_a5Cs) ->
+      case ds_d5Ph of { Row ref_a5jU ds1_d5Pn -> ref_a5jU }
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$trModule1_r5TB :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule1_r5TB = "main"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$trModule2_r5TC :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule2_r5TC = GHC.Types.TrNameS $trModule1_r5TB
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$trModule3_r5TD :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule3_r5TD = "FDB.GADTForall"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$trModule4_r5TE :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule4_r5TE = GHC.Types.TrNameS $trModule3_r5TD
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+FDB.GADTForall.$trModule :: GHC.Types.Module
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+FDB.GADTForall.$trModule
+  = GHC.Types.Module $trModule2_r5TC $trModule4_r5TE
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep_r5TF :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep_r5TF
+  = GHC.Types.KindRepTyConApp
+      GHC.Types.$tcChar (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep1_r5TG :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep1_r5TG
+  = GHC.Types.KindRepTyConApp
+      GHC.Word.$tcWord64 (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep2_r5TH :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep2_r5TH
+  = GHC.Types.KindRepTyConApp
+      GHC.Word.$tcWord16 (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep3_r5TI :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep3_r5TI
+  = GHC.Types.KindRepTyConApp
+      GHC.Types.$tcBool (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep4_r5TJ :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep4_r5TJ
+  = GHC.Types.KindRepTyConApp
+      GHC.Types.$tcConstraint (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep5_r5TK :: [GHC.Types.KindRep]
+[GblId, Unf=OtherCon []]
+$krep5_r5TK
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep_r5TF (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep6_r5TL :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep6_r5TL = GHC.Types.KindRepTyConApp GHC.Types.$tc[] $krep5_r5TK
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep7_r5TM :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep7_r5TM = GHC.Types.KindRepFun GHC.Types.krep$* $krep4_r5TJ
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep8_r5TN :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep8_r5TN = GHC.Types.KindRepFun GHC.Types.krep$* $krep7_r5TM
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep9_r5TO :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep9_r5TO
+  = GHC.Types.KindRepFun GHC.Types.krep$* GHC.Types.krep$*->*->*
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$krep10_r5TP :: GHC.Types.KindRep
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep10_r5TP = GHC.Types.KindRepVar 2#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$krep11_r5TQ :: GHC.Types.KindRep
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep11_r5TQ = GHC.Types.KindRepVar 1#
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep12_r5TR :: GHC.Types.KindRep
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep12_r5TR = GHC.Types.KindRepFun $krep10_r5TP $krep11_r5TQ
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$krep13_r5TS :: GHC.Types.KindRep
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep13_r5TS = GHC.Types.KindRepVar 0#
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep14_r5TT :: GHC.Types.KindRep
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep14_r5TT = GHC.Types.KindRepFun $krep13_r5TS $krep11_r5TQ
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep15_r5TU :: GHC.Types.KindRep
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep15_r5TU = GHC.Types.KindRepFun $krep13_r5TS $krep10_r5TP
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep16_r5TV :: GHC.Types.KindRep
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep16_r5TV = GHC.Types.KindRepFun $krep10_r5TP $krep15_r5TU
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep17_r5TW :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep17_r5TW = GHC.Types.KindRepFun $krep13_r5TS $krep3_r5TI
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep18_r5TX :: GHC.Types.KindRep
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep18_r5TX = GHC.Types.KindRepFun $krep11_r5TQ $krep13_r5TS
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep19_r5TY :: [GHC.Types.KindRep]
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep19_r5TY
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep11_r5TQ (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep20_r5TZ :: [GHC.Types.KindRep]
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep20_r5TZ
+  = GHC.Types.: @ GHC.Types.KindRep $krep13_r5TS $krep19_r5TY
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep21_r5U0 :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep21_r5U0
+  = GHC.Types.KindRepTyConApp GHC.Tuple.$tc(,) $krep20_r5TZ
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep22_r5U1 :: [GHC.Types.KindRep]
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep22_r5U1
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep13_r5TS (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep23_r5U2 :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep23_r5U2
+  = GHC.Types.KindRepTyConApp GHC.Classes.$tcOrd $krep22_r5U1
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep24_r5U3 :: [GHC.Types.KindRep]
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep24_r5U3
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep13_r5TS (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep25_r5U4 :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep25_r5U4
+  = GHC.Types.KindRepTyConApp GHC.Real.$tcIntegral $krep24_r5U3
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tcTable1_r5U5 :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcTable1_r5U5 = "Table"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tcTable2_r5U6 :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcTable2_r5U6 = GHC.Types.TrNameS $tcTable1_r5U5
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.GADTForall.$tcTable :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.GADTForall.$tcTable
+  = GHC.Types.TyCon
+      6112764465777374685##
+      4824890021682489453##
+      FDB.GADTForall.$trModule
+      $tcTable2_r5U6
+      0#
+      GHC.Types.krep$*Arr*
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep26_r5U7 :: [GHC.Types.KindRep]
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep26_r5U7
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep13_r5TS (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep27_r5U8 :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep27_r5U8
+  = GHC.Types.KindRepTyConApp FDB.GADTForall.$tcTable $krep26_r5U7
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep28_r5U9 :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep28_r5U9 = GHC.Types.KindRepFun $krep6_r5TL $krep27_r5U8
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'Table1_r5Ua :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Table1_r5Ua = "'Table"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'Table2_r5Ub :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Table2_r5Ub = GHC.Types.TrNameS $tc'Table1_r5Ua
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.GADTForall.$tc'Table :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.GADTForall.$tc'Table
+  = GHC.Types.TyCon
+      10871517142501221515##
+      4325455715354573628##
+      FDB.GADTForall.$trModule
+      $tc'Table2_r5Ub
+      1#
+      $krep28_r5U9
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tcAgg1_r5Uc :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcAgg1_r5Uc = "Agg"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tcAgg2_r5Ud :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcAgg2_r5Ud = GHC.Types.TrNameS $tcAgg1_r5Uc
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.GADTForall.$tcAgg :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.GADTForall.$tcAgg
+  = GHC.Types.TyCon
+      6997330576107404323##
+      12350032399431940804##
+      FDB.GADTForall.$trModule
+      $tcAgg2_r5Ud
+      0#
+      $krep9_r5TO
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep29_r5Ue :: [GHC.Types.KindRep]
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep29_r5Ue
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep10_r5TP (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep30_r5Uf :: [GHC.Types.KindRep]
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep30_r5Uf
+  = GHC.Types.: @ GHC.Types.KindRep $krep11_r5TQ $krep29_r5Ue
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep31_r5Ug :: [GHC.Types.KindRep]
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep31_r5Ug
+  = GHC.Types.: @ GHC.Types.KindRep $krep13_r5TS $krep30_r5Uf
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep32_r5Uh :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep32_r5Uh
+  = GHC.Types.KindRepTyConApp FDB.GADTForall.$tcAgg $krep31_r5Ug
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep33_r5Ui :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep33_r5Ui = GHC.Types.KindRepFun $krep12_r5TR $krep32_r5Uh
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep34_r5Uj :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep34_r5Uj = GHC.Types.KindRepFun $krep10_r5TP $krep33_r5Ui
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep35_r5Uk :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep35_r5Uk = GHC.Types.KindRepFun $krep16_r5TV $krep34_r5Uj
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'Agg1_r5Ul :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Agg1_r5Ul = "'Agg"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'Agg2_r5Um :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Agg2_r5Um = GHC.Types.TrNameS $tc'Agg1_r5Ul
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.GADTForall.$tc'Agg :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.GADTForall.$tc'Agg
+  = GHC.Types.TyCon
+      8300879811530789064##
+      621423574753608316##
+      FDB.GADTForall.$trModule
+      $tc'Agg2_r5Um
+      3#
+      $krep35_r5Uk
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tcRowId1_r5Un :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcRowId1_r5Un = "RowId"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tcRowId2_r5Uo :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcRowId2_r5Uo = GHC.Types.TrNameS $tcRowId1_r5Un
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.GADTForall.$tcRowId :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.GADTForall.$tcRowId
+  = GHC.Types.TyCon
+      6564313131908661638##
+      391072849311021736##
+      FDB.GADTForall.$trModule
+      $tcRowId2_r5Uo
+      0#
+      GHC.Types.krep$*
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep36_r5Up :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep36_r5Up
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcRowId (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep37_r5Uq :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep37_r5Uq = GHC.Types.KindRepFun $krep1_r5TG $krep36_r5Up
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'RowId1_r5Ur :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'RowId1_r5Ur = "'RowId"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'RowId2_r5Us :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'RowId2_r5Us = GHC.Types.TrNameS $tc'RowId1_r5Ur
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.GADTForall.$tc'RowId :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.GADTForall.$tc'RowId
+  = GHC.Types.TyCon
+      11182397406630558385##
+      2250286617457619889##
+      FDB.GADTForall.$trModule
+      $tc'RowId2_r5Us
+      0#
+      $krep37_r5Uq
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tcTableId1_r5Ut :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcTableId1_r5Ut = "TableId"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tcTableId2_r5Uu :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcTableId2_r5Uu = GHC.Types.TrNameS $tcTableId1_r5Ut
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.GADTForall.$tcTableId :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.GADTForall.$tcTableId
+  = GHC.Types.TyCon
+      221136922417672250##
+      2647284849506157507##
+      FDB.GADTForall.$trModule
+      $tcTableId2_r5Uu
+      0#
+      GHC.Types.krep$*
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep38_r5Uv :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep38_r5Uv
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcTableId (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep39_r5Uw :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep39_r5Uw = GHC.Types.KindRepFun $krep2_r5TH $krep38_r5Uv
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'TableId1_r5Ux :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'TableId1_r5Ux = "'TableId"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'TableId2_r5Uy :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'TableId2_r5Uy = GHC.Types.TrNameS $tc'TableId1_r5Ux
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.GADTForall.$tc'TableId :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.GADTForall.$tc'TableId
+  = GHC.Types.TyCon
+      299570635528495236##
+      7767331940541179554##
+      FDB.GADTForall.$trModule
+      $tc'TableId2_r5Uy
+      0#
+      $krep39_r5Uw
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tcRowRef1_r5Uz :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcRowRef1_r5Uz = "RowRef"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tcRowRef2_r5UA :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcRowRef2_r5UA = GHC.Types.TrNameS $tcRowRef1_r5Uz
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.GADTForall.$tcRowRef :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.GADTForall.$tcRowRef
+  = GHC.Types.TyCon
+      6167723302899116461##
+      12820464192123209494##
+      FDB.GADTForall.$trModule
+      $tcRowRef2_r5UA
+      0#
+      GHC.Types.krep$*Arr*
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep40_r5UB :: [GHC.Types.KindRep]
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep40_r5UB
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep13_r5TS (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep41_r5UC :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep41_r5UC
+  = GHC.Types.KindRepTyConApp FDB.GADTForall.$tcRowRef $krep40_r5UB
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep42_r5UD :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep42_r5UD = GHC.Types.KindRepFun $krep36_r5Up $krep41_r5UC
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep43_r5UE :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep43_r5UE = GHC.Types.KindRepFun $krep38_r5Uv $krep42_r5UD
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'RowRef1_r5UF :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'RowRef1_r5UF = "'RowRef"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'RowRef2_r5UG :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'RowRef2_r5UG = GHC.Types.TrNameS $tc'RowRef1_r5UF
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.GADTForall.$tc'RowRef :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.GADTForall.$tc'RowRef
+  = GHC.Types.TyCon
+      1951283466925547487##
+      17778823377038719573##
+      FDB.GADTForall.$trModule
+      $tc'RowRef2_r5UG
+      1#
+      $krep43_r5UE
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tcRow1_r5UH :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcRow1_r5UH = "Row"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tcRow2_r5UI :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcRow2_r5UI = GHC.Types.TrNameS $tcRow1_r5UH
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.GADTForall.$tcRow :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.GADTForall.$tcRow
+  = GHC.Types.TyCon
+      7837339403267824689##
+      11319950323759755044##
+      FDB.GADTForall.$trModule
+      $tcRow2_r5UI
+      0#
+      GHC.Types.krep$*Arr*
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep44_r5UJ :: [GHC.Types.KindRep]
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep44_r5UJ
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep13_r5TS (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep45_r5UK :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep45_r5UK
+  = GHC.Types.KindRepTyConApp FDB.GADTForall.$tcRow $krep44_r5UJ
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep46_r5UL :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep46_r5UL = GHC.Types.KindRepFun $krep13_r5TS $krep45_r5UK
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep47_r5UM :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep47_r5UM = GHC.Types.KindRepFun $krep41_r5UC $krep46_r5UL
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'Row1_r5UN :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Row1_r5UN = "'Row"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'Row2_r5UO :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Row2_r5UO = GHC.Types.TrNameS $tc'Row1_r5UN
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.GADTForall.$tc'Row :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.GADTForall.$tc'Row
+  = GHC.Types.TyCon
+      16802854983749163630##
+      1951157969764704594##
+      FDB.GADTForall.$trModule
+      $tc'Row2_r5UO
+      1#
+      $krep47_r5UM
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tcQ1_r5UP :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcQ1_r5UP = "Q"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tcQ2_r5UQ :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcQ2_r5UQ = GHC.Types.TrNameS $tcQ1_r5UP
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.GADTForall.$tcQ :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.GADTForall.$tcQ
+  = GHC.Types.TyCon
+      18238656953556965988##
+      5882741213209533844##
+      FDB.GADTForall.$trModule
+      $tcQ2_r5UQ
+      0#
+      GHC.Types.krep$*Arr*
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep48_r5UR :: [GHC.Types.KindRep]
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep48_r5UR
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep13_r5TS (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep49_r5US :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep49_r5US
+  = GHC.Types.KindRepTyConApp FDB.GADTForall.$tcQ $krep48_r5UR
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep50_r5UT :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep50_r5UT = GHC.Types.KindRepFun $krep27_r5U8 $krep49_r5US
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'Read1_r5UU :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Read1_r5UU = "'Read"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'Read2_r5UV :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Read2_r5UV = GHC.Types.TrNameS $tc'Read1_r5UU
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.GADTForall.$tc'Read :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.GADTForall.$tc'Read
+  = GHC.Types.TyCon
+      5506696017368664421##
+      2631673073369786685##
+      FDB.GADTForall.$trModule
+      $tc'Read2_r5UV
+      1#
+      $krep50_r5UT
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep51_r5UW :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep51_r5UW = GHC.Types.KindRepFun $krep49_r5US $krep49_r5US
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep52_r5UX :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep52_r5UX = GHC.Types.KindRepFun $krep17_r5TW $krep51_r5UW
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'Filter1_r5UY :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Filter1_r5UY = "'Filter"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'Filter2_r5UZ :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Filter2_r5UZ = GHC.Types.TrNameS $tc'Filter1_r5UY
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.GADTForall.$tc'Filter :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.GADTForall.$tc'Filter
+  = GHC.Types.TyCon
+      3342106065591891117##
+      5504432989845619796##
+      FDB.GADTForall.$trModule
+      $tc'Filter2_r5UZ
+      1#
+      $krep52_r5UX
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep53_r5V0 :: [GHC.Types.KindRep]
+[GblId, Unf=OtherCon []]
+$krep53_r5V0
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep49_r5US (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep54_r5V1 :: [GHC.Types.KindRep]
+[GblId, Unf=OtherCon []]
+$krep54_r5V1
+  = GHC.Types.: @ GHC.Types.KindRep $krep11_r5TQ $krep53_r5V0
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep55_r5V2 :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep55_r5V2
+  = GHC.Types.KindRepTyConApp GHC.Tuple.$tc(,) $krep54_r5V1
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep56_r5V3 :: [GHC.Types.KindRep]
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep56_r5V3
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep11_r5TQ (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep57_r5V4 :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep57_r5V4
+  = GHC.Types.KindRepTyConApp FDB.GADTForall.$tcQ $krep56_r5V3
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep58_r5V5 :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep58_r5V5 = GHC.Types.KindRepFun $krep49_r5US $krep57_r5V4
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep59_r5V6 :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep59_r5V6 = GHC.Types.KindRepFun $krep14_r5TT $krep58_r5V5
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'Map1_r5V7 :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Map1_r5V7 = "'Map"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'Map2_r5V8 :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Map2_r5V8 = GHC.Types.TrNameS $tc'Map1_r5V7
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.GADTForall.$tc'Map :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.GADTForall.$tc'Map
+  = GHC.Types.TyCon
+      14379505272008014040##
+      10084327610682124345##
+      FDB.GADTForall.$trModule
+      $tc'Map2_r5V8
+      2#
+      $krep59_r5V6
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep60_r5V9 :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep60_r5V9 = GHC.Types.KindRepFun $krep57_r5V4 $krep57_r5V4
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep61_r5Va :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep61_r5Va = GHC.Types.KindRepFun $krep13_r5TS $krep60_r5V9
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep62_r5Vb :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep62_r5Vb = GHC.Types.KindRepFun $krep25_r5U4 $krep61_r5Va
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'Take1_r5Vc :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Take1_r5Vc = "'Take"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'Take2_r5Vd :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Take2_r5Vd = GHC.Types.TrNameS $tc'Take1_r5Vc
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.GADTForall.$tc'Take :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.GADTForall.$tc'Take
+  = GHC.Types.TyCon
+      18145023462564812289##
+      14897176176755836167##
+      FDB.GADTForall.$trModule
+      $tc'Take2_r5Vd
+      2#
+      $krep62_r5Vb
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep63_r5Ve :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep63_r5Ve = GHC.Types.KindRepFun $krep18_r5TX $krep60_r5V9
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep64_r5Vf :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep64_r5Vf = GHC.Types.KindRepFun $krep23_r5U2 $krep63_r5Ve
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'OrderBy1_r5Vg :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'OrderBy1_r5Vg = "'OrderBy"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'OrderBy2_r5Vh :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'OrderBy2_r5Vh = GHC.Types.TrNameS $tc'OrderBy1_r5Vg
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.GADTForall.$tc'OrderBy :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.GADTForall.$tc'OrderBy
+  = GHC.Types.TyCon
+      14908185740511951096##
+      14008337868706905896##
+      FDB.GADTForall.$trModule
+      $tc'OrderBy2_r5Vh
+      2#
+      $krep64_r5Vf
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep65_r5Vi :: [GHC.Types.KindRep]
+[GblId, Unf=OtherCon []]
+$krep65_r5Vi
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep21_r5U0 (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep66_r5Vj :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep66_r5Vj
+  = GHC.Types.KindRepTyConApp FDB.GADTForall.$tcQ $krep65_r5Vi
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep67_r5Vk :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep67_r5Vk = GHC.Types.KindRepFun $krep57_r5V4 $krep66_r5Vj
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep68_r5Vl :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep68_r5Vl = GHC.Types.KindRepFun $krep49_r5US $krep67_r5Vk
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep69_r5Vm :: [GHC.Types.KindRep]
+[GblId, Unf=OtherCon []]
+$krep69_r5Vm
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep55_r5V2 (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep70_r5Vn :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep70_r5Vn
+  = GHC.Types.KindRepTyConApp FDB.GADTForall.$tcQ $krep69_r5Vm
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep71_r5Vo :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep71_r5Vo = GHC.Types.KindRepFun $krep49_r5US $krep70_r5Vn
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep72_r5Vp :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep72_r5Vp = GHC.Types.KindRepFun $krep14_r5TT $krep71_r5Vo
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'GroupBy1_r5Vq :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'GroupBy1_r5Vq = "'GroupBy"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'GroupBy2_r5Vr :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'GroupBy2_r5Vr = GHC.Types.TrNameS $tc'GroupBy1_r5Vq
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.GADTForall.$tc'GroupBy :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.GADTForall.$tc'GroupBy
+  = GHC.Types.TyCon
+      13670223224869757845##
+      8697476818672593631##
+      FDB.GADTForall.$trModule
+      $tc'GroupBy2_r5Vr
+      2#
+      $krep72_r5Vp
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tcSQ1_r5Vs :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcSQ1_r5Vs = "SQ"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tcSQ2_r5Vt :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcSQ2_r5Vt = GHC.Types.TrNameS $tcSQ1_r5Vs
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.GADTForall.$tcSQ :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.GADTForall.$tcSQ
+  = GHC.Types.TyCon
+      7724225419132177098##
+      14063341351447723075##
+      FDB.GADTForall.$trModule
+      $tcSQ2_r5Vt
+      0#
+      GHC.Types.krep$*Arr*
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep73_r5Vu :: [GHC.Types.KindRep]
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep73_r5Vu
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep11_r5TQ (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep74_r5Vv :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep74_r5Vv
+  = GHC.Types.KindRepTyConApp FDB.GADTForall.$tcSQ $krep73_r5Vu
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep75_r5Vw :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep75_r5Vw = GHC.Types.KindRepFun $krep13_r5TS $krep74_r5Vv
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep76_r5Vx :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep76_r5Vx = GHC.Types.KindRepFun $krep75_r5Vw $krep58_r5V5
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'MapSQ1_r5Vy :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'MapSQ1_r5Vy = "'MapSQ"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'MapSQ2_r5Vz :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'MapSQ2_r5Vz = GHC.Types.TrNameS $tc'MapSQ1_r5Vy
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.GADTForall.$tc'MapSQ :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.GADTForall.$tc'MapSQ
+  = GHC.Types.TyCon
+      1443944143463630897##
+      6245638742163314951##
+      FDB.GADTForall.$trModule
+      $tc'MapSQ2_r5Vz
+      2#
+      $krep76_r5Vx
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep77_r5VA :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep77_r5VA = GHC.Types.KindRepFun $krep49_r5US $krep74_r5Vv
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep78_r5VB :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep78_r5VB = GHC.Types.KindRepFun $krep32_r5Uh $krep77_r5VA
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'StateFold1_r5VC :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'StateFold1_r5VC = "'StateFold"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'StateFold2_r5VD :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'StateFold2_r5VD = GHC.Types.TrNameS $tc'StateFold1_r5VC
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.GADTForall.$tc'StateFold :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.GADTForall.$tc'StateFold
+  = GHC.Types.TyCon
+      18411259465723880701##
+      4094594497890411514##
+      FDB.GADTForall.$trModule
+      $tc'StateFold2_r5VD
+      3#
+      $krep78_r5VB
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep79_r5VE :: [GHC.Types.KindRep]
+[GblId, Unf=OtherCon []]
+$krep79_r5VE
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep45_r5UK (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep80_r5VF :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep80_r5VF
+  = GHC.Types.KindRepTyConApp FDB.GADTForall.$tcSQ $krep79_r5VE
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep81_r5VG :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep81_r5VG = GHC.Types.KindRepFun $krep41_r5UC $krep80_r5VF
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'FetchRow1_r5VH :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'FetchRow1_r5VH = "'FetchRow"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'FetchRow2_r5VI :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'FetchRow2_r5VI = GHC.Types.TrNameS $tc'FetchRow1_r5VH
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.GADTForall.$tc'FetchRow :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.GADTForall.$tc'FetchRow
+  = GHC.Types.TyCon
+      10701926302208271525##
+      2310866770539922913##
+      FDB.GADTForall.$trModule
+      $tc'FetchRow2_r5VI
+      1#
+      $krep81_r5VG
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep82_r5VJ :: [GHC.Types.KindRep]
+[GblId, Unf=OtherCon []]
+$krep82_r5VJ
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep3_r5TI (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep83_r5VK :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep83_r5VK
+  = GHC.Types.KindRepTyConApp FDB.GADTForall.$tcSQ $krep82_r5VJ
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep84_r5VL :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep84_r5VL = GHC.Types.KindRepFun $krep13_r5TS $krep83_r5VK
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep85_r5VM :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep85_r5VM = GHC.Types.KindRepFun $krep84_r5VL $krep51_r5UW
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'FilterSQ1_r5VN :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'FilterSQ1_r5VN = "'FilterSQ"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'FilterSQ2_r5VO :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'FilterSQ2_r5VO = GHC.Types.TrNameS $tc'FilterSQ1_r5VN
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.GADTForall.$tc'FilterSQ :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.GADTForall.$tc'FilterSQ
+  = GHC.Types.TyCon
+      3550822472285476798##
+      14511159754611735049##
+      FDB.GADTForall.$trModule
+      $tc'FilterSQ2_r5VO
+      1#
+      $krep85_r5VM
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tcNatJoin1_r5VP :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcNatJoin1_r5VP = "NatJoin"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tcNatJoin2_r5VQ :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcNatJoin2_r5VQ = GHC.Types.TrNameS $tcNatJoin1_r5VP
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.GADTForall.$tcNatJoin :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.GADTForall.$tcNatJoin
+  = GHC.Types.TyCon
+      4754972827294106747##
+      18091397365184212835##
+      FDB.GADTForall.$trModule
+      $tcNatJoin2_r5VQ
+      0#
+      $krep8_r5TN
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep86_r5VR :: [GHC.Types.KindRep]
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep86_r5VR
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep11_r5TQ (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep87_r5VS :: [GHC.Types.KindRep]
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$krep87_r5VS
+  = GHC.Types.: @ GHC.Types.KindRep $krep13_r5TS $krep86_r5VR
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep88_r5VT :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep88_r5VT
+  = GHC.Types.KindRepTyConApp FDB.GADTForall.$tcNatJoin $krep87_r5VS
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep89_r5VU :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep89_r5VU = GHC.Types.KindRepFun $krep68_r5Vl $krep88_r5VT
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'C:NatJoin1_r5VV :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'C:NatJoin1_r5VV = "'C:NatJoin"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'C:NatJoin2_r5VW :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'C:NatJoin2_r5VW = GHC.Types.TrNameS $tc'C:NatJoin1_r5VV
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+FDB.GADTForall.$tc'C:NatJoin :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+FDB.GADTForall.$tc'C:NatJoin
+  = GHC.Types.TyCon
+      1773075345423852451##
+      14997350799920276371##
+      FDB.GADTForall.$trModule
+      $tc'C:NatJoin2_r5VW
+      2#
+      $krep89_r5VU
+
+
+
+[7 of 8] Compiling FDB.FDB          ( FDB/FDB.hs, FDB/FDB.o )
+
+==================== Tidy Core ====================
+Result size of Tidy Core
+  = {terms: 14, types: 5, coercions: 0, joins: 0/0}
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$trModule1_r6I7 :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule1_r6I7 = "main"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$trModule2_r6Ig :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule2_r6Ig = GHC.Types.TrNameS $trModule1_r6I7
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$trModule3_r6Ih :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule3_r6Ih = "FDB.FDB"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$trModule4_r6Ii :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule4_r6Ii = GHC.Types.TrNameS $trModule3_r6Ih
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+FDB.FDB.$trModule :: GHC.Types.Module
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+FDB.FDB.$trModule
+  = GHC.Types.Module $trModule2_r6Ig $trModule4_r6Ii
+
+
+
+[8 of 8] Compiling TPCH.Functional.Schema ( ghc-dumps/../TPCH/Functional/Schema.hs, ghc-dumps/../TPCH/Functional/Schema.o )
+
+==================== Tidy Core ====================
+Result size of Tidy Core
+  = {terms: 1,206, types: 1,081, coercions: 56, joins: 0/0}
+
+-- RHS size: {terms: 9, types: 4, coercions: 0, joins: 0/0}
+$c==_r6NE :: Region -> Region -> Bool
+[GblId, Arity=2, Caf=NoCafRefs, Unf=OtherCon []]
+$c==_r6NE
+  = \ (ds_d71m :: Region) (ds1_d71n :: Region) ->
+      case ds_d71m of { EMEA ->
+      case ds1_d71n of { EMEA -> GHC.Types.True }
+      }
+
+Rec {
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+TPCH.Functional.Schema.$fEqRegion [InlPrag=NOUSERINLINE CONLIKE]
+  :: Eq Region
+[GblId[DFunId]]
+TPCH.Functional.Schema.$fEqRegion
+  = GHC.Classes.C:Eq @ Region $c==_r6NE $c/=_r74a
+
+-- RHS size: {terms: 2, types: 1, coercions: 0, joins: 0/0}
+$c/=_r74a :: Region -> Region -> Bool
+[GblId]
+$c/=_r74a
+  = GHC.Classes.$dm/= @ Region TPCH.Functional.Schema.$fEqRegion
+end Rec }
+
+-- RHS size: {terms: 18, types: 5, coercions: 0, joins: 0/0}
+$c==1_r74b :: Nation -> Nation -> Bool
+[GblId, Arity=2, Caf=NoCafRefs, Unf=OtherCon []]
+$c==1_r74b
+  = \ (ds_d71i :: Nation) (ds1_d71j :: Nation) ->
+      case ds_d71i of {
+        France ->
+          case ds1_d71j of {
+            France -> GHC.Types.True;
+            Germany -> GHC.Types.False
+          };
+        Germany ->
+          case ds1_d71j of {
+            France -> GHC.Types.False;
+            Germany -> GHC.Types.True
+          }
+      }
+
+Rec {
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+TPCH.Functional.Schema.$fEqNation [InlPrag=NOUSERINLINE CONLIKE]
+  :: Eq Nation
+[GblId[DFunId]]
+TPCH.Functional.Schema.$fEqNation
+  = GHC.Classes.C:Eq @ Nation $c==1_r74b $c/=1_r74c
+
+-- RHS size: {terms: 2, types: 1, coercions: 0, joins: 0/0}
+$c/=1_r74c :: Nation -> Nation -> Bool
+[GblId]
+$c/=1_r74c
+  = GHC.Classes.$dm/= @ Nation TPCH.Functional.Schema.$fEqNation
+end Rec }
+
+-- RHS size: {terms: 5, types: 10, coercions: 0, joins: 0/0}
+p_comment :: Part -> String
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+p_comment
+  = \ (ds_d719 :: Part) ->
+      case ds_d719 of
+      { Part ds1_d71a ds2_d71b ds3_d71c ds4_d71d ds5_d71e ds6_d71f
+             ds7_d71g ds8_d71h ->
+      ds8_d71h
+      }
+
+-- RHS size: {terms: 5, types: 10, coercions: 0, joins: 0/0}
+p_retailprice :: Part -> Decimal
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+p_retailprice
+  = \ (ds_d710 :: Part) ->
+      case ds_d710 of
+      { Part ds1_d711 ds2_d712 ds3_d713 ds4_d714 ds5_d715 ds6_d716
+             ds7_d717 ds8_d718 ->
+      ds7_d717
+      }
+
+-- RHS size: {terms: 5, types: 10, coercions: 0, joins: 0/0}
+p_container :: Part -> String
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+p_container
+  = \ (ds_d70R :: Part) ->
+      case ds_d70R of
+      { Part ds1_d70S ds2_d70T ds3_d70U ds4_d70V ds5_d70W ds6_d70X
+             ds7_d70Y ds8_d70Z ->
+      ds6_d70X
+      }
+
+-- RHS size: {terms: 5, types: 10, coercions: 0, joins: 0/0}
+p_size :: Part -> Int
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+p_size
+  = \ (ds_d70I :: Part) ->
+      case ds_d70I of
+      { Part ds1_d70J ds2_d70K ds3_d70L ds4_d70M ds5_d70N ds6_d70O
+             ds7_d70P ds8_d70Q ->
+      ds5_d70N
+      }
+
+-- RHS size: {terms: 5, types: 10, coercions: 0, joins: 0/0}
+p_type :: Part -> String
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+p_type
+  = \ (ds_d70z :: Part) ->
+      case ds_d70z of
+      { Part ds1_d70A ds2_d70B ds3_d70C ds4_d70D ds5_d70E ds6_d70F
+             ds7_d70G ds8_d70H ->
+      ds4_d70D
+      }
+
+-- RHS size: {terms: 5, types: 10, coercions: 0, joins: 0/0}
+p_brand :: Part -> String
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+p_brand
+  = \ (ds_d70q :: Part) ->
+      case ds_d70q of
+      { Part ds1_d70r ds2_d70s ds3_d70t ds4_d70u ds5_d70v ds6_d70w
+             ds7_d70x ds8_d70y ->
+      ds3_d70t
+      }
+
+-- RHS size: {terms: 5, types: 10, coercions: 0, joins: 0/0}
+p_mfgr :: Part -> String
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+p_mfgr
+  = \ (ds_d70h :: Part) ->
+      case ds_d70h of
+      { Part ds1_d70i ds2_d70j ds3_d70k ds4_d70l ds5_d70m ds6_d70n
+             ds7_d70o ds8_d70p ->
+      ds2_d70j
+      }
+
+-- RHS size: {terms: 5, types: 10, coercions: 0, joins: 0/0}
+p_name :: Part -> String
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+p_name
+  = \ (ds_d708 :: Part) ->
+      case ds_d708 of
+      { Part ds1_d709 ds2_d70a ds3_d70b ds4_d70c ds5_d70d ds6_d70e
+             ds7_d70f ds8_d70g ->
+      ds1_d709
+      }
+
+-- RHS size: {terms: 5, types: 9, coercions: 0, joins: 0/0}
+c_comment :: Customer -> String
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+c_comment
+  = \ (ds_d700 :: Customer) ->
+      case ds_d700 of
+      { Customer ds1_d701 ds2_d702 ds3_d703 ds4_d704 ds5_d705 ds6_d706
+                 ds7_d707 ->
+      ds7_d707
+      }
+
+-- RHS size: {terms: 5, types: 9, coercions: 0, joins: 0/0}
+c_mktsegment :: Customer -> String
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+c_mktsegment
+  = \ (ds_d6ZS :: Customer) ->
+      case ds_d6ZS of
+      { Customer ds1_d6ZT ds2_d6ZU ds3_d6ZV ds4_d6ZW ds5_d6ZX ds6_d6ZY
+                 ds7_d6ZZ ->
+      ds6_d6ZY
+      }
+
+-- RHS size: {terms: 5, types: 9, coercions: 0, joins: 0/0}
+c_acctbal :: Customer -> Decimal
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+c_acctbal
+  = \ (ds_d6ZK :: Customer) ->
+      case ds_d6ZK of
+      { Customer ds1_d6ZL ds2_d6ZM ds3_d6ZN ds4_d6ZO ds5_d6ZP ds6_d6ZQ
+                 ds7_d6ZR ->
+      ds5_d6ZP
+      }
+
+-- RHS size: {terms: 5, types: 9, coercions: 0, joins: 0/0}
+c_phone :: Customer -> PhoneNumber
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+c_phone
+  = \ (ds_d6ZC :: Customer) ->
+      case ds_d6ZC of
+      { Customer ds1_d6ZD ds2_d6ZE ds3_d6ZF ds4_d6ZG ds5_d6ZH ds6_d6ZI
+                 ds7_d6ZJ ->
+      ds4_d6ZG
+      }
+
+-- RHS size: {terms: 5, types: 9, coercions: 0, joins: 0/0}
+c_nation :: Customer -> Nation
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+c_nation
+  = \ (ds_d6Zu :: Customer) ->
+      case ds_d6Zu of
+      { Customer ds1_d6Zv ds2_d6Zw ds3_d6Zx ds4_d6Zy ds5_d6Zz ds6_d6ZA
+                 ds7_d6ZB ->
+      ds3_d6Zx
+      }
+
+-- RHS size: {terms: 5, types: 9, coercions: 0, joins: 0/0}
+c_address :: Customer -> String
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+c_address
+  = \ (ds_d6Zm :: Customer) ->
+      case ds_d6Zm of
+      { Customer ds1_d6Zn ds2_d6Zo ds3_d6Zp ds4_d6Zq ds5_d6Zr ds6_d6Zs
+                 ds7_d6Zt ->
+      ds2_d6Zo
+      }
+
+-- RHS size: {terms: 5, types: 9, coercions: 0, joins: 0/0}
+c_name :: Customer -> String
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+c_name
+  = \ (ds_d6Ze :: Customer) ->
+      case ds_d6Ze of
+      { Customer ds1_d6Zf ds2_d6Zg ds3_d6Zh ds4_d6Zi ds5_d6Zj ds6_d6Zk
+                 ds7_d6Zl ->
+      ds1_d6Zf
+      }
+
+-- RHS size: {terms: 5, types: 11, coercions: 0, joins: 0/0}
+o_comment :: Order -> String
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+o_comment
+  = \ (ds_d6Z5 :: Order) ->
+      case ds_d6Z5 of
+      { Order ds1_d6Z6 ds2_d6Z7 ds3_d6Z8 ds4_d6Z9 ds5_d6Za ds6_d6Zb
+              ds7_d6Zc ds8_d6Zd ->
+      ds8_d6Zd
+      }
+
+-- RHS size: {terms: 5, types: 11, coercions: 0, joins: 0/0}
+o_shippriority :: Order -> Int
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+o_shippriority
+  = \ (ds_d6YW :: Order) ->
+      case ds_d6YW of
+      { Order ds1_d6YX ds2_d6YY ds3_d6YZ ds4_d6Z0 ds5_d6Z1 ds6_d6Z2
+              ds7_d6Z3 ds8_d6Z4 ->
+      ds7_d6Z3
+      }
+
+-- RHS size: {terms: 5, types: 11, coercions: 0, joins: 0/0}
+o_clerk :: Order -> String
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+o_clerk
+  = \ (ds_d6YN :: Order) ->
+      case ds_d6YN of
+      { Order ds1_d6YO ds2_d6YP ds3_d6YQ ds4_d6YR ds5_d6YS ds6_d6YT
+              ds7_d6YU ds8_d6YV ->
+      ds6_d6YT
+      }
+
+-- RHS size: {terms: 5, types: 11, coercions: 0, joins: 0/0}
+o_orderpriority :: Order -> String
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+o_orderpriority
+  = \ (ds_d6YE :: Order) ->
+      case ds_d6YE of
+      { Order ds1_d6YF ds2_d6YG ds3_d6YH ds4_d6YI ds5_d6YJ ds6_d6YK
+              ds7_d6YL ds8_d6YM ->
+      ds5_d6YJ
+      }
+
+-- RHS size: {terms: 5, types: 11, coercions: 0, joins: 0/0}
+o_orderdate :: Order -> Date
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+o_orderdate
+  = \ (ds_d6Yv :: Order) ->
+      case ds_d6Yv of
+      { Order ds1_d6Yw ds2_d6Yx ds3_d6Yy ds4_d6Yz ds5_d6YA ds6_d6YB
+              ds7_d6YC ds8_d6YD ->
+      ds4_d6Yz
+      }
+
+-- RHS size: {terms: 5, types: 11, coercions: 0, joins: 0/0}
+o_totalprice :: Order -> Decimal
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+o_totalprice
+  = \ (ds_d6Ym :: Order) ->
+      case ds_d6Ym of
+      { Order ds1_d6Yn ds2_d6Yo ds3_d6Yp ds4_d6Yq ds5_d6Yr ds6_d6Ys
+              ds7_d6Yt ds8_d6Yu ->
+      ds3_d6Yp
+      }
+
+-- RHS size: {terms: 5, types: 11, coercions: 0, joins: 0/0}
+o_orderstatus :: Order -> Char
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+o_orderstatus
+  = \ (ds_d6Yd :: Order) ->
+      case ds_d6Yd of
+      { Order ds1_d6Ye ds2_d6Yf ds3_d6Yg ds4_d6Yh ds5_d6Yi ds6_d6Yj
+              ds7_d6Yk ds8_d6Yl ->
+      ds2_d6Yf
+      }
+
+-- RHS size: {terms: 5, types: 11, coercions: 0, joins: 0/0}
+o_custref :: Order -> TableRef Customer
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+o_custref
+  = \ (ds_d6Y4 :: Order) ->
+      case ds_d6Y4 of
+      { Order ds1_d6Y5 ds2_d6Y6 ds3_d6Y7 ds4_d6Y8 ds5_d6Y9 ds6_d6Ya
+              ds7_d6Yb ds8_d6Yc ->
+      ds1_d6Y5
+      }
+
+-- RHS size: {terms: 5, types: 8, coercions: 0, joins: 0/0}
+s_comment :: Supplier -> String
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+s_comment
+  = \ (ds_d6XX :: Supplier) ->
+      case ds_d6XX of
+      { Supplier ds1_d6XY ds2_d6XZ ds3_d6Y0 ds4_d6Y1 ds5_d6Y2 ds6_d6Y3 ->
+      ds6_d6Y3
+      }
+
+-- RHS size: {terms: 5, types: 8, coercions: 0, joins: 0/0}
+s_acctbal :: Supplier -> Decimal
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+s_acctbal
+  = \ (ds_d6XQ :: Supplier) ->
+      case ds_d6XQ of
+      { Supplier ds1_d6XR ds2_d6XS ds3_d6XT ds4_d6XU ds5_d6XV ds6_d6XW ->
+      ds5_d6XV
+      }
+
+-- RHS size: {terms: 5, types: 8, coercions: 0, joins: 0/0}
+s_phone :: Supplier -> PhoneNumber
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+s_phone
+  = \ (ds_d6XJ :: Supplier) ->
+      case ds_d6XJ of
+      { Supplier ds1_d6XK ds2_d6XL ds3_d6XM ds4_d6XN ds5_d6XO ds6_d6XP ->
+      ds4_d6XN
+      }
+
+-- RHS size: {terms: 5, types: 8, coercions: 0, joins: 0/0}
+s_nation :: Supplier -> Nation
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+s_nation
+  = \ (ds_d6XC :: Supplier) ->
+      case ds_d6XC of
+      { Supplier ds1_d6XD ds2_d6XE ds3_d6XF ds4_d6XG ds5_d6XH ds6_d6XI ->
+      ds3_d6XF
+      }
+
+-- RHS size: {terms: 5, types: 8, coercions: 0, joins: 0/0}
+s_address :: Supplier -> String
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+s_address
+  = \ (ds_d6Xv :: Supplier) ->
+      case ds_d6Xv of
+      { Supplier ds1_d6Xw ds2_d6Xx ds3_d6Xy ds4_d6Xz ds5_d6XA ds6_d6XB ->
+      ds2_d6Xx
+      }
+
+-- RHS size: {terms: 5, types: 8, coercions: 0, joins: 0/0}
+s_name :: Supplier -> String
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+s_name
+  = \ (ds_d6Xo :: Supplier) ->
+      case ds_d6Xo of
+      { Supplier ds1_d6Xp ds2_d6Xq ds3_d6Xr ds4_d6Xs ds5_d6Xt ds6_d6Xu ->
+      ds1_d6Xp
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_comment :: LineItem -> String
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+l_comment
+  = \ (ds_d6X7 :: LineItem) ->
+      case ds_d6X7 of
+      { LineItem ds1_d6X8 ds2_d6X9 ds3_d6Xa ds4_d6Xb ds5_d6Xc ds6_d6Xd
+                 ds7_d6Xe ds8_d6Xf ds9_d6Xg ds10_d6Xh ds11_d6Xi ds12_d6Xj ds13_d6Xk
+                 ds14_d6Xl ds15_d6Xm ds16_d6Xn ->
+      ds16_d6Xn
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_shipmode :: LineItem -> String
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+l_shipmode
+  = \ (ds_d6WQ :: LineItem) ->
+      case ds_d6WQ of
+      { LineItem ds1_d6WR ds2_d6WS ds3_d6WT ds4_d6WU ds5_d6WV ds6_d6WW
+                 ds7_d6WX ds8_d6WY ds9_d6WZ ds10_d6X0 ds11_d6X1 ds12_d6X2 ds13_d6X3
+                 ds14_d6X4 ds15_d6X5 ds16_d6X6 ->
+      ds15_d6X5
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_shipinstruct :: LineItem -> String
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+l_shipinstruct
+  = \ (ds_d6Wz :: LineItem) ->
+      case ds_d6Wz of
+      { LineItem ds1_d6WA ds2_d6WB ds3_d6WC ds4_d6WD ds5_d6WE ds6_d6WF
+                 ds7_d6WG ds8_d6WH ds9_d6WI ds10_d6WJ ds11_d6WK ds12_d6WL ds13_d6WM
+                 ds14_d6WN ds15_d6WO ds16_d6WP ->
+      ds14_d6WN
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_receiptdate :: LineItem -> Date
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+l_receiptdate
+  = \ (ds_d6Wi :: LineItem) ->
+      case ds_d6Wi of
+      { LineItem ds1_d6Wj ds2_d6Wk ds3_d6Wl ds4_d6Wm ds5_d6Wn ds6_d6Wo
+                 ds7_d6Wp ds8_d6Wq ds9_d6Wr ds10_d6Ws ds11_d6Wt ds12_d6Wu ds13_d6Wv
+                 ds14_d6Ww ds15_d6Wx ds16_d6Wy ->
+      ds13_d6Wv
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_commitdate :: LineItem -> Date
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+l_commitdate
+  = \ (ds_d6W1 :: LineItem) ->
+      case ds_d6W1 of
+      { LineItem ds1_d6W2 ds2_d6W3 ds3_d6W4 ds4_d6W5 ds5_d6W6 ds6_d6W7
+                 ds7_d6W8 ds8_d6W9 ds9_d6Wa ds10_d6Wb ds11_d6Wc ds12_d6Wd ds13_d6We
+                 ds14_d6Wf ds15_d6Wg ds16_d6Wh ->
+      ds12_d6Wd
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_shipdate :: LineItem -> Date
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+l_shipdate
+  = \ (ds_d6VK :: LineItem) ->
+      case ds_d6VK of
+      { LineItem ds1_d6VL ds2_d6VM ds3_d6VN ds4_d6VO ds5_d6VP ds6_d6VQ
+                 ds7_d6VR ds8_d6VS ds9_d6VT ds10_d6VU ds11_d6VV ds12_d6VW ds13_d6VX
+                 ds14_d6VY ds15_d6VZ ds16_d6W0 ->
+      ds11_d6VV
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_linestatus :: LineItem -> Char
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+l_linestatus
+  = \ (ds_d6Vt :: LineItem) ->
+      case ds_d6Vt of
+      { LineItem ds1_d6Vu ds2_d6Vv ds3_d6Vw ds4_d6Vx ds5_d6Vy ds6_d6Vz
+                 ds7_d6VA ds8_d6VB ds9_d6VC ds10_d6VD ds11_d6VE ds12_d6VF ds13_d6VG
+                 ds14_d6VH ds15_d6VI ds16_d6VJ ->
+      ds10_d6VD
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_returnflag :: LineItem -> Char
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+l_returnflag
+  = \ (ds_d6Vc :: LineItem) ->
+      case ds_d6Vc of
+      { LineItem ds1_d6Vd ds2_d6Ve ds3_d6Vf ds4_d6Vg ds5_d6Vh ds6_d6Vi
+                 ds7_d6Vj ds8_d6Vk ds9_d6Vl ds10_d6Vm ds11_d6Vn ds12_d6Vo ds13_d6Vp
+                 ds14_d6Vq ds15_d6Vr ds16_d6Vs ->
+      ds9_d6Vl
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_tax :: LineItem -> Decimal
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+l_tax
+  = \ (ds_d6UV :: LineItem) ->
+      case ds_d6UV of
+      { LineItem ds1_d6UW ds2_d6UX ds3_d6UY ds4_d6UZ ds5_d6V0 ds6_d6V1
+                 ds7_d6V2 ds8_d6V3 ds9_d6V4 ds10_d6V5 ds11_d6V6 ds12_d6V7 ds13_d6V8
+                 ds14_d6V9 ds15_d6Va ds16_d6Vb ->
+      ds8_d6V3
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_discount :: LineItem -> Decimal
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+l_discount
+  = \ (ds_d6UE :: LineItem) ->
+      case ds_d6UE of
+      { LineItem ds1_d6UF ds2_d6UG ds3_d6UH ds4_d6UI ds5_d6UJ ds6_d6UK
+                 ds7_d6UL ds8_d6UM ds9_d6UN ds10_d6UO ds11_d6UP ds12_d6UQ ds13_d6UR
+                 ds14_d6US ds15_d6UT ds16_d6UU ->
+      ds7_d6UL
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_extendedprice :: LineItem -> Decimal
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+l_extendedprice
+  = \ (ds_d6Un :: LineItem) ->
+      case ds_d6Un of
+      { LineItem ds1_d6Uo ds2_d6Up ds3_d6Uq ds4_d6Ur ds5_d6Us ds6_d6Ut
+                 ds7_d6Uu ds8_d6Uv ds9_d6Uw ds10_d6Ux ds11_d6Uy ds12_d6Uz ds13_d6UA
+                 ds14_d6UB ds15_d6UC ds16_d6UD ->
+      ds6_d6Ut
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_quantity :: LineItem -> Decimal
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+l_quantity
+  = \ (ds_d6U6 :: LineItem) ->
+      case ds_d6U6 of
+      { LineItem ds1_d6U7 ds2_d6U8 ds3_d6U9 ds4_d6Ua ds5_d6Ub ds6_d6Uc
+                 ds7_d6Ud ds8_d6Ue ds9_d6Uf ds10_d6Ug ds11_d6Uh ds12_d6Ui ds13_d6Uj
+                 ds14_d6Uk ds15_d6Ul ds16_d6Um ->
+      ds5_d6Ub
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_linenumber :: LineItem -> Int
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+l_linenumber
+  = \ (ds_d6TP :: LineItem) ->
+      case ds_d6TP of
+      { LineItem ds1_d6TQ ds2_d6TR ds3_d6TS ds4_d6TT ds5_d6TU ds6_d6TV
+                 ds7_d6TW ds8_d6TX ds9_d6TY ds10_d6TZ ds11_d6U0 ds12_d6U1 ds13_d6U2
+                 ds14_d6U3 ds15_d6U4 ds16_d6U5 ->
+      ds4_d6TT
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_suppref :: LineItem -> TableRef Supplier
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+l_suppref
+  = \ (ds_d6Ty :: LineItem) ->
+      case ds_d6Ty of
+      { LineItem ds1_d6Tz ds2_d6TA ds3_d6TB ds4_d6TC ds5_d6TD ds6_d6TE
+                 ds7_d6TF ds8_d6TG ds9_d6TH ds10_d6TI ds11_d6TJ ds12_d6TK ds13_d6TL
+                 ds14_d6TM ds15_d6TN ds16_d6TO ->
+      ds3_d6TB
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_partref :: LineItem -> TableRef Part
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+l_partref
+  = \ (ds_d6Th :: LineItem) ->
+      case ds_d6Th of
+      { LineItem ds1_d6Ti ds2_d6Tj ds3_d6Tk ds4_d6Tl ds5_d6Tm ds6_d6Tn
+                 ds7_d6To ds8_d6Tp ds9_d6Tq ds10_d6Tr ds11_d6Ts ds12_d6Tt ds13_d6Tu
+                 ds14_d6Tv ds15_d6Tw ds16_d6Tx ->
+      ds2_d6Tj
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_orderref :: LineItem -> TableRef Order
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+l_orderref
+  = \ (ds_d6T0 :: LineItem) ->
+      case ds_d6T0 of
+      { LineItem ds1_d6T1 ds2_d6T2 ds3_d6T3 ds4_d6T4 ds5_d6T5 ds6_d6T6
+                 ds7_d6T7 ds8_d6T8 ds9_d6T9 ds10_d6Ta ds11_d6Tb ds12_d6Tc ds13_d6Td
+                 ds14_d6Te ds15_d6Tf ds16_d6Tg ->
+      ds1_d6T1
+      }
+
+-- RHS size: {terms: 5, types: 9, coercions: 0, joins: 0/0}
+ps_comment :: PartSupp -> String
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+ps_comment
+  = \ (ds_d6SU :: PartSupp) ->
+      case ds_d6SU of
+      { PartSupp ds1_d6SV ds2_d6SW ds3_d6SX ds4_d6SY ds5_d6SZ ->
+      ds5_d6SZ
+      }
+
+-- RHS size: {terms: 5, types: 9, coercions: 0, joins: 0/0}
+ps_supplycost :: PartSupp -> Decimal
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+ps_supplycost
+  = \ (ds_d6SO :: PartSupp) ->
+      case ds_d6SO of
+      { PartSupp ds1_d6SP ds2_d6SQ ds3_d6SR ds4_d6SS ds5_d6ST ->
+      ds4_d6SS
+      }
+
+-- RHS size: {terms: 5, types: 9, coercions: 0, joins: 0/0}
+ps_availqty :: PartSupp -> Int
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+ps_availqty
+  = \ (ds_d6SI :: PartSupp) ->
+      case ds_d6SI of
+      { PartSupp ds1_d6SJ ds2_d6SK ds3_d6SL ds4_d6SM ds5_d6SN ->
+      ds3_d6SL
+      }
+
+-- RHS size: {terms: 5, types: 9, coercions: 0, joins: 0/0}
+ps_suppref :: PartSupp -> TableRef Supplier
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+ps_suppref
+  = \ (ds_d6SC :: PartSupp) ->
+      case ds_d6SC of
+      { PartSupp ds1_d6SD ds2_d6SE ds3_d6SF ds4_d6SG ds5_d6SH ->
+      ds2_d6SE
+      }
+
+-- RHS size: {terms: 5, types: 9, coercions: 0, joins: 0/0}
+ps_partref :: PartSupp -> TableRef Part
+[GblId[[RecSel]], Arity=1, Caf=NoCafRefs, Unf=OtherCon []]
+ps_partref
+  = \ (ds_d6Sw :: PartSupp) ->
+      case ds_d6Sw of
+      { PartSupp ds1_d6Sx ds2_d6Sy ds3_d6Sz ds4_d6SA ds5_d6SB ->
+      ds1_d6Sx
+      }
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+lineitems :: Table LineItem
+[GblId]
+lineitems
+  = findTable @ LineItem (GHC.CString.unpackCString# "LineItems"#)
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$trModule1_r74d :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule1_r74d = "main"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$trModule2_r74e :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule2_r74e = GHC.Types.TrNameS $trModule1_r74d
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$trModule3_r74f :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule3_r74f = "TPCH.Functional.Schema"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$trModule4_r74g :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule4_r74g = GHC.Types.TrNameS $trModule3_r74f
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+TPCH.Functional.Schema.$trModule :: GHC.Types.Module
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+TPCH.Functional.Schema.$trModule
+  = GHC.Types.Module $trModule2_r74e $trModule4_r74g
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep_r74h :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep_r74h
+  = GHC.Types.KindRepTyConApp
+      GHC.Tuple.$tc() (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep1_r74i :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep1_r74i
+  = GHC.Types.KindRepTyConApp
+      GHC.Types.$tcChar (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep2_r74j :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep2_r74j
+  = GHC.Types.KindRepTyConApp
+      GHC.Types.$tcDouble (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep3_r74k :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep3_r74k
+  = GHC.Types.KindRepTyConApp
+      GHC.Types.$tcInt (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep4_r74l :: [GHC.Types.KindRep]
+[GblId, Unf=OtherCon []]
+$krep4_r74l
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep1_r74i (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep5_r74m :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep5_r74m = GHC.Types.KindRepTyConApp GHC.Types.$tc[] $krep4_r74l
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tcPart1_r74n :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcPart1_r74n = "Part"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tcPart2_r74o :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcPart2_r74o = GHC.Types.TrNameS $tcPart1_r74n
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+TPCH.Functional.Schema.$tcPart :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+TPCH.Functional.Schema.$tcPart
+  = GHC.Types.TyCon
+      12636939280764832122##
+      2042036841775798596##
+      TPCH.Functional.Schema.$trModule
+      $tcPart2_r74o
+      0#
+      GHC.Types.krep$*
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep6_r74p :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep6_r74p
+  = GHC.Types.KindRepTyConApp
+      TPCH.Functional.Schema.$tcPart (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep7_r74q :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep7_r74q = GHC.Types.KindRepFun $krep5_r74m $krep6_r74p
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep8_r74r :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep8_r74r = GHC.Types.KindRepFun $krep2_r74j $krep7_r74q
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep9_r74s :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep9_r74s = GHC.Types.KindRepFun $krep5_r74m $krep8_r74r
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep10_r74t :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep10_r74t = GHC.Types.KindRepFun $krep3_r74k $krep9_r74s
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep11_r74u :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep11_r74u = GHC.Types.KindRepFun $krep5_r74m $krep10_r74t
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep12_r74v :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep12_r74v = GHC.Types.KindRepFun $krep5_r74m $krep11_r74u
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep13_r74w :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep13_r74w = GHC.Types.KindRepFun $krep5_r74m $krep12_r74v
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep14_r74x :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep14_r74x = GHC.Types.KindRepFun $krep5_r74m $krep13_r74w
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'Part1_r74y :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Part1_r74y = "'Part"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'Part2_r74z :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Part2_r74z = GHC.Types.TrNameS $tc'Part1_r74y
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+TPCH.Functional.Schema.$tc'Part :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+TPCH.Functional.Schema.$tc'Part
+  = GHC.Types.TyCon
+      2861360684592645105##
+      14440751847480628405##
+      TPCH.Functional.Schema.$trModule
+      $tc'Part2_r74z
+      0#
+      $krep14_r74x
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep15_r74A :: [GHC.Types.KindRep]
+[GblId, Unf=OtherCon []]
+$krep15_r74A
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep6_r74p (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep16_r74B :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep16_r74B
+  = GHC.Types.KindRepTyConApp FDB.GADTForall.$tcRowRef $krep15_r74A
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tcNation1_r74C :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcNation1_r74C = "Nation"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tcNation2_r74D :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcNation2_r74D = GHC.Types.TrNameS $tcNation1_r74C
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+TPCH.Functional.Schema.$tcNation :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+TPCH.Functional.Schema.$tcNation
+  = GHC.Types.TyCon
+      10710764971294019521##
+      2958077427421035359##
+      TPCH.Functional.Schema.$trModule
+      $tcNation2_r74D
+      0#
+      GHC.Types.krep$*
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep17_r74E :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep17_r74E
+  = GHC.Types.KindRepTyConApp
+      TPCH.Functional.Schema.$tcNation (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'France1_r74F :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'France1_r74F = "'France"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'France2_r74G :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'France2_r74G = GHC.Types.TrNameS $tc'France1_r74F
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+TPCH.Functional.Schema.$tc'France :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+TPCH.Functional.Schema.$tc'France
+  = GHC.Types.TyCon
+      15209813697351554211##
+      883766417185207263##
+      TPCH.Functional.Schema.$trModule
+      $tc'France2_r74G
+      0#
+      $krep17_r74E
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'Germany1_r74H :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Germany1_r74H = "'Germany"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'Germany2_r74I :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Germany2_r74I = GHC.Types.TrNameS $tc'Germany1_r74H
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+TPCH.Functional.Schema.$tc'Germany :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+TPCH.Functional.Schema.$tc'Germany
+  = GHC.Types.TyCon
+      1372385427742964851##
+      11954998232734438622##
+      TPCH.Functional.Schema.$trModule
+      $tc'Germany2_r74I
+      0#
+      $krep17_r74E
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tcCustomer1_r74J :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcCustomer1_r74J = "Customer"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tcCustomer2_r74K :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcCustomer2_r74K = GHC.Types.TrNameS $tcCustomer1_r74J
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+TPCH.Functional.Schema.$tcCustomer :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+TPCH.Functional.Schema.$tcCustomer
+  = GHC.Types.TyCon
+      7146533123847939809##
+      6452800127542812900##
+      TPCH.Functional.Schema.$trModule
+      $tcCustomer2_r74K
+      0#
+      GHC.Types.krep$*
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep18_r74L :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep18_r74L
+  = GHC.Types.KindRepTyConApp
+      TPCH.Functional.Schema.$tcCustomer
+      (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep19_r74M :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep19_r74M = GHC.Types.KindRepFun $krep5_r74m $krep18_r74L
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep20_r74N :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep20_r74N = GHC.Types.KindRepFun $krep5_r74m $krep19_r74M
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep21_r74O :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep21_r74O = GHC.Types.KindRepFun $krep2_r74j $krep20_r74N
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep22_r74P :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep22_r74P = GHC.Types.KindRepFun $krep_r74h $krep21_r74O
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep23_r74Q :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep23_r74Q = GHC.Types.KindRepFun $krep17_r74E $krep22_r74P
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep24_r74R :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep24_r74R = GHC.Types.KindRepFun $krep5_r74m $krep23_r74Q
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep25_r74S :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep25_r74S = GHC.Types.KindRepFun $krep5_r74m $krep24_r74R
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'Customer1_r74T :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Customer1_r74T = "'Customer"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'Customer2_r74U :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Customer2_r74U = GHC.Types.TrNameS $tc'Customer1_r74T
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+TPCH.Functional.Schema.$tc'Customer :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+TPCH.Functional.Schema.$tc'Customer
+  = GHC.Types.TyCon
+      14764552819634216928##
+      6068166705854968441##
+      TPCH.Functional.Schema.$trModule
+      $tc'Customer2_r74U
+      0#
+      $krep25_r74S
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep26_r74V :: [GHC.Types.KindRep]
+[GblId, Unf=OtherCon []]
+$krep26_r74V
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep18_r74L (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep27_r74W :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep27_r74W
+  = GHC.Types.KindRepTyConApp FDB.GADTForall.$tcRowRef $krep26_r74V
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tcOrder1_r74X :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcOrder1_r74X = "Order"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tcOrder2_r74Y :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcOrder2_r74Y = GHC.Types.TrNameS $tcOrder1_r74X
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+TPCH.Functional.Schema.$tcOrder :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+TPCH.Functional.Schema.$tcOrder
+  = GHC.Types.TyCon
+      10277513951169694645##
+      16962993689770346345##
+      TPCH.Functional.Schema.$trModule
+      $tcOrder2_r74Y
+      0#
+      GHC.Types.krep$*
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep28_r74Z :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep28_r74Z
+  = GHC.Types.KindRepTyConApp
+      TPCH.Functional.Schema.$tcOrder (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep29_r750 :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep29_r750 = GHC.Types.KindRepFun $krep5_r74m $krep28_r74Z
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep30_r751 :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep30_r751 = GHC.Types.KindRepFun $krep3_r74k $krep29_r750
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep31_r752 :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep31_r752 = GHC.Types.KindRepFun $krep5_r74m $krep30_r751
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep32_r753 :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep32_r753 = GHC.Types.KindRepFun $krep5_r74m $krep31_r752
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep33_r754 :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep33_r754 = GHC.Types.KindRepFun $krep_r74h $krep32_r753
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep34_r755 :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep34_r755 = GHC.Types.KindRepFun $krep2_r74j $krep33_r754
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep35_r756 :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep35_r756 = GHC.Types.KindRepFun $krep1_r74i $krep34_r755
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep36_r757 :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep36_r757 = GHC.Types.KindRepFun $krep27_r74W $krep35_r756
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'Order1_r758 :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Order1_r758 = "'Order"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'Order2_r759 :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Order2_r759 = GHC.Types.TrNameS $tc'Order1_r758
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+TPCH.Functional.Schema.$tc'Order :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+TPCH.Functional.Schema.$tc'Order
+  = GHC.Types.TyCon
+      13153087065208477111##
+      17701592658522406836##
+      TPCH.Functional.Schema.$trModule
+      $tc'Order2_r759
+      0#
+      $krep36_r757
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep37_r75a :: [GHC.Types.KindRep]
+[GblId, Unf=OtherCon []]
+$krep37_r75a
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep28_r74Z (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep38_r75b :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep38_r75b
+  = GHC.Types.KindRepTyConApp FDB.GADTForall.$tcRowRef $krep37_r75a
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tcSupplier1_r75c :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcSupplier1_r75c = "Supplier"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tcSupplier2_r75d :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcSupplier2_r75d = GHC.Types.TrNameS $tcSupplier1_r75c
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+TPCH.Functional.Schema.$tcSupplier :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+TPCH.Functional.Schema.$tcSupplier
+  = GHC.Types.TyCon
+      5537664870048215054##
+      6807973368023935809##
+      TPCH.Functional.Schema.$trModule
+      $tcSupplier2_r75d
+      0#
+      GHC.Types.krep$*
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep39_r75e :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep39_r75e
+  = GHC.Types.KindRepTyConApp
+      TPCH.Functional.Schema.$tcSupplier
+      (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep40_r75f :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep40_r75f = GHC.Types.KindRepFun $krep5_r74m $krep39_r75e
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep41_r75g :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep41_r75g = GHC.Types.KindRepFun $krep2_r74j $krep40_r75f
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep42_r75h :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep42_r75h = GHC.Types.KindRepFun $krep_r74h $krep41_r75g
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep43_r75i :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep43_r75i = GHC.Types.KindRepFun $krep17_r74E $krep42_r75h
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep44_r75j :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep44_r75j = GHC.Types.KindRepFun $krep5_r74m $krep43_r75i
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep45_r75k :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep45_r75k = GHC.Types.KindRepFun $krep5_r74m $krep44_r75j
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'Supplier1_r75l :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Supplier1_r75l = "'Supplier"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'Supplier2_r75m :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'Supplier2_r75m = GHC.Types.TrNameS $tc'Supplier1_r75l
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+TPCH.Functional.Schema.$tc'Supplier :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+TPCH.Functional.Schema.$tc'Supplier
+  = GHC.Types.TyCon
+      3112581097731694837##
+      5980504949697491730##
+      TPCH.Functional.Schema.$trModule
+      $tc'Supplier2_r75m
+      0#
+      $krep45_r75k
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+$krep46_r75n :: [GHC.Types.KindRep]
+[GblId, Unf=OtherCon []]
+$krep46_r75n
+  = GHC.Types.:
+      @ GHC.Types.KindRep $krep39_r75e (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep47_r75o :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep47_r75o
+  = GHC.Types.KindRepTyConApp FDB.GADTForall.$tcRowRef $krep46_r75n
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tcLineItem1_r75p :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcLineItem1_r75p = "LineItem"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tcLineItem2_r75q :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcLineItem2_r75q = GHC.Types.TrNameS $tcLineItem1_r75p
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+TPCH.Functional.Schema.$tcLineItem :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+TPCH.Functional.Schema.$tcLineItem
+  = GHC.Types.TyCon
+      4413522648051142635##
+      4580059422389727633##
+      TPCH.Functional.Schema.$trModule
+      $tcLineItem2_r75q
+      0#
+      GHC.Types.krep$*
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep48_r75r :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep48_r75r
+  = GHC.Types.KindRepTyConApp
+      TPCH.Functional.Schema.$tcLineItem
+      (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep49_r75s :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep49_r75s = GHC.Types.KindRepFun $krep5_r74m $krep48_r75r
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep50_r75t :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep50_r75t = GHC.Types.KindRepFun $krep5_r74m $krep49_r75s
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep51_r75u :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep51_r75u = GHC.Types.KindRepFun $krep5_r74m $krep50_r75t
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep52_r75v :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep52_r75v = GHC.Types.KindRepFun $krep_r74h $krep51_r75u
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep53_r75w :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep53_r75w = GHC.Types.KindRepFun $krep_r74h $krep52_r75v
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep54_r75x :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep54_r75x = GHC.Types.KindRepFun $krep_r74h $krep53_r75w
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep55_r75y :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep55_r75y = GHC.Types.KindRepFun $krep1_r74i $krep54_r75x
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep56_r75z :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep56_r75z = GHC.Types.KindRepFun $krep1_r74i $krep55_r75y
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep57_r75A :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep57_r75A = GHC.Types.KindRepFun $krep2_r74j $krep56_r75z
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep58_r75B :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep58_r75B = GHC.Types.KindRepFun $krep2_r74j $krep57_r75A
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep59_r75C :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep59_r75C = GHC.Types.KindRepFun $krep2_r74j $krep58_r75B
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep60_r75D :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep60_r75D = GHC.Types.KindRepFun $krep2_r74j $krep59_r75C
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep61_r75E :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep61_r75E = GHC.Types.KindRepFun $krep3_r74k $krep60_r75D
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep62_r75F :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep62_r75F = GHC.Types.KindRepFun $krep47_r75o $krep61_r75E
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep63_r75G :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep63_r75G = GHC.Types.KindRepFun $krep16_r74B $krep62_r75F
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep64_r75H :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep64_r75H = GHC.Types.KindRepFun $krep38_r75b $krep63_r75G
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'LineItem1_r75I :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'LineItem1_r75I = "'LineItem"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'LineItem2_r75J :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'LineItem2_r75J = GHC.Types.TrNameS $tc'LineItem1_r75I
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+TPCH.Functional.Schema.$tc'LineItem :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+TPCH.Functional.Schema.$tc'LineItem
+  = GHC.Types.TyCon
+      8539620922902222438##
+      9565303329789687194##
+      TPCH.Functional.Schema.$trModule
+      $tc'LineItem2_r75J
+      0#
+      $krep64_r75H
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tcPartSupp1_r75K :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcPartSupp1_r75K = "PartSupp"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tcPartSupp2_r75L :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcPartSupp2_r75L = GHC.Types.TrNameS $tcPartSupp1_r75K
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+TPCH.Functional.Schema.$tcPartSupp :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+TPCH.Functional.Schema.$tcPartSupp
+  = GHC.Types.TyCon
+      10849560314591573693##
+      11581864324186551291##
+      TPCH.Functional.Schema.$trModule
+      $tcPartSupp2_r75L
+      0#
+      GHC.Types.krep$*
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep65_r75M :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep65_r75M
+  = GHC.Types.KindRepTyConApp
+      TPCH.Functional.Schema.$tcPartSupp
+      (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep66_r75N :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep66_r75N = GHC.Types.KindRepFun $krep5_r74m $krep65_r75M
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep67_r75O :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep67_r75O = GHC.Types.KindRepFun $krep2_r74j $krep66_r75N
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep68_r75P :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep68_r75P = GHC.Types.KindRepFun $krep3_r74k $krep67_r75O
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep69_r75Q :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep69_r75Q = GHC.Types.KindRepFun $krep47_r75o $krep68_r75P
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep70_r75R :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep70_r75R = GHC.Types.KindRepFun $krep16_r74B $krep69_r75Q
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'PartSupp1_r75S :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'PartSupp1_r75S = "'PartSupp"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'PartSupp2_r75T :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'PartSupp2_r75T = GHC.Types.TrNameS $tc'PartSupp1_r75S
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+TPCH.Functional.Schema.$tc'PartSupp :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+TPCH.Functional.Schema.$tc'PartSupp
+  = GHC.Types.TyCon
+      10754361947780373833##
+      14007972955674632504##
+      TPCH.Functional.Schema.$trModule
+      $tc'PartSupp2_r75T
+      0#
+      $krep70_r75R
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tcRegion1_r75U :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcRegion1_r75U = "Region"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tcRegion2_r75V :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tcRegion2_r75V = GHC.Types.TrNameS $tcRegion1_r75U
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+TPCH.Functional.Schema.$tcRegion :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+TPCH.Functional.Schema.$tcRegion
+  = GHC.Types.TyCon
+      17005900331151520450##
+      2933480038519603125##
+      TPCH.Functional.Schema.$trModule
+      $tcRegion2_r75V
+      0#
+      GHC.Types.krep$*
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep71_r75W :: GHC.Types.KindRep
+[GblId, Unf=OtherCon []]
+$krep71_r75W
+  = GHC.Types.KindRepTyConApp
+      TPCH.Functional.Schema.$tcRegion (GHC.Types.[] @ GHC.Types.KindRep)
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$tc'EMEA1_r75X :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'EMEA1_r75X = "'EMEA"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$tc'EMEA2_r75Y :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$tc'EMEA2_r75Y = GHC.Types.TrNameS $tc'EMEA1_r75X
+
+-- RHS size: {terms: 7, types: 0, coercions: 0, joins: 0/0}
+TPCH.Functional.Schema.$tc'EMEA :: GHC.Types.TyCon
+[GblId, Unf=OtherCon []]
+TPCH.Functional.Schema.$tc'EMEA
+  = GHC.Types.TyCon
+      8266201620596383484##
+      3675984000706788314##
+      TPCH.Functional.Schema.$trModule
+      $tc'EMEA2_r75Y
+      0#
+      $krep71_r75W
+
+-- RHS size: {terms: 20, types: 3, coercions: 0, joins: 0/0}
+$dIP_r75Z :: GHC.Stack.Types.CallStack
+[GblId]
+$dIP_r75Z
+  = GHC.Stack.Types.pushCallStack
+      (GHC.CString.unpackCString# "undefined"#,
+       GHC.Stack.Types.SrcLoc
+         (GHC.CString.unpackCString# "main"#)
+         (GHC.CString.unpackCString# "TPCH.Functional.Schema"#)
+         (GHC.CString.unpackCString#
+            "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+         (GHC.Types.I# 21#)
+         (GHC.Types.I# 9#)
+         (GHC.Types.I# 21#)
+         (GHC.Types.I# 18#))
+      GHC.Stack.Types.emptyCallStack
+
+-- RHS size: {terms: 2, types: 3, coercions: 4, joins: 0/0}
+parts :: Table Part
+[GblId]
+parts
+  = undefined
+      @ 'GHC.Types.LiftedRep
+      @ (Table Part)
+      ($dIP_r75Z
+       `cast` (Sym (GHC.Classes.N:IP[0]
+                        <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+               :: GHC.Stack.Types.CallStack
+                  ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+-- RHS size: {terms: 20, types: 3, coercions: 0, joins: 0/0}
+$dIP1_r760 :: GHC.Stack.Types.CallStack
+[GblId]
+$dIP1_r760
+  = GHC.Stack.Types.pushCallStack
+      (GHC.CString.unpackCString# "undefined"#,
+       GHC.Stack.Types.SrcLoc
+         (GHC.CString.unpackCString# "main"#)
+         (GHC.CString.unpackCString# "TPCH.Functional.Schema"#)
+         (GHC.CString.unpackCString#
+            "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+         (GHC.Types.I# 34#)
+         (GHC.Types.I# 13#)
+         (GHC.Types.I# 34#)
+         (GHC.Types.I# 22#))
+      GHC.Stack.Types.emptyCallStack
+
+-- RHS size: {terms: 2, types: 3, coercions: 4, joins: 0/0}
+suppliers :: Table Supplier
+[GblId]
+suppliers
+  = undefined
+      @ 'GHC.Types.LiftedRep
+      @ (Table Supplier)
+      ($dIP1_r760
+       `cast` (Sym (GHC.Classes.N:IP[0]
+                        <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+               :: GHC.Stack.Types.CallStack
+                  ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+-- RHS size: {terms: 20, types: 3, coercions: 0, joins: 0/0}
+$dIP2_r761 :: GHC.Stack.Types.CallStack
+[GblId]
+$dIP2_r761
+  = GHC.Stack.Types.pushCallStack
+      (GHC.CString.unpackCString# "undefined"#,
+       GHC.Stack.Types.SrcLoc
+         (GHC.CString.unpackCString# "main"#)
+         (GHC.CString.unpackCString# "TPCH.Functional.Schema"#)
+         (GHC.CString.unpackCString#
+            "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+         (GHC.Types.I# 46#)
+         (GHC.Types.I# 13#)
+         (GHC.Types.I# 46#)
+         (GHC.Types.I# 22#))
+      GHC.Stack.Types.emptyCallStack
+
+-- RHS size: {terms: 2, types: 3, coercions: 4, joins: 0/0}
+partsupps :: Table PartSupp
+[GblId]
+partsupps
+  = undefined
+      @ 'GHC.Types.LiftedRep
+      @ (Table PartSupp)
+      ($dIP2_r761
+       `cast` (Sym (GHC.Classes.N:IP[0]
+                        <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+               :: GHC.Stack.Types.CallStack
+                  ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+-- RHS size: {terms: 20, types: 3, coercions: 0, joins: 0/0}
+$dIP3_r762 :: GHC.Stack.Types.CallStack
+[GblId]
+$dIP3_r762
+  = GHC.Stack.Types.pushCallStack
+      (GHC.CString.unpackCString# "undefined"#,
+       GHC.Stack.Types.SrcLoc
+         (GHC.CString.unpackCString# "main"#)
+         (GHC.CString.unpackCString# "TPCH.Functional.Schema"#)
+         (GHC.CString.unpackCString#
+            "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+         (GHC.Types.I# 60#)
+         (GHC.Types.I# 13#)
+         (GHC.Types.I# 60#)
+         (GHC.Types.I# 22#))
+      GHC.Stack.Types.emptyCallStack
+
+-- RHS size: {terms: 2, types: 3, coercions: 4, joins: 0/0}
+customers :: Table Customer
+[GblId]
+customers
+  = undefined
+      @ 'GHC.Types.LiftedRep
+      @ (Table Customer)
+      ($dIP3_r762
+       `cast` (Sym (GHC.Classes.N:IP[0]
+                        <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+               :: GHC.Stack.Types.CallStack
+                  ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+-- RHS size: {terms: 20, types: 3, coercions: 0, joins: 0/0}
+$dIP4_r763 :: GHC.Stack.Types.CallStack
+[GblId]
+$dIP4_r763
+  = GHC.Stack.Types.pushCallStack
+      (GHC.CString.unpackCString# "undefined"#,
+       GHC.Stack.Types.SrcLoc
+         (GHC.CString.unpackCString# "main"#)
+         (GHC.CString.unpackCString# "TPCH.Functional.Schema"#)
+         (GHC.CString.unpackCString#
+            "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+         (GHC.Types.I# 75#)
+         (GHC.Types.I# 10#)
+         (GHC.Types.I# 75#)
+         (GHC.Types.I# 19#))
+      GHC.Stack.Types.emptyCallStack
+
+-- RHS size: {terms: 2, types: 3, coercions: 4, joins: 0/0}
+orders :: Table Order
+[GblId]
+orders
+  = undefined
+      @ 'GHC.Types.LiftedRep
+      @ (Table Order)
+      ($dIP4_r763
+       `cast` (Sym (GHC.Classes.N:IP[0]
+                        <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+               :: GHC.Stack.Types.CallStack
+                  ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+-- RHS size: {terms: 20, types: 3, coercions: 0, joins: 0/0}
+$dIP5_r764 :: GHC.Stack.Types.CallStack
+[GblId]
+$dIP5_r764
+  = GHC.Stack.Types.pushCallStack
+      (GHC.CString.unpackCString# "undefined"#,
+       GHC.Stack.Types.SrcLoc
+         (GHC.CString.unpackCString# "main"#)
+         (GHC.CString.unpackCString# "TPCH.Functional.Schema"#)
+         (GHC.CString.unpackCString#
+            "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+         (GHC.Types.I# 106#)
+         (GHC.Types.I# 10#)
+         (GHC.Types.I# 106#)
+         (GHC.Types.I# 19#))
+      GHC.Stack.Types.emptyCallStack
+
+-- RHS size: {terms: 2, types: 3, coercions: 4, joins: 0/0}
+n_name :: Nation -> String
+[GblId]
+n_name
+  = undefined
+      @ 'GHC.Types.LiftedRep
+      @ (Nation -> String)
+      ($dIP5_r764
+       `cast` (Sym (GHC.Classes.N:IP[0]
+                        <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+               :: GHC.Stack.Types.CallStack
+                  ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+-- RHS size: {terms: 20, types: 3, coercions: 0, joins: 0/0}
+$dIP6_r765 :: GHC.Stack.Types.CallStack
+[GblId]
+$dIP6_r765
+  = GHC.Stack.Types.pushCallStack
+      (GHC.CString.unpackCString# "undefined"#,
+       GHC.Stack.Types.SrcLoc
+         (GHC.CString.unpackCString# "main"#)
+         (GHC.CString.unpackCString# "TPCH.Functional.Schema"#)
+         (GHC.CString.unpackCString#
+            "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+         (GHC.Types.I# 109#)
+         (GHC.Types.I# 12#)
+         (GHC.Types.I# 109#)
+         (GHC.Types.I# 21#))
+      GHC.Stack.Types.emptyCallStack
+
+-- RHS size: {terms: 2, types: 3, coercions: 4, joins: 0/0}
+n_region :: Nation -> Region
+[GblId]
+n_region
+  = undefined
+      @ 'GHC.Types.LiftedRep
+      @ (Nation -> Region)
+      ($dIP6_r765
+       `cast` (Sym (GHC.Classes.N:IP[0]
+                        <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+               :: GHC.Stack.Types.CallStack
+                  ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+-- RHS size: {terms: 20, types: 3, coercions: 0, joins: 0/0}
+$dIP7_r766 :: GHC.Stack.Types.CallStack
+[GblId]
+$dIP7_r766
+  = GHC.Stack.Types.pushCallStack
+      (GHC.CString.unpackCString# "undefined"#,
+       GHC.Stack.Types.SrcLoc
+         (GHC.CString.unpackCString# "main"#)
+         (GHC.CString.unpackCString# "TPCH.Functional.Schema"#)
+         (GHC.CString.unpackCString#
+            "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+         (GHC.Types.I# 112#)
+         (GHC.Types.I# 13#)
+         (GHC.Types.I# 112#)
+         (GHC.Types.I# 22#))
+      GHC.Stack.Types.emptyCallStack
+
+-- RHS size: {terms: 2, types: 3, coercions: 4, joins: 0/0}
+n_comment :: Nation -> String
+[GblId]
+n_comment
+  = undefined
+      @ 'GHC.Types.LiftedRep
+      @ (Nation -> String)
+      ($dIP7_r766
+       `cast` (Sym (GHC.Classes.N:IP[0]
+                        <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+               :: GHC.Stack.Types.CallStack
+                  ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+-- RHS size: {terms: 20, types: 3, coercions: 0, joins: 0/0}
+$dIP8_r767 :: GHC.Stack.Types.CallStack
+[GblId]
+$dIP8_r767
+  = GHC.Stack.Types.pushCallStack
+      (GHC.CString.unpackCString# "undefined"#,
+       GHC.Stack.Types.SrcLoc
+         (GHC.CString.unpackCString# "main"#)
+         (GHC.CString.unpackCString# "TPCH.Functional.Schema"#)
+         (GHC.CString.unpackCString#
+            "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+         (GHC.Types.I# 115#)
+         (GHC.Types.I# 14#)
+         (GHC.Types.I# 115#)
+         (GHC.Types.I# 23#))
+      GHC.Stack.Types.emptyCallStack
+
+-- RHS size: {terms: 2, types: 3, coercions: 4, joins: 0/0}
+allNations :: [Nation]
+[GblId]
+allNations
+  = undefined
+      @ 'GHC.Types.LiftedRep
+      @ [Nation]
+      ($dIP8_r767
+       `cast` (Sym (GHC.Classes.N:IP[0]
+                        <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+               :: GHC.Stack.Types.CallStack
+                  ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+-- RHS size: {terms: 20, types: 3, coercions: 0, joins: 0/0}
+$dIP9_r768 :: GHC.Stack.Types.CallStack
+[GblId]
+$dIP9_r768
+  = GHC.Stack.Types.pushCallStack
+      (GHC.CString.unpackCString# "undefined"#,
+       GHC.Stack.Types.SrcLoc
+         (GHC.CString.unpackCString# "main"#)
+         (GHC.CString.unpackCString# "TPCH.Functional.Schema"#)
+         (GHC.CString.unpackCString#
+            "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+         (GHC.Types.I# 123#)
+         (GHC.Types.I# 10#)
+         (GHC.Types.I# 123#)
+         (GHC.Types.I# 19#))
+      GHC.Stack.Types.emptyCallStack
+
+-- RHS size: {terms: 2, types: 3, coercions: 4, joins: 0/0}
+r_name :: Region -> String
+[GblId]
+r_name
+  = undefined
+      @ 'GHC.Types.LiftedRep
+      @ (Region -> String)
+      ($dIP9_r768
+       `cast` (Sym (GHC.Classes.N:IP[0]
+                        <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+               :: GHC.Stack.Types.CallStack
+                  ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+-- RHS size: {terms: 20, types: 3, coercions: 0, joins: 0/0}
+$dIP10_r769 :: GHC.Stack.Types.CallStack
+[GblId]
+$dIP10_r769
+  = GHC.Stack.Types.pushCallStack
+      (GHC.CString.unpackCString# "undefined"#,
+       GHC.Stack.Types.SrcLoc
+         (GHC.CString.unpackCString# "main"#)
+         (GHC.CString.unpackCString# "TPCH.Functional.Schema"#)
+         (GHC.CString.unpackCString#
+            "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+         (GHC.Types.I# 126#)
+         (GHC.Types.I# 13#)
+         (GHC.Types.I# 126#)
+         (GHC.Types.I# 22#))
+      GHC.Stack.Types.emptyCallStack
+
+-- RHS size: {terms: 2, types: 3, coercions: 4, joins: 0/0}
+r_comment :: Region -> String
+[GblId]
+r_comment
+  = undefined
+      @ 'GHC.Types.LiftedRep
+      @ (Region -> String)
+      ($dIP10_r769
+       `cast` (Sym (GHC.Classes.N:IP[0]
+                        <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+               :: GHC.Stack.Types.CallStack
+                  ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+-- RHS size: {terms: 20, types: 3, coercions: 0, joins: 0/0}
+$dIP11_r76a :: GHC.Stack.Types.CallStack
+[GblId]
+$dIP11_r76a
+  = GHC.Stack.Types.pushCallStack
+      (GHC.CString.unpackCString# "undefined"#,
+       GHC.Stack.Types.SrcLoc
+         (GHC.CString.unpackCString# "main"#)
+         (GHC.CString.unpackCString# "TPCH.Functional.Schema"#)
+         (GHC.CString.unpackCString#
+            "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+         (GHC.Types.I# 129#)
+         (GHC.Types.I# 14#)
+         (GHC.Types.I# 129#)
+         (GHC.Types.I# 23#))
+      GHC.Stack.Types.emptyCallStack
+
+-- RHS size: {terms: 2, types: 3, coercions: 4, joins: 0/0}
+allRegions :: [Region]
+[GblId]
+allRegions
+  = undefined
+      @ 'GHC.Types.LiftedRep
+      @ [Region]
+      ($dIP11_r76a
+       `cast` (Sym (GHC.Classes.N:IP[0]
+                        <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+               :: GHC.Stack.Types.CallStack
+                  ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+-- RHS size: {terms: 20, types: 3, coercions: 0, joins: 0/0}
+$dIP12_r76b :: GHC.Stack.Types.CallStack
+[GblId]
+$dIP12_r76b
+  = GHC.Stack.Types.pushCallStack
+      (GHC.CString.unpackCString# "undefined"#,
+       GHC.Stack.Types.SrcLoc
+         (GHC.CString.unpackCString# "main"#)
+         (GHC.CString.unpackCString# "TPCH.Functional.Schema"#)
+         (GHC.CString.unpackCString#
+            "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+         (GHC.Types.I# 132#)
+         (GHC.Types.I# 14#)
+         (GHC.Types.I# 132#)
+         (GHC.Types.I# 23#))
+      GHC.Stack.Types.emptyCallStack
+
+-- RHS size: {terms: 2, types: 3, coercions: 4, joins: 0/0}
+findRegion :: String -> Region
+[GblId]
+findRegion
+  = undefined
+      @ 'GHC.Types.LiftedRep
+      @ (String -> Region)
+      ($dIP12_r76b
+       `cast` (Sym (GHC.Classes.N:IP[0]
+                        <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+               :: GHC.Stack.Types.CallStack
+                  ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+-- RHS size: {terms: 20, types: 3, coercions: 0, joins: 0/0}
+$dIP13_r76c :: GHC.Stack.Types.CallStack
+[GblId]
+$dIP13_r76c
+  = GHC.Stack.Types.pushCallStack
+      (GHC.CString.unpackCString# "undefined"#,
+       GHC.Stack.Types.SrcLoc
+         (GHC.CString.unpackCString# "main"#)
+         (GHC.CString.unpackCString# "TPCH.Functional.Schema"#)
+         (GHC.CString.unpackCString#
+            "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+         (GHC.Types.I# 135#)
+         (GHC.Types.I# 13#)
+         (GHC.Types.I# 135#)
+         (GHC.Types.I# 22#))
+      GHC.Stack.Types.emptyCallStack
+
+-- RHS size: {terms: 2, types: 4, coercions: 4, joins: 0/0}
+nationsIn :: Region -> [Nation]
+[GblId]
+nationsIn
+  = undefined
+      @ 'GHC.Types.LiftedRep
+      @ (Region -> [Nation])
+      ($dIP13_r76c
+       `cast` (Sym (GHC.Classes.N:IP[0]
+                        <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+               :: GHC.Stack.Types.CallStack
+                  ~R# (?callStack::GHC.Stack.Types.CallStack)))
+
+
+

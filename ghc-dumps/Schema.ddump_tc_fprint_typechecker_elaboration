@@ -1,0 +1,3990 @@
+[1 of 8] Compiling FDB.MoreTypes    ( FDB/MoreTypes.hs, FDB/MoreTypes.o )
+TYPE SIGNATURES
+  FDB.MoreTypes.Day :: Int -> DateInterval
+  dateFromString :: String -> Date
+  minusInterval :: Date -> DateInterval -> Date
+  tryDateFromString :: String -> Maybe Date
+TYPE CONSTRUCTORS
+  type Date = ()
+  data DateInterval = Day Int
+  type Decimal = Double
+  type PhoneNumber = ()
+COERCION AXIOMS
+Dependent modules: []
+Dependent packages: [base-4.12.0.0, ghc-prim-0.5.3,
+                     integer-gmp-1.0.2.0]
+
+==================== Typechecker ====================
+FDB.MoreTypes.$tcDateInterval
+  = GHC.Types.TyCon
+      18376018677496580262##
+      7294864336028437579##
+      FDB.MoreTypes.$trModule
+      (GHC.Types.TrNameS "DateInterval"#)
+      0
+      GHC.Types.krep$*
+FDB.MoreTypes.$tc'Day
+  = GHC.Types.TyCon
+      2870245755353241826##
+      3795114783946290854##
+      FDB.MoreTypes.$trModule
+      (GHC.Types.TrNameS "'Day"#)
+      0
+      $krep_a2qt
+$krep_a2qt [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a2qu $krep_a2qv
+$krep_a2qu [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp GHC.Types.$tcInt [] @ GHC.Types.KindRep
+$krep_a2qv [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.MoreTypes.$tcDateInterval [] @ GHC.Types.KindRep
+FDB.MoreTypes.$trModule
+  = GHC.Types.Module
+      (GHC.Types.TrNameS "main"#) (GHC.Types.TrNameS "FDB.MoreTypes"#)
+AbsBinds [] []
+  {Exports: [minusInterval <= minusInterval_a1cf
+               wrap: <>]
+   Exported types: minusInterval :: Date -> DateInterval -> Date
+                   [LclId]
+   Binds: minusInterval_a1cf
+            = undefined @ 'GHC.Types.LiftedRep @ (Date -> DateInterval -> Date)
+                $dIP_a2ex
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [tryDateFromString <= tryDateFromString_a2ey
+               wrap: <>]
+   Exported types: tryDateFromString :: String -> Maybe Date
+                   [LclId]
+   Binds: tryDateFromString_a2ey
+            = undefined @ 'GHC.Types.LiftedRep @ (String -> Maybe Date)
+                $dIP_a2eB
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [dateFromString <= dateFromString_a2eC
+               wrap: <>]
+   Exported types: dateFromString :: String -> Date
+                   [LclId]
+   Binds: dateFromString_a2eC
+            = undefined @ 'GHC.Types.LiftedRep @ (String -> Date) $dIP_a2eF
+   Evidence: [EvBinds{}]}
+
+[2 of 8] Compiling FDB.Utils        ( FDB/Utils.hs, FDB/Utils.o )
+TYPE SIGNATURES
+  .: ::
+    forall t1 t2 t3 t4.
+    (t1 -> t2) -> (t3 -> t4 -> t1) -> t3 -> t4 -> t2
+  <&> ::
+    forall (f :: * -> *) a b. Functor f => f a -> (a -> b) -> f b
+  compose2 ::
+    forall t1 t2 t3 t4.
+    (t1 -> t2) -> (t3 -> t4 -> t1) -> t3 -> t4 -> t2
+TYPE CONSTRUCTORS
+COERCION AXIOMS
+Dependent modules: []
+Dependent packages: [base-4.12.0.0, ghc-prim-0.5.3,
+                     integer-gmp-1.0.2.0]
+
+==================== Typechecker ====================
+FDB.Utils.$trModule
+  = GHC.Types.Module
+      (GHC.Types.TrNameS "main"#) (GHC.Types.TrNameS "FDB.Utils"#)
+AbsBinds [f_a2Ap, a_a2Aq, b_a2Ar] [$dFunctor_a2At]
+  {Exports: [<&> <= <&>_a2As
+               wrap: <>]
+   Exported types: <&>
+                     :: forall (f :: * -> *) a b. Functor f => f a -> (a -> b) -> f b
+                   [LclId]
+   Binds: (<&>_a2As) as_a2zn f_a2zo = f_a2zo <$> as_a2zn
+   Evidence: [EvBinds{[W] $dFunctor_a2AA = $dFunctor_a2At}]}
+AbsBinds [t_a2AR, t_a2AT, t_a2AV, t_a2AZ] []
+  {Exports: [compose2 <= compose2_a2B4
+               wrap: <>]
+   Exported types: compose2
+                     :: forall t t t t. (t -> t) -> (t -> t -> t) -> t -> t -> t
+                   [LclId]
+   Binds: compose2 f_a2zh g_a2zi x_a2zj y_a2zk
+            = f_a2zh (g_a2zi x_a2zj y_a2zk)
+   Evidence: [EvBinds{}]}
+AbsBinds [t_a2Bo, t_a2Bp, t_a2Bq, t_a2Br] []
+  {Exports: [.: <= .:_a2Bu
+               wrap: <>]
+   Exported types: .:
+                     :: forall t t t t. (t -> t) -> (t -> t -> t) -> t -> t -> t
+                   [LclId]
+   Binds: (.:) f_a2zl g_a2zm = f_a2zl `compose2` g_a2zm
+   Evidence: [EvBinds{}]}
+
+[3 of 8] Compiling Utils.List       ( Utils/List.hs, Utils/List.o )
+TYPE SIGNATURES
+  groupByKeyVal ::
+    forall k a v. Eq k => (a -> k) -> (a -> v) -> [a] -> [(k, [v])]
+  noDuplicates :: forall a. Ord a => [a] -> [a]
+  zipWithIndex :: forall a. [a] -> [(Int, a)]
+  zipWithIndexRight :: forall a. [a] -> [(a, Int)]
+TYPE CONSTRUCTORS
+COERCION AXIOMS
+Dependent modules: []
+Dependent packages: [array-0.5.3.0, base-4.12.0.0,
+                     containers-0.6.0.1, deepseq-1.4.4.0, ghc-prim-0.5.3,
+                     integer-gmp-1.0.2.0]
+
+==================== Typechecker ====================
+Utils.List.$trModule
+  = GHC.Types.Module
+      (GHC.Types.TrNameS "main"#) (GHC.Types.TrNameS "Utils.List"#)
+AbsBinds [k_a2ZZ, a_a300, v_a301] [$dEq_a303]
+  {Exports: [groupByKeyVal <= groupByKeyVal_a302
+               wrap: <>]
+   Exported types: groupByKeyVal
+                     :: forall k a v. Eq k => (a -> k) -> (a -> v) -> [a] -> [(k, [v])]
+                   [LclId]
+   Binds: groupByKeyVal_a302 key_a2Re val_a2Rf xs_a2Rg
+            = map @ [a_a300] @ (k_a2ZZ, [v_a301])
+                transformGroup_a2Ri naiveGroups_a2Rh
+            where
+                AbsBinds [] []
+                  {Exports: [naiveGroups_a2Rh <= naiveGroups_a30Q
+                               wrap: <>]
+                   Exported types: naiveGroups_a2Rh :: [[a_a300]]
+                                   [LclId]
+                   Binds: naiveGroups_a2Rh
+                            = List.groupBy @ a_a300
+                                (\ x1_a2TY x2_a2TZ -> (key_a2Re x1_a2TY) == (key_a2Re x2_a2TZ))
+                                xs_a2Rg
+                   Evidence: [EvBinds{[W] $dEq_a30N = $dEq_a303}]}
+                AbsBinds [] []
+                  {Exports: [transformGroup_a2Ri <= transformGroup_a30D
+                               wrap: <>]
+                   Exported types: transformGroup_a2Ri
+                                     :: [a_a300] -> (k_a2ZZ, [v_a301])
+                                   [LclId]
+                   Binds: transformGroup_a2Ri thisGroup_a2U0
+                            = (thisGroupKey_a2U1, thisGroupVals_a2U2)
+                            where
+                                AbsBinds [] []
+                                  {Exports: [thisGroupKey_a2U1 <= thisGroupKey_a30u
+                                               wrap: <>]
+                                   Exported types: thisGroupKey_a2U1 :: k_a2ZZ
+                                                   [LclId]
+                                   Binds: thisGroupKey_a2U1
+                                            = key_a2Re
+                                                (head @ a_a300 thisGroup_a2U0 |> <[a_a300]>_R)
+                                   Evidence: [EvBinds{}]}
+                                AbsBinds [] []
+                                  {Exports: [thisGroupVals_a2U2 <= thisGroupVals_a30i
+                                               wrap: <>]
+                                   Exported types: thisGroupVals_a2U2 :: [v_a301]
+                                                   [LclId]
+                                   Binds: thisGroupVals_a2U2
+                                            = val_a2Rf <$> thisGroup_a2U0 |> <[a_a300]>_R
+                                   Evidence: [EvBinds{[W] $dFunctor_a30e = GHC.Base.$fFunctor[]}]}
+                   Evidence: [EvBinds{}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [a_a30Z] []
+  {Exports: [zipWithIndex <= zipWithIndex_a310
+               wrap: <>]
+   Exported types: zipWithIndex :: forall a. [a] -> [(Int, a)]
+                   [LclId]
+   Binds: zipWithIndex_a310 = zip @ Int @ a_a30Z [0 .. ]
+   Evidence: [EvBinds{[W] $dNum_a32B = GHC.Num.$fNumInt
+                      [W] $dEnum_a3ct = GHC.Enum.$fEnumInt}]}
+AbsBinds [a_a3cv] []
+  {Exports: [zipWithIndexRight <= zipWithIndexRight_a3cw
+               wrap: <>]
+   Exported types: zipWithIndexRight :: forall a. [a] -> [(a, Int)]
+                   [LclId]
+   Binds: zipWithIndexRight_a3cw
+            = map @ (Int, a_a3cv) @ (a_a3cv, Int) swap @ Int @ a_a3cv
+                . zipWithIndex @ a_a3cv
+   Evidence: [EvBinds{}]}
+AbsBinds [a_a3cK] [$dOrd_a3cM]
+  {Exports: [noDuplicates <= noDuplicates_a3cL
+               wrap: <>]
+   Exported types: noDuplicates :: forall a. Ord a => [a] -> [a]
+                   [LclId]
+   Binds: noDuplicates_a3cL
+            = Set.toList @ a_a3cK . Set.fromList @ a_a3cK $dOrd_a3cU
+   Evidence: [EvBinds{[W] $dOrd_a3cU = $dOrd_a3cM}]}
+
+[4 of 8] Compiling Utils.Prelude    ( Utils/Prelude.hs, Utils/Prelude.o )
+TYPE SIGNATURES
+  .: ::
+    forall b c a1 a2. (b -> c) -> (a1 -> a2 -> b) -> a1 -> a2 -> c
+  <&> ::
+    forall (f :: * -> *) a b. Functor f => f a -> (a -> b) -> f b
+  compose2 ::
+    forall b c a1 a2. (b -> c) -> (a1 -> a2 -> b) -> a1 -> a2 -> c
+  doNothing :: IO ()
+  ignore :: forall a. a -> ()
+TYPE CONSTRUCTORS
+COERCION AXIOMS
+Dependent modules: []
+Dependent packages: [base-4.12.0.0, ghc-prim-0.5.3,
+                     integer-gmp-1.0.2.0]
+
+==================== Typechecker ====================
+Utils.Prelude.$trModule
+  = GHC.Types.Module
+      (GHC.Types.TrNameS "main"#) (GHC.Types.TrNameS "Utils.Prelude"#)
+AbsBinds [a_a3hr] []
+  {Exports: [ignore <= ignore_a3hs
+               wrap: <>]
+   Exported types: ignore :: forall a. a -> ()
+                   [LclId]
+   Binds: ignore_a3hs = const @ () @ a_a3hr ()
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [doNothing <= doNothing_a3hx
+               wrap: <>]
+   Exported types: doNothing :: IO ()
+                   [LclId]
+   Binds: doNothing_a3hx = return @ IO $dMonad_a3hJ @ () ()
+   Evidence: [EvBinds{}]}
+AbsBinds [f_a3hL, a_a3hM, b_a3hN] [$dFunctor_a3hP]
+  {Exports: [<&> <= <&>_a3hO
+               wrap: <>]
+   Exported types: <&>
+                     :: forall (f :: * -> *) a b. Functor f => f a -> (a -> b) -> f b
+                   [LclId]
+   Binds: (<&>_a3hO) as_a3gA f_a3gB = f_a3gB <$> as_a3gA
+   Evidence: [EvBinds{[W] $dFunctor_a3hT = $dFunctor_a3hP}]}
+AbsBinds [b_a3i3, c_a3i4, a_a3i2, a_a3i5] []
+  {Exports: [compose2 <= compose2_a3i8
+               wrap: <>]
+   Exported types: compose2
+                     :: forall b c a a. (b -> c) -> (a -> a -> b) -> a -> a -> c
+                   [LclId]
+   Binds: compose2
+            = (.) @ (a_a3i5 -> b_a3i3) @ (a_a3i5 -> c_a3i4) @ a_a3i2
+                . (.) @ b_a3i3 @ c_a3i4 @ a_a3i5
+   Evidence: [EvBinds{}]}
+AbsBinds [b_a3im, c_a3in, a_a3io, a_a3ip] []
+  {Exports: [.: <= .:_a3it
+               wrap: <>]
+   Exported types: .:
+                     :: forall b c a a. (b -> c) -> (a -> a -> b) -> a -> a -> c
+                   [LclId]
+   Binds: (.:) = compose2 @ b_a3im @ c_a3in @ a_a3io @ a_a3ip
+   Evidence: [EvBinds{}]}
+
+[5 of 8] Compiling Utils.AbstractGraph ( Utils/AbstractGraph.hs, Utils/AbstractGraph.o )
+TYPE SIGNATURES
+  Utils.AbstractGraph.Graph ::
+    forall v e. [v] -> [(v, e, v)] -> Graph v e
+  Utils.AbstractGraph.Tree ::
+    forall v e. v -> [(e, Tree v e)] -> Tree v e
+  allTreeEdges :: forall v e. Tree v e -> [(v, e, v)]
+  allTreeNodes :: forall v e. Tree v e -> [v]
+  assignTreeIds :: forall v e. Tree v e -> Tree (v, Int) e
+  assignUniqueIds ::
+    forall v e. Ord v => Graph v e -> (Graph (v, Int) e, Map v Int)
+  buildTree ::
+    forall t v e. (t -> v) -> (t -> [(e, t)]) -> t -> Tree v e
+  edgeTriplets :: forall v e. Graph v e -> [(v, e, v)]
+  eliminateDuplicateVertices ::
+    forall v e. Ord v => Graph v e -> Graph v e
+  getNode :: forall v e. Tree v e -> v
+  graphFromTree :: forall v e. Tree v e -> Graph v e
+  mapEdgeFromTriplet :: forall e f v. (e -> f) -> (v, e, v) -> f
+  mapEdgeInTriplet ::
+    forall e f v. (e -> f) -> (v, e, v) -> (v, f, v)
+  mapEdgeTriplets ::
+    forall v e f. ((v, e, v) -> f) -> Graph v e -> Graph v f
+  mapEdges :: forall e f v. (e -> f) -> Graph v e -> Graph v f
+  mapGraphTriplets ::
+    forall v1 v2 e1 e2.
+    (v1 -> v2) -> ((v1, e1, v1) -> e2) -> Graph v1 e1 -> Graph v2 e2
+  mapTreeNodes :: forall v w e. (v -> w) -> Tree v e -> Tree w e
+  mapVertices :: forall v w e. (v -> w) -> Graph v e -> Graph w e
+  rootNode :: forall v e. Tree v e -> v
+  singleton :: forall v e. v -> Graph v e
+  subtreeNodes :: forall v e. Tree v e -> [v]
+  subtrees :: forall v e. Tree v e -> [Tree v e]
+  vertices :: forall v e. Graph v e -> [v]
+TYPE CONSTRUCTORS
+  data Graph v e = Graph [v] [(v, e, v)]
+  data Tree v e = Tree v [(e, Tree v e)]
+COERCION AXIOMS
+INSTANCES
+  instance Bifunctor Graph -- Defined at Utils/AbstractGraph.hs:22:10
+  instance Semigroup (Graph v e)
+    -- Defined at Utils/AbstractGraph.hs:28:10
+  instance Monoid (Graph v e)
+    -- Defined at Utils/AbstractGraph.hs:31:10
+Dependent modules: [(Utils.List, False), (Utils.Prelude, False)]
+Dependent packages: [array-0.5.3.0, base-4.12.0.0,
+                     containers-0.6.0.1, deepseq-1.4.4.0, ghc-prim-0.5.3,
+                     integer-gmp-1.0.2.0]
+
+==================== Typechecker ====================
+Utils.AbstractGraph.$tcTree
+  = GHC.Types.TyCon
+      6515252302738829926##
+      7116435001695257579##
+      Utils.AbstractGraph.$trModule
+      (GHC.Types.TrNameS "Tree"#)
+      0
+      GHC.Types.krep$*->*->*
+Utils.AbstractGraph.$tc'Tree
+  = GHC.Types.TyCon
+      1962891149104463300##
+      12402799480339590078##
+      Utils.AbstractGraph.$trModule
+      (GHC.Types.TrNameS "'Tree"#)
+      2
+      $krep_a4wv
+Utils.AbstractGraph.$tcGraph
+  = GHC.Types.TyCon
+      11750601768977025181##
+      11539868905161674652##
+      Utils.AbstractGraph.$trModule
+      (GHC.Types.TrNameS "Graph"#)
+      0
+      GHC.Types.krep$*->*->*
+Utils.AbstractGraph.$tc'Graph
+  = GHC.Types.TyCon
+      17329342475042821334##
+      15132150088727508783##
+      Utils.AbstractGraph.$trModule
+      (GHC.Types.TrNameS "'Graph"#)
+      2
+      $krep_a4wC
+$krep_a4ww [InlPrag=NOUSERINLINE[~]] = GHC.Types.KindRepVar 0
+$krep_a4wA [InlPrag=NOUSERINLINE[~]] = GHC.Types.KindRepVar 1
+$krep_a4wv [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a4ww $krep_a4wx
+$krep_a4wC [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a4wD $krep_a4wE
+$krep_a4wE [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a4wF $krep_a4wH
+$krep_a4wx [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a4wy $krep_a4wB
+$krep_a4wG [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      GHC.Tuple.$tc(,,)
+      ((:) @ GHC.Types.KindRep
+         $krep_a4ww
+         ((:) @ GHC.Types.KindRep
+            $krep_a4wA
+            ((:) @ GHC.Types.KindRep $krep_a4ww [] @ GHC.Types.KindRep)))
+$krep_a4wB [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      Utils.AbstractGraph.$tcTree
+      ((:) @ GHC.Types.KindRep
+         $krep_a4ww
+         ((:) @ GHC.Types.KindRep $krep_a4wA [] @ GHC.Types.KindRep))
+$krep_a4wz [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      GHC.Tuple.$tc(,)
+      ((:) @ GHC.Types.KindRep
+         $krep_a4wA
+         ((:) @ GHC.Types.KindRep $krep_a4wB [] @ GHC.Types.KindRep))
+$krep_a4wH [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      Utils.AbstractGraph.$tcGraph
+      ((:) @ GHC.Types.KindRep
+         $krep_a4ww
+         ((:) @ GHC.Types.KindRep $krep_a4wA [] @ GHC.Types.KindRep))
+$krep_a4wD [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      GHC.Types.$tc[]
+      ((:) @ GHC.Types.KindRep $krep_a4ww [] @ GHC.Types.KindRep)
+$krep_a4wF [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      GHC.Types.$tc[]
+      ((:) @ GHC.Types.KindRep $krep_a4wG [] @ GHC.Types.KindRep)
+$krep_a4wy [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      GHC.Types.$tc[]
+      ((:) @ GHC.Types.KindRep $krep_a4wz [] @ GHC.Types.KindRep)
+Utils.AbstractGraph.$trModule
+  = GHC.Types.Module
+      (GHC.Types.TrNameS "main"#)
+      (GHC.Types.TrNameS "Utils.AbstractGraph"#)
+AbsBinds [v_a4em, w_a4en, e_a4eo] []
+  {Exports: [mapTreeNodes <= mapTreeNodes_a4ep
+               wrap: <>]
+   Exported types: mapTreeNodes
+                     :: forall v w e. (v -> w) -> Tree v e -> Tree w e
+                   [LclId]
+   Binds: mapTreeNodes_a4ep
+            f_a44P
+            (Tree{EvBinds{}} root_a44Q edges_a44R)
+            = Tree @ w_a4en @ e_a4eo
+                (f_a44P root_a44Q)
+                [(edge_a44S, 
+                  mapTreeNodes @ v_a4em @ w_a4en @ e_a4eo f_a44P subtree_a44T) |
+                   (edge_a44S, subtree_a44T) <- edges_a44R]
+   Evidence: [EvBinds{}]}
+AbsBinds [v_a4ew, e_a4ex] []
+  {Exports: [subtrees <= subtrees_a4ey
+               wrap: <>]
+   Exported types: subtrees :: forall v e. Tree v e -> [Tree v e]
+                   [LclId]
+   Binds: subtrees_a4ey (Tree{EvBinds{}} _ edges_a44O)
+            = map @ (e_a4ex, Tree v_a4ew e_a4ex) @ (Tree v_a4ew e_a4ex)
+                snd @ e_a4ex @ (Tree v_a4ew e_a4ex) edges_a44O
+   Evidence: [EvBinds{}]}
+AbsBinds [v_a4eF, e_a4eG] []
+  {Exports: [rootNode <= rootNode_a4eH
+               wrap: <>]
+   Exported types: rootNode :: forall v e. Tree v e -> v
+                   [LclId]
+   Binds: rootNode_a4eH (Tree{EvBinds{}} root_a44N _) = root_a44N
+   Evidence: [EvBinds{}]}
+AbsBinds [v_a4eI, e_a4eJ] []
+  {Exports: [subtreeNodes <= subtreeNodes_a4eK
+               wrap: <>]
+   Exported types: subtreeNodes :: forall v e. Tree v e -> [v]
+                   [LclId]
+   Binds: subtreeNodes_a4eK
+            = map @ (Tree v_a4eI e_a4eJ) @ v_a4eI rootNode @ v_a4eI @ e_a4eJ
+                . subtrees @ v_a4eI @ e_a4eJ
+   Evidence: [EvBinds{}]}
+AbsBinds [v_a4eU, e_a4eV] []
+  {Exports: [allTreeNodes <= allTreeNodes_a4eW
+               wrap: <>]
+   Exported types: allTreeNodes :: forall v e. Tree v e -> [v]
+                   [LclId]
+   Binds: allTreeNodes_a4eW t_a44M
+            = (rootNode @ v_a4eU @ e_a4eV t_a44M)
+                : (subtrees @ v_a4eU @ e_a4eV t_a44M
+                     >>= allTreeNodes @ v_a4eU @ e_a4eV)
+   Evidence: [EvBinds{[W] $dMonad_a4f3 = GHC.Base.$fMonad[]}]}
+AbsBinds [v_a4fb, e_a4fc] []
+  {Exports: [allTreeEdges <= allTreeEdges_a4fd
+               wrap: <>]
+   Exported types: allTreeEdges :: forall v e. Tree v e -> [(v, e, v)]
+                   [LclId]
+   Binds: allTreeEdges_a4fd (Tree{EvBinds{}} root_a44F children_a44G)
+            = rootEdges_a44H ++ subtreeEdges_a44I
+            where
+                AbsBinds [] []
+                  {Exports: [rootEdges_a44H <= rootEdges_a4fE
+                               wrap: <>]
+                   Exported types: rootEdges_a44H :: [(v_a4fb, e_a4fc, v_a4fb)]
+                                   [LclId]
+                   Binds: rootEdges_a44H
+                            = [(root_a44F, edge_a44J, 
+                                (rootNode @ v_a4fb @ e_a4fc subtree_a44K)) |
+                                 (edge_a44J, subtree_a44K) <- children_a44G]
+                   Evidence: [EvBinds{}]}
+                AbsBinds [] []
+                  {Exports: [subtreeEdges_a44I <= subtreeEdges_a4fo
+                               wrap: <>]
+                   Exported types: subtreeEdges_a44I :: [(v_a4fb, e_a4fc, v_a4fb)]
+                                   [LclId]
+                   Binds: subtreeEdges_a44I
+                            = do (_, subtree_a44L) <- children_a44G
+                                 allTreeEdges @ v_a4fb @ e_a4fc subtree_a44L
+                   Evidence: [EvBinds{[W] $dMonad_a4fh = GHC.Base.$fMonad[]}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [v_a4fJ, e_a4fK] []
+  {Exports: [assignTreeIds <= assignTreeIds_a4fL
+               wrap: <>]
+   Exported types: assignTreeIds
+                     :: forall v e. Tree v e -> Tree (v, Int) e
+                   [LclId]
+   Binds: assignTreeIds_a4fL root_a44k
+            = fst @ (Tree (v_a4fJ, Int) e_a4fK) @ Int
+                (recAssignIds_a44l @ v_a4fJ @ e_a4fK 0 root_a44k)
+            where
+                recAssignIds_a44l ::
+                  Int -> Tree v_a44m e_a44n -> (Tree (v_a44m, Int) e_a44n, Int)
+                AbsBinds [v_a4g6, e_a4g7] []
+                  {Exports: [recAssignIds_a44l <= recAssignIds_a4g8
+                               wrap: <>]
+                   Exported types: recAssignIds_a44l
+                                     :: forall v e. Int -> Tree v e -> (Tree (v, Int) e, Int)
+                                   [LclId]
+                   Binds: recAssignIds_a4g8
+                            id_a44o
+                            (Tree{EvBinds{}} node_a44p children_a44q)
+                            = (Tree @ (v_a4g6, Int) @ e_a4g7
+                                 (node_a44p, id_a44o) childrenWithId_a44r, 
+                               nextId_a44s)
+                            where
+                                AbsBinds [] []
+                                  {Exports: [childrenWithId_a44r <= childrenWithId_a4ha
+                                               wrap: <>,
+                                             nextId_a44s <= nextId_a4hc
+                                               wrap: <>]
+                                   Exported types: childrenWithId_a44r
+                                                     :: [(e_a4g7, Tree (v_a4g6, Int) e_a4g7)]
+                                                   [LclId]
+                                                   nextId_a44s :: Int
+                                                   [LclId]
+                                   Binds: (childrenWithId_a4ha, nextId_a4hc)
+                                            = assignInSequence_a44t @ e_a4g7 @ v_a4g6
+                                                (id_a44o + 1) children_a44q
+                                   Evidence: [EvBinds{[W] $dNum_a4hg = GHC.Num.$fNumInt
+                                                      [W] $dNum_a4hi = $dNum_a4hg}]}
+                                assignInSequence_a44t ::
+                                  Int
+                                  -> [(e_a44u, Tree v_a44v e_a44u)]
+                                     -> ([(e_a44u, Tree (v_a44v, Int) e_a44u)], Int)
+                                AbsBinds [e_a4gu, v_a4gv] []
+                                  {Exports: [assignInSequence_a44t <= assignInSequence_a4gw
+                                               wrap: <>]
+                                   Exported types: assignInSequence_a44t
+                                                     :: forall e v.
+                                                        Int
+                                                        -> [(e, Tree v e)]
+                                                        -> ([(e, Tree (v, Int) e)], Int)
+                                                   [LclId]
+                                   Binds: assignInSequence_a4gw
+                                            freeId_a44w
+                                            (:{EvBinds{}} (edge_a44x, thisSubtree_a44y)
+                                                          remEdges_a44z)
+                                            = let
+                                                AbsBinds [] []
+                                                  {Exports: [thisSubtreeWithId_a44A <= thisSubtreeWithId_a4gD
+                                                               wrap: <>,
+                                                             idAfterThisSubtree_a44B <= idAfterThisSubtree_a4gF
+                                                               wrap: <>]
+                                                   Exported types: thisSubtreeWithId_a44A
+                                                                     :: Tree (v_a4gv, Int) e_a4gu
+                                                                   [LclId]
+                                                                   idAfterThisSubtree_a44B :: Int
+                                                                   [LclId]
+                                                   Binds: (thisSubtreeWithId_a4gD,
+                                                           idAfterThisSubtree_a4gF)
+                                                            = recAssignIds_a44l @ v_a4gv @ e_a4gu
+                                                                freeId_a44w thisSubtree_a44y
+                                                   Evidence: [EvBinds{}]}
+                                                AbsBinds [] []
+                                                  {Exports: [remEdgesWithId_a44C <= remEdgesWithId_a4gS
+                                                               wrap: <>,
+                                                             nextFreeId_a44D <= nextFreeId_a4gU
+                                                               wrap: <>]
+                                                   Exported types: remEdgesWithId_a44C
+                                                                     :: [(e_a4gu,
+                                                                          Tree
+                                                                            (v_a4gv, Int) e_a4gu)]
+                                                                   [LclId]
+                                                                   nextFreeId_a44D :: Int
+                                                                   [LclId]
+                                                   Binds: (remEdgesWithId_a4gS, nextFreeId_a4gU)
+                                                            = assignInSequence_a44t @ e_a4gu
+                                                              @ v_a4gv
+                                                                idAfterThisSubtree_a44B
+                                                                remEdges_a44z
+                                                   Evidence: [EvBinds{}]}
+                                              in
+                                                ((edge_a44x, thisSubtreeWithId_a44A)
+                                                   : remEdgesWithId_a44C, 
+                                                 nextFreeId_a44D)
+                                          assignInSequence_a4gw freeId_a44E []{EvBinds{}}
+                                            = ([], freeId_a44E)
+                                   Evidence: [EvBinds{}]}
+                   Evidence: [EvBinds{}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [t_a4hy, v_a4hz, e_a4hA] []
+  {Exports: [buildTree <= buildTree_a4hB
+               wrap: <>]
+   Exported types: buildTree
+                     :: forall t v e. (t -> v) -> (t -> [(e, t)]) -> t -> Tree v e
+                   [LclId]
+   Binds: buildTree_a4hB toNode_a44b children_a44c root_a44d
+            = let
+                AbsBinds [] []
+                  {Exports: [rootNode_a44e <= rootNode_a4i9
+                               wrap: <>]
+                   Exported types: rootNode_a44e :: v_a4hz
+                                   [LclId]
+                   Binds: rootNode_a44e = toNode_a44b root_a44d
+                   Evidence: [EvBinds{}]}
+                AbsBinds [] []
+                  {Exports: [rootChildren_a44f <= rootChildren_a4hQ
+                               wrap: <>]
+                   Exported types: rootChildren_a44f :: [(e_a4hA, t_a4hy)]
+                                   [LclId]
+                   Binds: rootChildren_a44f = children_a44c root_a44d
+                   Evidence: [EvBinds{}]}
+                AbsBinds [] []
+                  {Exports: [subtrees_a44g <= subtrees_a4i2
+                               wrap: <>]
+                   Exported types: subtrees_a44g :: [(e_a4hA, Tree v_a4hz e_a4hA)]
+                                   [LclId]
+                   Binds: subtrees_a44g
+                            = [(edge_a44i, recBuildTree_a44h child_a44j) |
+                                 (edge_a44i, child_a44j) <- rootChildren_a44f]
+                   Evidence: [EvBinds{}]}
+                AbsBinds [] []
+                  {Exports: [recBuildTree_a44h <= recBuildTree_a4hJ
+                               wrap: <>]
+                   Exported types: recBuildTree_a44h :: t_a4hy -> Tree v_a4hz e_a4hA
+                                   [LclId]
+                   Binds: recBuildTree_a44h
+                            = buildTree @ t_a4hy @ v_a4hz @ e_a4hA toNode_a44b children_a44c
+                   Evidence: [EvBinds{}]}
+              in Tree @ v_a4hz @ e_a4hA rootNode_a44e subtrees_a44g
+   Evidence: [EvBinds{}]}
+AbsBinds [v_a4ie, e_a4if] [$dOrd_a4ih]
+  {Exports: [eliminateDuplicateVertices <= eliminateDuplicateVertices_a4ig
+               wrap: <>]
+   Exported types: eliminateDuplicateVertices
+                     :: forall v e. Ord v => Graph v e -> Graph v e
+                   [LclId]
+   Binds: eliminateDuplicateVertices_a4ig
+            (Graph{EvBinds{}} vs_a449 es_a44a)
+            = Graph @ v_a4ie @ e_a4if
+                (ListUtils.noDuplicates @ v_a4ie $dOrd_a4il vs_a449) es_a44a
+   Evidence: [EvBinds{[W] $dOrd_a4il = $dOrd_a4ih}]}
+AbsBinds [e_a4in, f_a4io, v_a4ip] []
+  {Exports: [mapEdgeFromTriplet <= mapEdgeFromTriplet_a4iq
+               wrap: <>]
+   Exported types: mapEdgeFromTriplet
+                     :: forall e f v. (e -> f) -> (v, e, v) -> f
+                   [LclId]
+   Binds: mapEdgeFromTriplet_a4iq f_a443 (_, e_a444, _)
+            = f_a443 e_a444
+   Evidence: [EvBinds{}]}
+AbsBinds [e_a4ir, f_a4is, v_a4it] []
+  {Exports: [mapEdgeInTriplet <= mapEdgeInTriplet_a4iu
+               wrap: <>]
+   Exported types: mapEdgeInTriplet
+                     :: forall e f v. (e -> f) -> (v, e, v) -> (v, f, v)
+                   [LclId]
+   Binds: mapEdgeInTriplet_a4iu f_a43Z (s_a440, e_a441, d_a442)
+            = (s_a440, f_a43Z e_a441, d_a442)
+   Evidence: [EvBinds{}]}
+AbsBinds [v1_a4iv, v2_a4iw, e1_a4ix, e2_a4iy] []
+  {Exports: [mapGraphTriplets <= mapGraphTriplets_a4iz
+               wrap: <>]
+   Exported types: mapGraphTriplets
+                     :: forall v1 v2 e1 e2.
+                        (v1 -> v2) -> ((v1, e1, v1) -> e2) -> Graph v1 e1 -> Graph v2 e2
+                   [LclId]
+   Binds: mapGraphTriplets_a4iz
+            fv_a43R
+            fe_a43S
+            (Graph{EvBinds{}} vs_a43T es_a43U)
+            = Graph @ v2_a4iw @ e2_a4iy
+                (map @ v1_a4iv @ v2_a4iw fv_a43R vs_a43T)
+                (map @ (v1_a4iv, e1_a4ix, v1_a4iv) @ (v2_a4iw, e2_a4iy, v2_a4iw)
+                   fvev_a43V es_a43U)
+            where
+                AbsBinds [] []
+                  {Exports: [fvev_a43V <= fvev_a4iO
+                               wrap: <>]
+                   Exported types: fvev_a43V
+                                     :: (v1_a4iv, e1_a4ix, v1_a4iv) -> (v2_a4iw, e2_a4iy, v2_a4iw)
+                                   [LclId]
+                   Binds: fvev_a43V (s_a43W, e_a43X, d_a43Y)
+                            = (fv_a43R s_a43W, fe_a43S (s_a43W, e_a43X, d_a43Y), 
+                               fv_a43R d_a43Y)
+                   Evidence: [EvBinds{}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [v_a4iX, e_a4iY, f_a4iZ] []
+  {Exports: [mapEdgeTriplets <= mapEdgeTriplets_a4j0
+               wrap: <>]
+   Exported types: mapEdgeTriplets
+                     :: forall v e f. ((v, e, v) -> f) -> Graph v e -> Graph v f
+                   [LclId]
+   Binds: mapEdgeTriplets_a4j0
+            f_a43L
+            (Graph{EvBinds{}} vs_a43M es_a43N)
+            = Graph @ v_a4iX @ f_a4iZ
+                vs_a43M
+                (es_a43N
+                   <&>
+                     (\ (s_a43O, e_a43P, d_a43Q)
+                        -> (s_a43O, f_a43L (s_a43O, e_a43P, d_a43Q), d_a43Q)))
+   Evidence: [EvBinds{[W] $dFunctor_a4j6 = GHC.Base.$fFunctor[]}]}
+AbsBinds [e_a4jb, f_a4jc, v_a4jd] []
+  {Exports: [mapEdges <= mapEdges_a4je
+               wrap: <>]
+   Exported types: mapEdges
+                     :: forall e f v. (e -> f) -> Graph v e -> Graph v f
+                   [LclId]
+   Binds: mapEdges_a4je
+            = second @ Graph $dBifunctor_a4jj @ e_a4jb @ f_a4jc @ v_a4jd
+   Evidence: [EvBinds{[W] $dBifunctor_a4jj
+                        = Utils.AbstractGraph.$fBifunctorGraph}]}
+AbsBinds [v_a4jo, w_a4jp, e_a4jq] []
+  {Exports: [mapVertices <= mapVertices_a4jr
+               wrap: <>]
+   Exported types: mapVertices
+                     :: forall v w e. (v -> w) -> Graph v e -> Graph w e
+                   [LclId]
+   Binds: mapVertices_a4jr
+            = first @ Graph $dBifunctor_a4jw @ v_a4jo @ w_a4jp @ e_a4jq
+   Evidence: [EvBinds{[W] $dBifunctor_a4jw
+                        = Utils.AbstractGraph.$fBifunctorGraph}]}
+AbsBinds [v_a4jB, e_a4jC] []
+  {Exports: [edgeTriplets <= edgeTriplets_a4jD
+               wrap: <>]
+   Exported types: edgeTriplets
+                     :: forall v e. Graph v e -> [(v, e, v)]
+                   [LclId]
+   Binds: edgeTriplets_a4jD (Graph{EvBinds{}} _ es_a43K) = es_a43K
+   Evidence: [EvBinds{}]}
+AbsBinds [v_a4jE, e_a4jF] []
+  {Exports: [vertices <= vertices_a4jG
+               wrap: <>]
+   Exported types: vertices :: forall v e. Graph v e -> [v]
+                   [LclId]
+   Binds: vertices_a4jG (Graph{EvBinds{}} vs_a43J _) = vs_a43J
+   Evidence: [EvBinds{}]}
+AbsBinds [v_a4jH, e_a4jI] [$dOrd_a4jK]
+  {Exports: [assignUniqueIds <= assignUniqueIds_a4jJ
+               wrap: <>]
+   Exported types: assignUniqueIds
+                     :: forall v e. Ord v => Graph v e -> (Graph (v, Int) e, Map v Int)
+                   [LclId]
+   Binds: assignUniqueIds_a4jJ g_a445
+            = let
+                AbsBinds [] []
+                  {Exports: [idMap_a446 <= idMap_a4jX
+                               wrap: <>]
+                   Exported types: idMap_a446 :: Map v_a4jH Int
+                                   [LclId]
+                   Binds: idMap_a446
+                            = Map.fromList @ v_a4jH @ Int $dOrd_a4jR
+                                (zipWithIndexRight @ v_a4jH (vertices @ v_a4jH @ e_a4jI g_a445))
+                   Evidence: [EvBinds{[W] $dOrd_a4jR = $dOrd_a4jK}]}
+                AbsBinds [] []
+                  {Exports: [gWithIds_a447 <= gWithIds_a4kp
+                               wrap: <>]
+                   Exported types: gWithIds_a447 :: Graph (v_a4jH, Int) e_a4jI
+                                   [LclId]
+                   Binds: gWithIds_a447
+                            = mapVertices @ v_a4jH @ (v_a4jH, Int) @ e_a4jI
+                                (\ v_a448 -> (v_a448, idMap_a446 ! v_a448)) g_a445
+                   Evidence: [EvBinds{[W] $dOrd_a4km = $dOrd_a4jK}]}
+              in (gWithIds_a447, idMap_a446)
+   Evidence: [EvBinds{}]}
+AbsBinds [v_a4ku, e_a4kv] []
+  {Exports: [singleton <= singleton_a4kw
+               wrap: <>]
+   Exported types: singleton :: forall v e. v -> Graph v e
+                   [LclId]
+   Binds: singleton_a4kw v_a43I = Graph @ v_a4ku @ e_a4kv [v_a43I] []
+   Evidence: [EvBinds{}]}
+AbsBinds [v_a4kz, e_a4kA] []
+  {Exports: [getNode <= getNode_a4kB
+               wrap: <>]
+   Exported types: getNode :: forall v e. Tree v e -> v
+                   [LclId]
+   Binds: getNode_a4kB (Tree{EvBinds{}} node_a43H _) = node_a43H
+   Evidence: [EvBinds{}]}
+AbsBinds [v_a4kC, e_a4kD] []
+  {Exports: [graphFromTree <= graphFromTree_a4kE
+               wrap: <>]
+   Exported types: graphFromTree :: forall v e. Tree v e -> Graph v e
+                   [LclId]
+   Binds: graphFromTree_a4kE (Tree{EvBinds{}} node_a43z children_a43A)
+            = let
+                AbsBinds [] []
+                  {Exports: [edgeTriplets_a43B <= edgeTriplets_a4l3
+                               wrap: <>]
+                   Exported types: edgeTriplets_a43B :: [(v_a4kC, e_a4kD, v_a4kC)]
+                                   [LclId]
+                   Binds: edgeTriplets_a43B
+                            = [(node_a43z, edge_a43E, getNode @ v_a4kC @ e_a4kD child_a43F) |
+                                 (edge_a43E, child_a43F) <- children_a43A]
+                   Evidence: [EvBinds{}]}
+                AbsBinds [] []
+                  {Exports: [subGraphs_a43C <= subGraphs_a4kO
+                               wrap: <>]
+                   Exported types: subGraphs_a43C :: [Graph v_a4kC e_a4kD]
+                                   [LclId]
+                   Binds: subGraphs_a43C
+                            = [graphFromTree @ v_a4kC @ e_a4kD child_a43G |
+                                 (_, child_a43G) <- children_a43A]
+                   Evidence: [EvBinds{}]}
+                AbsBinds [] []
+                  {Exports: [localGraph_a43D <= localGraph_a4lc
+                               wrap: <>]
+                   Exported types: localGraph_a43D :: Graph v_a4kC e_a4kD
+                                   [LclId]
+                   Binds: localGraph_a43D
+                            = Graph @ v_a4kC @ e_a4kD [node_a43z] edgeTriplets_a43B
+                   Evidence: [EvBinds{}]}
+              in
+                localGraph_a43D
+                  <> (mconcat @ (Graph v_a4kC e_a4kD) $dMonoid_a4li subGraphs_a43C)
+   Evidence: [EvBinds{[W] $dSemigroup_a4lg
+                        = Utils.AbstractGraph.$fSemigroupGraph @ v_a4kC @ e_a4kD
+                      [W] $dMonoid_a4li
+                        = Utils.AbstractGraph.$fMonoidGraph @ v_a4kC @ e_a4kD}]}
+AbsBinds [v_a4lk, e_a4ll] []
+  {Exports: [Utils.AbstractGraph.$fMonoidGraph <= $dMonoid_a4lK
+               wrap: <>]
+   Exported types: Utils.AbstractGraph.$fMonoidGraph [InlPrag=NOUSERINLINE CONLIKE]
+                     :: forall v e. Monoid (Graph v e)
+                   [LclIdX[DFunId],
+                    Unf=DFun: \ (@ v_a3Nk) (@ e_a3Nl) ->
+                          GHC.Base.C:Monoid TYPE: Graph v_a3Nk e_a3Nl
+                                            $cp1Monoid_a4lp @ v_a3Nk @ e_a3Nl
+                                            $cmempty_a4lr @ v_a3Nk @ e_a3Nl
+                                            $cmappend_a4lx @ v_a3Nk @ e_a3Nl
+                                            $cmconcat_a4lE @ v_a3Nk @ e_a3Nl]
+   Binds: $dMonoid_a4lK
+            = GHC.Base.C:Monoid @ (Graph v_a4lk e_a4ll)
+                $cp1Monoid_a4lp @ v_a4lk @ e_a4ll
+                $cmempty_a4lr @ v_a4lk @ e_a4ll
+                $cmappend_a4lx @ v_a4lk @ e_a4ll
+                $cmconcat_a4lE @ v_a4lk @ e_a4ll
+   Evidence: [EvBinds{}]}
+AbsBinds [v_a4lk, e_a4ll] []
+  {Exports: [$cp1Monoid_a4lp <= $dSemigroup_a4lq
+               wrap: <>]
+   Exported types: $cp1Monoid_a4lp
+                     :: forall v e. Semigroup (Graph v e)
+                   [LclId]
+   Binds:
+   Evidence: [EvBinds{[W] $dSemigroup_a4lq = $dSemigroup_a4ln
+                      [W] $dSemigroup_a4ln
+                        = Utils.AbstractGraph.$fSemigroupGraph @ v_a4lk @ e_a4ll}]}
+AbsBinds [v_a4lk, e_a4ll] []
+  {Exports: [$cmempty_a4lr <= mempty_a4ls
+               wrap: <>]
+   Exported types: $cmempty_a4lr :: forall v e. Graph v e
+                   [LclId]
+   Binds: AbsBinds [] []
+            {Exports: [mempty_a4ls <= mempty_a4lt
+                         wrap: <>]
+             Exported types: mempty_a4ls :: Graph v_a4lk e_a4ll
+                             [LclId]
+             Binds: mempty_a4lt = Graph @ v_a4lk @ e_a4ll [] []
+             Evidence: [EvBinds{}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [v_a4lk, e_a4ll] []
+  {Exports: [$cmappend_a4lx <= mappend_a4ly
+               wrap: <>]
+   Exported types: $cmappend_a4lx
+                     :: forall v e. Graph v e -> Graph v e -> Graph v e
+                   [LclId]
+   Binds: AbsBinds [] []
+            {Exports: [mappend_a4ly <= mappend_a4lz
+                         wrap: <>]
+             Exported types: mappend_a4ly
+                               :: Graph v_a4lk e_a4ll
+                                  -> Graph v_a4lk e_a4ll -> Graph v_a4lk e_a4ll
+                             [LclId]
+             Binds: mappend_a4lz = (<>) @ (Graph v_a4lk e_a4ll) $dSemigroup_a4lB
+             Evidence: [EvBinds{}]}
+   Evidence: [EvBinds{[W] $dSemigroup_a4lB
+                        = Utils.AbstractGraph.$fSemigroupGraph @ v_a4lk @ e_a4ll}]}
+AbsBinds [v_a4lk, e_a4ll] []
+  {Exports: [$cmconcat_a4lE <= mconcat_a4lF
+               wrap: <>]
+   Exported types: $cmconcat_a4lE
+                     :: forall v e. [Graph v e] -> Graph v e
+                   [LclId]
+   Binds: AbsBinds [] []
+            {Exports: [mconcat_a4lF <= mconcat_a4lG
+                         wrap: <>]
+             Exported types: mconcat_a4lF
+                               :: [Graph v_a4lk e_a4ll] -> Graph v_a4lk e_a4ll
+                             [LclId]
+             Binds: mconcat_a4lG
+                      = GHC.Base.$dmmconcat @ (Graph v_a4lk e_a4ll)
+                          @(Graph v_a4lk[ssk:1] e_a4ll[ssk:1])
+                          $dMonoid_a4lI
+             Evidence: [EvBinds{}]}
+   Evidence: [EvBinds{[W] $dMonoid_a4lI
+                        = Utils.AbstractGraph.$fMonoidGraph @ v_a4lk @ e_a4ll}]}
+AbsBinds [v_a4lL, e_a4lM] []
+  {Exports: [Utils.AbstractGraph.$fSemigroupGraph <= $dSemigroup_a4vp
+               wrap: <>]
+   Exported types: Utils.AbstractGraph.$fSemigroupGraph [InlPrag=NOUSERINLINE CONLIKE]
+                     :: forall v e. Semigroup (Graph v e)
+                   [LclIdX[DFunId],
+                    Unf=DFun: \ (@ v_a3Nm) (@ e_a3Nn) ->
+                          GHC.Base.C:Semigroup TYPE: Graph v_a3Nm e_a3Nn
+                                               $c<>_a4lO @ v_a3Nm @ e_a3Nn
+                                               $csconcat_a4lZ @ v_a3Nm @ e_a3Nn
+                                               $cstimes_a4v1 @ v_a3Nm @ e_a3Nn]
+   Binds: $dSemigroup_a4vp
+            = GHC.Base.C:Semigroup @ (Graph v_a4lL e_a4lM)
+                $c<>_a4lO @ v_a4lL @ e_a4lM
+                $csconcat_a4lZ @ v_a4lL @ e_a4lM
+                $cstimes_a4v1 @ v_a4lL @ e_a4lM
+   Evidence: [EvBinds{}]}
+AbsBinds [v_a4lL, e_a4lM] []
+  {Exports: [$c<>_a4lO <= <>_a4lP
+               wrap: <>]
+   Exported types: $c<>_a4lO
+                     :: forall v e. Graph v e -> Graph v e -> Graph v e
+                   [LclId]
+   Binds: AbsBinds [] []
+            {Exports: [<>_a4lP <= <>_a4lQ
+                         wrap: <>]
+             Exported types: <>_a4lP
+                               :: Graph v_a4lL e_a4lM
+                                  -> Graph v_a4lL e_a4lM -> Graph v_a4lL e_a4lM
+                             [LclId]
+             Binds: (<>_a4lQ)
+                      (Graph{EvBinds{}} lv_a3No le_a3Np)
+                      (Graph{EvBinds{}} rv_a3Nq re_a3Nr)
+                      = Graph @ v_a4lL @ e_a4lM (lv_a3No <> rv_a3Nq) (le_a3Np <> re_a3Nr)
+             Evidence: [EvBinds{}]}
+   Evidence: [EvBinds{[W] $dSemigroup_a4lU
+                        = GHC.Base.$fSemigroup[] @ v_a4lL
+                      [W] $dSemigroup_a4lW
+                        = GHC.Base.$fSemigroup[] @ (v_a4lL, e_a4lM, v_a4lL)}]}
+AbsBinds [v_a4lL, e_a4lM] []
+  {Exports: [$csconcat_a4lZ <= sconcat_a4m0
+               wrap: <>]
+   Exported types: $csconcat_a4lZ
+                     :: forall v e. GHC.Base.NonEmpty (Graph v e) -> Graph v e
+                   [LclId]
+   Binds: AbsBinds [] []
+            {Exports: [sconcat_a4m0 <= sconcat_a4m1
+                         wrap: <>]
+             Exported types: sconcat_a4m0
+                               :: GHC.Base.NonEmpty (Graph v_a4lL e_a4lM) -> Graph v_a4lL e_a4lM
+                             [LclId]
+             Binds: sconcat_a4m1
+                      = GHC.Base.$dmsconcat @ (Graph v_a4lL e_a4lM)
+                          @(Graph v_a4lL[ssk:1] e_a4lM[ssk:1])
+                          $dSemigroup_a4m3
+             Evidence: [EvBinds{}]}
+   Evidence: [EvBinds{[W] $dSemigroup_a4m3
+                        = Utils.AbstractGraph.$fSemigroupGraph @ v_a4lL @ e_a4lM}]}
+AbsBinds [v_a4lL, e_a4lM] []
+  {Exports: [$cstimes_a4v1 <= stimes_a4v2
+               wrap: <>]
+   Exported types: $cstimes_a4v1
+                     :: forall v e b. Integral b => b -> Graph v e -> Graph v e
+                   [LclId]
+   Binds: AbsBinds [b_a4vg] [$dIntegral_a4vi]
+            {Exports: [stimes_a4v2 <= stimes_a4vh
+                         wrap: <>]
+             Exported types: stimes_a4v2
+                               :: forall b.
+                                  Integral b =>
+                                  b -> Graph v_a4lL e_a4lM -> Graph v_a4lL e_a4lM
+                             [LclId]
+             Binds: stimes_a4vh
+                      = GHC.Base.$dmstimes @ (Graph v_a4lL e_a4lM)
+                          @(Graph v_a4lL[ssk:1] e_a4lM[ssk:1])
+                          $dSemigroup_a4vk
+                        @ b_a4vg
+                          $dIntegral_a4vm
+             Evidence: [EvBinds{[W] $dSemigroup_a4vk
+                                  = Utils.AbstractGraph.$fSemigroupGraph @ v_a4lL @ e_a4lM
+                                [W] $dIntegral_a4vm = $dIntegral_a4vi}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [Utils.AbstractGraph.$fBifunctorGraph <= $dBifunctor_a4we
+               wrap: <>]
+   Exported types: Utils.AbstractGraph.$fBifunctorGraph [InlPrag=NOUSERINLINE CONLIKE]
+                     :: Bifunctor Graph
+                   [LclIdX[DFunId],
+                    Unf=DFun: \ ->
+                          Data.Bifunctor.C:Bifunctor TYPE: Graph
+                                                     $cbimap_a4vr
+                                                     $cfirst_a4vO
+                                                     $csecond_a4w1]
+   Binds: $dBifunctor_a4we
+            = Data.Bifunctor.C:Bifunctor @ Graph
+                $cbimap_a4vr $cfirst_a4vO $csecond_a4w1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$cbimap_a4vr <= bimap_a4vs
+               wrap: <>]
+   Exported types: $cbimap_a4vr
+                     :: forall a b c d. (a -> b) -> (c -> d) -> Graph a c -> Graph b d
+                   [LclId]
+   Binds: AbsBinds [a_a4vx, b_a4vy, c_a4vz, d_a4vA] []
+            {Exports: [bimap_a4vs <= bimap_a4vB
+                         wrap: <>]
+             Exported types: bimap_a4vs
+                               :: forall a b c d. (a -> b) -> (c -> d) -> Graph a c -> Graph b d
+                             [LclId]
+             Binds: bimap_a4vB fv_a3Ns fe_a3Nt
+                      = mapGraphTriplets @ a_a4vx @ b_a4vy @ c_a4vz @ d_a4vA
+                          fv_a3Ns (mapEdgeFromTriplet @ c_a4vz @ d_a4vA @ a_a4vx fe_a3Nt)
+             Evidence: [EvBinds{}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$cfirst_a4vO <= first_a4vP
+               wrap: <>]
+   Exported types: $cfirst_a4vO
+                     :: forall a b c. (a -> b) -> Graph a c -> Graph b c
+                   [LclId]
+   Binds: AbsBinds [a_a4vQ, b_a4vR, c_a4vS] []
+            {Exports: [first_a4vP <= first_a4vT
+                         wrap: <>]
+             Exported types: first_a4vP
+                               :: forall a b c. (a -> b) -> Graph a c -> Graph b c
+                             [LclId]
+             Binds: first_a4vT
+                      = Data.Bifunctor.$dmfirst @ Graph @(Graph) $dBifunctor_a4vV
+                        @ a_a4vQ
+                        @ b_a4vR
+                        @ c_a4vS
+             Evidence: [EvBinds{[W] $dBifunctor_a4vV
+                                  = Utils.AbstractGraph.$fBifunctorGraph}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$csecond_a4w1 <= second_a4w2
+               wrap: <>]
+   Exported types: $csecond_a4w1
+                     :: forall b c a. (b -> c) -> Graph a b -> Graph a c
+                   [LclId]
+   Binds: AbsBinds [b_a4w3, c_a4w4, a_a4w5] []
+            {Exports: [second_a4w2 <= second_a4w6
+                         wrap: <>]
+             Exported types: second_a4w2
+                               :: forall b c a. (b -> c) -> Graph a b -> Graph a c
+                             [LclId]
+             Binds: second_a4w6 fe_a3Nu
+                      = mapEdgeTriplets @ a_a4w5 @ b_a4w3 @ c_a4w4
+                          (mapEdgeFromTriplet @ b_a4w3 @ c_a4w4 @ a_a4w5 fe_a3Nu)
+             Evidence: [EvBinds{}]}
+   Evidence: [EvBinds{}]}
+
+[6 of 8] Compiling FDB.GADTForall   ( FDB/GADTForall.hs, FDB/GADTForall.o )
+TYPE SIGNATURES
+  -|><|-> :: forall a b. NatJoin a b => Q a -> Q b -> Q b
+  <-|><|- :: forall a b. NatJoin a b => Q a -> Q b -> Q a
+  FDB.GADTForall.Agg ::
+    forall a b s. (s -> a -> s) -> s -> (s -> b) -> Agg a b s
+  FDB.GADTForall.FetchRow ::
+    forall a1 a2. (a1 ~ Row a2) => RowRef a2 -> SQ a1
+  FDB.GADTForall.Filter :: forall a. (a -> Bool) -> Q a -> Q a
+  FDB.GADTForall.FilterSQ :: forall a. (a -> SQ Bool) -> Q a -> Q a
+  FDB.GADTForall.GroupBy ::
+    forall a v k. (a ~ (k, Q v)) => (v -> k) -> Q v -> Q a
+  FDB.GADTForall.Map :: forall a b. (b -> a) -> Q b -> Q a
+  FDB.GADTForall.MapSQ :: forall b v. (v -> SQ b) -> Q v -> Q b
+  FDB.GADTForall.OrderBy ::
+    forall a b. Ord b => (a -> b) -> Q a -> Q a
+  FDB.GADTForall.Read :: forall a. Table a -> Q a
+  FDB.GADTForall.Row :: forall a. RowRef a -> a -> Row a
+  FDB.GADTForall.RowId :: Word64 -> RowId
+  FDB.GADTForall.RowRef :: forall a. TableId -> RowId -> RowRef a
+  FDB.GADTForall.StateFold :: forall b a s. Agg a b s -> Q a -> SQ b
+  FDB.GADTForall.Table :: forall a. String -> Table a
+  FDB.GADTForall.TableId :: Word16 -> TableId
+  FDB.GADTForall.Take :: forall a n. Integral n => n -> Q a -> Q a
+  agg :: forall a b s. Agg a b s -> Q a -> SQ b
+  avgAgg :: forall a. Fractional a => Agg a a (a, a)
+  count :: forall n a. Integral n => Q a -> SQ n
+  emptyQ :: forall a. Q a
+  eqFilter :: forall b a. Eq b => (a -> b) -> b -> Q a -> Q a
+  equiJoin ::
+    forall c a b.
+    Eq c =>
+    (a -> c) -> (b -> c) -> Q a -> Q b -> Q (a, b)
+  exists :: forall a. Q a -> SQ Bool
+  fetchForeign :: forall a. RowRef a -> SQ a
+  fetchRow :: forall a. RowRef a -> SQ (Row a)
+  filterQ :: forall a. (a -> Bool) -> Q a -> Q a
+  findTable :: forall a. String -> Table a
+  groupByQ :: forall k a. Ord k => (a -> k) -> Q a -> Q (Q a)
+  groupByWithKey ::
+    forall k a. Ord k => (a -> k) -> Q a -> Q (k, Q a)
+  mapAgg :: forall b c s a. Agg b c s -> (a -> b) -> Q a -> SQ c
+  mapQ :: forall a b. (a -> b) -> Q a -> Q b
+  mapToQ :: forall a b. (a -> Q b) -> SQ a -> Q b
+  minAgg :: forall a. Ord a => Fold1 a
+  orderBy :: forall b a. Ord b => (a -> b) -> Q a -> Q a
+  pull :: forall a. Q a -> a
+  readT :: forall a. Table a -> Q a
+  rowRef :: forall a. Row a -> RowRef a
+  rowVal :: forall a. Row a -> a
+  subqFilter :: forall a. (a -> SQ Bool) -> Q a -> Q a
+  subqMap :: forall a b. (a -> SQ b) -> Q a -> Q b
+  sumAgg :: forall a. Num a => Fold1 a
+  takeQ :: forall n a. Integral n => n -> Q a -> Q a
+  toQ :: forall a. SQ a -> Q a
+  |><| :: forall a b. NatJoin a b => Q a -> Q b -> Q (a, b)
+TYPE CONSTRUCTORS
+  data Agg a b s = Agg (s -> a -> s) s (s -> b)
+  type Fold a b = Agg a b b
+  type Fold1 a = Agg a a a
+  class NatJoin a b where
+    (|><|) :: Q a -> Q b -> Q (a, b)
+    {-# MINIMAL (|><|) #-}
+  type role Q nominal
+  data Q a where
+    Filter :: (a -> Bool) -> (Q a) -> Q a
+    Map :: (b -> a) -> (Q b) -> Q a
+    Read :: (Table a) -> Q a
+    GroupBy :: (v -> k) -> (Q v) -> Q (k, Q v)
+    MapSQ :: (v -> SQ a) -> (Q v) -> Q a
+    FilterSQ :: (a -> SQ Bool) -> (Q a) -> Q a
+    OrderBy :: Ord b => (a -> b) -> (Q a) -> Q a
+    Take :: Integral n => n -> (Q a) -> Q a
+  data Row a = Row (RowRef a) a
+  newtype RowId = RowId Word64
+  type role RowRef phantom
+  data RowRef a = RowRef TableId RowId
+  type role SQ nominal
+  data SQ a where
+    FetchRow :: (RowRef a1) -> SQ (Row a1)
+    StateFold :: (Agg a1 a s) -> (Q a1) -> SQ a
+  type role Table phantom
+  newtype Table a = Table String
+  newtype TableId = TableId Word16
+  type TableRef a = RowRef a
+COERCION AXIOMS
+  axiom FDB.GADTForall.N:Table ::
+    Table a = String -- Defined at FDB/GADTForall.hs:12:1
+  axiom FDB.GADTForall.N:RowId ::
+    RowId = Word64 -- Defined at FDB/GADTForall.hs:185:1
+  axiom FDB.GADTForall.N:TableId ::
+    TableId = Word16 -- Defined at FDB/GADTForall.hs:188:1
+  axiom FDB.GADTForall.N:NatJoin ::
+    NatJoin a b = Q a -> Q b -> Q (a, b)
+      -- Defined at FDB/GADTForall.hs:161:1
+INSTANCES
+  instance Eq (RowRef a) -- Defined at FDB/GADTForall.hs:183:12
+  instance Eq TableId -- Defined at FDB/GADTForall.hs:189:12
+  instance Eq RowId -- Defined at FDB/GADTForall.hs:186:12
+  instance Functor Q -- Defined at FDB/GADTForall.hs:77:10
+  instance Applicative Q -- Defined at FDB/GADTForall.hs:80:10
+  instance Monad Q -- Defined at FDB/GADTForall.hs:84:10
+  instance Functor SQ -- Defined at FDB/GADTForall.hs:103:10
+  instance Applicative SQ -- Defined at FDB/GADTForall.hs:106:10
+  instance Monad SQ -- Defined at FDB/GADTForall.hs:110:10
+Dependent modules: [(FDB.Utils, False),
+                    (Utils.AbstractGraph, False), (Utils.List, False),
+                    (Utils.Prelude, False)]
+Dependent packages: [array-0.5.3.0, base-4.12.0.0,
+                     containers-0.6.0.1, deepseq-1.4.4.0, ghc-prim-0.5.3,
+                     integer-gmp-1.0.2.0]
+
+==================== Typechecker ====================
+FDB.GADTForall.$tcNatJoin
+  = GHC.Types.TyCon
+      4754972827294106747##
+      18091397365184212835##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "NatJoin"#)
+      0
+      $krep_a5Ob
+FDB.GADTForall.$tc'C:NatJoin
+  = GHC.Types.TyCon
+      1773075345423852451##
+      14997350799920276371##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'C:NatJoin"#)
+      2
+      $krep_a5Oe
+FDB.GADTForall.$tcSQ
+  = GHC.Types.TyCon
+      7724225419132177098##
+      14063341351447723075##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "SQ"#)
+      0
+      GHC.Types.krep$*Arr*
+FDB.GADTForall.$tc'FetchRow
+  = GHC.Types.TyCon
+      10701926302208271525##
+      2310866770539922913##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'FetchRow"#)
+      1
+      $krep_a5Oo
+FDB.GADTForall.$tc'StateFold
+  = GHC.Types.TyCon
+      18411259465723880701##
+      4094594497890411514##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'StateFold"#)
+      3
+      $krep_a5Os
+FDB.GADTForall.$tcQ
+  = GHC.Types.TyCon
+      18238656953556965988##
+      5882741213209533844##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "Q"#)
+      0
+      GHC.Types.krep$*Arr*
+FDB.GADTForall.$tc'Filter
+  = GHC.Types.TyCon
+      3342106065591891117##
+      5504432989845619796##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'Filter"#)
+      1
+      $krep_a5Ox
+FDB.GADTForall.$tc'Map
+  = GHC.Types.TyCon
+      14379505272008014040##
+      10084327610682124345##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'Map"#)
+      2
+      $krep_a5OB
+FDB.GADTForall.$tc'Read
+  = GHC.Types.TyCon
+      5506696017368664421##
+      2631673073369786685##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'Read"#)
+      1
+      $krep_a5OE
+FDB.GADTForall.$tc'GroupBy
+  = GHC.Types.TyCon
+      13670223224869757845##
+      8697476818672593631##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'GroupBy"#)
+      2
+      $krep_a5OG
+FDB.GADTForall.$tc'MapSQ
+  = GHC.Types.TyCon
+      1443944143463630897##
+      6245638742163314951##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'MapSQ"#)
+      2
+      $krep_a5OK
+FDB.GADTForall.$tc'FilterSQ
+  = GHC.Types.TyCon
+      3550822472285476798##
+      14511159754611735049##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'FilterSQ"#)
+      1
+      $krep_a5OM
+FDB.GADTForall.$tc'OrderBy
+  = GHC.Types.TyCon
+      14908185740511951096##
+      14008337868706905896##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'OrderBy"#)
+      2
+      $krep_a5OP
+FDB.GADTForall.$tc'Take
+  = GHC.Types.TyCon
+      18145023462564812289##
+      14897176176755836167##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'Take"#)
+      2
+      $krep_a5OU
+FDB.GADTForall.$tcRow
+  = GHC.Types.TyCon
+      7837339403267824689##
+      11319950323759755044##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "Row"#)
+      0
+      GHC.Types.krep$*Arr*
+FDB.GADTForall.$tc'Row
+  = GHC.Types.TyCon
+      16802854983749163630##
+      1951157969764704594##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'Row"#)
+      1
+      $krep_a5OX
+FDB.GADTForall.$tcRowRef
+  = GHC.Types.TyCon
+      6167723302899116461##
+      12820464192123209494##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "RowRef"#)
+      0
+      GHC.Types.krep$*Arr*
+FDB.GADTForall.$tc'RowRef
+  = GHC.Types.TyCon
+      1951283466925547487##
+      17778823377038719573##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'RowRef"#)
+      1
+      $krep_a5OZ
+FDB.GADTForall.$tcTableId
+  = GHC.Types.TyCon
+      221136922417672250##
+      2647284849506157507##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "TableId"#)
+      0
+      GHC.Types.krep$*
+FDB.GADTForall.$tc'TableId
+  = GHC.Types.TyCon
+      299570635528495236##
+      7767331940541179554##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'TableId"#)
+      0
+      $krep_a5P3
+FDB.GADTForall.$tcRowId
+  = GHC.Types.TyCon
+      6564313131908661638##
+      391072849311021736##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "RowId"#)
+      0
+      GHC.Types.krep$*
+FDB.GADTForall.$tc'RowId
+  = GHC.Types.TyCon
+      11182397406630558385##
+      2250286617457619889##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'RowId"#)
+      0
+      $krep_a5P5
+FDB.GADTForall.$tcAgg
+  = GHC.Types.TyCon
+      6997330576107404323##
+      12350032399431940804##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "Agg"#)
+      0
+      $krep_a5P7
+FDB.GADTForall.$tc'Agg
+  = GHC.Types.TyCon
+      8300879811530789064##
+      621423574753608316##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'Agg"#)
+      3
+      $krep_a5P8
+FDB.GADTForall.$tcTable
+  = GHC.Types.TyCon
+      6112764465777374685##
+      4824890021682489453##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "Table"#)
+      0
+      GHC.Types.krep$*Arr*
+FDB.GADTForall.$tc'Table
+  = GHC.Types.TyCon
+      10871517142501221515##
+      4325455715354573628##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'Table"#)
+      1
+      $krep_a5Pe
+$krep_a5Oh [InlPrag=NOUSERINLINE[~]] = GHC.Types.KindRepVar 0
+$krep_a5Ok [InlPrag=NOUSERINLINE[~]] = GHC.Types.KindRepVar 1
+$krep_a5Ou [InlPrag=NOUSERINLINE[~]] = GHC.Types.KindRepVar 2
+$krep_a5OC [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Oh $krep_a5Ok
+$krep_a5Pa [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Oh $krep_a5Ou
+$krep_a5OW [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Oh $krep_a5OT
+$krep_a5OL [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Oh $krep_a5Ow
+$krep_a5ON [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Oh $krep_a5OO
+$krep_a5OY [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Oh $krep_a5Or
+$krep_a5Oy [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Oh $krep_a5Oz
+$krep_a5OS [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Ok $krep_a5Oh
+$krep_a5Pd [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Ou $krep_a5Ok
+$krep_a5P9 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Ou $krep_a5Pa
+$krep_a5Pb [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Ou $krep_a5Pc
+$krep_a5OB [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5OC $krep_a5OD
+$krep_a5OG [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5OC $krep_a5OH
+$krep_a5OK [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5OL $krep_a5OD
+$krep_a5OM [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5ON $krep_a5OA
+$krep_a5Ox [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Oy $krep_a5OA
+$krep_a5OR [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5OS $krep_a5OT
+$krep_a5Pc [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Pd $krep_a5Ot
+$krep_a5P8 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5P9 $krep_a5Pb
+$krep_a5Oe [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Of $krep_a5On
+$krep_a5Os [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Ot $krep_a5Ov
+$krep_a5OE [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5OF $krep_a5Og
+$krep_a5Of [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Og $krep_a5Oi
+$krep_a5Ov [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Og $krep_a5Ow
+$krep_a5OA [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Og $krep_a5Og
+$krep_a5OD [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Og $krep_a5Oj
+$krep_a5OH [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Og $krep_a5OI
+$krep_a5OT [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Oj $krep_a5Oj
+$krep_a5Oi [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Oj $krep_a5Ol
+$krep_a5OP [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5OQ $krep_a5OR
+$krep_a5OU [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5OV $krep_a5OW
+$krep_a5OX [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Op $krep_a5OY
+$krep_a5Oo [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Op $krep_a5Oq
+$krep_a5P7 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun GHC.Types.krep$* GHC.Types.krep$*->*->*
+$krep_a5Ob [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun GHC.Types.krep$* $krep_a5Oc
+$krep_a5Oc [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun GHC.Types.krep$* $krep_a5Od
+$krep_a5Pe [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Pf $krep_a5OF
+$krep_a5P1 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5P2 $krep_a5Op
+$krep_a5OZ [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5P0 $krep_a5P1
+$krep_a5P3 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5P4 $krep_a5P0
+$krep_a5P5 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5P6 $krep_a5P2
+$krep_a5Ot [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcAgg
+      ((:) @ GHC.Types.KindRep
+         $krep_a5Oh
+         ((:) @ GHC.Types.KindRep
+            $krep_a5Ok
+            ((:) @ GHC.Types.KindRep $krep_a5Ou [] @ GHC.Types.KindRep)))
+$krep_a5Om [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      GHC.Tuple.$tc(,)
+      ((:) @ GHC.Types.KindRep
+         $krep_a5Oh
+         ((:) @ GHC.Types.KindRep $krep_a5Ok [] @ GHC.Types.KindRep))
+$krep_a5OJ [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      GHC.Tuple.$tc(,)
+      ((:) @ GHC.Types.KindRep
+         $krep_a5Ok
+         ((:) @ GHC.Types.KindRep $krep_a5Og [] @ GHC.Types.KindRep))
+$krep_a5Op [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcRowRef
+      ((:) @ GHC.Types.KindRep $krep_a5Oh [] @ GHC.Types.KindRep)
+$krep_a5Or [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcRow
+      ((:) @ GHC.Types.KindRep $krep_a5Oh [] @ GHC.Types.KindRep)
+$krep_a5OF [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcTable
+      ((:) @ GHC.Types.KindRep $krep_a5Oh [] @ GHC.Types.KindRep)
+$krep_a5Og [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcQ
+      ((:) @ GHC.Types.KindRep $krep_a5Oh [] @ GHC.Types.KindRep)
+$krep_a5Oj [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcQ
+      ((:) @ GHC.Types.KindRep $krep_a5Ok [] @ GHC.Types.KindRep)
+$krep_a5Ol [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcQ
+      ((:) @ GHC.Types.KindRep $krep_a5Om [] @ GHC.Types.KindRep)
+$krep_a5OI [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcQ
+      ((:) @ GHC.Types.KindRep $krep_a5OJ [] @ GHC.Types.KindRep)
+$krep_a5Ow [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcSQ
+      ((:) @ GHC.Types.KindRep $krep_a5Ok [] @ GHC.Types.KindRep)
+$krep_a5Oq [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcSQ
+      ((:) @ GHC.Types.KindRep $krep_a5Or [] @ GHC.Types.KindRep)
+$krep_a5OO [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcSQ
+      ((:) @ GHC.Types.KindRep $krep_a5Oz [] @ GHC.Types.KindRep)
+$krep_a5Pf [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      GHC.Types.$tc[]
+      ((:) @ GHC.Types.KindRep $krep_a5Pg [] @ GHC.Types.KindRep)
+$krep_a5Od [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      GHC.Types.$tcConstraint [] @ GHC.Types.KindRep
+$krep_a5Oz [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      GHC.Types.$tcBool [] @ GHC.Types.KindRep
+$krep_a5P0 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcTableId [] @ GHC.Types.KindRep
+$krep_a5P2 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcRowId [] @ GHC.Types.KindRep
+$krep_a5P4 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      GHC.Word.$tcWord16 [] @ GHC.Types.KindRep
+$krep_a5P6 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      GHC.Word.$tcWord64 [] @ GHC.Types.KindRep
+$krep_a5Pg [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      GHC.Types.$tcChar [] @ GHC.Types.KindRep
+$krep_a5On [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcNatJoin
+      ((:) @ GHC.Types.KindRep
+         $krep_a5Oh
+         ((:) @ GHC.Types.KindRep $krep_a5Ok [] @ GHC.Types.KindRep))
+$krep_a5OQ [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      GHC.Classes.$tcOrd
+      ((:) @ GHC.Types.KindRep $krep_a5Oh [] @ GHC.Types.KindRep)
+$krep_a5OV [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      GHC.Real.$tcIntegral
+      ((:) @ GHC.Types.KindRep $krep_a5Oh [] @ GHC.Types.KindRep)
+FDB.GADTForall.$trModule
+  = GHC.Types.Module
+      (GHC.Types.TrNameS "main"#) (GHC.Types.TrNameS "FDB.GADTForall"#)
+AbsBinds [a_a5Cs] []
+  {Exports: [rowRef <= rowRef_a5Ct
+               wrap: <>]
+   Exported types: rowRef :: forall a. Row a -> RowRef a
+                   [LclId]
+   Binds: rowRef_a5Ct (Row{EvBinds{}} ref_a5jU _) = ref_a5jU
+   Evidence: [EvBinds{}]}
+AbsBinds [a_a5Cu] []
+  {Exports: [rowVal <= rowVal_a5Cv
+               wrap: <>]
+   Exported types: rowVal :: forall a. Row a -> a
+                   [LclId]
+   Binds: rowVal_a5Cv (Row{EvBinds{}} _ val_a5jT) = val_a5jT
+   Evidence: [EvBinds{}]}
+AbsBinds [a_a5Cw] [$dOrd_a5Cy]
+  {Exports: [minAgg <= minAgg_a5Cx
+               wrap: <>]
+   Exported types: minAgg :: forall a. Ord a => Fold1 a
+                   [LclId]
+   Binds: minAgg_a5Cx
+            = undefined @ 'GHC.Types.LiftedRep @ (Agg a_a5Cw a_a5Cw a_a5Cw)
+                $dIP_a5CB
+   Evidence: [EvBinds{[W] $dIP_a5CB
+                        = (GHC.Stack.Types.pushCallStack
+                             (GHC.CString.unpackCString# "undefined"#,
+                              GHC.Stack.Types.SrcLoc
+                                (GHC.CString.unpackCString# "main"#)
+                                (GHC.CString.unpackCString# "FDB.GADTForall"#)
+                                (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+                                (GHC.Types.I# 157#)
+                                (GHC.Types.I# 10#)
+                                (GHC.Types.I# 157#)
+                                (GHC.Types.I# 19#))
+                             ($dIP_a5MQ
+                              `cast` (GHC.Classes.N:IP[0]
+                                          <"callStack">_N <GHC.Stack.Types.CallStack>_N
+                                      :: (?callStack::GHC.Stack.Types.CallStack)
+                                         ~R# GHC.Stack.Types.CallStack)))
+                          `cast` (Sym (GHC.Classes.N:IP[0]
+                                           <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                  :: GHC.Stack.Types.CallStack
+                                     ~R# (?callStack::GHC.Stack.Types.CallStack))
+                      [W] $dIP_a5MQ
+                        = GHC.Stack.Types.emptyCallStack
+                          `cast` (Sym (GHC.Classes.N:IP[0]
+                                           <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                  :: GHC.Stack.Types.CallStack
+                                     ~R# (?callStack::GHC.Stack.Types.CallStack))}]}
+AbsBinds [n_a5CD, a_a5CE] [$dIntegral_a5CG]
+  {Exports: [count <= count_a5CF
+               wrap: <>]
+   Exported types: count :: forall n a. Integral n => Q a -> SQ n
+                   [LclId]
+   Binds: count_a5CF
+            = undefined @ 'GHC.Types.LiftedRep @ (Q a_a5CE -> SQ n_a5CD)
+                $dIP_a5CJ
+   Evidence: [EvBinds{[W] $dIP_a5CJ
+                        = (GHC.Stack.Types.pushCallStack
+                             (GHC.CString.unpackCString# "undefined"#,
+                              GHC.Stack.Types.SrcLoc
+                                (GHC.CString.unpackCString# "main"#)
+                                (GHC.CString.unpackCString# "FDB.GADTForall"#)
+                                (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+                                (GHC.Types.I# 154#)
+                                (GHC.Types.I# 9#)
+                                (GHC.Types.I# 154#)
+                                (GHC.Types.I# 18#))
+                             ($dIP_a5MW
+                              `cast` (GHC.Classes.N:IP[0]
+                                          <"callStack">_N <GHC.Stack.Types.CallStack>_N
+                                      :: (?callStack::GHC.Stack.Types.CallStack)
+                                         ~R# GHC.Stack.Types.CallStack)))
+                          `cast` (Sym (GHC.Classes.N:IP[0]
+                                           <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                  :: GHC.Stack.Types.CallStack
+                                     ~R# (?callStack::GHC.Stack.Types.CallStack))
+                      [W] $dIP_a5MW
+                        = GHC.Stack.Types.emptyCallStack
+                          `cast` (Sym (GHC.Classes.N:IP[0]
+                                           <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                  :: GHC.Stack.Types.CallStack
+                                     ~R# (?callStack::GHC.Stack.Types.CallStack))}]}
+AbsBinds [a_a5CL] [$dFractional_a5CN]
+  {Exports: [avgAgg <= avgAgg_a5CM
+               wrap: <>]
+   Exported types: avgAgg :: forall a. Fractional a => Agg a a (a, a)
+                   [LclId]
+   Binds: avgAgg_a5CM
+            = undefined @ 'GHC.Types.LiftedRep
+              @ (Agg a_a5CL a_a5CL (a_a5CL, a_a5CL))
+                $dIP_a5CQ
+   Evidence: [EvBinds{[W] $dIP_a5CQ
+                        = (GHC.Stack.Types.pushCallStack
+                             (GHC.CString.unpackCString# "undefined"#,
+                              GHC.Stack.Types.SrcLoc
+                                (GHC.CString.unpackCString# "main"#)
+                                (GHC.CString.unpackCString# "FDB.GADTForall"#)
+                                (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+                                (GHC.Types.I# 151#)
+                                (GHC.Types.I# 10#)
+                                (GHC.Types.I# 151#)
+                                (GHC.Types.I# 19#))
+                             ($dIP_a5MY
+                              `cast` (GHC.Classes.N:IP[0]
+                                          <"callStack">_N <GHC.Stack.Types.CallStack>_N
+                                      :: (?callStack::GHC.Stack.Types.CallStack)
+                                         ~R# GHC.Stack.Types.CallStack)))
+                          `cast` (Sym (GHC.Classes.N:IP[0]
+                                           <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                  :: GHC.Stack.Types.CallStack
+                                     ~R# (?callStack::GHC.Stack.Types.CallStack))
+                      [W] $dIP_a5MY
+                        = GHC.Stack.Types.emptyCallStack
+                          `cast` (Sym (GHC.Classes.N:IP[0]
+                                           <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                  :: GHC.Stack.Types.CallStack
+                                     ~R# (?callStack::GHC.Stack.Types.CallStack))}]}
+AbsBinds [a_a5CS] [$dNum_a5CU]
+  {Exports: [sumAgg <= sumAgg_a5CT
+               wrap: <>]
+   Exported types: sumAgg :: forall a. Num a => Fold1 a
+                   [LclId]
+   Binds: sumAgg_a5CT
+            = undefined @ 'GHC.Types.LiftedRep @ (Agg a_a5CS a_a5CS a_a5CS)
+                $dIP_a5CX
+   Evidence: [EvBinds{[W] $dIP_a5CX
+                        = (GHC.Stack.Types.pushCallStack
+                             (GHC.CString.unpackCString# "undefined"#,
+                              GHC.Stack.Types.SrcLoc
+                                (GHC.CString.unpackCString# "main"#)
+                                (GHC.CString.unpackCString# "FDB.GADTForall"#)
+                                (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+                                (GHC.Types.I# 148#)
+                                (GHC.Types.I# 10#)
+                                (GHC.Types.I# 148#)
+                                (GHC.Types.I# 19#))
+                             ($dIP_a5MZ
+                              `cast` (GHC.Classes.N:IP[0]
+                                          <"callStack">_N <GHC.Stack.Types.CallStack>_N
+                                      :: (?callStack::GHC.Stack.Types.CallStack)
+                                         ~R# GHC.Stack.Types.CallStack)))
+                          `cast` (Sym (GHC.Classes.N:IP[0]
+                                           <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                  :: GHC.Stack.Types.CallStack
+                                     ~R# (?callStack::GHC.Stack.Types.CallStack))
+                      [W] $dIP_a5MZ
+                        = GHC.Stack.Types.emptyCallStack
+                          `cast` (Sym (GHC.Classes.N:IP[0]
+                                           <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                  :: GHC.Stack.Types.CallStack
+                                     ~R# (?callStack::GHC.Stack.Types.CallStack))}]}
+AbsBinds [a_a5CZ, b_a5D0, s_a5D1] []
+  {Exports: [agg <= agg_a5D2
+               wrap: <>]
+   Exported types: agg :: forall a b s. Agg a b s -> Q a -> SQ b
+                   [LclId]
+   Binds: agg_a5D2 = StateFold @ a_a5CZ @ b_a5D0 @ s_a5D1
+   Evidence: [EvBinds{}]}
+AbsBinds [a_a5D6] []
+  {Exports: [toQ <= toQ_a5D7
+               wrap: <>]
+   Exported types: toQ :: forall a. SQ a -> Q a
+                   [LclId]
+   Binds: toQ_a5D7
+            = undefined @ 'GHC.Types.LiftedRep @ (SQ a_a5D6 -> Q a_a5D6)
+                $dIP_a5Da
+   Evidence: [EvBinds{[W] $dIP_a5Da
+                        = (GHC.Stack.Types.pushCallStack
+                             (GHC.CString.unpackCString# "undefined"#,
+                              GHC.Stack.Types.SrcLoc
+                                (GHC.CString.unpackCString# "main"#)
+                                (GHC.CString.unpackCString# "FDB.GADTForall"#)
+                                (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+                                (GHC.Types.I# 133#)
+                                (GHC.Types.I# 7#)
+                                (GHC.Types.I# 133#)
+                                (GHC.Types.I# 16#))
+                             ($dIP_a5N0
+                              `cast` (GHC.Classes.N:IP[0]
+                                          <"callStack">_N <GHC.Stack.Types.CallStack>_N
+                                      :: (?callStack::GHC.Stack.Types.CallStack)
+                                         ~R# GHC.Stack.Types.CallStack)))
+                          `cast` (Sym (GHC.Classes.N:IP[0]
+                                           <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                  :: GHC.Stack.Types.CallStack
+                                     ~R# (?callStack::GHC.Stack.Types.CallStack))
+                      [W] $dIP_a5N0
+                        = GHC.Stack.Types.emptyCallStack
+                          `cast` (Sym (GHC.Classes.N:IP[0]
+                                           <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                  :: GHC.Stack.Types.CallStack
+                                     ~R# (?callStack::GHC.Stack.Types.CallStack))}]}
+AbsBinds [a_a5Dc, b_a5Dd] []
+  {Exports: [mapToQ <= mapToQ_a5De
+               wrap: <>]
+   Exported types: mapToQ :: forall a b. (a -> Q b) -> SQ a -> Q b
+                   [LclId]
+   Binds: mapToQ_a5De
+            = undefined @ 'GHC.Types.LiftedRep
+              @ ((a_a5Dc -> Q b_a5Dd) -> SQ a_a5Dc -> Q b_a5Dd)
+                $dIP_a5Dh
+   Evidence: [EvBinds{[W] $dIP_a5Dh
+                        = (GHC.Stack.Types.pushCallStack
+                             (GHC.CString.unpackCString# "undefined"#,
+                              GHC.Stack.Types.SrcLoc
+                                (GHC.CString.unpackCString# "main"#)
+                                (GHC.CString.unpackCString# "FDB.GADTForall"#)
+                                (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+                                (GHC.Types.I# 130#)
+                                (GHC.Types.I# 10#)
+                                (GHC.Types.I# 130#)
+                                (GHC.Types.I# 19#))
+                             ($dIP_a5N1
+                              `cast` (GHC.Classes.N:IP[0]
+                                          <"callStack">_N <GHC.Stack.Types.CallStack>_N
+                                      :: (?callStack::GHC.Stack.Types.CallStack)
+                                         ~R# GHC.Stack.Types.CallStack)))
+                          `cast` (Sym (GHC.Classes.N:IP[0]
+                                           <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                  :: GHC.Stack.Types.CallStack
+                                     ~R# (?callStack::GHC.Stack.Types.CallStack))
+                      [W] $dIP_a5N1
+                        = GHC.Stack.Types.emptyCallStack
+                          `cast` (Sym (GHC.Classes.N:IP[0]
+                                           <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                  :: GHC.Stack.Types.CallStack
+                                     ~R# (?callStack::GHC.Stack.Types.CallStack))}]}
+AbsBinds [a_a5Dj] []
+  {Exports: [subqFilter <= subqFilter_a5Dk
+               wrap: <>]
+   Exported types: subqFilter
+                     :: forall a. (a -> SQ Bool) -> Q a -> Q a
+                   [LclId]
+   Binds: subqFilter_a5Dk = FilterSQ @ a_a5Dj
+   Evidence: [EvBinds{}]}
+AbsBinds [a_a5Dm, b_a5Dn] []
+  {Exports: [subqMap <= subqMap_a5Do
+               wrap: <>]
+   Exported types: subqMap :: forall a b. (a -> SQ b) -> Q a -> Q b
+                   [LclId]
+   Binds: subqMap_a5Do = MapSQ @ a_a5Dm @ b_a5Dn
+   Evidence: [EvBinds{}]}
+AbsBinds [a_a5Dr] []
+  {Exports: [fetchRow <= fetchRow_a5Ds
+               wrap: <>]
+   Exported types: fetchRow :: forall a. RowRef a -> SQ (Row a)
+                   [LclId]
+   Binds: fetchRow_a5Ds = FetchRow @ a_a5Dr
+   Evidence: [EvBinds{}]}
+AbsBinds [a_a5Du] []
+  {Exports: [fetchForeign <= fetchForeign_a5Dv
+               wrap: <>]
+   Exported types: fetchForeign :: forall a. RowRef a -> SQ a
+                   [LclId]
+   Binds: fetchForeign_a5Dv ref_a5jJ
+            = fetchRow @ a_a5Du ref_a5jJ <&> rowVal @ a_a5Du
+   Evidence: [EvBinds{[W] $dFunctor_a5Dz
+                        = FDB.GADTForall.$fFunctorSQ}]}
+AbsBinds [c_a5DD, a_a5DE, b_a5DF] [$dEq_a5DH]
+  {Exports: [equiJoin <= equiJoin_a5DG
+               wrap: <>]
+   Exported types: equiJoin
+                     :: forall c a b.
+                        Eq c =>
+                        (a -> c) -> (b -> c) -> Q a -> Q b -> Q (a, b)
+                   [LclId]
+   Binds: equiJoin_a5DG
+            = undefined @ 'GHC.Types.LiftedRep
+              @ ((a_a5DE -> c_a5DD)
+                 -> (b_a5DF -> c_a5DD)
+                 -> Q a_a5DE
+                 -> Q b_a5DF
+                 -> Q (a_a5DE, b_a5DF))
+                $dIP_a5DK
+   Evidence: [EvBinds{[W] $dIP_a5DK
+                        = (GHC.Stack.Types.pushCallStack
+                             (GHC.CString.unpackCString# "undefined"#,
+                              GHC.Stack.Types.SrcLoc
+                                (GHC.CString.unpackCString# "main"#)
+                                (GHC.CString.unpackCString# "FDB.GADTForall"#)
+                                (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+                                (GHC.Types.I# 73#)
+                                (GHC.Types.I# 12#)
+                                (GHC.Types.I# 73#)
+                                (GHC.Types.I# 21#))
+                             ($dIP_a5N2
+                              `cast` (GHC.Classes.N:IP[0]
+                                          <"callStack">_N <GHC.Stack.Types.CallStack>_N
+                                      :: (?callStack::GHC.Stack.Types.CallStack)
+                                         ~R# GHC.Stack.Types.CallStack)))
+                          `cast` (Sym (GHC.Classes.N:IP[0]
+                                           <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                  :: GHC.Stack.Types.CallStack
+                                     ~R# (?callStack::GHC.Stack.Types.CallStack))
+                      [W] $dIP_a5N2
+                        = GHC.Stack.Types.emptyCallStack
+                          `cast` (Sym (GHC.Classes.N:IP[0]
+                                           <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                  :: GHC.Stack.Types.CallStack
+                                     ~R# (?callStack::GHC.Stack.Types.CallStack))}]}
+AbsBinds [b_a5DM, a_a5DN] [$dEq_a5DP]
+  {Exports: [eqFilter <= eqFilter_a5DO
+               wrap: <>]
+   Exported types: eqFilter
+                     :: forall b a. Eq b => (a -> b) -> b -> Q a -> Q a
+                   [LclId]
+   Binds: eqFilter_a5DO
+            = undefined @ 'GHC.Types.LiftedRep
+              @ ((a_a5DN -> b_a5DM) -> b_a5DM -> Q a_a5DN -> Q a_a5DN)
+                $dIP_a5DS
+   Evidence: [EvBinds{[W] $dIP_a5DS
+                        = (GHC.Stack.Types.pushCallStack
+                             (GHC.CString.unpackCString# "undefined"#,
+                              GHC.Stack.Types.SrcLoc
+                                (GHC.CString.unpackCString# "main"#)
+                                (GHC.CString.unpackCString# "FDB.GADTForall"#)
+                                (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+                                (GHC.Types.I# 70#)
+                                (GHC.Types.I# 12#)
+                                (GHC.Types.I# 70#)
+                                (GHC.Types.I# 21#))
+                             ($dIP_a5N3
+                              `cast` (GHC.Classes.N:IP[0]
+                                          <"callStack">_N <GHC.Stack.Types.CallStack>_N
+                                      :: (?callStack::GHC.Stack.Types.CallStack)
+                                         ~R# GHC.Stack.Types.CallStack)))
+                          `cast` (Sym (GHC.Classes.N:IP[0]
+                                           <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                  :: GHC.Stack.Types.CallStack
+                                     ~R# (?callStack::GHC.Stack.Types.CallStack))
+                      [W] $dIP_a5N3
+                        = GHC.Stack.Types.emptyCallStack
+                          `cast` (Sym (GHC.Classes.N:IP[0]
+                                           <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                  :: GHC.Stack.Types.CallStack
+                                     ~R# (?callStack::GHC.Stack.Types.CallStack))}]}
+AbsBinds [a_a5DU] []
+  {Exports: [emptyQ <= emptyQ_a5DV
+               wrap: <>]
+   Exported types: emptyQ :: forall a. Q a
+                   [LclId]
+   Binds: emptyQ_a5DV
+            = undefined @ 'GHC.Types.LiftedRep @ (Q a_a5DU) $dIP_a5DY
+   Evidence: [EvBinds{[W] $dIP_a5DY
+                        = (GHC.Stack.Types.pushCallStack
+                             (GHC.CString.unpackCString# "undefined"#,
+                              GHC.Stack.Types.SrcLoc
+                                (GHC.CString.unpackCString# "main"#)
+                                (GHC.CString.unpackCString# "FDB.GADTForall"#)
+                                (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+                                (GHC.Types.I# 65#)
+                                (GHC.Types.I# 10#)
+                                (GHC.Types.I# 65#)
+                                (GHC.Types.I# 19#))
+                             ($dIP_a5N4
+                              `cast` (GHC.Classes.N:IP[0]
+                                          <"callStack">_N <GHC.Stack.Types.CallStack>_N
+                                      :: (?callStack::GHC.Stack.Types.CallStack)
+                                         ~R# GHC.Stack.Types.CallStack)))
+                          `cast` (Sym (GHC.Classes.N:IP[0]
+                                           <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                  :: GHC.Stack.Types.CallStack
+                                     ~R# (?callStack::GHC.Stack.Types.CallStack))
+                      [W] $dIP_a5N4
+                        = GHC.Stack.Types.emptyCallStack
+                          `cast` (Sym (GHC.Classes.N:IP[0]
+                                           <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                  :: GHC.Stack.Types.CallStack
+                                     ~R# (?callStack::GHC.Stack.Types.CallStack))}]}
+AbsBinds [n_a5E0, a_a5E1] [$dIntegral_a5E3]
+  {Exports: [takeQ <= takeQ_a5E2
+               wrap: <>]
+   Exported types: takeQ :: forall n a. Integral n => n -> Q a -> Q a
+                   [LclId]
+   Binds: takeQ_a5E2 = Take @ n_a5E0 @ a_a5E1 $dIntegral_a5E6
+   Evidence: [EvBinds{[W] $dIntegral_a5E6 = $dIntegral_a5E3}]}
+AbsBinds [a_a5E8] []
+  {Exports: [exists <= exists_a5E9
+               wrap: <>]
+   Exported types: exists :: forall a. Q a -> SQ Bool
+                   [LclId]
+   Binds: exists_a5E9 q_a5jK
+            = do c_a5jL <- count @ Integer @ a_a5E8 $dIntegral_a5Ei
+                             $ takeQ @ Integer @ a_a5E8 $dIntegral_a5El 1 q_a5jK
+                 return @ SQ $dMonad_a5Es @ Bool (c_a5jL > 0)
+   Evidence: [EvBinds{[W] $dMonad_a5Eb = FDB.GADTForall.$fMonadSQ
+                      [W] $dMonad_a5Es = $dMonad_a5Eb
+                      [W] $dIntegral_a5Ei = GHC.Real.$fIntegralInteger
+                      [W] $dIntegral_a5El = $dIntegral_a5Ei
+                      [W] $dNum_a5En = GHC.Num.$fNumInteger
+                      [W] $dNum_a5Ex = $dNum_a5En
+                      [W] $dOrd_a5Ev
+                        = integer-gmp-1.0.2.0:GHC.Integer.Type.$fOrdInteger}]}
+AbsBinds [b_a5Ez, a_a5EA] [$dOrd_a5EC]
+  {Exports: [orderBy <= orderBy_a5EB
+               wrap: <>]
+   Exported types: orderBy
+                     :: forall b a. Ord b => (a -> b) -> Q a -> Q a
+                   [LclId]
+   Binds: orderBy_a5EB = OrderBy @ b_a5Ez @ a_a5EA $dOrd_a5EF
+   Evidence: [EvBinds{[W] $dOrd_a5EF = $dOrd_a5EC}]}
+AbsBinds [k_a5EH, a_a5EI] [$dOrd_a5EK]
+  {Exports: [groupByWithKey <= groupByWithKey_a5EJ
+               wrap: <>]
+   Exported types: groupByWithKey
+                     :: forall k a. Ord k => (a -> k) -> Q a -> Q (k, Q a)
+                   [LclId]
+   Binds: groupByWithKey_a5EJ = GroupBy @ a_a5EI @ k_a5EH
+   Evidence: [EvBinds{}]}
+AbsBinds [a_a5EO] []
+  {Exports: [filterQ <= filterQ_a5EP
+               wrap: <>]
+   Exported types: filterQ :: forall a. (a -> Bool) -> Q a -> Q a
+                   [LclId]
+   Binds: filterQ_a5EP = Filter @ a_a5EO
+   Evidence: [EvBinds{}]}
+AbsBinds [a_a5ER, b_a5ES] []
+  {Exports: [mapQ <= mapQ_a5ET
+               wrap: <>]
+   Exported types: mapQ :: forall a b. (a -> b) -> Q a -> Q b
+                   [LclId]
+   Binds: mapQ_a5ET = Map @ a_a5ER @ b_a5ES
+   Evidence: [EvBinds{}]}
+AbsBinds [k_a5EW, a_a5EX] [$dOrd_a5EZ]
+  {Exports: [groupByQ <= groupByQ_a5EY
+               wrap: <>]
+   Exported types: groupByQ
+                     :: forall k a. Ord k => (a -> k) -> Q a -> Q (Q a)
+                   [LclId]
+   Binds: groupByQ_a5EY
+            = mapQ @ (k_a5EW, Q a_a5EX) @ (Q a_a5EX) snd @ k_a5EW @ (Q a_a5EX)
+                .: groupByWithKey @ k_a5EW @ a_a5EX $dOrd_a5Fa
+   Evidence: [EvBinds{[W] $dOrd_a5Fa = $dOrd_a5EZ}]}
+AbsBinds [b_a5Fc, c_a5Fd, s_a5Fe, a_a5Ff] []
+  {Exports: [mapAgg <= mapAgg_a5Fg
+               wrap: <>]
+   Exported types: mapAgg
+                     :: forall b c s a. Agg b c s -> (a -> b) -> Q a -> SQ c
+                   [LclId]
+   Binds: mapAgg_a5Fg g_a5jM f_a5jN q_a5jO
+            = agg @ b_a5Fc @ c_a5Fd @ s_a5Fe
+                g_a5jM (mapQ @ a_a5Ff @ b_a5Fc f_a5jN q_a5jO)
+   Evidence: [EvBinds{}]}
+AbsBinds [a_a5Fm, b_a5Fn] [$dNatJoin_a5Fp]
+  {Exports: [-|><|-> <= -|><|->_a5Fo
+               wrap: <>]
+   Exported types: -|><|->
+                     :: forall a b. NatJoin a b => Q a -> Q b -> Q b
+                   [LclId]
+   Binds: (-|><|->_a5Fo) x_a5jP y_a5jQ
+            = mapQ @ (a_a5Fm, b_a5Fn) @ b_a5Fn
+                snd @ a_a5Fm @ b_a5Fn (x_a5jP |><| y_a5jQ)
+   Evidence: [EvBinds{[W] $dNatJoin_a5Fw = $dNatJoin_a5Fp}]}
+AbsBinds [a_a5Fy, b_a5Fz] [$dNatJoin_a5FB]
+  {Exports: [<-|><|- <= <-|><|-_a5FA
+               wrap: <>]
+   Exported types: <-|><|-
+                     :: forall a b. NatJoin a b => Q a -> Q b -> Q a
+                   [LclId]
+   Binds: (<-|><|-_a5FA) a_a5jR b_a5jS
+            = mapQ @ (a_a5Fy, b_a5Fz) @ a_a5Fy
+                fst @ a_a5Fy @ b_a5Fz (a_a5jR |><| b_a5jS)
+   Evidence: [EvBinds{[W] $dNatJoin_a5FI = $dNatJoin_a5FB}]}
+AbsBinds [a_a5FK] []
+  {Exports: [readT <= readT_a5FL
+               wrap: <>]
+   Exported types: readT :: forall a. Table a -> Q a
+                   [LclId]
+   Binds: readT_a5FL = Read @ a_a5FK
+   Evidence: [EvBinds{}]}
+AbsBinds [a_a5FN] []
+  {Exports: [pull <= pull_a5FO
+               wrap: <>]
+   Exported types: pull :: forall a. Q a -> a
+                   [LclId]
+   Binds: pull_a5FO rec_a5jD@(Filter{EvBinds{}} p_a5jE q_a5jF)
+            = let x_a5jG = pull @ a_a5FN q_a5jF
+              in if p_a5jE x_a5jG then x_a5jG else pull @ a_a5FN rec_a5jD
+          pull_a5FO (Map{b_a5FV EvBinds{}} f_a5jH q_a5jI)
+            = f_a5jH (pull @ b_a5FV q_a5jI)
+   Evidence: [EvBinds{}]}
+AbsBinds [a_a5FX] []
+  {Exports: [findTable <= findTable_a5FY
+               wrap: <>]
+   Exported types: findTable :: forall a. String -> Table a
+                   [LclId]
+   Binds: findTable_a5FY = Table @ a_a5FX
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [FDB.GADTForall.$fEqRowId <= $dEq_a5GU
+               wrap: <>]
+   Exported types: FDB.GADTForall.$fEqRowId [InlPrag=NOUSERINLINE CONLIKE]
+                     :: Eq RowId
+                   [LclIdX[DFunId],
+                    Unf=DFun: \ -> GHC.Classes.C:Eq TYPE: RowId $c==_a5G2 $c/=_a5Gt]
+   Binds: $dEq_a5GU = GHC.Classes.C:Eq @ RowId $c==_a5G2 $c/=_a5Gt
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$c==_a5G2 <= ==_a5G3
+               wrap: <>]
+   Exported types: $c==_a5G2 :: RowId -> RowId -> Bool
+                   [LclId]
+   Binds: AbsBinds [] []
+            {Exports: [==_a5G3 <= ==_a5G4
+                         wrap: <>]
+             Exported types: ==_a5G3 :: RowId -> RowId -> Bool
+                             [LclId]
+             Binds: (==_a5G4)
+                      = GHC.Prim.coerce @ (Word64 -> Word64 -> Bool)
+                        @ (RowId -> RowId -> Bool)
+                          $dCoercible_a5Gp
+                          @(Word64 -> Word64 -> Bool)
+                          @(RowId -> RowId -> Bool)
+                          (==) @ Word64 $dEq_a5Gr ::
+                          RowId -> RowId -> Bool
+             Evidence: [EvBinds{}]}
+   Evidence: [EvBinds{[W] $dCoercible_a5Gp
+                        = GHC.Types.MkCoercible
+                            @ *
+                            @ (Word64 -> Word64 -> Bool)
+                            @ (RowId -> RowId -> Bool)
+                            @~ (Sym (FDB.GADTForall.N:RowId[0])
+                                ->_R Sym (FDB.GADTForall.N:RowId[0])
+                                ->_R <Bool>_R
+                                :: (Word64 -> Word64 -> Bool) ~R# (RowId -> RowId -> Bool))
+                      [W] $dEq_a5Gr = GHC.Word.$fEqWord64}]}
+AbsBinds [] []
+  {Exports: [$c/=_a5Gt <= /=_a5Gu
+               wrap: <>]
+   Exported types: $c/=_a5Gt :: RowId -> RowId -> Bool
+                   [LclId]
+   Binds: AbsBinds [] []
+            {Exports: [/=_a5Gu <= /=_a5Gv
+                         wrap: <>]
+             Exported types: /=_a5Gu :: RowId -> RowId -> Bool
+                             [LclId]
+             Binds: (/=_a5Gv)
+                      = GHC.Prim.coerce @ (Word64 -> Word64 -> Bool)
+                        @ (RowId -> RowId -> Bool)
+                          $dCoercible_a5GQ
+                          @(Word64 -> Word64 -> Bool)
+                          @(RowId -> RowId -> Bool)
+                          (/=) @ Word64 $dEq_a5GS ::
+                          RowId -> RowId -> Bool
+             Evidence: [EvBinds{}]}
+   Evidence: [EvBinds{[W] $dCoercible_a5GQ
+                        = GHC.Types.MkCoercible
+                            @ *
+                            @ (Word64 -> Word64 -> Bool)
+                            @ (RowId -> RowId -> Bool)
+                            @~ (Sym (FDB.GADTForall.N:RowId[0])
+                                ->_R Sym (FDB.GADTForall.N:RowId[0])
+                                ->_R <Bool>_R
+                                :: (Word64 -> Word64 -> Bool) ~R# (RowId -> RowId -> Bool))
+                      [W] $dEq_a5GS = GHC.Word.$fEqWord64}]}
+AbsBinds [] []
+  {Exports: [FDB.GADTForall.$fEqTableId <= $dEq_a5HO
+               wrap: <>]
+   Exported types: FDB.GADTForall.$fEqTableId [InlPrag=NOUSERINLINE CONLIKE]
+                     :: Eq TableId
+                   [LclIdX[DFunId],
+                    Unf=DFun: \ -> GHC.Classes.C:Eq TYPE: TableId $c==_a5GW $c/=_a5Hn]
+   Binds: $dEq_a5HO = GHC.Classes.C:Eq @ TableId $c==_a5GW $c/=_a5Hn
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$c==_a5GW <= ==_a5GX
+               wrap: <>]
+   Exported types: $c==_a5GW :: TableId -> TableId -> Bool
+                   [LclId]
+   Binds: AbsBinds [] []
+            {Exports: [==_a5GX <= ==_a5GY
+                         wrap: <>]
+             Exported types: ==_a5GX :: TableId -> TableId -> Bool
+                             [LclId]
+             Binds: (==_a5GY)
+                      = GHC.Prim.coerce @ (Word16 -> Word16 -> Bool)
+                        @ (TableId -> TableId -> Bool)
+                          $dCoercible_a5Hj
+                          @(Word16 -> Word16 -> Bool)
+                          @(TableId -> TableId -> Bool)
+                          (==) @ Word16 $dEq_a5Hl ::
+                          TableId -> TableId -> Bool
+             Evidence: [EvBinds{}]}
+   Evidence: [EvBinds{[W] $dCoercible_a5Hj
+                        = GHC.Types.MkCoercible
+                            @ *
+                            @ (Word16 -> Word16 -> Bool)
+                            @ (TableId -> TableId -> Bool)
+                            @~ (Sym (FDB.GADTForall.N:TableId[0])
+                                ->_R Sym (FDB.GADTForall.N:TableId[0])
+                                ->_R <Bool>_R
+                                :: (Word16 -> Word16 -> Bool) ~R# (TableId -> TableId -> Bool))
+                      [W] $dEq_a5Hl = GHC.Word.$fEqWord16}]}
+AbsBinds [] []
+  {Exports: [$c/=_a5Hn <= /=_a5Ho
+               wrap: <>]
+   Exported types: $c/=_a5Hn :: TableId -> TableId -> Bool
+                   [LclId]
+   Binds: AbsBinds [] []
+            {Exports: [/=_a5Ho <= /=_a5Hp
+                         wrap: <>]
+             Exported types: /=_a5Ho :: TableId -> TableId -> Bool
+                             [LclId]
+             Binds: (/=_a5Hp)
+                      = GHC.Prim.coerce @ (Word16 -> Word16 -> Bool)
+                        @ (TableId -> TableId -> Bool)
+                          $dCoercible_a5HK
+                          @(Word16 -> Word16 -> Bool)
+                          @(TableId -> TableId -> Bool)
+                          (/=) @ Word16 $dEq_a5HM ::
+                          TableId -> TableId -> Bool
+             Evidence: [EvBinds{}]}
+   Evidence: [EvBinds{[W] $dCoercible_a5HK
+                        = GHC.Types.MkCoercible
+                            @ *
+                            @ (Word16 -> Word16 -> Bool)
+                            @ (TableId -> TableId -> Bool)
+                            @~ (Sym (FDB.GADTForall.N:TableId[0])
+                                ->_R Sym (FDB.GADTForall.N:TableId[0])
+                                ->_R <Bool>_R
+                                :: (Word16 -> Word16 -> Bool) ~R# (TableId -> TableId -> Bool))
+                      [W] $dEq_a5HM = GHC.Word.$fEqWord16}]}
+AbsBinds [a_a5HP] []
+  {Exports: [FDB.GADTForall.$fEqRowRef <= $dEq_a5I6
+               wrap: <>]
+   Exported types: FDB.GADTForall.$fEqRowRef [InlPrag=NOUSERINLINE CONLIKE]
+                     :: forall a. Eq (RowRef a)
+                   [LclIdX[DFunId],
+                    Unf=DFun: \ (@ a_a5in) ->
+                          GHC.Classes.C:Eq TYPE: RowRef a_a5in
+                                           $c==_a5HR @ a_a5in
+                                           $c/=_a5I0 @ a_a5in]
+   Binds: $dEq_a5I6
+            = GHC.Classes.C:Eq @ (RowRef a_a5HP)
+                $c==_a5HR @ a_a5HP $c/=_a5I0 @ a_a5HP
+   Evidence: [EvBinds{}]}
+AbsBinds [a_a5HP] []
+  {Exports: [$c==_a5HR <= ==_a5HS
+               wrap: <>]
+   Exported types: $c==_a5HR :: forall a. RowRef a -> RowRef a -> Bool
+                   [LclId]
+   Binds: AbsBinds [] []
+            {Exports: [==_a5HS <= ==_a5HT
+                         wrap: <>]
+             Exported types: ==_a5HS :: RowRef a_a5HP -> RowRef a_a5HP -> Bool
+                             [LclId]
+             Binds: (==_a5HT)
+                      (RowRef{EvBinds{}} a1_a5sv a2_a5sw)
+                      (RowRef{EvBinds{}} b1_a5sx b2_a5sy)
+                      = (((a1_a5sv == b1_a5sx)) && ((a2_a5sw == b2_a5sy)))
+             Evidence: [EvBinds{}]}
+   Evidence: [EvBinds{[W] $dEq_a5HV = FDB.GADTForall.$fEqTableId
+                      [W] $dEq_a5HX = FDB.GADTForall.$fEqRowId}]}
+AbsBinds [a_a5HP] []
+  {Exports: [$c/=_a5I0 <= /=_a5I1
+               wrap: <>]
+   Exported types: $c/=_a5I0 :: forall a. RowRef a -> RowRef a -> Bool
+                   [LclId]
+   Binds: AbsBinds [] []
+            {Exports: [/=_a5I1 <= /=_a5I2
+                         wrap: <>]
+             Exported types: /=_a5I1 :: RowRef a_a5HP -> RowRef a_a5HP -> Bool
+                             [LclId]
+             Binds: (/=_a5I2)
+                      = GHC.Classes.$dm/= @ (RowRef a_a5HP) @(RowRef a_a5HP[ssk:1])
+                          $dEq_a5I4
+             Evidence: [EvBinds{}]}
+   Evidence: [EvBinds{[W] $dEq_a5I4
+                        = FDB.GADTForall.$fEqRowRef @ a_a5HP}]}
+AbsBinds [] []
+  {Exports: [FDB.GADTForall.$fMonadSQ <= $dMonad_a5IZ
+               wrap: <>]
+   Exported types: FDB.GADTForall.$fMonadSQ [InlPrag=NOUSERINLINE CONLIKE]
+                     :: Monad SQ
+                   [LclIdX[DFunId],
+                    Unf=DFun: \ ->
+                          GHC.Base.C:Monad TYPE: SQ
+                                           $cp1Monad_a5Ia
+                                           $c>>=_a5Ic
+                                           $c>>_a5Ip
+                                           $creturn_a5IE
+                                           $cfail_a5IP]
+   Binds: $dMonad_a5IZ
+            = GHC.Base.C:Monad @ SQ
+                $cp1Monad_a5Ia $c>>=_a5Ic $c>>_a5Ip $creturn_a5IE $cfail_a5IP
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$cp1Monad_a5Ia <= $dApplicative_a5Ib
+               wrap: <>]
+   Exported types: $cp1Monad_a5Ia :: Applicative SQ
+                   [LclId]
+   Binds:
+   Evidence: [EvBinds{[W] $dApplicative_a5Ib = $dApplicative_a5I8
+                      [W] $dApplicative_a5I8 = FDB.GADTForall.$fApplicativeSQ}]}
+AbsBinds [] []
+  {Exports: [$c>>=_a5Ic <= >>=_a5Id
+               wrap: <>]
+   Exported types: $c>>=_a5Ic
+                     :: forall a b. SQ a -> (a -> SQ b) -> SQ b
+                   [LclId]
+   Binds: AbsBinds [a_a5Ie, b_a5If] []
+            {Exports: [>>=_a5Id <= >>=_a5Ig
+                         wrap: <>]
+             Exported types: >>=_a5Id :: forall a b. SQ a -> (a -> SQ b) -> SQ b
+                             [LclId]
+             Binds: (>>=_a5Ig)
+                      = undefined @ 'GHC.Types.LiftedRep
+                        @ (SQ a_a5Ie -> (a_a5Ie -> SQ b_a5If) -> SQ b_a5If)
+                          $dIP_a5Ij
+             Evidence: [EvBinds{[W] $dIP_a5Ij
+                                  = (GHC.Stack.Types.pushCallStack
+                                       (GHC.CString.unpackCString# "undefined"#,
+                                        GHC.Stack.Types.SrcLoc
+                                          (GHC.CString.unpackCString# "main"#)
+                                          (GHC.CString.unpackCString# "FDB.GADTForall"#)
+                                          (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+                                          (GHC.Types.I# 111#)
+                                          (GHC.Types.I# 11#)
+                                          (GHC.Types.I# 111#)
+                                          (GHC.Types.I# 20#))
+                                       ($dIP_a5NP
+                                        `cast` (GHC.Classes.N:IP[0]
+                                                    <"callStack">_N <GHC.Stack.Types.CallStack>_N
+                                                :: (?callStack::GHC.Stack.Types.CallStack)
+                                                   ~R# GHC.Stack.Types.CallStack)))
+                                    `cast` (Sym (GHC.Classes.N:IP[0]
+                                                     <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                            :: GHC.Stack.Types.CallStack
+                                               ~R# (?callStack::GHC.Stack.Types.CallStack))
+                                [W] $dIP_a5NP
+                                  = GHC.Stack.Types.emptyCallStack
+                                    `cast` (Sym (GHC.Classes.N:IP[0]
+                                                     <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                            :: GHC.Stack.Types.CallStack
+                                               ~R# (?callStack::GHC.Stack.Types.CallStack))}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$c>>_a5Ip <= >>_a5Iq
+               wrap: <>]
+   Exported types: $c>>_a5Ip :: forall a b. SQ a -> SQ b -> SQ b
+                   [LclId]
+   Binds: AbsBinds [a_a5It, b_a5Iu] []
+            {Exports: [>>_a5Iq <= >>_a5Iv
+                         wrap: <>]
+             Exported types: >>_a5Iq :: forall a b. SQ a -> SQ b -> SQ b
+                             [LclId]
+             Binds: (>>_a5Iv)
+                      = GHC.Base.$dm>> @ SQ @(SQ) $dMonad_a5Ix @ a_a5It @ b_a5Iu
+             Evidence: [EvBinds{[W] $dMonad_a5Ix = FDB.GADTForall.$fMonadSQ}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$creturn_a5IE <= return_a5IF
+               wrap: <>]
+   Exported types: $creturn_a5IE :: forall a. a -> SQ a
+                   [LclId]
+   Binds: AbsBinds [a_a5IG] []
+            {Exports: [return_a5IF <= return_a5IH
+                         wrap: <>]
+             Exported types: return_a5IF :: forall a. a -> SQ a
+                             [LclId]
+             Binds: return_a5IH
+                      = GHC.Base.$dmreturn @ SQ @(SQ) $dMonad_a5IJ @ a_a5IG
+             Evidence: [EvBinds{[W] $dMonad_a5IJ = FDB.GADTForall.$fMonadSQ}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$cfail_a5IP <= fail_a5IQ
+               wrap: <>]
+   Exported types: $cfail_a5IP :: forall a. String -> SQ a
+                   [LclId]
+   Binds: AbsBinds [a_a5IS] []
+            {Exports: [fail_a5IQ <= fail_a5IT
+                         wrap: <>]
+             Exported types: fail_a5IQ :: forall a. String -> SQ a
+                             [LclId]
+             Binds: fail_a5IT
+                      = GHC.Base.$dmfail @ SQ @(SQ) $dMonad_a5IV @ a_a5IS
+             Evidence: [EvBinds{[W] $dMonad_a5IV = FDB.GADTForall.$fMonadSQ}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [FDB.GADTForall.$fApplicativeSQ <= $dApplicative_a5Kh
+               wrap: <>]
+   Exported types: FDB.GADTForall.$fApplicativeSQ [InlPrag=NOUSERINLINE CONLIKE]
+                     :: Applicative SQ
+                   [LclIdX[DFunId],
+                    Unf=DFun: \ ->
+                          GHC.Base.C:Applicative TYPE: SQ
+                                                 $cp1Applicative_a5J3
+                                                 $cpure_a5J5
+                                                 $c<*>_a5Jf
+                                                 $cliftA2_a5Jv
+                                                 $c*>_a5JO
+                                                 $c<*_a5K4]
+   Binds: $dApplicative_a5Kh
+            = GHC.Base.C:Applicative @ SQ
+                $cp1Applicative_a5J3
+                $cpure_a5J5
+                $c<*>_a5Jf
+                $cliftA2_a5Jv
+                $c*>_a5JO
+                $c<*_a5K4
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$cp1Applicative_a5J3 <= $dFunctor_a5J4
+               wrap: <>]
+   Exported types: $cp1Applicative_a5J3 :: Functor SQ
+                   [LclId]
+   Binds:
+   Evidence: [EvBinds{[W] $dFunctor_a5J4 = $dFunctor_a5J1
+                      [W] $dFunctor_a5J1 = FDB.GADTForall.$fFunctorSQ}]}
+AbsBinds [] []
+  {Exports: [$cpure_a5J5 <= pure_a5J6
+               wrap: <>]
+   Exported types: $cpure_a5J5 :: forall a. a -> SQ a
+                   [LclId]
+   Binds: AbsBinds [a_a5J8] []
+            {Exports: [pure_a5J6 <= pure_a5J9
+                         wrap: <>]
+             Exported types: pure_a5J6 :: forall a. a -> SQ a
+                             [LclId]
+             Binds: pure_a5J9
+                      = undefined @ 'GHC.Types.LiftedRep @ (a_a5J8 -> SQ a_a5J8)
+                          $dIP_a5Jc
+             Evidence: [EvBinds{[W] $dIP_a5Jc
+                                  = (GHC.Stack.Types.pushCallStack
+                                       (GHC.CString.unpackCString# "undefined"#,
+                                        GHC.Stack.Types.SrcLoc
+                                          (GHC.CString.unpackCString# "main"#)
+                                          (GHC.CString.unpackCString# "FDB.GADTForall"#)
+                                          (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+                                          (GHC.Types.I# 107#)
+                                          (GHC.Types.I# 10#)
+                                          (GHC.Types.I# 107#)
+                                          (GHC.Types.I# 19#))
+                                       ($dIP_a5NQ
+                                        `cast` (GHC.Classes.N:IP[0]
+                                                    <"callStack">_N <GHC.Stack.Types.CallStack>_N
+                                                :: (?callStack::GHC.Stack.Types.CallStack)
+                                                   ~R# GHC.Stack.Types.CallStack)))
+                                    `cast` (Sym (GHC.Classes.N:IP[0]
+                                                     <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                            :: GHC.Stack.Types.CallStack
+                                               ~R# (?callStack::GHC.Stack.Types.CallStack))
+                                [W] $dIP_a5NQ
+                                  = GHC.Stack.Types.emptyCallStack
+                                    `cast` (Sym (GHC.Classes.N:IP[0]
+                                                     <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                            :: GHC.Stack.Types.CallStack
+                                               ~R# (?callStack::GHC.Stack.Types.CallStack))}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$c<*>_a5Jf <= <*>_a5Jg
+               wrap: <>]
+   Exported types: $c<*>_a5Jf
+                     :: forall a b. SQ (a -> b) -> SQ a -> SQ b
+                   [LclId]
+   Binds: AbsBinds [a_a5Jj, b_a5Jk] []
+            {Exports: [<*>_a5Jg <= <*>_a5Jl
+                         wrap: <>]
+             Exported types: <*>_a5Jg :: forall a b. SQ (a -> b) -> SQ a -> SQ b
+                             [LclId]
+             Binds: (<*>_a5Jl)
+                      = undefined @ 'GHC.Types.LiftedRep
+                        @ (SQ (a_a5Jj -> b_a5Jk) -> SQ a_a5Jj -> SQ b_a5Jk)
+                          $dIP_a5Jo
+             Evidence: [EvBinds{[W] $dIP_a5Jo
+                                  = (GHC.Stack.Types.pushCallStack
+                                       (GHC.CString.unpackCString# "undefined"#,
+                                        GHC.Stack.Types.SrcLoc
+                                          (GHC.CString.unpackCString# "main"#)
+                                          (GHC.CString.unpackCString# "FDB.GADTForall"#)
+                                          (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+                                          (GHC.Types.I# 108#)
+                                          (GHC.Types.I# 11#)
+                                          (GHC.Types.I# 108#)
+                                          (GHC.Types.I# 20#))
+                                       ($dIP_a5NR
+                                        `cast` (GHC.Classes.N:IP[0]
+                                                    <"callStack">_N <GHC.Stack.Types.CallStack>_N
+                                                :: (?callStack::GHC.Stack.Types.CallStack)
+                                                   ~R# GHC.Stack.Types.CallStack)))
+                                    `cast` (Sym (GHC.Classes.N:IP[0]
+                                                     <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                            :: GHC.Stack.Types.CallStack
+                                               ~R# (?callStack::GHC.Stack.Types.CallStack))
+                                [W] $dIP_a5NR
+                                  = GHC.Stack.Types.emptyCallStack
+                                    `cast` (Sym (GHC.Classes.N:IP[0]
+                                                     <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                            :: GHC.Stack.Types.CallStack
+                                               ~R# (?callStack::GHC.Stack.Types.CallStack))}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$cliftA2_a5Jv <= liftA2_a5Jw
+               wrap: <>]
+   Exported types: $cliftA2_a5Jv
+                     :: forall a b c. (a -> b -> c) -> SQ a -> SQ b -> SQ c
+                   [LclId]
+   Binds: AbsBinds [a_a5JA, b_a5JB, c_a5JC] []
+            {Exports: [liftA2_a5Jw <= liftA2_a5JD
+                         wrap: <>]
+             Exported types: liftA2_a5Jw
+                               :: forall a b c. (a -> b -> c) -> SQ a -> SQ b -> SQ c
+                             [LclId]
+             Binds: liftA2_a5JD
+                      = GHC.Base.$dmliftA2 @ SQ @(SQ) $dApplicative_a5JF @ a_a5JA
+                        @ b_a5JB
+                        @ c_a5JC
+             Evidence: [EvBinds{[W] $dApplicative_a5JF
+                                  = FDB.GADTForall.$fApplicativeSQ}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$c*>_a5JO <= *>_a5JP
+               wrap: <>]
+   Exported types: $c*>_a5JO :: forall a b. SQ a -> SQ b -> SQ b
+                   [LclId]
+   Binds: AbsBinds [a_a5JS, b_a5JT] []
+            {Exports: [*>_a5JP <= *>_a5JU
+                         wrap: <>]
+             Exported types: *>_a5JP :: forall a b. SQ a -> SQ b -> SQ b
+                             [LclId]
+             Binds: (*>_a5JU)
+                      = GHC.Base.$dm*> @ SQ @(SQ) $dApplicative_a5JW @ a_a5JS @ b_a5JT
+             Evidence: [EvBinds{[W] $dApplicative_a5JW
+                                  = FDB.GADTForall.$fApplicativeSQ}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$c<*_a5K4 <= <*_a5K5
+               wrap: <>]
+   Exported types: $c<*_a5K4 :: forall a b. SQ a -> SQ b -> SQ a
+                   [LclId]
+   Binds: AbsBinds [a_a5K8, b_a5K9] []
+            {Exports: [<*_a5K5 <= <*_a5Ka
+                         wrap: <>]
+             Exported types: <*_a5K5 :: forall a b. SQ a -> SQ b -> SQ a
+                             [LclId]
+             Binds: (<*_a5Ka)
+                      = GHC.Base.$dm<* @ SQ @(SQ) $dApplicative_a5Kc @ a_a5K8 @ b_a5K9
+             Evidence: [EvBinds{[W] $dApplicative_a5Kc
+                                  = FDB.GADTForall.$fApplicativeSQ}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [FDB.GADTForall.$fFunctorSQ <= $dFunctor_a5KL
+               wrap: <>]
+   Exported types: FDB.GADTForall.$fFunctorSQ [InlPrag=NOUSERINLINE CONLIKE]
+                     :: Functor SQ
+                   [LclIdX[DFunId],
+                    Unf=DFun: \ -> GHC.Base.C:Functor TYPE: SQ $cfmap_a5Kj $c<$_a5Ky]
+   Binds: $dFunctor_a5KL
+            = GHC.Base.C:Functor @ SQ $cfmap_a5Kj $c<$_a5Ky
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$cfmap_a5Kj <= fmap_a5Kk
+               wrap: <>]
+   Exported types: $cfmap_a5Kj :: forall a b. (a -> b) -> SQ a -> SQ b
+                   [LclId]
+   Binds: AbsBinds [a_a5Kn, b_a5Ko] []
+            {Exports: [fmap_a5Kk <= fmap_a5Kp
+                         wrap: <>]
+             Exported types: fmap_a5Kk :: forall a b. (a -> b) -> SQ a -> SQ b
+                             [LclId]
+             Binds: fmap_a5Kp
+                      = undefined @ 'GHC.Types.LiftedRep
+                        @ ((a_a5Kn -> b_a5Ko) -> SQ a_a5Kn -> SQ b_a5Ko)
+                          $dIP_a5Ks
+             Evidence: [EvBinds{[W] $dIP_a5Ks
+                                  = (GHC.Stack.Types.pushCallStack
+                                       (GHC.CString.unpackCString# "undefined"#,
+                                        GHC.Stack.Types.SrcLoc
+                                          (GHC.CString.unpackCString# "main"#)
+                                          (GHC.CString.unpackCString# "FDB.GADTForall"#)
+                                          (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+                                          (GHC.Types.I# 104#)
+                                          (GHC.Types.I# 10#)
+                                          (GHC.Types.I# 104#)
+                                          (GHC.Types.I# 19#))
+                                       ($dIP_a5NS
+                                        `cast` (GHC.Classes.N:IP[0]
+                                                    <"callStack">_N <GHC.Stack.Types.CallStack>_N
+                                                :: (?callStack::GHC.Stack.Types.CallStack)
+                                                   ~R# GHC.Stack.Types.CallStack)))
+                                    `cast` (Sym (GHC.Classes.N:IP[0]
+                                                     <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                            :: GHC.Stack.Types.CallStack
+                                               ~R# (?callStack::GHC.Stack.Types.CallStack))
+                                [W] $dIP_a5NS
+                                  = GHC.Stack.Types.emptyCallStack
+                                    `cast` (Sym (GHC.Classes.N:IP[0]
+                                                     <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                            :: GHC.Stack.Types.CallStack
+                                               ~R# (?callStack::GHC.Stack.Types.CallStack))}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$c<$_a5Ky <= <$_a5Kz
+               wrap: <>]
+   Exported types: $c<$_a5Ky :: forall a b. a -> SQ b -> SQ a
+                   [LclId]
+   Binds: AbsBinds [a_a5KC, b_a5KD] []
+            {Exports: [<$_a5Kz <= <$_a5KE
+                         wrap: <>]
+             Exported types: <$_a5Kz :: forall a b. a -> SQ b -> SQ a
+                             [LclId]
+             Binds: (<$_a5KE)
+                      = GHC.Base.$dm<$ @ SQ @(SQ) $dFunctor_a5KG @ a_a5KC @ b_a5KD
+             Evidence: [EvBinds{[W] $dFunctor_a5KG
+                                  = FDB.GADTForall.$fFunctorSQ}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [FDB.GADTForall.$fMonadQ <= $dMonad_a5Lu
+               wrap: <>]
+   Exported types: FDB.GADTForall.$fMonadQ [InlPrag=NOUSERINLINE CONLIKE]
+                     :: Monad Q
+                   [LclIdX[DFunId],
+                    Unf=DFun: \ ->
+                          GHC.Base.C:Monad TYPE: Q
+                                           $cp1Monad_a5KP
+                                           $c>>=_a5KR
+                                           $c>>_a5L1
+                                           $creturn_a5Lc
+                                           $cfail_a5Ll]
+   Binds: $dMonad_a5Lu
+            = GHC.Base.C:Monad @ Q
+                $cp1Monad_a5KP $c>>=_a5KR $c>>_a5L1 $creturn_a5Lc $cfail_a5Ll
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$cp1Monad_a5KP <= $dApplicative_a5KQ
+               wrap: <>]
+   Exported types: $cp1Monad_a5KP :: Applicative Q
+                   [LclId]
+   Binds:
+   Evidence: [EvBinds{[W] $dApplicative_a5KQ = $dApplicative_a5KN
+                      [W] $dApplicative_a5KN = FDB.GADTForall.$fApplicativeQ}]}
+AbsBinds [] []
+  {Exports: [$c>>=_a5KR <= >>=_a5KS
+               wrap: <>]
+   Exported types: $c>>=_a5KR :: forall a b. Q a -> (a -> Q b) -> Q b
+                   [LclId]
+   Binds: AbsBinds [a_a5KT, b_a5KU] []
+            {Exports: [>>=_a5KS <= >>=_a5KV
+                         wrap: <>]
+             Exported types: >>=_a5KS :: forall a b. Q a -> (a -> Q b) -> Q b
+                             [LclId]
+             Binds: (>>=_a5KV)
+                      = undefined @ 'GHC.Types.LiftedRep
+                        @ (Q a_a5KT -> (a_a5KT -> Q b_a5KU) -> Q b_a5KU)
+                          $dIP_a5KY
+             Evidence: [EvBinds{[W] $dIP_a5KY
+                                  = (GHC.Stack.Types.pushCallStack
+                                       (GHC.CString.unpackCString# "undefined"#,
+                                        GHC.Stack.Types.SrcLoc
+                                          (GHC.CString.unpackCString# "main"#)
+                                          (GHC.CString.unpackCString# "FDB.GADTForall"#)
+                                          (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+                                          (GHC.Types.I# 85#)
+                                          (GHC.Types.I# 11#)
+                                          (GHC.Types.I# 85#)
+                                          (GHC.Types.I# 20#))
+                                       ($dIP_a5NT
+                                        `cast` (GHC.Classes.N:IP[0]
+                                                    <"callStack">_N <GHC.Stack.Types.CallStack>_N
+                                                :: (?callStack::GHC.Stack.Types.CallStack)
+                                                   ~R# GHC.Stack.Types.CallStack)))
+                                    `cast` (Sym (GHC.Classes.N:IP[0]
+                                                     <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                            :: GHC.Stack.Types.CallStack
+                                               ~R# (?callStack::GHC.Stack.Types.CallStack))
+                                [W] $dIP_a5NT
+                                  = GHC.Stack.Types.emptyCallStack
+                                    `cast` (Sym (GHC.Classes.N:IP[0]
+                                                     <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                            :: GHC.Stack.Types.CallStack
+                                               ~R# (?callStack::GHC.Stack.Types.CallStack))}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$c>>_a5L1 <= >>_a5L2
+               wrap: <>]
+   Exported types: $c>>_a5L1 :: forall a b. Q a -> Q b -> Q b
+                   [LclId]
+   Binds: AbsBinds [a_a5L3, b_a5L4] []
+            {Exports: [>>_a5L2 <= >>_a5L5
+                         wrap: <>]
+             Exported types: >>_a5L2 :: forall a b. Q a -> Q b -> Q b
+                             [LclId]
+             Binds: (>>_a5L5)
+                      = GHC.Base.$dm>> @ Q @(Q) $dMonad_a5L7 @ a_a5L3 @ b_a5L4
+             Evidence: [EvBinds{[W] $dMonad_a5L7 = FDB.GADTForall.$fMonadQ}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$creturn_a5Lc <= return_a5Ld
+               wrap: <>]
+   Exported types: $creturn_a5Lc :: forall a. a -> Q a
+                   [LclId]
+   Binds: AbsBinds [a_a5Le] []
+            {Exports: [return_a5Ld <= return_a5Lf
+                         wrap: <>]
+             Exported types: return_a5Ld :: forall a. a -> Q a
+                             [LclId]
+             Binds: return_a5Lf
+                      = GHC.Base.$dmreturn @ Q @(Q) $dMonad_a5Lh @ a_a5Le
+             Evidence: [EvBinds{[W] $dMonad_a5Lh = FDB.GADTForall.$fMonadQ}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$cfail_a5Ll <= fail_a5Lm
+               wrap: <>]
+   Exported types: $cfail_a5Ll :: forall a. String -> Q a
+                   [LclId]
+   Binds: AbsBinds [a_a5Ln] []
+            {Exports: [fail_a5Lm <= fail_a5Lo
+                         wrap: <>]
+             Exported types: fail_a5Lm :: forall a. String -> Q a
+                             [LclId]
+             Binds: fail_a5Lo = GHC.Base.$dmfail @ Q @(Q) $dMonad_a5Lq @ a_a5Ln
+             Evidence: [EvBinds{[W] $dMonad_a5Lq = FDB.GADTForall.$fMonadQ}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [FDB.GADTForall.$fApplicativeQ <= $dApplicative_a5Ms
+               wrap: <>]
+   Exported types: FDB.GADTForall.$fApplicativeQ [InlPrag=NOUSERINLINE CONLIKE]
+                     :: Applicative Q
+                   [LclIdX[DFunId],
+                    Unf=DFun: \ ->
+                          GHC.Base.C:Applicative TYPE: Q
+                                                 $cp1Applicative_a5Ly
+                                                 $cpure_a5LA
+                                                 $c<*>_a5LJ
+                                                 $cliftA2_a5LT
+                                                 $c*>_a5M6
+                                                 $c<*_a5Mh]
+   Binds: $dApplicative_a5Ms
+            = GHC.Base.C:Applicative @ Q
+                $cp1Applicative_a5Ly
+                $cpure_a5LA
+                $c<*>_a5LJ
+                $cliftA2_a5LT
+                $c*>_a5M6
+                $c<*_a5Mh
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$cp1Applicative_a5Ly <= $dFunctor_a5Lz
+               wrap: <>]
+   Exported types: $cp1Applicative_a5Ly :: Functor Q
+                   [LclId]
+   Binds:
+   Evidence: [EvBinds{[W] $dFunctor_a5Lz = $dFunctor_a5Lw
+                      [W] $dFunctor_a5Lw = FDB.GADTForall.$fFunctorQ}]}
+AbsBinds [] []
+  {Exports: [$cpure_a5LA <= pure_a5LB
+               wrap: <>]
+   Exported types: $cpure_a5LA :: forall a. a -> Q a
+                   [LclId]
+   Binds: AbsBinds [a_a5LC] []
+            {Exports: [pure_a5LB <= pure_a5LD
+                         wrap: <>]
+             Exported types: pure_a5LB :: forall a. a -> Q a
+                             [LclId]
+             Binds: pure_a5LD
+                      = undefined @ 'GHC.Types.LiftedRep @ (a_a5LC -> Q a_a5LC) $dIP_a5LG
+             Evidence: [EvBinds{[W] $dIP_a5LG
+                                  = (GHC.Stack.Types.pushCallStack
+                                       (GHC.CString.unpackCString# "undefined"#,
+                                        GHC.Stack.Types.SrcLoc
+                                          (GHC.CString.unpackCString# "main"#)
+                                          (GHC.CString.unpackCString# "FDB.GADTForall"#)
+                                          (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+                                          (GHC.Types.I# 81#)
+                                          (GHC.Types.I# 10#)
+                                          (GHC.Types.I# 81#)
+                                          (GHC.Types.I# 19#))
+                                       ($dIP_a5NU
+                                        `cast` (GHC.Classes.N:IP[0]
+                                                    <"callStack">_N <GHC.Stack.Types.CallStack>_N
+                                                :: (?callStack::GHC.Stack.Types.CallStack)
+                                                   ~R# GHC.Stack.Types.CallStack)))
+                                    `cast` (Sym (GHC.Classes.N:IP[0]
+                                                     <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                            :: GHC.Stack.Types.CallStack
+                                               ~R# (?callStack::GHC.Stack.Types.CallStack))
+                                [W] $dIP_a5NU
+                                  = GHC.Stack.Types.emptyCallStack
+                                    `cast` (Sym (GHC.Classes.N:IP[0]
+                                                     <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                            :: GHC.Stack.Types.CallStack
+                                               ~R# (?callStack::GHC.Stack.Types.CallStack))}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$c<*>_a5LJ <= <*>_a5LK
+               wrap: <>]
+   Exported types: $c<*>_a5LJ :: forall a b. Q (a -> b) -> Q a -> Q b
+                   [LclId]
+   Binds: AbsBinds [a_a5LL, b_a5LM] []
+            {Exports: [<*>_a5LK <= <*>_a5LN
+                         wrap: <>]
+             Exported types: <*>_a5LK :: forall a b. Q (a -> b) -> Q a -> Q b
+                             [LclId]
+             Binds: (<*>_a5LN)
+                      = undefined @ 'GHC.Types.LiftedRep
+                        @ (Q (a_a5LL -> b_a5LM) -> Q a_a5LL -> Q b_a5LM)
+                          $dIP_a5LQ
+             Evidence: [EvBinds{[W] $dIP_a5LQ
+                                  = (GHC.Stack.Types.pushCallStack
+                                       (GHC.CString.unpackCString# "undefined"#,
+                                        GHC.Stack.Types.SrcLoc
+                                          (GHC.CString.unpackCString# "main"#)
+                                          (GHC.CString.unpackCString# "FDB.GADTForall"#)
+                                          (GHC.CString.unpackCString# "./FDB/GADTForall.hs"#)
+                                          (GHC.Types.I# 82#)
+                                          (GHC.Types.I# 11#)
+                                          (GHC.Types.I# 82#)
+                                          (GHC.Types.I# 20#))
+                                       ($dIP_a5NV
+                                        `cast` (GHC.Classes.N:IP[0]
+                                                    <"callStack">_N <GHC.Stack.Types.CallStack>_N
+                                                :: (?callStack::GHC.Stack.Types.CallStack)
+                                                   ~R# GHC.Stack.Types.CallStack)))
+                                    `cast` (Sym (GHC.Classes.N:IP[0]
+                                                     <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                            :: GHC.Stack.Types.CallStack
+                                               ~R# (?callStack::GHC.Stack.Types.CallStack))
+                                [W] $dIP_a5NV
+                                  = GHC.Stack.Types.emptyCallStack
+                                    `cast` (Sym (GHC.Classes.N:IP[0]
+                                                     <"callStack">_N <GHC.Stack.Types.CallStack>_N)
+                                            :: GHC.Stack.Types.CallStack
+                                               ~R# (?callStack::GHC.Stack.Types.CallStack))}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$cliftA2_a5LT <= liftA2_a5LU
+               wrap: <>]
+   Exported types: $cliftA2_a5LT
+                     :: forall a b c. (a -> b -> c) -> Q a -> Q b -> Q c
+                   [LclId]
+   Binds: AbsBinds [a_a5LV, b_a5LW, c_a5LX] []
+            {Exports: [liftA2_a5LU <= liftA2_a5LY
+                         wrap: <>]
+             Exported types: liftA2_a5LU
+                               :: forall a b c. (a -> b -> c) -> Q a -> Q b -> Q c
+                             [LclId]
+             Binds: liftA2_a5LY
+                      = GHC.Base.$dmliftA2 @ Q @(Q) $dApplicative_a5M0 @ a_a5LV @ b_a5LW
+                        @ c_a5LX
+             Evidence: [EvBinds{[W] $dApplicative_a5M0
+                                  = FDB.GADTForall.$fApplicativeQ}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$c*>_a5M6 <= *>_a5M7
+               wrap: <>]
+   Exported types: $c*>_a5M6 :: forall a b. Q a -> Q b -> Q b
+                   [LclId]
+   Binds: AbsBinds [a_a5M8, b_a5M9] []
+            {Exports: [*>_a5M7 <= *>_a5Ma
+                         wrap: <>]
+             Exported types: *>_a5M7 :: forall a b. Q a -> Q b -> Q b
+                             [LclId]
+             Binds: (*>_a5Ma)
+                      = GHC.Base.$dm*> @ Q @(Q) $dApplicative_a5Mc @ a_a5M8 @ b_a5M9
+             Evidence: [EvBinds{[W] $dApplicative_a5Mc
+                                  = FDB.GADTForall.$fApplicativeQ}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$c<*_a5Mh <= <*_a5Mi
+               wrap: <>]
+   Exported types: $c<*_a5Mh :: forall a b. Q a -> Q b -> Q a
+                   [LclId]
+   Binds: AbsBinds [a_a5Mj, b_a5Mk] []
+            {Exports: [<*_a5Mi <= <*_a5Ml
+                         wrap: <>]
+             Exported types: <*_a5Mi :: forall a b. Q a -> Q b -> Q a
+                             [LclId]
+             Binds: (<*_a5Ml)
+                      = GHC.Base.$dm<* @ Q @(Q) $dApplicative_a5Mn @ a_a5Mj @ b_a5Mk
+             Evidence: [EvBinds{[W] $dApplicative_a5Mn
+                                  = FDB.GADTForall.$fApplicativeQ}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [FDB.GADTForall.$fFunctorQ <= $dFunctor_a5MN
+               wrap: <>]
+   Exported types: FDB.GADTForall.$fFunctorQ [InlPrag=NOUSERINLINE CONLIKE]
+                     :: Functor Q
+                   [LclIdX[DFunId],
+                    Unf=DFun: \ -> GHC.Base.C:Functor TYPE: Q $cfmap_a5Mu $c<$_a5MC]
+   Binds: $dFunctor_a5MN
+            = GHC.Base.C:Functor @ Q $cfmap_a5Mu $c<$_a5MC
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$cfmap_a5Mu <= fmap_a5Mv
+               wrap: <>]
+   Exported types: $cfmap_a5Mu :: forall a b. (a -> b) -> Q a -> Q b
+                   [LclId]
+   Binds: AbsBinds [a_a5Mw, b_a5Mx] []
+            {Exports: [fmap_a5Mv <= fmap_a5My
+                         wrap: <>]
+             Exported types: fmap_a5Mv :: forall a b. (a -> b) -> Q a -> Q b
+                             [LclId]
+             Binds: fmap_a5My = Map @ a_a5Mw @ b_a5Mx
+             Evidence: [EvBinds{}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$c<$_a5MC <= <$_a5MD
+               wrap: <>]
+   Exported types: $c<$_a5MC :: forall a b. a -> Q b -> Q a
+                   [LclId]
+   Binds: AbsBinds [a_a5ME, b_a5MF] []
+            {Exports: [<$_a5MD <= <$_a5MG
+                         wrap: <>]
+             Exported types: <$_a5MD :: forall a b. a -> Q b -> Q a
+                             [LclId]
+             Binds: (<$_a5MG)
+                      = GHC.Base.$dm<$ @ Q @(Q) $dFunctor_a5MI @ a_a5ME @ b_a5MF
+             Evidence: [EvBinds{[W] $dFunctor_a5MI
+                                  = FDB.GADTForall.$fFunctorQ}]}
+   Evidence: [EvBinds{}]}
+
+[7 of 8] Compiling FDB.FDB          ( FDB/FDB.hs, FDB/FDB.o )
+TYPE SIGNATURES
+TYPE CONSTRUCTORS
+COERCION AXIOMS
+Dependent modules: [(FDB.GADTForall, False), (FDB.Utils, False),
+                    (Utils.AbstractGraph, False), (Utils.List, False),
+                    (Utils.Prelude, False)]
+Dependent packages: [array-0.5.3.0, base-4.12.0.0,
+                     containers-0.6.0.1, deepseq-1.4.4.0, ghc-prim-0.5.3,
+                     integer-gmp-1.0.2.0]
+
+==================== Typechecker ====================
+FDB.FDB.$trModule
+  = GHC.Types.Module
+      (GHC.Types.TrNameS "main"#) (GHC.Types.TrNameS "FDB.FDB"#)
+
+[8 of 8] Compiling TPCH.Functional.Schema ( ghc-dumps/../TPCH/Functional/Schema.hs, ghc-dumps/../TPCH/Functional/Schema.o )
+TYPE SIGNATURES
+  TPCH.Functional.Schema.Customer ::
+    String
+    -> String
+    -> Nation
+    -> PhoneNumber
+    -> Decimal
+    -> String
+    -> String
+    -> Customer
+  TPCH.Functional.Schema.EMEA :: Region
+  TPCH.Functional.Schema.France :: Nation
+  TPCH.Functional.Schema.Germany :: Nation
+  TPCH.Functional.Schema.LineItem ::
+    TableRef Order
+    -> TableRef Part
+    -> TableRef Supplier
+    -> Int
+    -> Decimal
+    -> Decimal
+    -> Decimal
+    -> Decimal
+    -> Char
+    -> Char
+    -> Date
+    -> Date
+    -> Date
+    -> String
+    -> String
+    -> String
+    -> LineItem
+  TPCH.Functional.Schema.Order ::
+    TableRef Customer
+    -> Char
+    -> Decimal
+    -> Date
+    -> String
+    -> String
+    -> Int
+    -> String
+    -> Order
+  TPCH.Functional.Schema.Part ::
+    String
+    -> String
+    -> String
+    -> String
+    -> Int
+    -> String
+    -> Decimal
+    -> String
+    -> Part
+  TPCH.Functional.Schema.PartSupp ::
+    TableRef Part
+    -> TableRef Supplier -> Int -> Decimal -> String -> PartSupp
+  TPCH.Functional.Schema.Supplier ::
+    String
+    -> String -> Nation -> PhoneNumber -> Decimal -> String -> Supplier
+  allNations :: [Nation]
+  allRegions :: [Region]
+  c_acctbal :: Customer -> Decimal
+  c_address :: Customer -> String
+  c_comment :: Customer -> String
+  c_mktsegment :: Customer -> String
+  c_name :: Customer -> String
+  c_nation :: Customer -> Nation
+  c_phone :: Customer -> PhoneNumber
+  customers :: Table Customer
+  findRegion :: String -> Region
+  l_comment :: LineItem -> String
+  l_commitdate :: LineItem -> Date
+  l_discount :: LineItem -> Decimal
+  l_extendedprice :: LineItem -> Decimal
+  l_linenumber :: LineItem -> Int
+  l_linestatus :: LineItem -> Char
+  l_orderref :: LineItem -> TableRef Order
+  l_partref :: LineItem -> TableRef Part
+  l_quantity :: LineItem -> Decimal
+  l_receiptdate :: LineItem -> Date
+  l_returnflag :: LineItem -> Char
+  l_shipdate :: LineItem -> Date
+  l_shipinstruct :: LineItem -> String
+  l_shipmode :: LineItem -> String
+  l_suppref :: LineItem -> TableRef Supplier
+  l_tax :: LineItem -> Decimal
+  lineitems :: Table LineItem
+  n_comment :: Nation -> String
+  n_name :: Nation -> String
+  n_region :: Nation -> Region
+  nationsIn :: Region -> [Nation]
+  o_clerk :: Order -> String
+  o_comment :: Order -> String
+  o_custref :: Order -> TableRef Customer
+  o_orderdate :: Order -> Date
+  o_orderpriority :: Order -> String
+  o_orderstatus :: Order -> Char
+  o_shippriority :: Order -> Int
+  o_totalprice :: Order -> Decimal
+  orders :: Table Order
+  p_brand :: Part -> String
+  p_comment :: Part -> String
+  p_container :: Part -> String
+  p_mfgr :: Part -> String
+  p_name :: Part -> String
+  p_retailprice :: Part -> Decimal
+  p_size :: Part -> Int
+  p_type :: Part -> String
+  parts :: Table Part
+  partsupps :: Table PartSupp
+  ps_availqty :: PartSupp -> Int
+  ps_comment :: PartSupp -> String
+  ps_partref :: PartSupp -> TableRef Part
+  ps_supplycost :: PartSupp -> Decimal
+  ps_suppref :: PartSupp -> TableRef Supplier
+  r_comment :: Region -> String
+  r_name :: Region -> String
+  s_acctbal :: Supplier -> Decimal
+  s_address :: Supplier -> String
+  s_comment :: Supplier -> String
+  s_name :: Supplier -> String
+  s_nation :: Supplier -> Nation
+  s_phone :: Supplier -> PhoneNumber
+  suppliers :: Table Supplier
+TYPE CONSTRUCTORS
+  data Customer
+    = Customer {c_name :: String,
+                c_address :: String,
+                c_nation :: Nation,
+                c_phone :: PhoneNumber,
+                c_acctbal :: Decimal,
+                c_mktsegment :: String,
+                c_comment :: String}
+  data LineItem
+    = LineItem {l_orderref :: TableRef Order,
+                l_partref :: TableRef Part,
+                l_suppref :: TableRef Supplier,
+                l_linenumber :: Int,
+                l_quantity :: Decimal,
+                l_extendedprice :: Decimal,
+                l_discount :: Decimal,
+                l_tax :: Decimal,
+                l_returnflag :: Char,
+                l_linestatus :: Char,
+                l_shipdate :: Date,
+                l_commitdate :: Date,
+                l_receiptdate :: Date,
+                l_shipinstruct :: String,
+                l_shipmode :: String,
+                l_comment :: String}
+  data Nation = France | Germany
+  data Order
+    = Order {o_custref :: TableRef Customer,
+             o_orderstatus :: Char,
+             o_totalprice :: Decimal,
+             o_orderdate :: Date,
+             o_orderpriority :: String,
+             o_clerk :: String,
+             o_shippriority :: Int,
+             o_comment :: String}
+  data Part
+    = Part {p_name :: String,
+            p_mfgr :: String,
+            p_brand :: String,
+            p_type :: String,
+            p_size :: Int,
+            p_container :: String,
+            p_retailprice :: Decimal,
+            p_comment :: String}
+  data PartSupp
+    = PartSupp {ps_partref :: TableRef Part,
+                ps_suppref :: TableRef Supplier,
+                ps_availqty :: Int,
+                ps_supplycost :: Decimal,
+                ps_comment :: String}
+  data Region = EMEA
+  data Supplier
+    = Supplier {s_name :: String,
+                s_address :: String,
+                s_nation :: Nation,
+                s_phone :: PhoneNumber,
+                s_acctbal :: Decimal,
+                s_comment :: String}
+COERCION AXIOMS
+INSTANCES
+  instance Eq Region
+    -- Defined at ghc-dumps/../TPCH/Functional/Schema.hs:119:12
+  instance Eq Nation
+    -- Defined at ghc-dumps/../TPCH/Functional/Schema.hs:102:12
+Dependent modules: [(FDB.FDB, False), (FDB.GADTForall, False),
+                    (FDB.MoreTypes, False), (FDB.Utils, False),
+                    (Utils.AbstractGraph, False), (Utils.List, False),
+                    (Utils.Prelude, False)]
+Dependent packages: [array-0.5.3.0, base-4.12.0.0,
+                     containers-0.6.0.1, deepseq-1.4.4.0, ghc-prim-0.5.3,
+                     integer-gmp-1.0.2.0]
+
+==================== Typechecker ====================
+TPCH.Functional.Schema.$tcRegion
+  = GHC.Types.TyCon
+      17005900331151520450##
+      2933480038519603125##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "Region"#)
+      0
+      GHC.Types.krep$*
+TPCH.Functional.Schema.$tc'EMEA
+  = GHC.Types.TyCon
+      8266201620596383484##
+      3675984000706788314##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "'EMEA"#)
+      0
+      $krep_a6Rc
+TPCH.Functional.Schema.$tcPartSupp
+  = GHC.Types.TyCon
+      10849560314591573693##
+      11581864324186551291##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "PartSupp"#)
+      0
+      GHC.Types.krep$*
+TPCH.Functional.Schema.$tc'PartSupp
+  = GHC.Types.TyCon
+      10754361947780373833##
+      14007972955674632504##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "'PartSupp"#)
+      0
+      $krep_a6Rd
+TPCH.Functional.Schema.$tcLineItem
+  = GHC.Types.TyCon
+      4413522648051142635##
+      4580059422389727633##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "LineItem"#)
+      0
+      GHC.Types.krep$*
+TPCH.Functional.Schema.$tc'LineItem
+  = GHC.Types.TyCon
+      8539620922902222438##
+      9565303329789687194##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "'LineItem"#)
+      0
+      $krep_a6Rr
+TPCH.Functional.Schema.$tcSupplier
+  = GHC.Types.TyCon
+      5537664870048215054##
+      6807973368023935809##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "Supplier"#)
+      0
+      GHC.Types.krep$*
+TPCH.Functional.Schema.$tc'Supplier
+  = GHC.Types.TyCon
+      3112581097731694837##
+      5980504949697491730##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "'Supplier"#)
+      0
+      $krep_a6RL
+TPCH.Functional.Schema.$tcOrder
+  = GHC.Types.TyCon
+      10277513951169694645##
+      16962993689770346345##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "Order"#)
+      0
+      GHC.Types.krep$*
+TPCH.Functional.Schema.$tc'Order
+  = GHC.Types.TyCon
+      13153087065208477111##
+      17701592658522406836##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "'Order"#)
+      0
+      $krep_a6RS
+TPCH.Functional.Schema.$tcCustomer
+  = GHC.Types.TyCon
+      7146533123847939809##
+      6452800127542812900##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "Customer"#)
+      0
+      GHC.Types.krep$*
+TPCH.Functional.Schema.$tc'Customer
+  = GHC.Types.TyCon
+      14764552819634216928##
+      6068166705854968441##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "'Customer"#)
+      0
+      $krep_a6S2
+TPCH.Functional.Schema.$tcNation
+  = GHC.Types.TyCon
+      10710764971294019521##
+      2958077427421035359##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "Nation"#)
+      0
+      GHC.Types.krep$*
+TPCH.Functional.Schema.$tc'France
+  = GHC.Types.TyCon
+      15209813697351554211##
+      883766417185207263##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "'France"#)
+      0
+      $krep_a6RO
+TPCH.Functional.Schema.$tc'Germany
+  = GHC.Types.TyCon
+      1372385427742964851##
+      11954998232734438622##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "'Germany"#)
+      0
+      $krep_a6RO
+TPCH.Functional.Schema.$tcPart
+  = GHC.Types.TyCon
+      12636939280764832122##
+      2042036841775798596##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "Part"#)
+      0
+      GHC.Types.krep$*
+TPCH.Functional.Schema.$tc'Part
+  = GHC.Types.TyCon
+      2861360684592645105##
+      14440751847480628405##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "'Part"#)
+      0
+      $krep_a6S9
+$krep_a6Rg [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rh $krep_a6Rj
+$krep_a6Rv [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rh $krep_a6Rw
+$krep_a6Rd [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Re $krep_a6Rg
+$krep_a6Ru [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Re $krep_a6Rv
+$krep_a6Rr [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rs $krep_a6Ru
+$krep_a6RS [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6RT $krep_a6RV
+$krep_a6S9 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6Sa
+$krep_a6Sa [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6Sb
+$krep_a6RH [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6RI
+$krep_a6S2 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6S3
+$krep_a6RL [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6RM
+$krep_a6Sb [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6Sc
+$krep_a6RY [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6RZ
+$krep_a6RI [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6RJ
+$krep_a6S7 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6S8
+$krep_a6S3 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6S4
+$krep_a6RM [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6RN
+$krep_a6Se [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6Sf
+$krep_a6Sc [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6Sd
+$krep_a6RZ [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6S0
+$krep_a6Rn [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6Rq
+$krep_a6RJ [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6RK
+$krep_a6RR [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6Ri
+$krep_a6S1 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6Rt
+$krep_a6S8 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6RU
+$krep_a6Sg [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6Rf
+$krep_a6RC [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rp $krep_a6RD
+$krep_a6RB [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rp $krep_a6RC
+$krep_a6RV [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rp $krep_a6RW
+$krep_a6RG [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6RE $krep_a6RH
+$krep_a6RX [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6RE $krep_a6RY
+$krep_a6RF [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6RE $krep_a6RG
+$krep_a6RD [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6RE $krep_a6RF
+$krep_a6S5 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6RE $krep_a6S6
+$krep_a6RP [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6RE $krep_a6RQ
+$krep_a6S4 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6RO $krep_a6S5
+$krep_a6RN [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6RO $krep_a6RP
+$krep_a6S6 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rm $krep_a6S7
+$krep_a6Rl [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rm $krep_a6Rn
+$krep_a6RQ [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rm $krep_a6RR
+$krep_a6Sf [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rm $krep_a6Sg
+$krep_a6RA [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rm $krep_a6RB
+$krep_a6Rz [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rm $krep_a6RA
+$krep_a6Ry [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rm $krep_a6Rz
+$krep_a6Rx [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rm $krep_a6Ry
+$krep_a6RW [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rm $krep_a6RX
+$krep_a6Sd [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rk $krep_a6Se
+$krep_a6S0 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rk $krep_a6S1
+$krep_a6Rj [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rk $krep_a6Rl
+$krep_a6Rw [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rk $krep_a6Rx
+$krep_a6Ro [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      GHC.Types.$tc[]
+      ((:) @ GHC.Types.KindRep $krep_a6Rp [] @ GHC.Types.KindRep)
+$krep_a6Re [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcRowRef
+      ((:) @ GHC.Types.KindRep $krep_a6Rf [] @ GHC.Types.KindRep)
+$krep_a6Rh [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcRowRef
+      ((:) @ GHC.Types.KindRep $krep_a6Ri [] @ GHC.Types.KindRep)
+$krep_a6Rs [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcRowRef
+      ((:) @ GHC.Types.KindRep $krep_a6Rt [] @ GHC.Types.KindRep)
+$krep_a6RT [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcRowRef
+      ((:) @ GHC.Types.KindRep $krep_a6RU [] @ GHC.Types.KindRep)
+$krep_a6Rc [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      TPCH.Functional.Schema.$tcRegion [] @ GHC.Types.KindRep
+$krep_a6Rf [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      TPCH.Functional.Schema.$tcPart [] @ GHC.Types.KindRep
+$krep_a6Ri [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      TPCH.Functional.Schema.$tcSupplier [] @ GHC.Types.KindRep
+$krep_a6Rk [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp GHC.Types.$tcInt [] @ GHC.Types.KindRep
+$krep_a6Rm [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      GHC.Types.$tcDouble [] @ GHC.Types.KindRep
+$krep_a6Rp [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      GHC.Types.$tcChar [] @ GHC.Types.KindRep
+$krep_a6Rq [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      TPCH.Functional.Schema.$tcPartSupp [] @ GHC.Types.KindRep
+$krep_a6Rt [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      TPCH.Functional.Schema.$tcOrder [] @ GHC.Types.KindRep
+$krep_a6RE [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp GHC.Tuple.$tc() [] @ GHC.Types.KindRep
+$krep_a6RK [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      TPCH.Functional.Schema.$tcLineItem [] @ GHC.Types.KindRep
+$krep_a6RO [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      TPCH.Functional.Schema.$tcNation [] @ GHC.Types.KindRep
+$krep_a6RU [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      TPCH.Functional.Schema.$tcCustomer [] @ GHC.Types.KindRep
+TPCH.Functional.Schema.$trModule
+  = GHC.Types.Module
+      (GHC.Types.TrNameS "main"#)
+      (GHC.Types.TrNameS "TPCH.Functional.Schema"#)
+AbsBinds [] []
+  {Exports: [nationsIn <= nationsIn_a6PC
+               wrap: <>]
+   Exported types: nationsIn :: Region -> [Nation]
+                   [LclId]
+   Binds: nationsIn_a6PC
+            = undefined @ 'GHC.Types.LiftedRep @ (Region -> [Nation]) $dIP_a6PF
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [findRegion <= findRegion_a6PG
+               wrap: <>]
+   Exported types: findRegion :: String -> Region
+                   [LclId]
+   Binds: findRegion_a6PG
+            = undefined @ 'GHC.Types.LiftedRep @ (String -> Region) $dIP_a6PJ
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [allRegions <= allRegions_a6PK
+               wrap: <>]
+   Exported types: allRegions :: [Region]
+                   [LclId]
+   Binds: allRegions_a6PK
+            = undefined @ 'GHC.Types.LiftedRep @ [Region] $dIP_a6PN
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [r_comment <= r_comment_a6PO
+               wrap: <>]
+   Exported types: r_comment :: Region -> String
+                   [LclId]
+   Binds: r_comment_a6PO
+            = undefined @ 'GHC.Types.LiftedRep @ (Region -> String) $dIP_a6PR
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [r_name <= r_name_a6PS
+               wrap: <>]
+   Exported types: r_name :: Region -> String
+                   [LclId]
+   Binds: r_name_a6PS
+            = undefined @ 'GHC.Types.LiftedRep @ (Region -> String) $dIP_a6PV
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [allNations <= allNations_a6PW
+               wrap: <>]
+   Exported types: allNations :: [Nation]
+                   [LclId]
+   Binds: allNations_a6PW
+            = undefined @ 'GHC.Types.LiftedRep @ [Nation] $dIP_a6PZ
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [n_comment <= n_comment_a6Q0
+               wrap: <>]
+   Exported types: n_comment :: Nation -> String
+                   [LclId]
+   Binds: n_comment_a6Q0
+            = undefined @ 'GHC.Types.LiftedRep @ (Nation -> String) $dIP_a6Q3
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [n_region <= n_region_a6Q4
+               wrap: <>]
+   Exported types: n_region :: Nation -> Region
+                   [LclId]
+   Binds: n_region_a6Q4
+            = undefined @ 'GHC.Types.LiftedRep @ (Nation -> Region) $dIP_a6Q7
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [n_name <= n_name_a6Q8
+               wrap: <>]
+   Exported types: n_name :: Nation -> String
+                   [LclId]
+   Binds: n_name_a6Q8
+            = undefined @ 'GHC.Types.LiftedRep @ (Nation -> String) $dIP_a6Qb
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [lineitems <= lineitems_a6Qc
+               wrap: <>]
+   Exported types: lineitems :: Table LineItem
+                   [LclId]
+   Binds: lineitems_a6Qc = findTable @ LineItem "LineItems"
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [orders <= orders_a6Qe
+               wrap: <>]
+   Exported types: orders :: Table Order
+                   [LclId]
+   Binds: orders_a6Qe
+            = undefined @ 'GHC.Types.LiftedRep @ (Table Order) $dIP_a6Qh
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [customers <= customers_a6Qi
+               wrap: <>]
+   Exported types: customers :: Table Customer
+                   [LclId]
+   Binds: customers_a6Qi
+            = undefined @ 'GHC.Types.LiftedRep @ (Table Customer) $dIP_a6Ql
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [partsupps <= partsupps_a6Qm
+               wrap: <>]
+   Exported types: partsupps :: Table PartSupp
+                   [LclId]
+   Binds: partsupps_a6Qm
+            = undefined @ 'GHC.Types.LiftedRep @ (Table PartSupp) $dIP_a6Qp
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [suppliers <= suppliers_a6Qq
+               wrap: <>]
+   Exported types: suppliers :: Table Supplier
+                   [LclId]
+   Binds: suppliers_a6Qq
+            = undefined @ 'GHC.Types.LiftedRep @ (Table Supplier) $dIP_a6Qt
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [parts <= parts_a6Qu
+               wrap: <>]
+   Exported types: parts :: Table Part
+                   [LclId]
+   Binds: parts_a6Qu
+            = undefined @ 'GHC.Types.LiftedRep @ (Table Part) $dIP_a6Qx
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [ps_partref <= ps_partref_a6No
+               wrap: <>]
+   Exported types: ps_partref :: PartSupp -> TableRef Part
+                   [LclIdX[[RecSel]]]
+   Binds: ps_partref_a6No
+            PartSupp{EvBinds{}} {ps_partref = ps_partref_B1}
+            = ps_partref_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [ps_suppref <= ps_suppref_a6Np
+               wrap: <>]
+   Exported types: ps_suppref :: PartSupp -> TableRef Supplier
+                   [LclIdX[[RecSel]]]
+   Binds: ps_suppref_a6Np
+            PartSupp{EvBinds{}} {ps_suppref = ps_suppref_B1}
+            = ps_suppref_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [ps_availqty <= ps_availqty_a6Nq
+               wrap: <>]
+   Exported types: ps_availqty :: PartSupp -> Int
+                   [LclIdX[[RecSel]]]
+   Binds: ps_availqty_a6Nq
+            PartSupp{EvBinds{}} {ps_availqty = ps_availqty_B1}
+            = ps_availqty_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [ps_supplycost <= ps_supplycost_a6Nr
+               wrap: <>]
+   Exported types: ps_supplycost :: PartSupp -> Decimal
+                   [LclIdX[[RecSel]]]
+   Binds: ps_supplycost_a6Nr
+            PartSupp{EvBinds{}} {ps_supplycost = ps_supplycost_B1}
+            = ps_supplycost_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [ps_comment <= ps_comment_a6Ns
+               wrap: <>]
+   Exported types: ps_comment :: PartSupp -> String
+                   [LclIdX[[RecSel]]]
+   Binds: ps_comment_a6Ns
+            PartSupp{EvBinds{}} {ps_comment = ps_comment_B1}
+            = ps_comment_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [l_orderref <= l_orderref_a6MO
+               wrap: <>]
+   Exported types: l_orderref :: LineItem -> TableRef Order
+                   [LclIdX[[RecSel]]]
+   Binds: l_orderref_a6MO
+            LineItem{EvBinds{}} {l_orderref = l_orderref_B1}
+            = l_orderref_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [l_partref <= l_partref_a6MP
+               wrap: <>]
+   Exported types: l_partref :: LineItem -> TableRef Part
+                   [LclIdX[[RecSel]]]
+   Binds: l_partref_a6MP
+            LineItem{EvBinds{}} {l_partref = l_partref_B1}
+            = l_partref_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [l_suppref <= l_suppref_a6MQ
+               wrap: <>]
+   Exported types: l_suppref :: LineItem -> TableRef Supplier
+                   [LclIdX[[RecSel]]]
+   Binds: l_suppref_a6MQ
+            LineItem{EvBinds{}} {l_suppref = l_suppref_B1}
+            = l_suppref_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [l_linenumber <= l_linenumber_a6MR
+               wrap: <>]
+   Exported types: l_linenumber :: LineItem -> Int
+                   [LclIdX[[RecSel]]]
+   Binds: l_linenumber_a6MR
+            LineItem{EvBinds{}} {l_linenumber = l_linenumber_B1}
+            = l_linenumber_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [l_quantity <= l_quantity_a6MS
+               wrap: <>]
+   Exported types: l_quantity :: LineItem -> Decimal
+                   [LclIdX[[RecSel]]]
+   Binds: l_quantity_a6MS
+            LineItem{EvBinds{}} {l_quantity = l_quantity_B1}
+            = l_quantity_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [l_extendedprice <= l_extendedprice_a6MT
+               wrap: <>]
+   Exported types: l_extendedprice :: LineItem -> Decimal
+                   [LclIdX[[RecSel]]]
+   Binds: l_extendedprice_a6MT
+            LineItem{EvBinds{}} {l_extendedprice = l_extendedprice_B1}
+            = l_extendedprice_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [l_discount <= l_discount_a6MU
+               wrap: <>]
+   Exported types: l_discount :: LineItem -> Decimal
+                   [LclIdX[[RecSel]]]
+   Binds: l_discount_a6MU
+            LineItem{EvBinds{}} {l_discount = l_discount_B1}
+            = l_discount_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [l_tax <= l_tax_a6MV
+               wrap: <>]
+   Exported types: l_tax :: LineItem -> Decimal
+                   [LclIdX[[RecSel]]]
+   Binds: l_tax_a6MV LineItem{EvBinds{}} {l_tax = l_tax_B1} = l_tax_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [l_returnflag <= l_returnflag_a6MW
+               wrap: <>]
+   Exported types: l_returnflag :: LineItem -> Char
+                   [LclIdX[[RecSel]]]
+   Binds: l_returnflag_a6MW
+            LineItem{EvBinds{}} {l_returnflag = l_returnflag_B1}
+            = l_returnflag_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [l_linestatus <= l_linestatus_a6MX
+               wrap: <>]
+   Exported types: l_linestatus :: LineItem -> Char
+                   [LclIdX[[RecSel]]]
+   Binds: l_linestatus_a6MX
+            LineItem{EvBinds{}} {l_linestatus = l_linestatus_B1}
+            = l_linestatus_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [l_shipdate <= l_shipdate_a6MY
+               wrap: <>]
+   Exported types: l_shipdate :: LineItem -> Date
+                   [LclIdX[[RecSel]]]
+   Binds: l_shipdate_a6MY
+            LineItem{EvBinds{}} {l_shipdate = l_shipdate_B1}
+            = l_shipdate_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [l_commitdate <= l_commitdate_a6MZ
+               wrap: <>]
+   Exported types: l_commitdate :: LineItem -> Date
+                   [LclIdX[[RecSel]]]
+   Binds: l_commitdate_a6MZ
+            LineItem{EvBinds{}} {l_commitdate = l_commitdate_B1}
+            = l_commitdate_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [l_receiptdate <= l_receiptdate_a6N0
+               wrap: <>]
+   Exported types: l_receiptdate :: LineItem -> Date
+                   [LclIdX[[RecSel]]]
+   Binds: l_receiptdate_a6N0
+            LineItem{EvBinds{}} {l_receiptdate = l_receiptdate_B1}
+            = l_receiptdate_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [l_shipinstruct <= l_shipinstruct_a6N1
+               wrap: <>]
+   Exported types: l_shipinstruct :: LineItem -> String
+                   [LclIdX[[RecSel]]]
+   Binds: l_shipinstruct_a6N1
+            LineItem{EvBinds{}} {l_shipinstruct = l_shipinstruct_B1}
+            = l_shipinstruct_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [l_shipmode <= l_shipmode_a6N2
+               wrap: <>]
+   Exported types: l_shipmode :: LineItem -> String
+                   [LclIdX[[RecSel]]]
+   Binds: l_shipmode_a6N2
+            LineItem{EvBinds{}} {l_shipmode = l_shipmode_B1}
+            = l_shipmode_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [l_comment <= l_comment_a6N3
+               wrap: <>]
+   Exported types: l_comment :: LineItem -> String
+                   [LclIdX[[RecSel]]]
+   Binds: l_comment_a6N3
+            LineItem{EvBinds{}} {l_comment = l_comment_B1}
+            = l_comment_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [s_name <= s_name_a6Md
+               wrap: <>]
+   Exported types: s_name :: Supplier -> String
+                   [LclIdX[[RecSel]]]
+   Binds: s_name_a6Md Supplier{EvBinds{}} {s_name = s_name_B1}
+            = s_name_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [s_address <= s_address_a6Me
+               wrap: <>]
+   Exported types: s_address :: Supplier -> String
+                   [LclIdX[[RecSel]]]
+   Binds: s_address_a6Me
+            Supplier{EvBinds{}} {s_address = s_address_B1}
+            = s_address_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [s_nation <= s_nation_a6Mf
+               wrap: <>]
+   Exported types: s_nation :: Supplier -> Nation
+                   [LclIdX[[RecSel]]]
+   Binds: s_nation_a6Mf Supplier{EvBinds{}} {s_nation = s_nation_B1}
+            = s_nation_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [s_phone <= s_phone_a6Mg
+               wrap: <>]
+   Exported types: s_phone :: Supplier -> PhoneNumber
+                   [LclIdX[[RecSel]]]
+   Binds: s_phone_a6Mg Supplier{EvBinds{}} {s_phone = s_phone_B1}
+            = s_phone_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [s_acctbal <= s_acctbal_a6Mh
+               wrap: <>]
+   Exported types: s_acctbal :: Supplier -> Decimal
+                   [LclIdX[[RecSel]]]
+   Binds: s_acctbal_a6Mh
+            Supplier{EvBinds{}} {s_acctbal = s_acctbal_B1}
+            = s_acctbal_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [s_comment <= s_comment_a6Mi
+               wrap: <>]
+   Exported types: s_comment :: Supplier -> String
+                   [LclIdX[[RecSel]]]
+   Binds: s_comment_a6Mi
+            Supplier{EvBinds{}} {s_comment = s_comment_B1}
+            = s_comment_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [o_custref <= o_custref_a6LK
+               wrap: <>]
+   Exported types: o_custref :: Order -> TableRef Customer
+                   [LclIdX[[RecSel]]]
+   Binds: o_custref_a6LK Order{EvBinds{}} {o_custref = o_custref_B1}
+            = o_custref_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [o_orderstatus <= o_orderstatus_a6LL
+               wrap: <>]
+   Exported types: o_orderstatus :: Order -> Char
+                   [LclIdX[[RecSel]]]
+   Binds: o_orderstatus_a6LL
+            Order{EvBinds{}} {o_orderstatus = o_orderstatus_B1}
+            = o_orderstatus_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [o_totalprice <= o_totalprice_a6LM
+               wrap: <>]
+   Exported types: o_totalprice :: Order -> Decimal
+                   [LclIdX[[RecSel]]]
+   Binds: o_totalprice_a6LM
+            Order{EvBinds{}} {o_totalprice = o_totalprice_B1}
+            = o_totalprice_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [o_orderdate <= o_orderdate_a6LN
+               wrap: <>]
+   Exported types: o_orderdate :: Order -> Date
+                   [LclIdX[[RecSel]]]
+   Binds: o_orderdate_a6LN
+            Order{EvBinds{}} {o_orderdate = o_orderdate_B1}
+            = o_orderdate_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [o_orderpriority <= o_orderpriority_a6LO
+               wrap: <>]
+   Exported types: o_orderpriority :: Order -> String
+                   [LclIdX[[RecSel]]]
+   Binds: o_orderpriority_a6LO
+            Order{EvBinds{}} {o_orderpriority = o_orderpriority_B1}
+            = o_orderpriority_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [o_clerk <= o_clerk_a6LP
+               wrap: <>]
+   Exported types: o_clerk :: Order -> String
+                   [LclIdX[[RecSel]]]
+   Binds: o_clerk_a6LP Order{EvBinds{}} {o_clerk = o_clerk_B1}
+            = o_clerk_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [o_shippriority <= o_shippriority_a6LQ
+               wrap: <>]
+   Exported types: o_shippriority :: Order -> Int
+                   [LclIdX[[RecSel]]]
+   Binds: o_shippriority_a6LQ
+            Order{EvBinds{}} {o_shippriority = o_shippriority_B1}
+            = o_shippriority_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [o_comment <= o_comment_a6LR
+               wrap: <>]
+   Exported types: o_comment :: Order -> String
+                   [LclIdX[[RecSel]]]
+   Binds: o_comment_a6LR Order{EvBinds{}} {o_comment = o_comment_B1}
+            = o_comment_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [c_name <= c_name_a6Lg
+               wrap: <>]
+   Exported types: c_name :: Customer -> String
+                   [LclIdX[[RecSel]]]
+   Binds: c_name_a6Lg Customer{EvBinds{}} {c_name = c_name_B1}
+            = c_name_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [c_address <= c_address_a6Lh
+               wrap: <>]
+   Exported types: c_address :: Customer -> String
+                   [LclIdX[[RecSel]]]
+   Binds: c_address_a6Lh
+            Customer{EvBinds{}} {c_address = c_address_B1}
+            = c_address_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [c_nation <= c_nation_a6Li
+               wrap: <>]
+   Exported types: c_nation :: Customer -> Nation
+                   [LclIdX[[RecSel]]]
+   Binds: c_nation_a6Li Customer{EvBinds{}} {c_nation = c_nation_B1}
+            = c_nation_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [c_phone <= c_phone_a6Lj
+               wrap: <>]
+   Exported types: c_phone :: Customer -> PhoneNumber
+                   [LclIdX[[RecSel]]]
+   Binds: c_phone_a6Lj Customer{EvBinds{}} {c_phone = c_phone_B1}
+            = c_phone_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [c_acctbal <= c_acctbal_a6Lk
+               wrap: <>]
+   Exported types: c_acctbal :: Customer -> Decimal
+                   [LclIdX[[RecSel]]]
+   Binds: c_acctbal_a6Lk
+            Customer{EvBinds{}} {c_acctbal = c_acctbal_B1}
+            = c_acctbal_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [c_mktsegment <= c_mktsegment_a6Ll
+               wrap: <>]
+   Exported types: c_mktsegment :: Customer -> String
+                   [LclIdX[[RecSel]]]
+   Binds: c_mktsegment_a6Ll
+            Customer{EvBinds{}} {c_mktsegment = c_mktsegment_B1}
+            = c_mktsegment_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [c_comment <= c_comment_a6Lm
+               wrap: <>]
+   Exported types: c_comment :: Customer -> String
+                   [LclIdX[[RecSel]]]
+   Binds: c_comment_a6Lm
+            Customer{EvBinds{}} {c_comment = c_comment_B1}
+            = c_comment_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [p_name <= p_name_a6Kq
+               wrap: <>]
+   Exported types: p_name :: Part -> String
+                   [LclIdX[[RecSel]]]
+   Binds: p_name_a6Kq Part{EvBinds{}} {p_name = p_name_B1} = p_name_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [p_mfgr <= p_mfgr_a6Kr
+               wrap: <>]
+   Exported types: p_mfgr :: Part -> String
+                   [LclIdX[[RecSel]]]
+   Binds: p_mfgr_a6Kr Part{EvBinds{}} {p_mfgr = p_mfgr_B1} = p_mfgr_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [p_brand <= p_brand_a6Ks
+               wrap: <>]
+   Exported types: p_brand :: Part -> String
+                   [LclIdX[[RecSel]]]
+   Binds: p_brand_a6Ks Part{EvBinds{}} {p_brand = p_brand_B1}
+            = p_brand_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [p_type <= p_type_a6Kt
+               wrap: <>]
+   Exported types: p_type :: Part -> String
+                   [LclIdX[[RecSel]]]
+   Binds: p_type_a6Kt Part{EvBinds{}} {p_type = p_type_B1} = p_type_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [p_size <= p_size_a6Ku
+               wrap: <>]
+   Exported types: p_size :: Part -> Int
+                   [LclIdX[[RecSel]]]
+   Binds: p_size_a6Ku Part{EvBinds{}} {p_size = p_size_B1} = p_size_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [p_container <= p_container_a6Kv
+               wrap: <>]
+   Exported types: p_container :: Part -> String
+                   [LclIdX[[RecSel]]]
+   Binds: p_container_a6Kv
+            Part{EvBinds{}} {p_container = p_container_B1}
+            = p_container_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [p_retailprice <= p_retailprice_a6Kw
+               wrap: <>]
+   Exported types: p_retailprice :: Part -> Decimal
+                   [LclIdX[[RecSel]]]
+   Binds: p_retailprice_a6Kw
+            Part{EvBinds{}} {p_retailprice = p_retailprice_B1}
+            = p_retailprice_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [p_comment <= p_comment_a6Kx
+               wrap: <>]
+   Exported types: p_comment :: Part -> String
+                   [LclIdX[[RecSel]]]
+   Binds: p_comment_a6Kx Part{EvBinds{}} {p_comment = p_comment_B1}
+            = p_comment_B1
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [TPCH.Functional.Schema.$fEqNation <= $dEq_a6QJ
+               wrap: <>]
+   Exported types: TPCH.Functional.Schema.$fEqNation [InlPrag=NOUSERINLINE CONLIKE]
+                     :: Eq Nation
+                   [LclIdX[DFunId],
+                    Unf=DFun: \ -> GHC.Classes.C:Eq TYPE: Nation $c==_a6Qz $c/=_a6QD]
+   Binds: $dEq_a6QJ = GHC.Classes.C:Eq @ Nation $c==_a6Qz $c/=_a6QD
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$c==_a6Qz <= ==_a6QA
+               wrap: <>]
+   Exported types: $c==_a6Qz :: Nation -> Nation -> Bool
+                   [LclId]
+   Binds: AbsBinds [] []
+            {Exports: [==_a6QA <= ==_a6QB
+                         wrap: <>]
+             Exported types: ==_a6QA :: Nation -> Nation -> Bool
+                             [LclId]
+             Binds: (==_a6QB) (France{EvBinds{}}) (France{EvBinds{}}) = True
+                    (==_a6QB) (Germany{EvBinds{}}) (Germany{EvBinds{}}) = True
+                    (==_a6QB) _ _ = False
+             Evidence: [EvBinds{}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$c/=_a6QD <= /=_a6QE
+               wrap: <>]
+   Exported types: $c/=_a6QD :: Nation -> Nation -> Bool
+                   [LclId]
+   Binds: AbsBinds [] []
+            {Exports: [/=_a6QE <= /=_a6QF
+                         wrap: <>]
+             Exported types: /=_a6QE :: Nation -> Nation -> Bool
+                             [LclId]
+             Binds: (/=_a6QF) = GHC.Classes.$dm/= @ Nation @(Nation) $dEq_a6QH
+             Evidence: [EvBinds{}]}
+   Evidence: [EvBinds{[W] $dEq_a6QH
+                        = TPCH.Functional.Schema.$fEqNation}]}
+AbsBinds [] []
+  {Exports: [TPCH.Functional.Schema.$fEqRegion <= $dEq_a6QV
+               wrap: <>]
+   Exported types: TPCH.Functional.Schema.$fEqRegion [InlPrag=NOUSERINLINE CONLIKE]
+                     :: Eq Region
+                   [LclIdX[DFunId],
+                    Unf=DFun: \ -> GHC.Classes.C:Eq TYPE: Region $c==_a6QL $c/=_a6QP]
+   Binds: $dEq_a6QV = GHC.Classes.C:Eq @ Region $c==_a6QL $c/=_a6QP
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$c==_a6QL <= ==_a6QM
+               wrap: <>]
+   Exported types: $c==_a6QL :: Region -> Region -> Bool
+                   [LclId]
+   Binds: AbsBinds [] []
+            {Exports: [==_a6QM <= ==_a6QN
+                         wrap: <>]
+             Exported types: ==_a6QM :: Region -> Region -> Bool
+                             [LclId]
+             Binds: (==_a6QN) (EMEA{EvBinds{}}) (EMEA{EvBinds{}}) = True
+             Evidence: [EvBinds{}]}
+   Evidence: [EvBinds{}]}
+AbsBinds [] []
+  {Exports: [$c/=_a6QP <= /=_a6QQ
+               wrap: <>]
+   Exported types: $c/=_a6QP :: Region -> Region -> Bool
+                   [LclId]
+   Binds: AbsBinds [] []
+            {Exports: [/=_a6QQ <= /=_a6QR
+                         wrap: <>]
+             Exported types: /=_a6QQ :: Region -> Region -> Bool
+                             [LclId]
+             Binds: (/=_a6QR) = GHC.Classes.$dm/= @ Region @(Region) $dEq_a6QT
+             Evidence: [EvBinds{}]}
+   Evidence: [EvBinds{[W] $dEq_a6QT
+                        = TPCH.Functional.Schema.$fEqRegion}]}
+

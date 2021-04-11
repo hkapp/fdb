@@ -1,0 +1,1268 @@
+[1 of 8] Compiling FDB.MoreTypes    ( FDB/MoreTypes.hs, FDB/MoreTypes.o )
+
+==================== FINAL INTERFACE ====================
+interface main:FDB.MoreTypes 8065
+  interface hash: cf12376989093d299814aaebe8652d6a
+  ABI hash: 51d93a0ecfe12caec7f59da147006391
+  export-list hash: 70eadc3748dca67f295a72c608582db8
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: df5bc9012e514faafe3fa9c1526c8d03
+  opt_hash: d0a78e7b344f95c7406be35c9b75e196
+  hpc_hash: 93b885adfe0da089cdf634904fd59f71
+  plugin_hash: ad164012d6b1e14942349d58b1132007
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  FDB.MoreTypes.dateFromString
+  FDB.MoreTypes.minusInterval
+  FDB.MoreTypes.tryDateFromString
+  FDB.MoreTypes.Date
+  FDB.MoreTypes.DateInterval{FDB.MoreTypes.Day}
+  FDB.MoreTypes.Decimal
+  FDB.MoreTypes.PhoneNumber
+module dependencies:
+package dependencies: base-4.12.0.0* ghc-prim-0.5.3
+                      integer-gmp-1.0.2.0
+orphans: base-4.12.0.0:GHC.Float base-4.12.0.0:GHC.Base
+family instance modules: base-4.12.0.0:Control.Applicative
+                         base-4.12.0.0:Data.Functor.Const
+                         base-4.12.0.0:Data.Functor.Identity base-4.12.0.0:Data.Monoid
+                         base-4.12.0.0:Data.Semigroup.Internal base-4.12.0.0:GHC.Generics
+                         base-4.12.0.0:GHC.IO.Exception
+import  -/  base-4.12.0.0:GHC.Base c00b75f0b052d05c55ba6a4dd1c63b26
+import  -/  base-4.12.0.0:GHC.Err ea5e313ef4146b40b5d8b27aa168e736
+import  -/  base-4.12.0.0:Prelude 3c779dfd6448bdd8e234c336802c2acb
+50c60c5939509c51fb537de82565fa68
+  $tc'Day :: GHC.Types.TyCon
+d326d5940bafe2500696c105d0314b2f
+  $tcDateInterval :: GHC.Types.TyCon
+3724a5c1097c2210f4ae68b1d946d228
+  $trModule :: GHC.Types.Module
+56aaf2be4cc5c11040ebb5fe6768c529
+  type Date = ()
+8195e8591ab2aa0e0fc4c818dd5840eb
+  data DateInterval = Day GHC.Types.Int
+3876398af33a66cdd718e181436271b3
+  type Decimal = GHC.Types.Double
+f93d4e268e3f256eb537ab458f1ffb58
+  type PhoneNumber = ()
+da673ccf72739ff9185ec8051637ae48
+  dateFromString :: GHC.Base.String -> FDB.MoreTypes.Date
+56811f394e2d2740e49ba09013314642
+  minusInterval ::
+    FDB.MoreTypes.Date
+    -> FDB.MoreTypes.DateInterval -> FDB.MoreTypes.Date
+e435c21b86809e27670b91918ed4af21
+  tryDateFromString ::
+    GHC.Base.String -> GHC.Maybe.Maybe FDB.MoreTypes.Date
+trusted: safe
+require own pkg trusted: False
+module header:
+  Nothing
+declaration docs:
+arg docs:
+
+
+[2 of 8] Compiling FDB.Utils        ( FDB/Utils.hs, FDB/Utils.o )
+
+==================== FINAL INTERFACE ====================
+interface main:FDB.Utils 8065
+  interface hash: 6e96d7f59242f3af4a9769fddd3b96fe
+  ABI hash: f4e6f1f6d35067d6c5aa2f5e5c25ab6a
+  export-list hash: 5c6c88c79ca4b9a15ad40ac1338673b1
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: df5bc9012e514faafe3fa9c1526c8d03
+  opt_hash: d0a78e7b344f95c7406be35c9b75e196
+  hpc_hash: 93b885adfe0da089cdf634904fd59f71
+  plugin_hash: ad164012d6b1e14942349d58b1132007
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  FDB.Utils..:
+  FDB.Utils.<&>
+  FDB.Utils.compose2
+module dependencies:
+package dependencies: base-4.12.0.0* ghc-prim-0.5.3
+                      integer-gmp-1.0.2.0
+orphans: base-4.12.0.0:GHC.Float base-4.12.0.0:GHC.Base
+family instance modules: base-4.12.0.0:Control.Applicative
+                         base-4.12.0.0:Data.Functor.Const
+                         base-4.12.0.0:Data.Functor.Identity base-4.12.0.0:Data.Monoid
+                         base-4.12.0.0:Data.Semigroup.Internal base-4.12.0.0:GHC.Generics
+                         base-4.12.0.0:GHC.IO.Exception
+import  -/  base-4.12.0.0:Data.Functor 069b2025a03e32fd228e74a86a58a075
+import  -/  base-4.12.0.0:GHC.Base c00b75f0b052d05c55ba6a4dd1c63b26
+import  -/  base-4.12.0.0:Prelude 3c779dfd6448bdd8e234c336802c2acb
+fixities infixl 1 <&>
+89ea979a94ce465f906c0f1aa9b1426f
+  $trModule :: GHC.Types.Module
+5e916487f6923e2061177c6e198064bb
+  (.:) :: (t1 -> t2) -> (t3 -> t4 -> t1) -> t3 -> t4 -> t2
+45fae45a5ab04d401c26e113f4a72196
+  (<&>) :: GHC.Base.Functor f => f a -> (a -> b) -> f b
+df8c84aeac57044e115e76f7e4a74222
+  compose2 :: (t1 -> t2) -> (t3 -> t4 -> t1) -> t3 -> t4 -> t2
+trusted: safe
+require own pkg trusted: False
+module header:
+  Nothing
+declaration docs:
+arg docs:
+
+
+[3 of 8] Compiling Utils.List       ( Utils/List.hs, Utils/List.o )
+
+==================== FINAL INTERFACE ====================
+interface main:Utils.List 8065
+  interface hash: 1dfcebbc4c7874a8a10168978e680e13
+  ABI hash: c700a4057f299a5dd55aef9e0d881608
+  export-list hash: dc6dca607fc5d8d787c401b83dacc923
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: de7e9a0ece62a52510c1ee8e74262adb
+  opt_hash: d0a78e7b344f95c7406be35c9b75e196
+  hpc_hash: 93b885adfe0da089cdf634904fd59f71
+  plugin_hash: ad164012d6b1e14942349d58b1132007
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  Utils.List.groupByKeyVal
+  Utils.List.noDuplicates
+  Utils.List.zipWithIndex
+  Utils.List.zipWithIndexRight
+module dependencies:
+package dependencies: array-0.5.3.0 base-4.12.0.0*
+                      containers-0.6.0.1 deepseq-1.4.4.0 ghc-prim-0.5.3
+                      integer-gmp-1.0.2.0
+orphans: base-4.12.0.0:GHC.Float base-4.12.0.0:GHC.Base
+family instance modules: base-4.12.0.0:Control.Applicative
+                         base-4.12.0.0:Data.Complex base-4.12.0.0:Data.Functor.Compose
+                         base-4.12.0.0:Data.Functor.Const
+                         base-4.12.0.0:Data.Functor.Identity
+                         base-4.12.0.0:Data.Functor.Product base-4.12.0.0:Data.Functor.Sum
+                         base-4.12.0.0:Data.Monoid base-4.12.0.0:Data.Semigroup
+                         base-4.12.0.0:Data.Semigroup.Internal base-4.12.0.0:Data.Version
+                         base-4.12.0.0:Data.Void base-4.12.0.0:GHC.Exts
+                         base-4.12.0.0:GHC.Generics base-4.12.0.0:GHC.IO.Exception
+                         containers-0.6.0.1:Data.Set.Internal
+import  -/  base-4.12.0.0:Data.Functor 069b2025a03e32fd228e74a86a58a075
+import  -/  base-4.12.0.0:Data.List 17d0c71c557e42abe196f130788fd997
+import  -/  base-4.12.0.0:Data.OldList e931cf456dc87f11ee6e6fb153bca23e
+import  -/  base-4.12.0.0:Data.Tuple c719fc29608fe81c10bee9a1bf1e05ff
+import  -/  base-4.12.0.0:GHC.Base c00b75f0b052d05c55ba6a4dd1c63b26
+import  -/  base-4.12.0.0:GHC.List 4014a3c8a3b7c31c8325f6bcf1feea4a
+import  -/  base-4.12.0.0:Prelude 3c779dfd6448bdd8e234c336802c2acb
+import  -/  containers-0.6.0.1:Data.Set afd5ab7eac5658da18a4fffc2d1b683c
+import  -/  containers-0.6.0.1:Data.Set.Internal 37b649a82b62d074262d73d43076b8c8
+import  -/  ghc-prim-0.5.3:GHC.Classes 0f6fd7d7db53fc48f6e1f01803cc6c9d
+7f4a583a30f09ccae37abc3c91ab2306
+  $trModule :: GHC.Types.Module
+924683b6d9004cae84c3d8db5b15da0a
+  groupByKeyVal ::
+    GHC.Classes.Eq k => (a -> k) -> (a -> v) -> [a] -> [(k, [v])]
+4f9b6234627f96f41602feae6fc21b41
+  noDuplicates :: GHC.Classes.Ord a => [a] -> [a]
+d59eb92c9b12a1e2dca5c3bf84ff9537
+  zipWithIndex :: [a] -> [(GHC.Types.Int, a)]
+305c6e32f6e7c0f26ab1a543a02f08d1
+  zipWithIndexRight :: [a] -> [(a, GHC.Types.Int)]
+trusted: safe
+require own pkg trusted: False
+module header:
+  Nothing
+declaration docs:
+arg docs:
+
+
+[4 of 8] Compiling Utils.Prelude    ( Utils/Prelude.hs, Utils/Prelude.o )
+
+==================== FINAL INTERFACE ====================
+interface main:Utils.Prelude 8065
+  interface hash: e33d3fecbf162ea25288554a3cd0b3fa
+  ABI hash: 2049fc63c2237b0f82e531b17f481fdd
+  export-list hash: fb12b7c52b89b68d933656e700aa47f6
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: de7e9a0ece62a52510c1ee8e74262adb
+  opt_hash: d0a78e7b344f95c7406be35c9b75e196
+  hpc_hash: 93b885adfe0da089cdf634904fd59f71
+  plugin_hash: ad164012d6b1e14942349d58b1132007
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  Utils.Prelude..:
+  Utils.Prelude.<&>
+  Utils.Prelude.compose2
+  Utils.Prelude.doNothing
+  Utils.Prelude.ignore
+module dependencies:
+package dependencies: base-4.12.0.0* ghc-prim-0.5.3
+                      integer-gmp-1.0.2.0
+orphans: base-4.12.0.0:GHC.Float base-4.12.0.0:GHC.Base
+family instance modules: base-4.12.0.0:Control.Applicative
+                         base-4.12.0.0:Data.Functor.Const
+                         base-4.12.0.0:Data.Functor.Identity base-4.12.0.0:Data.Monoid
+                         base-4.12.0.0:Data.Semigroup.Internal base-4.12.0.0:GHC.Generics
+                         base-4.12.0.0:GHC.IO.Exception
+import  -/  base-4.12.0.0:Data.Functor 069b2025a03e32fd228e74a86a58a075
+import  -/  base-4.12.0.0:GHC.Base c00b75f0b052d05c55ba6a4dd1c63b26
+import  -/  base-4.12.0.0:Prelude 3c779dfd6448bdd8e234c336802c2acb
+import  -/  ghc-prim-0.5.3:GHC.Types 57064c9f957b09bc2e360061ad5cae0b
+fixities infixl 1 <&>
+fb20f66e4b728efc10c638388a0ed25f
+  $trModule :: GHC.Types.Module
+cb141d98e94cb46b69e48d10ddb43918
+  (.:) :: (b -> c) -> (a1 -> a2 -> b) -> a1 -> a2 -> c
+f22ca204aadbfe6382b8de875b48b4f1
+  (<&>) :: GHC.Base.Functor f => f a -> (a -> b) -> f b
+bfbdcfd9aeca48f4007ff03a7204bfd0
+  compose2 :: (b -> c) -> (a1 -> a2 -> b) -> a1 -> a2 -> c
+5d3c6e36e000614c870b608118aeabd5
+  doNothing :: GHC.Types.IO ()
+18c848ca6105f0d5304c12b6a54c8783
+  ignore :: a -> ()
+trusted: safe
+require own pkg trusted: False
+module header:
+  Nothing
+declaration docs:
+arg docs:
+
+
+[5 of 8] Compiling Utils.AbstractGraph ( Utils/AbstractGraph.hs, Utils/AbstractGraph.o )
+
+==================== FINAL INTERFACE ====================
+interface main:Utils.AbstractGraph 8065
+  interface hash: f88f7df446a44b4e832bce6a0f779d9f
+  ABI hash: 062dca48a670050876d3b27f34988327
+  export-list hash: 5255cf47c615525db1fa636d7a722dd9
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: de7e9a0ece62a52510c1ee8e74262adb
+  opt_hash: d0a78e7b344f95c7406be35c9b75e196
+  hpc_hash: 93b885adfe0da089cdf634904fd59f71
+  plugin_hash: ad164012d6b1e14942349d58b1132007
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  Utils.AbstractGraph.allTreeEdges
+  Utils.AbstractGraph.allTreeNodes
+  Utils.AbstractGraph.assignTreeIds
+  Utils.AbstractGraph.assignUniqueIds
+  Utils.AbstractGraph.buildTree
+  Utils.AbstractGraph.edgeTriplets
+  Utils.AbstractGraph.eliminateDuplicateVertices
+  Utils.AbstractGraph.getNode
+  Utils.AbstractGraph.graphFromTree
+  Utils.AbstractGraph.mapEdgeFromTriplet
+  Utils.AbstractGraph.mapEdgeInTriplet
+  Utils.AbstractGraph.mapEdgeTriplets
+  Utils.AbstractGraph.mapEdges
+  Utils.AbstractGraph.mapGraphTriplets
+  Utils.AbstractGraph.mapTreeNodes
+  Utils.AbstractGraph.mapVertices
+  Utils.AbstractGraph.rootNode
+  Utils.AbstractGraph.singleton
+  Utils.AbstractGraph.subtreeNodes
+  Utils.AbstractGraph.subtrees
+  Utils.AbstractGraph.vertices
+  Utils.AbstractGraph.Graph{Utils.AbstractGraph.Graph}
+  Utils.AbstractGraph.Tree{Utils.AbstractGraph.Tree}
+module dependencies: Utils.List Utils.Prelude
+package dependencies: array-0.5.3.0 base-4.12.0.0*
+                      containers-0.6.0.1 deepseq-1.4.4.0 ghc-prim-0.5.3
+                      integer-gmp-1.0.2.0
+orphans: base-4.12.0.0:GHC.Float base-4.12.0.0:GHC.Base
+family instance modules: base-4.12.0.0:Control.Applicative
+                         base-4.12.0.0:Data.Complex base-4.12.0.0:Data.Functor.Compose
+                         base-4.12.0.0:Data.Functor.Const
+                         base-4.12.0.0:Data.Functor.Identity
+                         base-4.12.0.0:Data.Functor.Product base-4.12.0.0:Data.Functor.Sum
+                         base-4.12.0.0:Data.Monoid base-4.12.0.0:Data.Semigroup
+                         base-4.12.0.0:Data.Semigroup.Internal base-4.12.0.0:Data.Version
+                         base-4.12.0.0:Data.Void base-4.12.0.0:GHC.Exts
+                         base-4.12.0.0:GHC.Generics base-4.12.0.0:GHC.IO.Exception
+                         containers-0.6.0.1:Data.Map.Internal
+                         containers-0.6.0.1:Data.Set.Internal
+import  -/  base-4.12.0.0:Data.Bifunctor c6b94a4350abddc02c676eba95d481f0
+import  -/  base-4.12.0.0:Data.Semigroup 77d0b010ed701f8a1da4f6d7b4d5812e
+import  -/  base-4.12.0.0:Data.Tuple c719fc29608fe81c10bee9a1bf1e05ff
+import  -/  base-4.12.0.0:GHC.Base c00b75f0b052d05c55ba6a4dd1c63b26
+import  -/  base-4.12.0.0:GHC.Num c2039f03637c68f47b0bbff4c18ec616
+import  -/  base-4.12.0.0:Prelude 3c779dfd6448bdd8e234c336802c2acb
+import  -/  containers-0.6.0.1:Data.Map bdd2edbbfdb7899380a68fd7777a8f2a
+import  -/  containers-0.6.0.1:Data.Map.Internal fbf8d1bed47de2b3b48e26c406ee4050
+import  -/  containers-0.6.0.1:Data.Set afd5ab7eac5658da18a4fffc2d1b683c
+import  -/  ghc-prim-0.5.3:GHC.Classes 0f6fd7d7db53fc48f6e1f01803cc6c9d
+import  -/  Utils.List c700a4057f299a5dd55aef9e0d881608
+  exports: dc6dca607fc5d8d787c401b83dacc923
+  noDuplicates 4f9b6234627f96f41602feae6fc21b41
+  zipWithIndexRight 305c6e32f6e7c0f26ab1a543a02f08d1
+import  -/  Utils.Prelude 2049fc63c2237b0f82e531b17f481fdd
+  exports: fb12b7c52b89b68d933656e700aa47f6
+  <&> f22ca204aadbfe6382b8de875b48b4f1
+bc7309e0e867ff096de9edddda591013
+  $fBifunctorGraph ::
+    Data.Bifunctor.Bifunctor Utils.AbstractGraph.Graph
+  DFunId
+bc7309e0e867ff096de9edddda591013
+  $fMonoidGraph :: GHC.Base.Monoid (Utils.AbstractGraph.Graph v e)
+  DFunId
+bc7309e0e867ff096de9edddda591013
+  $fSemigroupGraph ::
+    GHC.Base.Semigroup (Utils.AbstractGraph.Graph v e)
+  DFunId
+2f5876bd76083bc94103702860072ca1
+  $tc'Graph :: GHC.Types.TyCon
+40791f082b5a1b9e8331e95e412a3723
+  $tc'Tree :: GHC.Types.TyCon
+3abab9d7574fbba91d518cccc0386ad4
+  $tcGraph :: GHC.Types.TyCon
+6a7ed5b4f50e9b5d21066425f85aa9b3
+  $tcTree :: GHC.Types.TyCon
+e7ea678365df996f4f7df0503a9076b9
+  $trModule :: GHC.Types.Module
+bc7309e0e867ff096de9edddda591013
+  data Graph v e = Graph [v] [(v, e, v)]
+7b9851d1ed1a8b4cf980900f1b0aa2fc
+  data Tree v e = Tree v [(e, Utils.AbstractGraph.Tree v e)]
+587a88e948d60822b2742b8f5656b061
+  allTreeEdges :: Utils.AbstractGraph.Tree v e -> [(v, e, v)]
+dd27a05d77b4e648b925c43b2ccc8f55
+  allTreeNodes :: Utils.AbstractGraph.Tree v e -> [v]
+f389e2fe1fe1bc749ea07b2c3cb18577
+  assignTreeIds ::
+    Utils.AbstractGraph.Tree v e
+    -> Utils.AbstractGraph.Tree (v, GHC.Types.Int) e
+19bb94fdae1680cc00743b255049d322
+  assignUniqueIds ::
+    GHC.Classes.Ord v =>
+    Utils.AbstractGraph.Graph v e
+    -> (Utils.AbstractGraph.Graph (v, GHC.Types.Int) e,
+        Data.Map.Internal.Map v GHC.Types.Int)
+502b9b77101b5a7bc2db8c8b86df73b5
+  buildTree ::
+    (t -> v) -> (t -> [(e, t)]) -> t -> Utils.AbstractGraph.Tree v e
+89b89fd6e19a2b0c62eff779d91b8606
+  edgeTriplets :: Utils.AbstractGraph.Graph v e -> [(v, e, v)]
+8e5739be076e449e62546be4e50a4e14
+  eliminateDuplicateVertices ::
+    GHC.Classes.Ord v =>
+    Utils.AbstractGraph.Graph v e -> Utils.AbstractGraph.Graph v e
+6dc7dfc0910088e14d620368cecbb775
+  getNode :: Utils.AbstractGraph.Tree v e -> v
+c1651ddcfbe1f3f73cffcd7a6cec7536
+  graphFromTree ::
+    Utils.AbstractGraph.Tree v e -> Utils.AbstractGraph.Graph v e
+b3a920e5119802041928737852f9e7ca
+  mapEdgeFromTriplet :: (e -> f) -> (v, e, v) -> f
+4767f3a5e3949d1e7b1dfefd03c25e23
+  mapEdgeInTriplet :: (e -> f) -> (v, e, v) -> (v, f, v)
+65d7603e2a25738b852b238477cab5c8
+  mapEdgeTriplets ::
+    ((v, e, v) -> f)
+    -> Utils.AbstractGraph.Graph v e -> Utils.AbstractGraph.Graph v f
+5b235af8a2c233ccf3acc24ae145e303
+  mapEdges ::
+    (e -> f)
+    -> Utils.AbstractGraph.Graph v e -> Utils.AbstractGraph.Graph v f
+ce29c3ddb969c29ef828a7c9c3e5da96
+  mapGraphTriplets ::
+    (v1 -> v2)
+    -> ((v1, e1, v1) -> e2)
+    -> Utils.AbstractGraph.Graph v1 e1
+    -> Utils.AbstractGraph.Graph v2 e2
+2d8dacf4398dd9b904abcd2cf73c3820
+  mapTreeNodes ::
+    (v -> w)
+    -> Utils.AbstractGraph.Tree v e -> Utils.AbstractGraph.Tree w e
+c259dcc0e2f54073cda9a46e69623cb5
+  mapVertices ::
+    (v -> w)
+    -> Utils.AbstractGraph.Graph v e -> Utils.AbstractGraph.Graph w e
+9da840dfc35cd832ad962356cd9194e6
+  rootNode :: Utils.AbstractGraph.Tree v e -> v
+19a7e1b904a5cd7606badc9f744a3a98
+  singleton :: v -> Utils.AbstractGraph.Graph v e
+7f34786b7aa2483f52df3cf65553ac8a
+  subtreeNodes :: Utils.AbstractGraph.Tree v e -> [v]
+9d6f9cbfa6f3bd63dd615158c229bb0f
+  subtrees ::
+    Utils.AbstractGraph.Tree v e -> [Utils.AbstractGraph.Tree v e]
+42c6b3ffbd5b214999a58c1a3c8e35ab
+  vertices :: Utils.AbstractGraph.Graph v e -> [v]
+instance [safe] Data.Bifunctor.Bifunctor [Utils.AbstractGraph.Graph]
+  = Utils.AbstractGraph.$fBifunctorGraph
+instance [safe] GHC.Base.Monoid [Utils.AbstractGraph.Graph]
+  = Utils.AbstractGraph.$fMonoidGraph
+instance [safe] GHC.Base.Semigroup [Utils.AbstractGraph.Graph]
+  = Utils.AbstractGraph.$fSemigroupGraph
+trusted: safe
+require own pkg trusted: False
+module header:
+  Nothing
+declaration docs:
+arg docs:
+
+
+[6 of 8] Compiling FDB.GADTForall   ( FDB/GADTForall.hs, FDB/GADTForall.o )
+
+==================== FINAL INTERFACE ====================
+interface main:FDB.GADTForall 8065
+  interface hash: a2cf81457e76daedfb21c06066fcc5e0
+  ABI hash: 2ec04ab76785c0ef3367f1072213b81d
+  export-list hash: fb193511fe8d73f164a58cae22e37359
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 2b220cef429ba69255d46704689733cc
+  opt_hash: d0a78e7b344f95c7406be35c9b75e196
+  hpc_hash: 93b885adfe0da089cdf634904fd59f71
+  plugin_hash: ad164012d6b1e14942349d58b1132007
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  FDB.GADTForall.-|><|->
+  FDB.GADTForall.<-|><|-
+  FDB.GADTForall.agg
+  FDB.GADTForall.avgAgg
+  FDB.GADTForall.count
+  FDB.GADTForall.emptyQ
+  FDB.GADTForall.eqFilter
+  FDB.GADTForall.equiJoin
+  FDB.GADTForall.exists
+  FDB.GADTForall.fetchForeign
+  FDB.GADTForall.fetchRow
+  FDB.GADTForall.filterQ
+  FDB.GADTForall.findTable
+  FDB.GADTForall.groupByQ
+  FDB.GADTForall.groupByWithKey
+  FDB.GADTForall.mapAgg
+  FDB.GADTForall.mapQ
+  FDB.GADTForall.mapToQ
+  FDB.GADTForall.minAgg
+  FDB.GADTForall.orderBy
+  FDB.GADTForall.pull
+  FDB.GADTForall.readT
+  FDB.GADTForall.rowRef
+  FDB.GADTForall.rowVal
+  FDB.GADTForall.subqFilter
+  FDB.GADTForall.subqMap
+  FDB.GADTForall.sumAgg
+  FDB.GADTForall.takeQ
+  FDB.GADTForall.toQ
+  FDB.GADTForall.Agg{FDB.GADTForall.Agg}
+  FDB.GADTForall.Fold
+  FDB.GADTForall.Fold1
+  FDB.GADTForall.NatJoin{FDB.GADTForall.|><|}
+  FDB.GADTForall.Q{FDB.GADTForall.Filter FDB.GADTForall.FilterSQ FDB.GADTForall.GroupBy FDB.GADTForall.Map FDB.GADTForall.MapSQ FDB.GADTForall.OrderBy FDB.GADTForall.Read FDB.GADTForall.Take}
+  FDB.GADTForall.Row{FDB.GADTForall.Row}
+  FDB.GADTForall.RowId{FDB.GADTForall.RowId}
+  FDB.GADTForall.RowRef{FDB.GADTForall.RowRef}
+  FDB.GADTForall.SQ{FDB.GADTForall.FetchRow FDB.GADTForall.StateFold}
+  FDB.GADTForall.Table{FDB.GADTForall.Table}
+  FDB.GADTForall.TableId{FDB.GADTForall.TableId}
+  FDB.GADTForall.TableRef
+module dependencies: FDB.Utils Utils.AbstractGraph Utils.List
+                     Utils.Prelude
+package dependencies: array-0.5.3.0 base-4.12.0.0*
+                      containers-0.6.0.1 deepseq-1.4.4.0 ghc-prim-0.5.3
+                      integer-gmp-1.0.2.0
+orphans: base-4.12.0.0:GHC.Float base-4.12.0.0:GHC.Base
+family instance modules: base-4.12.0.0:Control.Applicative
+                         base-4.12.0.0:Data.Complex base-4.12.0.0:Data.Functor.Compose
+                         base-4.12.0.0:Data.Functor.Const
+                         base-4.12.0.0:Data.Functor.Identity
+                         base-4.12.0.0:Data.Functor.Product base-4.12.0.0:Data.Functor.Sum
+                         base-4.12.0.0:Data.Monoid base-4.12.0.0:Data.Semigroup
+                         base-4.12.0.0:Data.Semigroup.Internal base-4.12.0.0:Data.Version
+                         base-4.12.0.0:Data.Void base-4.12.0.0:GHC.Exts
+                         base-4.12.0.0:GHC.Generics base-4.12.0.0:GHC.IO.Exception
+                         containers-0.6.0.1:Data.Map.Internal
+                         containers-0.6.0.1:Data.Set.Internal
+import  -/  base-4.12.0.0:Data.Tuple c719fc29608fe81c10bee9a1bf1e05ff
+import  -/  base-4.12.0.0:Data.Word 6b968b6c7df442cfcad986e497aee095
+import  -/  base-4.12.0.0:GHC.Base c00b75f0b052d05c55ba6a4dd1c63b26
+import  -/  base-4.12.0.0:GHC.Err ea5e313ef4146b40b5d8b27aa168e736
+import  -/  base-4.12.0.0:GHC.Num c2039f03637c68f47b0bbff4c18ec616
+import  -/  base-4.12.0.0:GHC.Real af2b985dd29515c375fb78b2c9298d42
+import  -/  base-4.12.0.0:GHC.Word 36bd327b03ce8a144ab8e66a53975837
+import  -/  base-4.12.0.0:Prelude 3c779dfd6448bdd8e234c336802c2acb
+import  -/  ghc-prim-0.5.3:GHC.Classes 0f6fd7d7db53fc48f6e1f01803cc6c9d
+import  -/  FDB.Utils f4e6f1f6d35067d6c5aa2f5e5c25ab6a
+  exports: 5c6c88c79ca4b9a15ad40ac1338673b1
+  .: 5e916487f6923e2061177c6e198064bb
+  <&> 45fae45a5ab04d401c26e113f4a72196
+import  -/  Utils.AbstractGraph 062dca48a670050876d3b27f34988327
+  exports: 5255cf47c615525db1fa636d7a722dd9
+a09e9c7821ad423c05a6fe4bac7535bb
+  $fApplicativeQ :: GHC.Base.Applicative FDB.GADTForall.Q
+  DFunId
+a09e9c7821ad423c05a6fe4bac7535bb
+  $fApplicativeSQ :: GHC.Base.Applicative FDB.GADTForall.SQ
+  DFunId
+b87a19a48fb6ebe44b8096155135bc78
+  $fEqRowId :: GHC.Classes.Eq FDB.GADTForall.RowId
+  DFunId
+7b2c19c12ae57c29c041feb70b8de8ca
+  $fEqRowRef :: GHC.Classes.Eq (FDB.GADTForall.RowRef a)
+  DFunId
+a0d3ffb812a8cb71f618e2378c776ee1
+  $fEqTableId :: GHC.Classes.Eq FDB.GADTForall.TableId
+  DFunId
+a09e9c7821ad423c05a6fe4bac7535bb
+  $fFunctorQ :: GHC.Base.Functor FDB.GADTForall.Q
+  DFunId
+a09e9c7821ad423c05a6fe4bac7535bb
+  $fFunctorSQ :: GHC.Base.Functor FDB.GADTForall.SQ
+  DFunId
+a09e9c7821ad423c05a6fe4bac7535bb
+  $fMonadQ :: GHC.Base.Monad FDB.GADTForall.Q
+  DFunId
+a09e9c7821ad423c05a6fe4bac7535bb
+  $fMonadSQ :: GHC.Base.Monad FDB.GADTForall.SQ
+  DFunId
+3b451fb8e50ecedfedd92994a0d5f903
+  $tc'Agg :: GHC.Types.TyCon
+d3925b14d34eacfae4367331fd269e3f
+  $tc'C:NatJoin :: GHC.Types.TyCon
+f628b191b9e0b758d2a2b5e11b147d6a
+  $tc'FetchRow :: GHC.Types.TyCon
+5e754153360e40a7a47b3f9d9287a22c
+  $tc'Filter :: GHC.Types.TyCon
+77cab28573c10abb0db16750db65c9d3
+  $tc'FilterSQ :: GHC.Types.TyCon
+720f8812ded5c26bbc85ff7a9d240df3
+  $tc'GroupBy :: GHC.Types.TyCon
+a88fe9473456f23d0be79c0aa1457580
+  $tc'Map :: GHC.Types.TyCon
+c089fbcba151f8a7d5b592b5fbe10c85
+  $tc'MapSQ :: GHC.Types.TyCon
+f763a8b080cbe17ce62e376090769bd2
+  $tc'OrderBy :: GHC.Types.TyCon
+1810b8b87b279399102a45a6c9e91a86
+  $tc'Read :: GHC.Types.TyCon
+1d788b60c215ef7bbcc1bb29241663f3
+  $tc'Row :: GHC.Types.TyCon
+c8835100260e76d3cff8de2b258b4cae
+  $tc'RowId :: GHC.Types.TyCon
+46613d769a899b2bd5b83310ca5607ee
+  $tc'RowRef :: GHC.Types.TyCon
+96845127de89444eb1381781c30b4fd3
+  $tc'StateFold :: GHC.Types.TyCon
+337fd37f466ef5636957c6d196221414
+  $tc'Table :: GHC.Types.TyCon
+1f39f517b3bac582057627c6001a2260
+  $tc'TableId :: GHC.Types.TyCon
+eacf11ec3579a4176a1e56f36ad8df09
+  $tc'Take :: GHC.Types.TyCon
+4ee5d758c3cd52e2fd26271ce056401f
+  $tcAgg :: GHC.Types.TyCon
+08ca1c323a8c1df889a427ad97b1eb59
+  $tcNatJoin :: GHC.Types.TyCon
+7fe7d609656a5bc60b49beeaba177b9e
+  $tcQ :: GHC.Types.TyCon
+5db0105394c81317b54a1dfb287d41ec
+  $tcRow :: GHC.Types.TyCon
+bdcde4872fe5d4686b4583228607af49
+  $tcRowId :: GHC.Types.TyCon
+5f8a9098681af336fb014946aa14fd34
+  $tcRowRef :: GHC.Types.TyCon
+efb7606a626a00b337e50b4000976d68
+  $tcSQ :: GHC.Types.TyCon
+6185f044a329c64fbe238ccdcf4c7840
+  $tcTable :: GHC.Types.TyCon
+7b97a5b29969f5df3106f9c3c3d29a1d
+  $tcTableId :: GHC.Types.TyCon
+f2e92330767009a2852c33e2f6e62e74
+  $trModule :: GHC.Types.Module
+0579b56cc211ae301f1acc55f778b05f
+  (-|><|->) ::
+    FDB.GADTForall.NatJoin a b =>
+    FDB.GADTForall.Q a -> FDB.GADTForall.Q b -> FDB.GADTForall.Q b
+4d75d96f259ac2cb1ed940b83bb2a10c
+  (<-|><|-) ::
+    FDB.GADTForall.NatJoin a b =>
+    FDB.GADTForall.Q a -> FDB.GADTForall.Q b -> FDB.GADTForall.Q a
+77cd277da192bedfc150d9627c7a2c61
+  data Agg a b s = Agg (s -> a -> s) s (s -> b)
+bcc5254964a83c22eb76e099e7914831
+  type Fold a b = FDB.GADTForall.Agg a b b
+2fbbc58d72238cd9c791b6e0352dc9f1
+  type Fold1 a = FDB.GADTForall.Agg a a a
+01e516785b9987c7c09ff9b8d52b30a1
+  class NatJoin a b where
+    (|><|) :: FDB.GADTForall.Q a
+              -> FDB.GADTForall.Q b -> FDB.GADTForall.Q (a, b)
+    {-# MINIMAL (|><|) #-}
+a09e9c7821ad423c05a6fe4bac7535bb
+  type role Q nominal
+  data Q a where
+    Filter :: (a -> GHC.Types.Bool) -> (FDB.GADTForall.Q a) -> Q a
+    Map :: (b -> a) -> (FDB.GADTForall.Q b) -> Q a
+    Read :: (FDB.GADTForall.Table a) -> Q a
+    GroupBy :: (v -> k) -> (FDB.GADTForall.Q v)
+               -> Q (k, FDB.GADTForall.Q v)
+    MapSQ :: (v -> FDB.GADTForall.SQ a) -> (FDB.GADTForall.Q v) -> Q a
+    FilterSQ :: (a -> FDB.GADTForall.SQ GHC.Types.Bool)
+                -> (FDB.GADTForall.Q a) -> Q a
+    OrderBy :: GHC.Classes.Ord b =>
+               (a -> b) -> (FDB.GADTForall.Q a) -> Q a
+    Take :: GHC.Real.Integral n => n -> (FDB.GADTForall.Q a) -> Q a
+430cda220c2c01c89b72a50960f08f8f
+  data Row a = Row (FDB.GADTForall.RowRef a) a
+b87a19a48fb6ebe44b8096155135bc78
+  newtype RowId = RowId GHC.Word.Word64
+7b2c19c12ae57c29c041feb70b8de8ca
+  type role RowRef phantom
+  data RowRef a = RowRef FDB.GADTForall.TableId FDB.GADTForall.RowId
+a09e9c7821ad423c05a6fe4bac7535bb
+  type role SQ nominal
+  data SQ a where
+    FetchRow :: (FDB.GADTForall.RowRef a1)
+                -> SQ (FDB.GADTForall.Row a1)
+    StateFold :: (FDB.GADTForall.Agg a1 a s) -> (FDB.GADTForall.Q a1)
+                 -> SQ a
+003d014158453317a575bbe8cadc8a4c
+  type role Table phantom
+  newtype Table a = Table GHC.Base.String
+a0d3ffb812a8cb71f618e2378c776ee1
+  newtype TableId = TableId GHC.Word.Word16
+a6ac765d4c148de8504cdaf872d065cc
+  type TableRef a = FDB.GADTForall.RowRef a
+327a25c5dc043c96cfb4f3032b9d3e53
+  agg ::
+    FDB.GADTForall.Agg a b s
+    -> FDB.GADTForall.Q a -> FDB.GADTForall.SQ b
+774877e29e043ea7f0722299e9d9af2c
+  avgAgg :: GHC.Real.Fractional a => FDB.GADTForall.Agg a a (a, a)
+efb9ae04714946b9371e4d6ec3a4170e
+  count ::
+    GHC.Real.Integral n => FDB.GADTForall.Q a -> FDB.GADTForall.SQ n
+e379a157d50cd1617f625cd824e5aa7c
+  emptyQ :: FDB.GADTForall.Q a
+b2bed967efbf5dce271dd876d782151f
+  eqFilter ::
+    GHC.Classes.Eq b =>
+    (a -> b) -> b -> FDB.GADTForall.Q a -> FDB.GADTForall.Q a
+b194438f092e3942c54049e887852ae5
+  equiJoin ::
+    GHC.Classes.Eq c =>
+    (a -> c)
+    -> (b -> c)
+    -> FDB.GADTForall.Q a
+    -> FDB.GADTForall.Q b
+    -> FDB.GADTForall.Q (a, b)
+4bc4a9faf6f2e5e6c29736be860fe830
+  exists :: FDB.GADTForall.Q a -> FDB.GADTForall.SQ GHC.Types.Bool
+4bb82de46dda368b2826dd4c6adfb349
+  fetchForeign :: FDB.GADTForall.RowRef a -> FDB.GADTForall.SQ a
+f78ff89a45e9cb54d8664ea240e07826
+  fetchRow ::
+    FDB.GADTForall.RowRef a -> FDB.GADTForall.SQ (FDB.GADTForall.Row a)
+f74ed4017303f7c103aabc48392437fe
+  filterQ ::
+    (a -> GHC.Types.Bool) -> FDB.GADTForall.Q a -> FDB.GADTForall.Q a
+257851540b5753fb4d99d3f5d24e71f6
+  findTable :: GHC.Base.String -> FDB.GADTForall.Table a
+a6fd418119ad0468a85e5a193efe4301
+  groupByQ ::
+    GHC.Classes.Ord k =>
+    (a -> k)
+    -> FDB.GADTForall.Q a -> FDB.GADTForall.Q (FDB.GADTForall.Q a)
+65c0893f98f64dfd97ca2a9ecd47b411
+  groupByWithKey ::
+    GHC.Classes.Ord k =>
+    (a -> k)
+    -> FDB.GADTForall.Q a -> FDB.GADTForall.Q (k, FDB.GADTForall.Q a)
+518ab15bd86bc20fa76a2cc2ebe2f9e4
+  mapAgg ::
+    FDB.GADTForall.Agg b c s
+    -> (a -> b) -> FDB.GADTForall.Q a -> FDB.GADTForall.SQ c
+e7eec41dc2e968861e43a1d3480a9f14
+  mapQ :: (a -> b) -> FDB.GADTForall.Q a -> FDB.GADTForall.Q b
+049258689a8f8d423ba03d1fcb35cb3a
+  mapToQ ::
+    (a -> FDB.GADTForall.Q b)
+    -> FDB.GADTForall.SQ a -> FDB.GADTForall.Q b
+e2293b127c7f126c7552a2f350cdfa7c
+  minAgg :: GHC.Classes.Ord a => FDB.GADTForall.Fold1 a
+b06fd076042a61f1304faa1b6af82db8
+  orderBy ::
+    GHC.Classes.Ord b =>
+    (a -> b) -> FDB.GADTForall.Q a -> FDB.GADTForall.Q a
+2ecca02be85429118a83141b80ed7bf2
+  pull :: FDB.GADTForall.Q a -> a
+58c33e9f583aa28748b9ab7b05af5575
+  readT :: FDB.GADTForall.Table a -> FDB.GADTForall.Q a
+9b854911b3728ea4eb83295fe8388cde
+  rowRef :: FDB.GADTForall.Row a -> FDB.GADTForall.RowRef a
+54181fa6a66f50412a5d25be2a919c07
+  rowVal :: FDB.GADTForall.Row a -> a
+ffd526c20372fd7231516f30555474ff
+  subqFilter ::
+    (a -> FDB.GADTForall.SQ GHC.Types.Bool)
+    -> FDB.GADTForall.Q a -> FDB.GADTForall.Q a
+390f944fb41bef220d2edbb33a024c54
+  subqMap ::
+    (a -> FDB.GADTForall.SQ b)
+    -> FDB.GADTForall.Q a -> FDB.GADTForall.Q b
+5e5cfa0b658fc8ee7804a0148ff49868
+  sumAgg :: GHC.Num.Num a => FDB.GADTForall.Fold1 a
+6f13f0bba3f13a3a689f9195ad212e89
+  takeQ ::
+    GHC.Real.Integral n =>
+    n -> FDB.GADTForall.Q a -> FDB.GADTForall.Q a
+74206513296e18ab282bdf737dd1cadf
+  toQ :: FDB.GADTForall.SQ a -> FDB.GADTForall.Q a
+instance [safe] GHC.Base.Applicative [FDB.GADTForall.Q]
+  = FDB.GADTForall.$fApplicativeQ
+instance [safe] GHC.Base.Applicative [FDB.GADTForall.SQ]
+  = FDB.GADTForall.$fApplicativeSQ
+instance [safe] GHC.Classes.Eq [FDB.GADTForall.RowId]
+  = FDB.GADTForall.$fEqRowId
+instance [safe] GHC.Classes.Eq [FDB.GADTForall.RowRef]
+  = FDB.GADTForall.$fEqRowRef
+instance [safe] GHC.Classes.Eq [FDB.GADTForall.TableId]
+  = FDB.GADTForall.$fEqTableId
+instance [safe] GHC.Base.Functor [FDB.GADTForall.Q]
+  = FDB.GADTForall.$fFunctorQ
+instance [safe] GHC.Base.Functor [FDB.GADTForall.SQ]
+  = FDB.GADTForall.$fFunctorSQ
+instance [safe] GHC.Base.Monad [FDB.GADTForall.Q]
+  = FDB.GADTForall.$fMonadQ
+instance [safe] GHC.Base.Monad [FDB.GADTForall.SQ]
+  = FDB.GADTForall.$fMonadSQ
+trusted: safe
+require own pkg trusted: False
+module header:
+  Nothing
+declaration docs:
+arg docs:
+
+
+[7 of 8] Compiling FDB.FDB          ( FDB/FDB.hs, FDB/FDB.o )
+
+==================== FINAL INTERFACE ====================
+interface main:FDB.FDB 8065
+  interface hash: 12317e3a878b53b9135e996874dfbe54
+  ABI hash: 56611820891a7bb5c4f9d91edadb6fcf
+  export-list hash: 8782b81c2ddd12280b40b50bff63b82b
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: df5bc9012e514faafe3fa9c1526c8d03
+  opt_hash: d0a78e7b344f95c7406be35c9b75e196
+  hpc_hash: 93b885adfe0da089cdf634904fd59f71
+  plugin_hash: ad164012d6b1e14942349d58b1132007
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  FDB.GADTForall.-|><|->
+  FDB.GADTForall.<-|><|-
+  FDB.GADTForall.avgAgg
+  FDB.GADTForall.count
+  FDB.GADTForall.emptyQ
+  FDB.GADTForall.eqFilter
+  FDB.GADTForall.equiJoin
+  FDB.GADTForall.exists
+  FDB.GADTForall.fetchForeign
+  FDB.GADTForall.fetchRow
+  FDB.GADTForall.filterQ
+  FDB.GADTForall.findTable
+  FDB.GADTForall.groupByQ
+  FDB.GADTForall.groupByWithKey
+  FDB.GADTForall.mapAgg
+  FDB.GADTForall.mapQ
+  FDB.GADTForall.mapToQ
+  FDB.GADTForall.minAgg
+  FDB.GADTForall.orderBy
+  FDB.GADTForall.readT
+  FDB.GADTForall.rowRef
+  FDB.GADTForall.subqFilter
+  FDB.GADTForall.subqMap
+  FDB.GADTForall.sumAgg
+  FDB.GADTForall.toQ
+  FDB.GADTForall.Agg
+  FDB.GADTForall.Fold
+  FDB.GADTForall.Fold1
+  FDB.GADTForall.NatJoin{FDB.GADTForall.|><|}
+  FDB.GADTForall.Q
+  FDB.GADTForall.Row
+  FDB.GADTForall.RowId
+  FDB.GADTForall.RowRef
+  FDB.GADTForall.SQ
+  FDB.GADTForall.Table
+  FDB.GADTForall.TableRef
+module dependencies: FDB.GADTForall FDB.Utils Utils.AbstractGraph
+                     Utils.List Utils.Prelude
+package dependencies: array-0.5.3.0 base-4.12.0.0*
+                      containers-0.6.0.1 deepseq-1.4.4.0 ghc-prim-0.5.3
+                      integer-gmp-1.0.2.0
+orphans: base-4.12.0.0:GHC.Float base-4.12.0.0:GHC.Base
+family instance modules: base-4.12.0.0:Control.Applicative
+                         base-4.12.0.0:Data.Complex base-4.12.0.0:Data.Functor.Compose
+                         base-4.12.0.0:Data.Functor.Const
+                         base-4.12.0.0:Data.Functor.Identity
+                         base-4.12.0.0:Data.Functor.Product base-4.12.0.0:Data.Functor.Sum
+                         base-4.12.0.0:Data.Monoid base-4.12.0.0:Data.Semigroup
+                         base-4.12.0.0:Data.Semigroup.Internal base-4.12.0.0:Data.Version
+                         base-4.12.0.0:Data.Void base-4.12.0.0:GHC.Exts
+                         base-4.12.0.0:GHC.Generics base-4.12.0.0:GHC.IO.Exception
+                         containers-0.6.0.1:Data.Map.Internal
+                         containers-0.6.0.1:Data.Set.Internal
+import  -/  base-4.12.0.0:Prelude 3c779dfd6448bdd8e234c336802c2acb
+import  -/  FDB.GADTForall 2ec04ab76785c0ef3367f1072213b81d
+  exports: fb193511fe8d73f164a58cae22e37359
+  -|><|-> 0579b56cc211ae301f1acc55f778b05f
+  <-|><|- 4d75d96f259ac2cb1ed940b83bb2a10c
+  Agg 77cd277da192bedfc150d9627c7a2c61
+  Fold bcc5254964a83c22eb76e099e7914831
+  Fold1 2fbbc58d72238cd9c791b6e0352dc9f1
+  NatJoin 01e516785b9987c7c09ff9b8d52b30a1
+  Q a09e9c7821ad423c05a6fe4bac7535bb
+  Row 430cda220c2c01c89b72a50960f08f8f
+  RowId b87a19a48fb6ebe44b8096155135bc78
+  RowRef 7b2c19c12ae57c29c041feb70b8de8ca
+  SQ a09e9c7821ad423c05a6fe4bac7535bb
+  Table 003d014158453317a575bbe8cadc8a4c
+  TableRef a6ac765d4c148de8504cdaf872d065cc
+  avgAgg 774877e29e043ea7f0722299e9d9af2c
+  count efb9ae04714946b9371e4d6ec3a4170e
+  emptyQ e379a157d50cd1617f625cd824e5aa7c
+  eqFilter b2bed967efbf5dce271dd876d782151f
+  equiJoin b194438f092e3942c54049e887852ae5
+  exists 4bc4a9faf6f2e5e6c29736be860fe830
+  fetchForeign 4bb82de46dda368b2826dd4c6adfb349
+  fetchRow f78ff89a45e9cb54d8664ea240e07826
+  filterQ f74ed4017303f7c103aabc48392437fe
+  findTable 257851540b5753fb4d99d3f5d24e71f6
+  groupByQ a6fd418119ad0468a85e5a193efe4301
+  groupByWithKey 65c0893f98f64dfd97ca2a9ecd47b411
+  mapAgg 518ab15bd86bc20fa76a2cc2ebe2f9e4
+  mapQ e7eec41dc2e968861e43a1d3480a9f14
+  mapToQ 049258689a8f8d423ba03d1fcb35cb3a
+  minAgg e2293b127c7f126c7552a2f350cdfa7c
+  orderBy b06fd076042a61f1304faa1b6af82db8
+  readT 58c33e9f583aa28748b9ab7b05af5575
+  rowRef 9b854911b3728ea4eb83295fe8388cde
+  subqFilter ffd526c20372fd7231516f30555474ff
+  subqMap 390f944fb41bef220d2edbb33a024c54
+  sumAgg 5e5cfa0b658fc8ee7804a0148ff49868
+  toQ 74206513296e18ab282bdf737dd1cadf
+  |><| 70d55f201659302d0751c04173871be8
+80963f0b316cf1efd6fb5bf2697142da
+  $trModule :: GHC.Types.Module
+trusted: safe
+require own pkg trusted: False
+module header:
+  Nothing
+declaration docs:
+arg docs:
+
+
+[8 of 8] Compiling TPCH.Functional.Schema ( ghc-dumps/../TPCH/Functional/Schema.hs, ghc-dumps/../TPCH/Functional/Schema.o )
+
+==================== FINAL INTERFACE ====================
+interface main:TPCH.Functional.Schema 8065
+  interface hash: 6284e3856a3b4e69ebf9d6ec7efe4f71
+  ABI hash: 02cefceaaec6dfc81998abc384e8f478
+  export-list hash: 4002090e29316fa23ec4bb1a30aa2184
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: a9eadf3bc0610a605a187c9db6b50994
+  opt_hash: d0a78e7b344f95c7406be35c9b75e196
+  hpc_hash: 93b885adfe0da089cdf634904fd59f71
+  plugin_hash: ad164012d6b1e14942349d58b1132007
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  TPCH.Functional.Schema.allNations
+  TPCH.Functional.Schema.allRegions
+  TPCH.Functional.Schema.customers
+  TPCH.Functional.Schema.findRegion
+  TPCH.Functional.Schema.lineitems
+  TPCH.Functional.Schema.n_comment
+  TPCH.Functional.Schema.n_name
+  TPCH.Functional.Schema.n_region
+  TPCH.Functional.Schema.nationsIn
+  TPCH.Functional.Schema.orders
+  TPCH.Functional.Schema.parts
+  TPCH.Functional.Schema.partsupps
+  TPCH.Functional.Schema.r_comment
+  TPCH.Functional.Schema.r_name
+  TPCH.Functional.Schema.suppliers
+  TPCH.Functional.Schema.Customer{TPCH.Functional.Schema.Customer c_acctbal c_address c_comment c_mktsegment c_name c_nation c_phone}
+  TPCH.Functional.Schema.LineItem{TPCH.Functional.Schema.LineItem l_comment l_commitdate l_discount l_extendedprice l_linenumber l_linestatus l_orderref l_partref l_quantity l_receiptdate l_returnflag l_shipdate l_shipinstruct l_shipmode l_suppref l_tax}
+  TPCH.Functional.Schema.Nation{TPCH.Functional.Schema.France TPCH.Functional.Schema.Germany}
+  TPCH.Functional.Schema.Order{TPCH.Functional.Schema.Order o_clerk o_comment o_custref o_orderdate o_orderpriority o_orderstatus o_shippriority o_totalprice}
+  TPCH.Functional.Schema.Part{TPCH.Functional.Schema.Part p_brand p_comment p_container p_mfgr p_name p_retailprice p_size p_type}
+  TPCH.Functional.Schema.PartSupp{TPCH.Functional.Schema.PartSupp ps_availqty ps_comment ps_partref ps_supplycost ps_suppref}
+  TPCH.Functional.Schema.Region{TPCH.Functional.Schema.EMEA}
+  TPCH.Functional.Schema.Supplier{TPCH.Functional.Schema.Supplier s_acctbal s_address s_comment s_name s_nation s_phone}
+module dependencies: FDB.FDB FDB.GADTForall FDB.MoreTypes FDB.Utils
+                     Utils.AbstractGraph Utils.List Utils.Prelude
+package dependencies: array-0.5.3.0 base-4.12.0.0*
+                      containers-0.6.0.1 deepseq-1.4.4.0 ghc-prim-0.5.3
+                      integer-gmp-1.0.2.0
+orphans: base-4.12.0.0:GHC.Float base-4.12.0.0:GHC.Base
+family instance modules: base-4.12.0.0:Control.Applicative
+                         base-4.12.0.0:Data.Complex base-4.12.0.0:Data.Functor.Compose
+                         base-4.12.0.0:Data.Functor.Const
+                         base-4.12.0.0:Data.Functor.Identity
+                         base-4.12.0.0:Data.Functor.Product base-4.12.0.0:Data.Functor.Sum
+                         base-4.12.0.0:Data.Monoid base-4.12.0.0:Data.Semigroup
+                         base-4.12.0.0:Data.Semigroup.Internal base-4.12.0.0:Data.Version
+                         base-4.12.0.0:Data.Void base-4.12.0.0:GHC.Exts
+                         base-4.12.0.0:GHC.Generics base-4.12.0.0:GHC.IO.Exception
+                         containers-0.6.0.1:Data.Map.Internal
+                         containers-0.6.0.1:Data.Set.Internal
+import  -/  base-4.12.0.0:GHC.Base c00b75f0b052d05c55ba6a4dd1c63b26
+import  -/  base-4.12.0.0:GHC.Err ea5e313ef4146b40b5d8b27aa168e736
+import  -/  base-4.12.0.0:Prelude 3c779dfd6448bdd8e234c336802c2acb
+import  -/  ghc-prim-0.5.3:GHC.Classes 0f6fd7d7db53fc48f6e1f01803cc6c9d
+import  -/  FDB.FDB 56611820891a7bb5c4f9d91edadb6fcf
+  exports: 8782b81c2ddd12280b40b50bff63b82b
+import  -/  FDB.GADTForall 2ec04ab76785c0ef3367f1072213b81d
+  Table 003d014158453317a575bbe8cadc8a4c
+  TableRef a6ac765d4c148de8504cdaf872d065cc
+  findTable 257851540b5753fb4d99d3f5d24e71f6
+import  -/  FDB.MoreTypes 51d93a0ecfe12caec7f59da147006391
+  exports: 70eadc3748dca67f295a72c608582db8
+  Date 56aaf2be4cc5c11040ebb5fe6768c529
+  Decimal 3876398af33a66cdd718e181436271b3
+  PhoneNumber f93d4e268e3f256eb537ab458f1ffb58
+2d7833b2fca424e27f676baae4ba260a
+  $fEqNation :: GHC.Classes.Eq TPCH.Functional.Schema.Nation
+  DFunId
+b0611179187d62bb6db96a096616daeb
+  $fEqRegion :: GHC.Classes.Eq TPCH.Functional.Schema.Region
+  DFunId
+aee7222d6314dfae28c600ce7f36576f
+  $tc'Customer :: GHC.Types.TyCon
+1c6e56b41ea559e975f3d98add53f136
+  $tc'EMEA :: GHC.Types.TyCon
+84e9941fb1e7d53ccee8dbecdababb30
+  $tc'France :: GHC.Types.TyCon
+53c5832fabad3f371e21b5fd6fce3906
+  $tc'Germany :: GHC.Types.TyCon
+3da39d607064bae61cf353a6295b47e6
+  $tc'LineItem :: GHC.Types.TyCon
+f04adb7e14b02f6dd37a8bc23b046f6a
+  $tc'Order :: GHC.Types.TyCon
+ef596206f448f8c8867738af0de8b556
+  $tc'Part :: GHC.Types.TyCon
+b6bce98208bfec2f7fd328146f4615bf
+  $tc'PartSupp :: GHC.Types.TyCon
+fa554f58fa3cb2fc6855424a71654e86
+  $tc'Supplier :: GHC.Types.TyCon
+3a560ada0004dc6f01283f8eb9082970
+  $tcCustomer :: GHC.Types.TyCon
+0ce18a7bd286caf126f1968a2c7bc4b7
+  $tcLineItem :: GHC.Types.TyCon
+9f1bca03c78a7b99cf8094296a3fdeac
+  $tcNation :: GHC.Types.TyCon
+4b3d39aff18d7b84fa7690ea2fee8955
+  $tcOrder :: GHC.Types.TyCon
+37d163d785ad4aa2fd5365fef350b152
+  $tcPart :: GHC.Types.TyCon
+27c70612808af07e3e1968a521806a16
+  $tcPartSupp :: GHC.Types.TyCon
+d7d1dc3810a522e34a76cac4fc5628f0
+  $tcRegion :: GHC.Types.TyCon
+143cd7b55282bc4159b57acd5731839f
+  $tcSupplier :: GHC.Types.TyCon
+751c5ce86b2af4d2c3acc83fa923a3a0
+  $trModule :: GHC.Types.Module
+37d92a836f619fd9b3cf63c97c25fccc
+  data Customer
+    = Customer {c_name :: GHC.Base.String,
+                c_address :: GHC.Base.String,
+                c_nation :: TPCH.Functional.Schema.Nation,
+                c_phone :: FDB.MoreTypes.PhoneNumber,
+                c_acctbal :: FDB.MoreTypes.Decimal,
+                c_mktsegment :: GHC.Base.String,
+                c_comment :: GHC.Base.String}
+abcdfb61ecfa57261c0e9b8867509c4c
+  data LineItem
+    = LineItem {l_orderref :: FDB.GADTForall.TableRef
+                                TPCH.Functional.Schema.Order,
+                l_partref :: FDB.GADTForall.TableRef TPCH.Functional.Schema.Part,
+                l_suppref :: FDB.GADTForall.TableRef
+                               TPCH.Functional.Schema.Supplier,
+                l_linenumber :: GHC.Types.Int,
+                l_quantity :: FDB.MoreTypes.Decimal,
+                l_extendedprice :: FDB.MoreTypes.Decimal,
+                l_discount :: FDB.MoreTypes.Decimal,
+                l_tax :: FDB.MoreTypes.Decimal,
+                l_returnflag :: GHC.Types.Char,
+                l_linestatus :: GHC.Types.Char,
+                l_shipdate :: FDB.MoreTypes.Date,
+                l_commitdate :: FDB.MoreTypes.Date,
+                l_receiptdate :: FDB.MoreTypes.Date,
+                l_shipinstruct :: GHC.Base.String,
+                l_shipmode :: GHC.Base.String,
+                l_comment :: GHC.Base.String}
+2d7833b2fca424e27f676baae4ba260a
+  data Nation = France | Germany
+c6b7a581e2d060ed569d4626e54d8ac4
+  data Order
+    = Order {o_custref :: FDB.GADTForall.TableRef
+                            TPCH.Functional.Schema.Customer,
+             o_orderstatus :: GHC.Types.Char,
+             o_totalprice :: FDB.MoreTypes.Decimal,
+             o_orderdate :: FDB.MoreTypes.Date,
+             o_orderpriority :: GHC.Base.String,
+             o_clerk :: GHC.Base.String,
+             o_shippriority :: GHC.Types.Int,
+             o_comment :: GHC.Base.String}
+0cb735488f6360cc17e4ce4581702814
+  data Part
+    = Part {p_name :: GHC.Base.String,
+            p_mfgr :: GHC.Base.String,
+            p_brand :: GHC.Base.String,
+            p_type :: GHC.Base.String,
+            p_size :: GHC.Types.Int,
+            p_container :: GHC.Base.String,
+            p_retailprice :: FDB.MoreTypes.Decimal,
+            p_comment :: GHC.Base.String}
+05c422f99204942ced3969a132114b81
+  data PartSupp
+    = PartSupp {ps_partref :: FDB.GADTForall.TableRef
+                                TPCH.Functional.Schema.Part,
+                ps_suppref :: FDB.GADTForall.TableRef
+                                TPCH.Functional.Schema.Supplier,
+                ps_availqty :: GHC.Types.Int,
+                ps_supplycost :: FDB.MoreTypes.Decimal,
+                ps_comment :: GHC.Base.String}
+b0611179187d62bb6db96a096616daeb
+  data Region = EMEA
+7af977a9221102f4eb78f478e1d94ef7
+  data Supplier
+    = Supplier {s_name :: GHC.Base.String,
+                s_address :: GHC.Base.String,
+                s_nation :: TPCH.Functional.Schema.Nation,
+                s_phone :: FDB.MoreTypes.PhoneNumber,
+                s_acctbal :: FDB.MoreTypes.Decimal,
+                s_comment :: GHC.Base.String}
+b86e15334c3603456e1819eabf622c9a
+  allNations :: [TPCH.Functional.Schema.Nation]
+67f7235d043476670f400ab506afa4b2
+  allRegions :: [TPCH.Functional.Schema.Region]
+37d92a836f619fd9b3cf63c97c25fccc
+  c_acctbal ::
+    TPCH.Functional.Schema.Customer -> FDB.MoreTypes.Decimal
+  RecSel Left TPCH.Functional.Schema.Customer
+37d92a836f619fd9b3cf63c97c25fccc
+  c_address :: TPCH.Functional.Schema.Customer -> GHC.Base.String
+  RecSel Left TPCH.Functional.Schema.Customer
+37d92a836f619fd9b3cf63c97c25fccc
+  c_comment :: TPCH.Functional.Schema.Customer -> GHC.Base.String
+  RecSel Left TPCH.Functional.Schema.Customer
+37d92a836f619fd9b3cf63c97c25fccc
+  c_mktsegment :: TPCH.Functional.Schema.Customer -> GHC.Base.String
+  RecSel Left TPCH.Functional.Schema.Customer
+37d92a836f619fd9b3cf63c97c25fccc
+  c_name :: TPCH.Functional.Schema.Customer -> GHC.Base.String
+  RecSel Left TPCH.Functional.Schema.Customer
+37d92a836f619fd9b3cf63c97c25fccc
+  c_nation ::
+    TPCH.Functional.Schema.Customer -> TPCH.Functional.Schema.Nation
+  RecSel Left TPCH.Functional.Schema.Customer
+37d92a836f619fd9b3cf63c97c25fccc
+  c_phone ::
+    TPCH.Functional.Schema.Customer -> FDB.MoreTypes.PhoneNumber
+  RecSel Left TPCH.Functional.Schema.Customer
+2cf3697e16a5f10cb8b610d2dc02e229
+  customers :: FDB.GADTForall.Table TPCH.Functional.Schema.Customer
+3ca4af8c1ed724542cc481d996b438a3
+  findRegion :: GHC.Base.String -> TPCH.Functional.Schema.Region
+abcdfb61ecfa57261c0e9b8867509c4c
+  l_comment :: TPCH.Functional.Schema.LineItem -> GHC.Base.String
+  RecSel Left TPCH.Functional.Schema.LineItem
+abcdfb61ecfa57261c0e9b8867509c4c
+  l_commitdate ::
+    TPCH.Functional.Schema.LineItem -> FDB.MoreTypes.Date
+  RecSel Left TPCH.Functional.Schema.LineItem
+abcdfb61ecfa57261c0e9b8867509c4c
+  l_discount ::
+    TPCH.Functional.Schema.LineItem -> FDB.MoreTypes.Decimal
+  RecSel Left TPCH.Functional.Schema.LineItem
+abcdfb61ecfa57261c0e9b8867509c4c
+  l_extendedprice ::
+    TPCH.Functional.Schema.LineItem -> FDB.MoreTypes.Decimal
+  RecSel Left TPCH.Functional.Schema.LineItem
+abcdfb61ecfa57261c0e9b8867509c4c
+  l_linenumber :: TPCH.Functional.Schema.LineItem -> GHC.Types.Int
+  RecSel Left TPCH.Functional.Schema.LineItem
+abcdfb61ecfa57261c0e9b8867509c4c
+  l_linestatus :: TPCH.Functional.Schema.LineItem -> GHC.Types.Char
+  RecSel Left TPCH.Functional.Schema.LineItem
+abcdfb61ecfa57261c0e9b8867509c4c
+  l_orderref ::
+    TPCH.Functional.Schema.LineItem
+    -> FDB.GADTForall.TableRef TPCH.Functional.Schema.Order
+  RecSel Left TPCH.Functional.Schema.LineItem
+abcdfb61ecfa57261c0e9b8867509c4c
+  l_partref ::
+    TPCH.Functional.Schema.LineItem
+    -> FDB.GADTForall.TableRef TPCH.Functional.Schema.Part
+  RecSel Left TPCH.Functional.Schema.LineItem
+abcdfb61ecfa57261c0e9b8867509c4c
+  l_quantity ::
+    TPCH.Functional.Schema.LineItem -> FDB.MoreTypes.Decimal
+  RecSel Left TPCH.Functional.Schema.LineItem
+abcdfb61ecfa57261c0e9b8867509c4c
+  l_receiptdate ::
+    TPCH.Functional.Schema.LineItem -> FDB.MoreTypes.Date
+  RecSel Left TPCH.Functional.Schema.LineItem
+abcdfb61ecfa57261c0e9b8867509c4c
+  l_returnflag :: TPCH.Functional.Schema.LineItem -> GHC.Types.Char
+  RecSel Left TPCH.Functional.Schema.LineItem
+abcdfb61ecfa57261c0e9b8867509c4c
+  l_shipdate :: TPCH.Functional.Schema.LineItem -> FDB.MoreTypes.Date
+  RecSel Left TPCH.Functional.Schema.LineItem
+abcdfb61ecfa57261c0e9b8867509c4c
+  l_shipinstruct ::
+    TPCH.Functional.Schema.LineItem -> GHC.Base.String
+  RecSel Left TPCH.Functional.Schema.LineItem
+abcdfb61ecfa57261c0e9b8867509c4c
+  l_shipmode :: TPCH.Functional.Schema.LineItem -> GHC.Base.String
+  RecSel Left TPCH.Functional.Schema.LineItem
+abcdfb61ecfa57261c0e9b8867509c4c
+  l_suppref ::
+    TPCH.Functional.Schema.LineItem
+    -> FDB.GADTForall.TableRef TPCH.Functional.Schema.Supplier
+  RecSel Left TPCH.Functional.Schema.LineItem
+abcdfb61ecfa57261c0e9b8867509c4c
+  l_tax :: TPCH.Functional.Schema.LineItem -> FDB.MoreTypes.Decimal
+  RecSel Left TPCH.Functional.Schema.LineItem
+a911dc997a439fb594fb4aaee8271165
+  lineitems :: FDB.GADTForall.Table TPCH.Functional.Schema.LineItem
+865619b5413b10d9a454892e56d7895a
+  n_comment :: TPCH.Functional.Schema.Nation -> GHC.Base.String
+8ba78b199db55c5d53752e318d264b27
+  n_name :: TPCH.Functional.Schema.Nation -> GHC.Base.String
+89a6174bed3f52ee786464bec5bcdfe0
+  n_region ::
+    TPCH.Functional.Schema.Nation -> TPCH.Functional.Schema.Region
+f0e0eda81471e8a4c618487e2acae5da
+  nationsIn ::
+    TPCH.Functional.Schema.Region -> [TPCH.Functional.Schema.Nation]
+c6b7a581e2d060ed569d4626e54d8ac4
+  o_clerk :: TPCH.Functional.Schema.Order -> GHC.Base.String
+  RecSel Left TPCH.Functional.Schema.Order
+c6b7a581e2d060ed569d4626e54d8ac4
+  o_comment :: TPCH.Functional.Schema.Order -> GHC.Base.String
+  RecSel Left TPCH.Functional.Schema.Order
+c6b7a581e2d060ed569d4626e54d8ac4
+  o_custref ::
+    TPCH.Functional.Schema.Order
+    -> FDB.GADTForall.TableRef TPCH.Functional.Schema.Customer
+  RecSel Left TPCH.Functional.Schema.Order
+c6b7a581e2d060ed569d4626e54d8ac4
+  o_orderdate :: TPCH.Functional.Schema.Order -> FDB.MoreTypes.Date
+  RecSel Left TPCH.Functional.Schema.Order
+c6b7a581e2d060ed569d4626e54d8ac4
+  o_orderpriority :: TPCH.Functional.Schema.Order -> GHC.Base.String
+  RecSel Left TPCH.Functional.Schema.Order
+c6b7a581e2d060ed569d4626e54d8ac4
+  o_orderstatus :: TPCH.Functional.Schema.Order -> GHC.Types.Char
+  RecSel Left TPCH.Functional.Schema.Order
+c6b7a581e2d060ed569d4626e54d8ac4
+  o_shippriority :: TPCH.Functional.Schema.Order -> GHC.Types.Int
+  RecSel Left TPCH.Functional.Schema.Order
+c6b7a581e2d060ed569d4626e54d8ac4
+  o_totalprice ::
+    TPCH.Functional.Schema.Order -> FDB.MoreTypes.Decimal
+  RecSel Left TPCH.Functional.Schema.Order
+d3338cb5984636f4e9757d5e8e512744
+  orders :: FDB.GADTForall.Table TPCH.Functional.Schema.Order
+0cb735488f6360cc17e4ce4581702814
+  p_brand :: TPCH.Functional.Schema.Part -> GHC.Base.String
+  RecSel Left TPCH.Functional.Schema.Part
+0cb735488f6360cc17e4ce4581702814
+  p_comment :: TPCH.Functional.Schema.Part -> GHC.Base.String
+  RecSel Left TPCH.Functional.Schema.Part
+0cb735488f6360cc17e4ce4581702814
+  p_container :: TPCH.Functional.Schema.Part -> GHC.Base.String
+  RecSel Left TPCH.Functional.Schema.Part
+0cb735488f6360cc17e4ce4581702814
+  p_mfgr :: TPCH.Functional.Schema.Part -> GHC.Base.String
+  RecSel Left TPCH.Functional.Schema.Part
+0cb735488f6360cc17e4ce4581702814
+  p_name :: TPCH.Functional.Schema.Part -> GHC.Base.String
+  RecSel Left TPCH.Functional.Schema.Part
+0cb735488f6360cc17e4ce4581702814
+  p_retailprice ::
+    TPCH.Functional.Schema.Part -> FDB.MoreTypes.Decimal
+  RecSel Left TPCH.Functional.Schema.Part
+0cb735488f6360cc17e4ce4581702814
+  p_size :: TPCH.Functional.Schema.Part -> GHC.Types.Int
+  RecSel Left TPCH.Functional.Schema.Part
+0cb735488f6360cc17e4ce4581702814
+  p_type :: TPCH.Functional.Schema.Part -> GHC.Base.String
+  RecSel Left TPCH.Functional.Schema.Part
+99b3f49e69fa2bdc6ab2b77fcc05c854
+  parts :: FDB.GADTForall.Table TPCH.Functional.Schema.Part
+295b171a4f70760c5d33e1d142bb612c
+  partsupps :: FDB.GADTForall.Table TPCH.Functional.Schema.PartSupp
+05c422f99204942ced3969a132114b81
+  ps_availqty :: TPCH.Functional.Schema.PartSupp -> GHC.Types.Int
+  RecSel Left TPCH.Functional.Schema.PartSupp
+05c422f99204942ced3969a132114b81
+  ps_comment :: TPCH.Functional.Schema.PartSupp -> GHC.Base.String
+  RecSel Left TPCH.Functional.Schema.PartSupp
+05c422f99204942ced3969a132114b81
+  ps_partref ::
+    TPCH.Functional.Schema.PartSupp
+    -> FDB.GADTForall.TableRef TPCH.Functional.Schema.Part
+  RecSel Left TPCH.Functional.Schema.PartSupp
+05c422f99204942ced3969a132114b81
+  ps_supplycost ::
+    TPCH.Functional.Schema.PartSupp -> FDB.MoreTypes.Decimal
+  RecSel Left TPCH.Functional.Schema.PartSupp
+05c422f99204942ced3969a132114b81
+  ps_suppref ::
+    TPCH.Functional.Schema.PartSupp
+    -> FDB.GADTForall.TableRef TPCH.Functional.Schema.Supplier
+  RecSel Left TPCH.Functional.Schema.PartSupp
+034e0f95f33ce082d167fc05ab43694e
+  r_comment :: TPCH.Functional.Schema.Region -> GHC.Base.String
+84f29d2551e6744e542da20aa4f6e7fa
+  r_name :: TPCH.Functional.Schema.Region -> GHC.Base.String
+7af977a9221102f4eb78f478e1d94ef7
+  s_acctbal ::
+    TPCH.Functional.Schema.Supplier -> FDB.MoreTypes.Decimal
+  RecSel Left TPCH.Functional.Schema.Supplier
+7af977a9221102f4eb78f478e1d94ef7
+  s_address :: TPCH.Functional.Schema.Supplier -> GHC.Base.String
+  RecSel Left TPCH.Functional.Schema.Supplier
+7af977a9221102f4eb78f478e1d94ef7
+  s_comment :: TPCH.Functional.Schema.Supplier -> GHC.Base.String
+  RecSel Left TPCH.Functional.Schema.Supplier
+7af977a9221102f4eb78f478e1d94ef7
+  s_name :: TPCH.Functional.Schema.Supplier -> GHC.Base.String
+  RecSel Left TPCH.Functional.Schema.Supplier
+7af977a9221102f4eb78f478e1d94ef7
+  s_nation ::
+    TPCH.Functional.Schema.Supplier -> TPCH.Functional.Schema.Nation
+  RecSel Left TPCH.Functional.Schema.Supplier
+7af977a9221102f4eb78f478e1d94ef7
+  s_phone ::
+    TPCH.Functional.Schema.Supplier -> FDB.MoreTypes.PhoneNumber
+  RecSel Left TPCH.Functional.Schema.Supplier
+2db2aaa11d421c96f479f0e19a16a1e2
+  suppliers :: FDB.GADTForall.Table TPCH.Functional.Schema.Supplier
+instance [safe] GHC.Classes.Eq [TPCH.Functional.Schema.Nation]
+  = TPCH.Functional.Schema.$fEqNation
+instance [safe] GHC.Classes.Eq [TPCH.Functional.Schema.Region]
+  = TPCH.Functional.Schema.$fEqRegion
+trusted: safe
+require own pkg trusted: False
+module header:
+  Nothing
+declaration docs:
+arg docs:
+
+

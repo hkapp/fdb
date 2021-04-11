@@ -1,0 +1,3010 @@
+[1 of 8] Compiling FDB.MoreTypes    ( FDB/MoreTypes.hs, FDB/MoreTypes.o )
+
+==================== Desugar (after optimization) ====================
+Result size of Desugar (after optimization)
+  = {terms: 108, types: 39, coercions: 33, joins: 0/0}
+
+-- RHS size: {terms: 5, types: 0, coercions: 0, joins: 0/0}
+$trModule
+$trModule = Module (TrNameS "main"#) (TrNameS "FDB.MoreTypes"#)
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep_a2qu
+$krep_a2qu = KindRepTyConApp $tcInt []
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tcDateInterval
+$tcDateInterval
+  = TyCon
+      18376018677496580262##
+      7294864336028437579##
+      $trModule
+      (TrNameS "DateInterval"#)
+      0#
+      krep$*
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep_a2qv
+$krep_a2qv = KindRepTyConApp $tcDateInterval []
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a2qt
+$krep_a2qt = KindRepFun $krep_a2qu $krep_a2qv
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'Day
+$tc'Day
+  = TyCon
+      2870245755353241826##
+      3795114783946290854##
+      $trModule
+      (TrNameS "'Day"#)
+      0#
+      $krep_a2qt
+
+-- RHS size: {terms: 20, types: 3, coercions: 11, joins: 0/0}
+$dIP_a2eF
+$dIP_a2eF
+  = (pushCallStack
+       (unpackCString# "undefined"#,
+        SrcLoc
+          (unpackCString# "main"#)
+          (unpackCString# "FDB.MoreTypes"#)
+          (unpackCString# "./FDB/MoreTypes.hs"#)
+          (I# 6#)
+          (I# 18#)
+          (I# 6#)
+          (I# 27#))
+       ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+    `cast` <Co:4>
+
+-- RHS size: {terms: 2, types: 3, coercions: 0, joins: 0/0}
+dateFromString
+dateFromString = undefined $dIP_a2eF
+
+-- RHS size: {terms: 20, types: 3, coercions: 11, joins: 0/0}
+$dIP_a2eB
+$dIP_a2eB
+  = (pushCallStack
+       (unpackCString# "undefined"#,
+        SrcLoc
+          (unpackCString# "main"#)
+          (unpackCString# "FDB.MoreTypes"#)
+          (unpackCString# "./FDB/MoreTypes.hs"#)
+          (I# 9#)
+          (I# 21#)
+          (I# 9#)
+          (I# 30#))
+       ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+    `cast` <Co:4>
+
+-- RHS size: {terms: 2, types: 4, coercions: 0, joins: 0/0}
+tryDateFromString
+tryDateFromString = undefined $dIP_a2eB
+
+-- RHS size: {terms: 20, types: 3, coercions: 11, joins: 0/0}
+$dIP_a2ex
+$dIP_a2ex
+  = (pushCallStack
+       (unpackCString# "undefined"#,
+        SrcLoc
+          (unpackCString# "main"#)
+          (unpackCString# "FDB.MoreTypes"#)
+          (unpackCString# "./FDB/MoreTypes.hs"#)
+          (I# 14#)
+          (I# 17#)
+          (I# 14#)
+          (I# 26#))
+       ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+    `cast` <Co:4>
+
+-- RHS size: {terms: 2, types: 4, coercions: 0, joins: 0/0}
+minusInterval
+minusInterval = undefined $dIP_a2ex
+
+
+
+[2 of 8] Compiling FDB.Utils        ( FDB/Utils.hs, FDB/Utils.o )
+
+==================== Desugar (after optimization) ====================
+Result size of Desugar (after optimization)
+  = {terms: 40, types: 98, coercions: 0, joins: 0/0}
+
+-- RHS size: {terms: 12, types: 15, coercions: 0, joins: 0/0}
+compose2
+compose2
+  = \ @ t_a2AR
+      @ t_a2AT
+      @ t_a2AV
+      @ t_a2AZ
+      f_a2zh
+      g_a2zi
+      x_a2zj
+      y_a2zk ->
+      f_a2zh (g_a2zi x_a2zj y_a2zk)
+
+-- RHS size: {terms: 9, types: 17, coercions: 0, joins: 0/0}
+.:
+.:
+  = \ @ t_a2Bo @ t_a2Bp @ t_a2Bq @ t_a2Br f_a2zl g_a2zm ->
+      compose2 f_a2zl g_a2zm
+
+-- RHS size: {terms: 10, types: 17, coercions: 0, joins: 0/0}
+<&>
+<&>
+  = \ @ f_a2Ap @ a_a2Aq @ b_a2Ar $dFunctor_a2At as_a2zn f_a2zo ->
+      <$> $dFunctor_a2At f_a2zo as_a2zn
+
+-- RHS size: {terms: 5, types: 0, coercions: 0, joins: 0/0}
+$trModule
+$trModule = Module (TrNameS "main"#) (TrNameS "FDB.Utils"#)
+
+
+
+[3 of 8] Compiling Utils.List       ( Utils/List.hs, Utils/List.o )
+
+==================== Desugar (after optimization) ====================
+Result size of Desugar (after optimization)
+  = {terms: 54, types: 115, coercions: 0, joins: 0/0}
+
+-- RHS size: {terms: 6, types: 12, coercions: 0, joins: 0/0}
+noDuplicates
+noDuplicates
+  = \ @ a_a3cK $dOrd_a3cM -> . toList (fromList $dOrd_a3cM)
+
+-- RHS size: {terms: 6, types: 5, coercions: 0, joins: 0/0}
+zipWithIndex
+zipWithIndex = \ @ a_a30Z -> zip (enumFrom $fEnumInt (I# 0#))
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+zipWithIndexRight
+zipWithIndexRight = \ @ a_a3cv -> . (map swap) zipWithIndex
+
+-- RHS size: {terms: 27, types: 33, coercions: 0, joins: 0/0}
+groupByKeyVal
+groupByKeyVal
+  = \ @ k_a2ZZ
+      @ a_a300
+      @ v_a301
+      $dEq_a303
+      key_a2Re
+      val_a2Rf
+      xs_a2Rg ->
+      map
+        (\ thisGroup_a2U0 ->
+           (key_a2Re (head thisGroup_a2U0),
+            <$> $fFunctor[] val_a2Rf thisGroup_a2U0))
+        (groupBy
+           (\ x1_a2TY x2_a2TZ ->
+              == $dEq_a303 (key_a2Re x1_a2TY) (key_a2Re x2_a2TZ))
+           xs_a2Rg)
+
+-- RHS size: {terms: 5, types: 0, coercions: 0, joins: 0/0}
+$trModule
+$trModule = Module (TrNameS "main"#) (TrNameS "Utils.List"#)
+
+
+
+[4 of 8] Compiling Utils.Prelude    ( Utils/Prelude.hs, Utils/Prelude.o )
+
+==================== Desugar (after optimization) ====================
+Result size of Desugar (after optimization)
+  = {terms: 35, types: 106, coercions: 0, joins: 0/0}
+
+-- RHS size: {terms: 7, types: 28, coercions: 0, joins: 0/0}
+compose2
+compose2 = \ @ b_a3i3 @ c_a3i4 @ a_a3i2 @ a_a3i5 -> . . .
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+.:
+.: = compose2
+
+-- RHS size: {terms: 10, types: 17, coercions: 0, joins: 0/0}
+<&>
+<&>
+  = \ @ f_a3hL @ a_a3hM @ b_a3hN $dFunctor_a3hP as_a3gA f_a3gB ->
+      <$> $dFunctor_a3hP f_a3gB as_a3gA
+
+-- RHS size: {terms: 3, types: 4, coercions: 0, joins: 0/0}
+ignore
+ignore = \ @ a_a3hr -> const ()
+
+-- RHS size: {terms: 5, types: 0, coercions: 0, joins: 0/0}
+$trModule
+$trModule = Module (TrNameS "main"#) (TrNameS "Utils.Prelude"#)
+
+-- RHS size: {terms: 3, types: 2, coercions: 0, joins: 0/0}
+doNothing
+doNothing = return $fMonadIO ()
+
+
+
+[5 of 8] Compiling Utils.AbstractGraph ( Utils/AbstractGraph.hs, Utils/AbstractGraph.o )
+
+==================== Desugar (after optimization) ====================
+Result size of Desugar (after optimization)
+  = {terms: 648, types: 1,668, coercions: 0, joins: 0/13}
+
+-- RHS size: {terms: 19, types: 44, coercions: 0, joins: 0/0}
+$c<>_a4lO
+$c<>_a4lO
+  = \ @ v_a4lL @ e_a4lM ds_d4Aa ds_d4Ab ->
+      case ds_d4Aa of { Graph lv_a3No le_a3Np ->
+      case ds_d4Ab of { Graph rv_a3Nq re_a3Nr ->
+      Graph
+        (<> $fSemigroup[] lv_a3No rv_a3Nq)
+        (<> $fSemigroup[] le_a3Np re_a3Nr)
+      }
+      }
+
+Rec {
+-- RHS size: {terms: 6, types: 13, coercions: 0, joins: 0/0}
+$fSemigroupGraph
+$fSemigroupGraph
+  = \ @ v_a4lL @ e_a4lM ->
+      C:Semigroup $c<>_a4lO $csconcat_a4lZ $cstimes_a4v1
+
+-- RHS size: {terms: 7, types: 14, coercions: 0, joins: 0/0}
+$cstimes_a4v1
+$cstimes_a4v1
+  = \ @ v_a4lL @ e_a4lM @ b_a4vg $dIntegral_a4vi ->
+      $dmstimes $fSemigroupGraph $dIntegral_a4vi
+
+-- RHS size: {terms: 4, types: 9, coercions: 0, joins: 0/0}
+$csconcat_a4lZ
+$csconcat_a4lZ = \ @ v_a4lL @ e_a4lM -> $dmsconcat $fSemigroupGraph
+end Rec }
+
+-- RHS size: {terms: 4, types: 9, coercions: 0, joins: 0/0}
+$cmappend_a4lx
+$cmappend_a4lx = \ @ v_a4lk @ e_a4ll -> <> $fSemigroupGraph
+
+-- RHS size: {terms: 5, types: 11, coercions: 0, joins: 0/0}
+$cmempty_a4lr
+$cmempty_a4lr = \ @ v_a4lk @ e_a4ll -> Graph [] []
+
+Rec {
+-- RHS size: {terms: 7, types: 15, coercions: 0, joins: 0/0}
+$fMonoidGraph
+$fMonoidGraph
+  = \ @ v_a4lk @ e_a4ll ->
+      C:Monoid
+        $fSemigroupGraph $cmempty_a4lr $cmappend_a4lx $cmconcat_a4lE
+
+-- RHS size: {terms: 4, types: 9, coercions: 0, joins: 0/0}
+$cmconcat_a4lE
+$cmconcat_a4lE = \ @ v_a4lk @ e_a4ll -> $dmmconcat $fMonoidGraph
+end Rec }
+
+-- RHS size: {terms: 7, types: 17, coercions: 0, joins: 0/0}
+getNode
+getNode
+  = \ @ v_a4kz @ e_a4kA ds_d4zB ->
+      case ds_d4zB of { Tree node_a43H _ -> node_a43H }
+
+Rec {
+-- RHS size: {terms: 53, types: 142, coercions: 0, joins: 0/3}
+graphFromTree
+graphFromTree
+  = \ @ v_a4kC @ e_a4kD ds_d4zI ->
+      case ds_d4zI of { Tree node_a43z children_a43A ->
+      let {
+        edgeTriplets_a43B
+        edgeTriplets_a43B
+          = letrec {
+              ds_d4zK
+              ds_d4zK
+                = \ ds_d4zL ->
+                    case ds_d4zL of {
+                      [] -> [];
+                      : ds_d4zM ds_d4zN ->
+                        case ds_d4zM of { (edge_a43E, child_a43F) ->
+                        : (node_a43z, edge_a43E, getNode child_a43F) (ds_d4zK ds_d4zN)
+                        }
+                    }; } in
+            ds_d4zK children_a43A } in
+      <>
+        $fSemigroupGraph
+        (Graph (: node_a43z []) edgeTriplets_a43B)
+        (mconcat
+           $fMonoidGraph
+           (letrec {
+              ds_d4zT
+              ds_d4zT
+                = \ ds_d4zU ->
+                    case ds_d4zU of {
+                      [] -> [];
+                      : ds_d4zV ds_d4zW ->
+                        case ds_d4zV of { (_, child_a43G) ->
+                        : (graphFromTree child_a43G) (ds_d4zT ds_d4zW)
+                        }
+                    }; } in
+            ds_d4zT children_a43A))
+      }
+end Rec }
+
+-- RHS size: {terms: 8, types: 13, coercions: 0, joins: 0/0}
+singleton
+singleton = \ @ v_a4ku @ e_a4kv v_a43I -> Graph (: v_a43I []) []
+
+-- RHS size: {terms: 7, types: 17, coercions: 0, joins: 0/0}
+vertices
+vertices
+  = \ @ v_a4jE @ e_a4jF ds_d4zl ->
+      case ds_d4zl of { Graph vs_a43J _ -> vs_a43J }
+
+-- RHS size: {terms: 7, types: 17, coercions: 0, joins: 0/0}
+edgeTriplets
+edgeTriplets
+  = \ @ v_a4jB @ e_a4jC ds_d4ze ->
+      case ds_d4ze of { Graph _ es_a43K -> es_a43K }
+
+-- RHS size: {terms: 25, types: 52, coercions: 0, joins: 0/0}
+mapEdgeTriplets
+mapEdgeTriplets
+  = \ @ v_a4iX @ e_a4iY @ f_a4iZ f_a43L ds_d4z1 ->
+      case ds_d4z1 of { Graph vs_a43M es_a43N ->
+      Graph
+        vs_a43M
+        (<&>
+           $fFunctor[]
+           es_a43N
+           (\ ds_d4z2 ->
+              case ds_d4z2 of { (s_a43O, e_a43P, d_a43Q) ->
+              (s_a43O, f_a43L (s_a43O, e_a43P, d_a43Q), d_a43Q)
+              }))
+      }
+
+-- RHS size: {terms: 30, types: 57, coercions: 0, joins: 0/0}
+mapGraphTriplets
+mapGraphTriplets
+  = \ @ v1_a4iv
+      @ v2_a4iw
+      @ e1_a4ix
+      @ e2_a4iy
+      fv_a43R
+      fe_a43S
+      ds_d4yQ ->
+      case ds_d4yQ of { Graph vs_a43T es_a43U ->
+      Graph
+        (map fv_a43R vs_a43T)
+        (map
+           (\ ds_d4yV ->
+              case ds_d4yV of { (s_a43W, e_a43X, d_a43Y) ->
+              (fv_a43R s_a43W, fe_a43S (s_a43W, e_a43X, d_a43Y), fv_a43R d_a43Y)
+              })
+           es_a43U)
+      }
+
+-- RHS size: {terms: 13, types: 22, coercions: 0, joins: 0/0}
+mapEdgeInTriplet
+mapEdgeInTriplet
+  = \ @ e_a4ir @ f_a4is @ v_a4it f_a43Z ds_d4yK ->
+      case ds_d4yK of { (s_a440, e_a441, d_a442) ->
+      (s_a440, f_a43Z e_a441, d_a442)
+      }
+
+-- RHS size: {terms: 10, types: 19, coercions: 0, joins: 0/0}
+mapEdgeFromTriplet
+mapEdgeFromTriplet
+  = \ @ e_a4in @ f_a4io @ v_a4ip f_a443 ds_d4yA ->
+      case ds_d4yA of { (_, e_a444, _) -> f_a443 e_a444 }
+
+-- RHS size: {terms: 10, types: 19, coercions: 0, joins: 0/0}
+$cbimap_a4vr
+$cbimap_a4vr
+  = \ @ a_a4vx @ b_a4vy @ c_a4vz @ d_a4vA fv_a3Ns fe_a3Nt ->
+      mapGraphTriplets fv_a3Ns (mapEdgeFromTriplet fe_a3Nt)
+
+-- RHS size: {terms: 7, types: 14, coercions: 0, joins: 0/0}
+$csecond_a4w1
+$csecond_a4w1
+  = \ @ b_a4w3 @ c_a4w4 @ a_a4w5 fe_a3Nu ->
+      mapEdgeTriplets (mapEdgeFromTriplet fe_a3Nu)
+
+Rec {
+-- RHS size: {terms: 4, types: 1, coercions: 0, joins: 0/0}
+$fBifunctorGraph
+$fBifunctorGraph
+  = C:Bifunctor $cbimap_a4vr $cfirst_a4vO $csecond_a4w1
+
+-- RHS size: {terms: 5, types: 10, coercions: 0, joins: 0/0}
+$cfirst_a4vO
+$cfirst_a4vO
+  = \ @ a_a4vQ @ b_a4vR @ c_a4vS -> $dmfirst $fBifunctorGraph
+end Rec }
+
+-- RHS size: {terms: 5, types: 10, coercions: 0, joins: 0/0}
+mapEdges
+mapEdges = \ @ e_a4jb @ f_a4jc @ v_a4jd -> second $fBifunctorGraph
+
+-- RHS size: {terms: 5, types: 10, coercions: 0, joins: 0/0}
+mapVertices
+mapVertices
+  = \ @ v_a4jo @ w_a4jp @ e_a4jq -> first $fBifunctorGraph
+
+-- RHS size: {terms: 21, types: 35, coercions: 0, joins: 0/1}
+assignUniqueIds
+assignUniqueIds
+  = \ @ v_a4jH @ e_a4jI $dOrd_a4jK g_a445 ->
+      let {
+        idMap_a446
+        idMap_a446
+          = fromList $dOrd_a4jK (zipWithIndexRight (vertices g_a445)) } in
+      (mapVertices
+         (\ v_a448 -> (v_a448, ! $dOrd_a4jK idMap_a446 v_a448)) g_a445,
+       idMap_a446)
+
+-- RHS size: {terms: 12, types: 22, coercions: 0, joins: 0/0}
+eliminateDuplicateVertices
+eliminateDuplicateVertices
+  = \ @ v_a4ie @ e_a4if $dOrd_a4ih ds_d4yu ->
+      case ds_d4yu of { Graph vs_a449 es_a44a ->
+      Graph (noDuplicates $dOrd_a4ih vs_a449) es_a44a
+      }
+
+Rec {
+-- RHS size: {terms: 33, types: 67, coercions: 0, joins: 0/2}
+buildTree
+buildTree
+  = \ @ t_a4hy
+      @ v_a4hz
+      @ e_a4hA
+      toNode_a44b
+      children_a44c
+      root_a44d ->
+      let {
+        recBuildTree_a44h
+        recBuildTree_a44h = buildTree toNode_a44b children_a44c } in
+      Tree
+        (toNode_a44b root_a44d)
+        (letrec {
+           ds_d4yi
+           ds_d4yi
+             = \ ds_d4yj ->
+                 case ds_d4yj of {
+                   [] -> [];
+                   : ds_d4yk ds_d4yl ->
+                     case ds_d4yk of { (edge_a44i, child_a44j) ->
+                     : (edge_a44i, recBuildTree_a44h child_a44j) (ds_d4yi ds_d4yl)
+                     }
+                 }; } in
+         ds_d4yi (children_a44c root_a44d))
+end Rec }
+
+-- RHS size: {terms: 79, types: 292, coercions: 0, joins: 0/5}
+assignTreeIds
+assignTreeIds
+  = \ @ v_a4fJ @ e_a4fK root_a44k ->
+      letrec {
+        recAssignIds_a44l
+        recAssignIds_a44l
+          = \ @ v_a4g6 @ e_a4g7 id_a44o ds_d4xy ->
+              case ds_d4xy of { Tree node_a44p children_a44q ->
+              letrec {
+                assignInSequence_a44t
+                assignInSequence_a44t
+                  = \ @ e_a4gu @ v_a4gv freeId_a44w ds_d4xN ->
+                      case ds_d4xN of {
+                        [] -> ([], freeId_a44w);
+                        : ds_d4yg remEdges_a44z ->
+                          case ds_d4yg of { (edge_a44x, thisSubtree_a44y) ->
+                          let {
+                            ds_d4xZ
+                            ds_d4xZ = recAssignIds_a44l freeId_a44w thisSubtree_a44y } in
+                          let {
+                            ds_d4xP
+                            ds_d4xP
+                              = assignInSequence_a44t
+                                  (case ds_d4xZ of { (_, idAfterThisSubtree_a4gF) ->
+                                   idAfterThisSubtree_a4gF
+                                   })
+                                  remEdges_a44z } in
+                          (: (edge_a44x,
+                              case ds_d4xZ of { (thisSubtreeWithId_a4gD, _) ->
+                              thisSubtreeWithId_a4gD
+                              })
+                             (case ds_d4xP of { (remEdgesWithId_a4gS, _) ->
+                              remEdgesWithId_a4gS
+                              }),
+                           case ds_d4xP of { (_, nextFreeId_a4gU) -> nextFreeId_a4gU })
+                          }
+                      }; } in
+              let {
+                ds_d4xE
+                ds_d4xE
+                  = assignInSequence_a44t
+                      (+ $fNumInt id_a44o (I# 1#)) children_a44q } in
+              (Tree
+                 (node_a44p, id_a44o)
+                 (case ds_d4xE of { (childrenWithId_a4ha, _) ->
+                  childrenWithId_a4ha
+                  }),
+               case ds_d4xE of { (_, nextId_a4hc) -> nextId_a4hc })
+              }; } in
+      fst (recAssignIds_a44l (I# 0#) root_a44k)
+
+-- RHS size: {terms: 7, types: 17, coercions: 0, joins: 0/0}
+rootNode
+rootNode
+  = \ @ v_a4eF @ e_a4eG ds_d4x2 ->
+      case ds_d4x2 of { Tree root_a44N _ -> root_a44N }
+
+Rec {
+-- RHS size: {terms: 36, types: 103, coercions: 0, joins: 0/1}
+allTreeEdges
+allTreeEdges
+  = \ @ v_a4fb @ e_a4fc ds_d4xb ->
+      case ds_d4xb of { Tree root_a44F children_a44G ->
+      ++
+        (letrec {
+           ds_d4xg
+           ds_d4xg
+             = \ ds_d4xh ->
+                 case ds_d4xh of {
+                   [] -> [];
+                   : ds_d4xi ds_d4xj ->
+                     case ds_d4xi of { (edge_a44J, subtree_a44K) ->
+                     : (root_a44F, edge_a44J, rootNode subtree_a44K) (ds_d4xg ds_d4xj)
+                     }
+                 }; } in
+         ds_d4xg children_a44G)
+        (>>=
+           $fMonad[]
+           children_a44G
+           (\ ds_d4xp ->
+              case ds_d4xp of { (_, subtree_a44L) ->
+              allTreeEdges subtree_a44L
+              }))
+      }
+end Rec }
+
+-- RHS size: {terms: 9, types: 29, coercions: 0, joins: 0/0}
+subtrees
+subtrees
+  = \ @ v_a4ew @ e_a4ex ds_d4wV ->
+      case ds_d4wV of { Tree _ edges_a44O -> map snd edges_a44O }
+
+-- RHS size: {terms: 6, types: 21, coercions: 0, joins: 0/0}
+subtreeNodes
+subtreeNodes = \ @ v_a4eI @ e_a4eJ -> . (map rootNode) subtrees
+
+Rec {
+-- RHS size: {terms: 11, types: 19, coercions: 0, joins: 0/0}
+allTreeNodes
+allTreeNodes
+  = \ @ v_a4eU @ e_a4eV t_a44M ->
+      : (rootNode t_a44M) (>>= $fMonad[] (subtrees t_a44M) allTreeNodes)
+end Rec }
+
+Rec {
+-- RHS size: {terms: 31, types: 84, coercions: 0, joins: 0/1}
+mapTreeNodes
+mapTreeNodes
+  = \ @ v_a4em @ w_a4en @ e_a4eo f_a44P ds_d4wI ->
+      case ds_d4wI of { Tree root_a44Q edges_a44R ->
+      Tree
+        (f_a44P root_a44Q)
+        (letrec {
+           ds_d4wJ
+           ds_d4wJ
+             = \ ds_d4wK ->
+                 case ds_d4wK of {
+                   [] -> [];
+                   : ds_d4wL ds_d4wM ->
+                     case ds_d4wL of { (edge_a44S, subtree_a44T) ->
+                     : (edge_a44S, mapTreeNodes f_a44P subtree_a44T) (ds_d4wJ ds_d4wM)
+                     }
+                 }; } in
+         ds_d4wJ edges_a44R)
+      }
+end Rec }
+
+-- RHS size: {terms: 5, types: 0, coercions: 0, joins: 0/0}
+$trModule
+$trModule
+  = Module (TrNameS "main"#) (TrNameS "Utils.AbstractGraph"#)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a4wA
+$krep_a4wA = $WKindRepVar (I# 1#)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a4ww
+$krep_a4ww = $WKindRepVar (I# 0#)
+
+-- RHS size: {terms: 9, types: 4, coercions: 0, joins: 0/0}
+$krep_a4wG
+$krep_a4wG
+  = KindRepTyConApp
+      $tc(,,) (: $krep_a4ww (: $krep_a4wA (: $krep_a4ww [])))
+
+-- RHS size: {terms: 5, types: 2, coercions: 0, joins: 0/0}
+$krep_a4wF
+$krep_a4wF = KindRepTyConApp $tc[] (: $krep_a4wG [])
+
+-- RHS size: {terms: 5, types: 2, coercions: 0, joins: 0/0}
+$krep_a4wD
+$krep_a4wD = KindRepTyConApp $tc[] (: $krep_a4ww [])
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tcGraph
+$tcGraph
+  = TyCon
+      11750601768977025181##
+      11539868905161674652##
+      $trModule
+      (TrNameS "Graph"#)
+      0#
+      krep$*->*->*
+
+-- RHS size: {terms: 7, types: 3, coercions: 0, joins: 0/0}
+$krep_a4wH
+$krep_a4wH
+  = KindRepTyConApp $tcGraph (: $krep_a4ww (: $krep_a4wA []))
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a4wE
+$krep_a4wE = KindRepFun $krep_a4wF $krep_a4wH
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a4wC
+$krep_a4wC = KindRepFun $krep_a4wD $krep_a4wE
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'Graph
+$tc'Graph
+  = TyCon
+      17329342475042821334##
+      15132150088727508783##
+      $trModule
+      (TrNameS "'Graph"#)
+      2#
+      $krep_a4wC
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tcTree
+$tcTree
+  = TyCon
+      6515252302738829926##
+      7116435001695257579##
+      $trModule
+      (TrNameS "Tree"#)
+      0#
+      krep$*->*->*
+
+-- RHS size: {terms: 7, types: 3, coercions: 0, joins: 0/0}
+$krep_a4wB
+$krep_a4wB
+  = KindRepTyConApp $tcTree (: $krep_a4ww (: $krep_a4wA []))
+
+-- RHS size: {terms: 7, types: 3, coercions: 0, joins: 0/0}
+$krep_a4wz
+$krep_a4wz
+  = KindRepTyConApp $tc(,) (: $krep_a4wA (: $krep_a4wB []))
+
+-- RHS size: {terms: 5, types: 2, coercions: 0, joins: 0/0}
+$krep_a4wy
+$krep_a4wy = KindRepTyConApp $tc[] (: $krep_a4wz [])
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a4wx
+$krep_a4wx = KindRepFun $krep_a4wy $krep_a4wB
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a4wv
+$krep_a4wv = KindRepFun $krep_a4ww $krep_a4wx
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'Tree
+$tc'Tree
+  = TyCon
+      1962891149104463300##
+      12402799480339590078##
+      $trModule
+      (TrNameS "'Tree"#)
+      2#
+      $krep_a4wv
+
+
+
+[6 of 8] Compiling FDB.GADTForall   ( FDB/GADTForall.hs, FDB/GADTForall.o )
+
+==================== Desugar (after optimization) ====================
+Result size of Desugar (after optimization)
+  = {terms: 1,252, types: 1,188, coercions: 207, joins: 0/11}
+
+Rec {
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$fFunctorQ
+$fFunctorQ = C:Functor $WMap $c<$_a5MC
+
+-- RHS size: {terms: 4, types: 7, coercions: 0, joins: 0/0}
+$c<$_a5MC
+$c<$_a5MC = \ @ a_a5ME @ b_a5MF -> $dm<$ $fFunctorQ
+end Rec }
+
+-- RHS size: {terms: 25, types: 16, coercions: 11, joins: 0/1}
+$c<*>_a5LJ
+$c<*>_a5LJ
+  = \ @ a_a5LL @ b_a5LM ->
+      let {
+        $dIP_a5LQ
+        $dIP_a5LQ
+          = (pushCallStack
+               (unpackCString# "undefined"#,
+                SrcLoc
+                  (unpackCString# "main"#)
+                  (unpackCString# "FDB.GADTForall"#)
+                  (unpackCString# "./FDB/GADTForall.hs"#)
+                  (I# 82#)
+                  (I# 11#)
+                  (I# 82#)
+                  (I# 20#))
+               ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+            `cast` <Co:4> } in
+      undefined $dIP_a5LQ
+
+-- RHS size: {terms: 24, types: 10, coercions: 11, joins: 0/1}
+$cpure_a5LA
+$cpure_a5LA
+  = \ @ a_a5LC ->
+      let {
+        $dIP_a5LG
+        $dIP_a5LG
+          = (pushCallStack
+               (unpackCString# "undefined"#,
+                SrcLoc
+                  (unpackCString# "main"#)
+                  (unpackCString# "FDB.GADTForall"#)
+                  (unpackCString# "./FDB/GADTForall.hs"#)
+                  (I# 81#)
+                  (I# 10#)
+                  (I# 81#)
+                  (I# 19#))
+               ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+            `cast` <Co:4> } in
+      undefined $dIP_a5LG
+
+Rec {
+-- RHS size: {terms: 7, types: 1, coercions: 0, joins: 0/0}
+$fApplicativeQ
+$fApplicativeQ
+  = C:Applicative
+      $fFunctorQ $cpure_a5LA $c<*>_a5LJ $cliftA2_a5LT $c*>_a5M6 $c<*_a5Mh
+
+-- RHS size: {terms: 4, types: 7, coercions: 0, joins: 0/0}
+$c*>_a5M6
+$c*>_a5M6 = \ @ a_a5M8 @ b_a5M9 -> $dm*> $fApplicativeQ
+
+-- RHS size: {terms: 4, types: 7, coercions: 0, joins: 0/0}
+$c<*_a5Mh
+$c<*_a5Mh = \ @ a_a5Mj @ b_a5Mk -> $dm<* $fApplicativeQ
+
+-- RHS size: {terms: 5, types: 10, coercions: 0, joins: 0/0}
+$cliftA2_a5LT
+$cliftA2_a5LT
+  = \ @ a_a5LV @ b_a5LW @ c_a5LX -> $dmliftA2 $fApplicativeQ
+end Rec }
+
+-- RHS size: {terms: 25, types: 16, coercions: 11, joins: 0/1}
+$c>>=_a5KR
+$c>>=_a5KR
+  = \ @ a_a5KT @ b_a5KU ->
+      let {
+        $dIP_a5KY
+        $dIP_a5KY
+          = (pushCallStack
+               (unpackCString# "undefined"#,
+                SrcLoc
+                  (unpackCString# "main"#)
+                  (unpackCString# "FDB.GADTForall"#)
+                  (unpackCString# "./FDB/GADTForall.hs"#)
+                  (I# 85#)
+                  (I# 11#)
+                  (I# 85#)
+                  (I# 20#))
+               ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+            `cast` <Co:4> } in
+      undefined $dIP_a5KY
+
+Rec {
+-- RHS size: {terms: 6, types: 1, coercions: 0, joins: 0/0}
+$fMonadQ
+$fMonadQ
+  = C:Monad
+      $fApplicativeQ $c>>=_a5KR $c>>_a5L1 $creturn_a5Lc $cfail_a5Ll
+
+-- RHS size: {terms: 3, types: 4, coercions: 0, joins: 0/0}
+$creturn_a5Lc
+$creturn_a5Lc = \ @ a_a5Le -> $dmreturn $fMonadQ
+
+-- RHS size: {terms: 3, types: 4, coercions: 0, joins: 0/0}
+$cfail_a5Ll
+$cfail_a5Ll = \ @ a_a5Ln -> $dmfail $fMonadQ
+
+-- RHS size: {terms: 4, types: 7, coercions: 0, joins: 0/0}
+$c>>_a5L1
+$c>>_a5L1 = \ @ a_a5L3 @ b_a5L4 -> $dm>> $fMonadQ
+end Rec }
+
+-- RHS size: {terms: 25, types: 15, coercions: 11, joins: 0/1}
+$cfmap_a5Kj
+$cfmap_a5Kj
+  = \ @ a_a5Kn @ b_a5Ko ->
+      let {
+        $dIP_a5Ks
+        $dIP_a5Ks
+          = (pushCallStack
+               (unpackCString# "undefined"#,
+                SrcLoc
+                  (unpackCString# "main"#)
+                  (unpackCString# "FDB.GADTForall"#)
+                  (unpackCString# "./FDB/GADTForall.hs"#)
+                  (I# 104#)
+                  (I# 10#)
+                  (I# 104#)
+                  (I# 19#))
+               ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+            `cast` <Co:4> } in
+      undefined $dIP_a5Ks
+
+Rec {
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$fFunctorSQ
+$fFunctorSQ = C:Functor $cfmap_a5Kj $c<$_a5Ky
+
+-- RHS size: {terms: 4, types: 7, coercions: 0, joins: 0/0}
+$c<$_a5Ky
+$c<$_a5Ky = \ @ a_a5KC @ b_a5KD -> $dm<$ $fFunctorSQ
+end Rec }
+
+-- RHS size: {terms: 25, types: 16, coercions: 11, joins: 0/1}
+$c<*>_a5Jf
+$c<*>_a5Jf
+  = \ @ a_a5Jj @ b_a5Jk ->
+      let {
+        $dIP_a5Jo
+        $dIP_a5Jo
+          = (pushCallStack
+               (unpackCString# "undefined"#,
+                SrcLoc
+                  (unpackCString# "main"#)
+                  (unpackCString# "FDB.GADTForall"#)
+                  (unpackCString# "./FDB/GADTForall.hs"#)
+                  (I# 108#)
+                  (I# 11#)
+                  (I# 108#)
+                  (I# 20#))
+               ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+            `cast` <Co:4> } in
+      undefined $dIP_a5Jo
+
+-- RHS size: {terms: 24, types: 10, coercions: 11, joins: 0/1}
+$cpure_a5J5
+$cpure_a5J5
+  = \ @ a_a5J8 ->
+      let {
+        $dIP_a5Jc
+        $dIP_a5Jc
+          = (pushCallStack
+               (unpackCString# "undefined"#,
+                SrcLoc
+                  (unpackCString# "main"#)
+                  (unpackCString# "FDB.GADTForall"#)
+                  (unpackCString# "./FDB/GADTForall.hs"#)
+                  (I# 107#)
+                  (I# 10#)
+                  (I# 107#)
+                  (I# 19#))
+               ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+            `cast` <Co:4> } in
+      undefined $dIP_a5Jc
+
+Rec {
+-- RHS size: {terms: 7, types: 1, coercions: 0, joins: 0/0}
+$fApplicativeSQ
+$fApplicativeSQ
+  = C:Applicative
+      $fFunctorSQ
+      $cpure_a5J5
+      $c<*>_a5Jf
+      $cliftA2_a5Jv
+      $c*>_a5JO
+      $c<*_a5K4
+
+-- RHS size: {terms: 4, types: 7, coercions: 0, joins: 0/0}
+$c*>_a5JO
+$c*>_a5JO = \ @ a_a5JS @ b_a5JT -> $dm*> $fApplicativeSQ
+
+-- RHS size: {terms: 4, types: 7, coercions: 0, joins: 0/0}
+$c<*_a5K4
+$c<*_a5K4 = \ @ a_a5K8 @ b_a5K9 -> $dm<* $fApplicativeSQ
+
+-- RHS size: {terms: 5, types: 10, coercions: 0, joins: 0/0}
+$cliftA2_a5Jv
+$cliftA2_a5Jv
+  = \ @ a_a5JA @ b_a5JB @ c_a5JC -> $dmliftA2 $fApplicativeSQ
+end Rec }
+
+-- RHS size: {terms: 25, types: 16, coercions: 11, joins: 0/1}
+$c>>=_a5Ic
+$c>>=_a5Ic
+  = \ @ a_a5Ie @ b_a5If ->
+      let {
+        $dIP_a5Ij
+        $dIP_a5Ij
+          = (pushCallStack
+               (unpackCString# "undefined"#,
+                SrcLoc
+                  (unpackCString# "main"#)
+                  (unpackCString# "FDB.GADTForall"#)
+                  (unpackCString# "./FDB/GADTForall.hs"#)
+                  (I# 111#)
+                  (I# 11#)
+                  (I# 111#)
+                  (I# 20#))
+               ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+            `cast` <Co:4> } in
+      undefined $dIP_a5Ij
+
+Rec {
+-- RHS size: {terms: 6, types: 1, coercions: 0, joins: 0/0}
+$fMonadSQ
+$fMonadSQ
+  = C:Monad
+      $fApplicativeSQ $c>>=_a5Ic $c>>_a5Ip $creturn_a5IE $cfail_a5IP
+
+-- RHS size: {terms: 3, types: 4, coercions: 0, joins: 0/0}
+$creturn_a5IE
+$creturn_a5IE = \ @ a_a5IG -> $dmreturn $fMonadSQ
+
+-- RHS size: {terms: 3, types: 4, coercions: 0, joins: 0/0}
+$cfail_a5IP
+$cfail_a5IP = \ @ a_a5IS -> $dmfail $fMonadSQ
+
+-- RHS size: {terms: 4, types: 7, coercions: 0, joins: 0/0}
+$c>>_a5Ip
+$c>>_a5Ip = \ @ a_a5It @ b_a5Iu -> $dm>> $fMonadSQ
+end Rec }
+
+-- RHS size: {terms: 2, types: 1, coercions: 7, joins: 0/0}
+$c/=_a5Hn
+$c/=_a5Hn = (/= $fEqWord16) `cast` <Co:7>
+
+-- RHS size: {terms: 2, types: 1, coercions: 7, joins: 0/0}
+$c==_a5GW
+$c==_a5GW = (== $fEqWord16) `cast` <Co:7>
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$fEqTableId
+$fEqTableId = C:Eq $c==_a5GW $c/=_a5Hn
+
+-- RHS size: {terms: 2, types: 1, coercions: 7, joins: 0/0}
+$c/=_a5Gt
+$c/=_a5Gt = (/= $fEqWord64) `cast` <Co:7>
+
+-- RHS size: {terms: 2, types: 1, coercions: 7, joins: 0/0}
+$c==_a5G2
+$c==_a5G2 = (== $fEqWord64) `cast` <Co:7>
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$fEqRowId
+$fEqRowId = C:Eq $c==_a5G2 $c/=_a5Gt
+
+-- RHS size: {terms: 18, types: 16, coercions: 0, joins: 0/0}
+$c==_a5HR
+$c==_a5HR
+  = \ @ a_a5HP ds_d5QW ds_d5QX ->
+      case ds_d5QW of { RowRef a1_a5sv a2_a5sw ->
+      case ds_d5QX of { RowRef b1_a5sx b2_a5sy ->
+      && (== $fEqTableId a1_a5sv b1_a5sx) (== $fEqRowId a2_a5sw b2_a5sy)
+      }
+      }
+
+Rec {
+-- RHS size: {terms: 4, types: 6, coercions: 0, joins: 0/0}
+$fEqRowRef
+$fEqRowRef = \ @ a_a5HP -> C:Eq $c==_a5HR $c/=_a5I0
+
+-- RHS size: {terms: 3, types: 5, coercions: 0, joins: 0/0}
+$c/=_a5I0
+$c/=_a5I0 = \ @ a_a5HP -> $dm/= $fEqRowRef
+end Rec }
+
+-- RHS size: {terms: 3, types: 3, coercions: 3, joins: 0/0}
+findTable
+findTable = \ @ a_a5FX v_B1 -> v_B1 `cast` <Co:3>
+
+Rec {
+-- RHS size: {terms: 23, types: 23, coercions: 0, joins: 0/1}
+pull
+pull
+  = \ @ a_a5FN rec_a5jD ->
+      case rec_a5jD of wild_00 {
+        __DEFAULT ->
+          patError "FDB/GADTForall.hs:(36,1)-(41,27)|function pull"#;
+        Filter p_a5jE q_a5jF ->
+          let {
+            x_a5jG
+            x_a5jG = pull q_a5jF } in
+          case p_a5jE x_a5jG of {
+            False -> pull wild_00;
+            True -> x_a5jG
+          };
+        Map @ b_a5FV f_a5jH q_a5jI -> f_a5jH (pull q_a5jI)
+      }
+end Rec }
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+readT
+readT = Read
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+mapQ
+mapQ = $WMap
+
+-- RHS size: {terms: 11, types: 19, coercions: 0, joins: 0/0}
+-|><|->
+-|><|->
+  = \ @ a_a5Fm @ b_a5Fn $dNatJoin_a5Fp x_a5jP y_a5jQ ->
+      mapQ snd (|><| $dNatJoin_a5Fp x_a5jP y_a5jQ)
+
+-- RHS size: {terms: 11, types: 19, coercions: 0, joins: 0/0}
+<-|><|-
+<-|><|-
+  = \ @ a_a5Fy @ b_a5Fz $dNatJoin_a5FB a_a5jR b_a5jS ->
+      mapQ fst (|><| $dNatJoin_a5FB a_a5jR b_a5jS)
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+filterQ
+filterQ = Filter
+
+-- RHS size: {terms: 4, types: 8, coercions: 0, joins: 0/0}
+groupByWithKey
+groupByWithKey = \ @ k_a5EH @ a_a5EI _ -> $WGroupBy
+
+-- RHS size: {terms: 8, types: 29, coercions: 0, joins: 0/0}
+groupByQ
+groupByQ
+  = \ @ k_a5EW @ a_a5EX $dOrd_a5EZ ->
+      .: (mapQ snd) (groupByWithKey $dOrd_a5EZ)
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+orderBy
+orderBy = $WOrderBy
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+takeQ
+takeQ = $WTake
+
+-- RHS size: {terms: 24, types: 9, coercions: 11, joins: 0/1}
+emptyQ
+emptyQ
+  = \ @ a_a5DU ->
+      let {
+        $dIP_a5DY
+        $dIP_a5DY
+          = (pushCallStack
+               (unpackCString# "undefined"#,
+                SrcLoc
+                  (unpackCString# "main"#)
+                  (unpackCString# "FDB.GADTForall"#)
+                  (unpackCString# "./FDB/GADTForall.hs"#)
+                  (I# 65#)
+                  (I# 10#)
+                  (I# 65#)
+                  (I# 19#))
+               ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+            `cast` <Co:4> } in
+      undefined $dIP_a5DY
+
+-- RHS size: {terms: 24, types: 17, coercions: 11, joins: 0/0}
+eqFilter
+eqFilter
+  = \ @ b_a5DM @ a_a5DN _ ->
+      undefined
+        ((pushCallStack
+            (unpackCString# "undefined"#,
+             SrcLoc
+               (unpackCString# "main"#)
+               (unpackCString# "FDB.GADTForall"#)
+               (unpackCString# "./FDB/GADTForall.hs"#)
+               (I# 70#)
+               (I# 12#)
+               (I# 70#)
+               (I# 21#))
+            ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+         `cast` <Co:4>)
+
+-- RHS size: {terms: 25, types: 24, coercions: 11, joins: 0/0}
+equiJoin
+equiJoin
+  = \ @ c_a5DD @ a_a5DE @ b_a5DF _ ->
+      undefined
+        ((pushCallStack
+            (unpackCString# "undefined"#,
+             SrcLoc
+               (unpackCString# "main"#)
+               (unpackCString# "FDB.GADTForall"#)
+               (unpackCString# "./FDB/GADTForall.hs"#)
+               (I# 73#)
+               (I# 12#)
+               (I# 73#)
+               (I# 21#))
+            ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+         `cast` <Co:4>)
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+fetchRow
+fetchRow = $WFetchRow
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+subqMap
+subqMap = $WMapSQ
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+subqFilter
+subqFilter = FilterSQ
+
+-- RHS size: {terms: 25, types: 16, coercions: 11, joins: 0/1}
+mapToQ
+mapToQ
+  = \ @ a_a5Dc @ b_a5Dd ->
+      let {
+        $dIP_a5Dh
+        $dIP_a5Dh
+          = (pushCallStack
+               (unpackCString# "undefined"#,
+                SrcLoc
+                  (unpackCString# "main"#)
+                  (unpackCString# "FDB.GADTForall"#)
+                  (unpackCString# "./FDB/GADTForall.hs"#)
+                  (I# 130#)
+                  (I# 10#)
+                  (I# 130#)
+                  (I# 19#))
+               ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+            `cast` <Co:4> } in
+      undefined $dIP_a5Dh
+
+-- RHS size: {terms: 24, types: 11, coercions: 11, joins: 0/1}
+toQ
+toQ
+  = \ @ a_a5D6 ->
+      let {
+        $dIP_a5Da
+        $dIP_a5Da
+          = (pushCallStack
+               (unpackCString# "undefined"#,
+                SrcLoc
+                  (unpackCString# "main"#)
+                  (unpackCString# "FDB.GADTForall"#)
+                  (unpackCString# "./FDB/GADTForall.hs"#)
+                  (I# 133#)
+                  (I# 7#)
+                  (I# 133#)
+                  (I# 16#))
+               ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+            `cast` <Co:4> } in
+      undefined $dIP_a5Da
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+agg
+agg = $WStateFold
+
+-- RHS size: {terms: 12, types: 21, coercions: 0, joins: 0/0}
+mapAgg
+mapAgg
+  = \ @ b_a5Fc @ c_a5Fd @ s_a5Fe @ a_a5Ff g_a5jM f_a5jN q_a5jO ->
+      agg g_a5jM (mapQ f_a5jN q_a5jO)
+
+-- RHS size: {terms: 23, types: 12, coercions: 11, joins: 0/0}
+sumAgg
+sumAgg
+  = \ @ a_a5CS _ ->
+      undefined
+        ((pushCallStack
+            (unpackCString# "undefined"#,
+             SrcLoc
+               (unpackCString# "main"#)
+               (unpackCString# "FDB.GADTForall"#)
+               (unpackCString# "./FDB/GADTForall.hs"#)
+               (I# 148#)
+               (I# 10#)
+               (I# 148#)
+               (I# 19#))
+            ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+         `cast` <Co:4>)
+
+-- RHS size: {terms: 23, types: 14, coercions: 11, joins: 0/0}
+avgAgg
+avgAgg
+  = \ @ a_a5CL _ ->
+      undefined
+        ((pushCallStack
+            (unpackCString# "undefined"#,
+             SrcLoc
+               (unpackCString# "main"#)
+               (unpackCString# "FDB.GADTForall"#)
+               (unpackCString# "./FDB/GADTForall.hs"#)
+               (I# 151#)
+               (I# 10#)
+               (I# 151#)
+               (I# 19#))
+            ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+         `cast` <Co:4>)
+
+-- RHS size: {terms: 24, types: 14, coercions: 11, joins: 0/0}
+count
+count
+  = \ @ n_a5CD @ a_a5CE _ ->
+      undefined
+        ((pushCallStack
+            (unpackCString# "undefined"#,
+             SrcLoc
+               (unpackCString# "main"#)
+               (unpackCString# "FDB.GADTForall"#)
+               (unpackCString# "./FDB/GADTForall.hs"#)
+               (I# 154#)
+               (I# 9#)
+               (I# 154#)
+               (I# 18#))
+            ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+         `cast` <Co:4>)
+
+-- RHS size: {terms: 18, types: 20, coercions: 0, joins: 0/0}
+exists
+exists
+  = \ @ a_a5E8 q_a5jK ->
+      >>=
+        $fMonadSQ
+        ($ (count $fIntegralInteger) (takeQ $fIntegralInteger 1 q_a5jK))
+        (\ c_a5jL -> return $fMonadSQ (> $fOrdInteger c_a5jL 0))
+
+-- RHS size: {terms: 23, types: 12, coercions: 11, joins: 0/0}
+minAgg
+minAgg
+  = \ @ a_a5Cw _ ->
+      undefined
+        ((pushCallStack
+            (unpackCString# "undefined"#,
+             SrcLoc
+               (unpackCString# "main"#)
+               (unpackCString# "FDB.GADTForall"#)
+               (unpackCString# "./FDB/GADTForall.hs"#)
+               (I# 157#)
+               (I# 10#)
+               (I# 157#)
+               (I# 19#))
+            ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+         `cast` <Co:4>)
+
+-- RHS size: {terms: 6, types: 9, coercions: 0, joins: 0/0}
+rowVal
+rowVal
+  = \ @ a_a5Cu ds_d5Po ->
+      case ds_d5Po of { Row _ val_a5jT -> val_a5jT }
+
+-- RHS size: {terms: 7, types: 10, coercions: 0, joins: 0/0}
+fetchForeign
+fetchForeign
+  = \ @ a_a5Du ref_a5jJ -> <&> $fFunctorSQ (fetchRow ref_a5jJ) rowVal
+
+-- RHS size: {terms: 6, types: 9, coercions: 0, joins: 0/0}
+rowRef
+rowRef
+  = \ @ a_a5Cs ds_d5Ph ->
+      case ds_d5Ph of { Row ref_a5jU _ -> ref_a5jU }
+
+-- RHS size: {terms: 5, types: 0, coercions: 0, joins: 0/0}
+$trModule
+$trModule = Module (TrNameS "main"#) (TrNameS "FDB.GADTForall"#)
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep_a5Pg
+$krep_a5Pg = KindRepTyConApp $tcChar []
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep_a5P6
+$krep_a5P6 = KindRepTyConApp $tcWord64 []
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep_a5P4
+$krep_a5P4 = KindRepTyConApp $tcWord16 []
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep_a5Oz
+$krep_a5Oz = KindRepTyConApp $tcBool []
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep_a5Od
+$krep_a5Od = KindRepTyConApp $tcConstraint []
+
+-- RHS size: {terms: 5, types: 2, coercions: 0, joins: 0/0}
+$krep_a5Pf
+$krep_a5Pf = KindRepTyConApp $tc[] (: $krep_a5Pg [])
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5Oc
+$krep_a5Oc = KindRepFun krep$* $krep_a5Od
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5Ob
+$krep_a5Ob = KindRepFun krep$* $krep_a5Oc
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5P7
+$krep_a5P7 = KindRepFun krep$* krep$*->*->*
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5Ou
+$krep_a5Ou = $WKindRepVar (I# 2#)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5Ok
+$krep_a5Ok = $WKindRepVar (I# 1#)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5Pd
+$krep_a5Pd = KindRepFun $krep_a5Ou $krep_a5Ok
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5Oh
+$krep_a5Oh = $WKindRepVar (I# 0#)
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5OC
+$krep_a5OC = KindRepFun $krep_a5Oh $krep_a5Ok
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5Pa
+$krep_a5Pa = KindRepFun $krep_a5Oh $krep_a5Ou
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5P9
+$krep_a5P9 = KindRepFun $krep_a5Ou $krep_a5Pa
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5Oy
+$krep_a5Oy = KindRepFun $krep_a5Oh $krep_a5Oz
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5OS
+$krep_a5OS = KindRepFun $krep_a5Ok $krep_a5Oh
+
+-- RHS size: {terms: 7, types: 3, coercions: 0, joins: 0/0}
+$krep_a5Om
+$krep_a5Om
+  = KindRepTyConApp $tc(,) (: $krep_a5Oh (: $krep_a5Ok []))
+
+-- RHS size: {terms: 5, types: 2, coercions: 0, joins: 0/0}
+$krep_a5OQ
+$krep_a5OQ = KindRepTyConApp $tcOrd (: $krep_a5Oh [])
+
+-- RHS size: {terms: 5, types: 2, coercions: 0, joins: 0/0}
+$krep_a5OV
+$krep_a5OV = KindRepTyConApp $tcIntegral (: $krep_a5Oh [])
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tcTable
+$tcTable
+  = TyCon
+      6112764465777374685##
+      4824890021682489453##
+      $trModule
+      (TrNameS "Table"#)
+      0#
+      krep$*Arr*
+
+-- RHS size: {terms: 5, types: 2, coercions: 0, joins: 0/0}
+$krep_a5OF
+$krep_a5OF = KindRepTyConApp $tcTable (: $krep_a5Oh [])
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5Pe
+$krep_a5Pe = KindRepFun $krep_a5Pf $krep_a5OF
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'Table
+$tc'Table
+  = TyCon
+      10871517142501221515##
+      4325455715354573628##
+      $trModule
+      (TrNameS "'Table"#)
+      1#
+      $krep_a5Pe
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tcAgg
+$tcAgg
+  = TyCon
+      6997330576107404323##
+      12350032399431940804##
+      $trModule
+      (TrNameS "Agg"#)
+      0#
+      $krep_a5P7
+
+-- RHS size: {terms: 9, types: 4, coercions: 0, joins: 0/0}
+$krep_a5Ot
+$krep_a5Ot
+  = KindRepTyConApp
+      $tcAgg (: $krep_a5Oh (: $krep_a5Ok (: $krep_a5Ou [])))
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5Pc
+$krep_a5Pc = KindRepFun $krep_a5Pd $krep_a5Ot
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5Pb
+$krep_a5Pb = KindRepFun $krep_a5Ou $krep_a5Pc
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5P8
+$krep_a5P8 = KindRepFun $krep_a5P9 $krep_a5Pb
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'Agg
+$tc'Agg
+  = TyCon
+      8300879811530789064##
+      621423574753608316##
+      $trModule
+      (TrNameS "'Agg"#)
+      3#
+      $krep_a5P8
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tcRowId
+$tcRowId
+  = TyCon
+      6564313131908661638##
+      391072849311021736##
+      $trModule
+      (TrNameS "RowId"#)
+      0#
+      krep$*
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep_a5P2
+$krep_a5P2 = KindRepTyConApp $tcRowId []
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5P5
+$krep_a5P5 = KindRepFun $krep_a5P6 $krep_a5P2
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'RowId
+$tc'RowId
+  = TyCon
+      11182397406630558385##
+      2250286617457619889##
+      $trModule
+      (TrNameS "'RowId"#)
+      0#
+      $krep_a5P5
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tcTableId
+$tcTableId
+  = TyCon
+      221136922417672250##
+      2647284849506157507##
+      $trModule
+      (TrNameS "TableId"#)
+      0#
+      krep$*
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep_a5P0
+$krep_a5P0 = KindRepTyConApp $tcTableId []
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5P3
+$krep_a5P3 = KindRepFun $krep_a5P4 $krep_a5P0
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'TableId
+$tc'TableId
+  = TyCon
+      299570635528495236##
+      7767331940541179554##
+      $trModule
+      (TrNameS "'TableId"#)
+      0#
+      $krep_a5P3
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tcRowRef
+$tcRowRef
+  = TyCon
+      6167723302899116461##
+      12820464192123209494##
+      $trModule
+      (TrNameS "RowRef"#)
+      0#
+      krep$*Arr*
+
+-- RHS size: {terms: 5, types: 2, coercions: 0, joins: 0/0}
+$krep_a5Op
+$krep_a5Op = KindRepTyConApp $tcRowRef (: $krep_a5Oh [])
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5P1
+$krep_a5P1 = KindRepFun $krep_a5P2 $krep_a5Op
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5OZ
+$krep_a5OZ = KindRepFun $krep_a5P0 $krep_a5P1
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'RowRef
+$tc'RowRef
+  = TyCon
+      1951283466925547487##
+      17778823377038719573##
+      $trModule
+      (TrNameS "'RowRef"#)
+      1#
+      $krep_a5OZ
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tcRow
+$tcRow
+  = TyCon
+      7837339403267824689##
+      11319950323759755044##
+      $trModule
+      (TrNameS "Row"#)
+      0#
+      krep$*Arr*
+
+-- RHS size: {terms: 5, types: 2, coercions: 0, joins: 0/0}
+$krep_a5Or
+$krep_a5Or = KindRepTyConApp $tcRow (: $krep_a5Oh [])
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5OY
+$krep_a5OY = KindRepFun $krep_a5Oh $krep_a5Or
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5OX
+$krep_a5OX = KindRepFun $krep_a5Op $krep_a5OY
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'Row
+$tc'Row
+  = TyCon
+      16802854983749163630##
+      1951157969764704594##
+      $trModule
+      (TrNameS "'Row"#)
+      1#
+      $krep_a5OX
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tcQ
+$tcQ
+  = TyCon
+      18238656953556965988##
+      5882741213209533844##
+      $trModule
+      (TrNameS "Q"#)
+      0#
+      krep$*Arr*
+
+-- RHS size: {terms: 5, types: 2, coercions: 0, joins: 0/0}
+$krep_a5Og
+$krep_a5Og = KindRepTyConApp $tcQ (: $krep_a5Oh [])
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5OE
+$krep_a5OE = KindRepFun $krep_a5OF $krep_a5Og
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'Read
+$tc'Read
+  = TyCon
+      5506696017368664421##
+      2631673073369786685##
+      $trModule
+      (TrNameS "'Read"#)
+      1#
+      $krep_a5OE
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5OA
+$krep_a5OA = KindRepFun $krep_a5Og $krep_a5Og
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5Ox
+$krep_a5Ox = KindRepFun $krep_a5Oy $krep_a5OA
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'Filter
+$tc'Filter
+  = TyCon
+      3342106065591891117##
+      5504432989845619796##
+      $trModule
+      (TrNameS "'Filter"#)
+      1#
+      $krep_a5Ox
+
+-- RHS size: {terms: 7, types: 3, coercions: 0, joins: 0/0}
+$krep_a5OJ
+$krep_a5OJ
+  = KindRepTyConApp $tc(,) (: $krep_a5Ok (: $krep_a5Og []))
+
+-- RHS size: {terms: 5, types: 2, coercions: 0, joins: 0/0}
+$krep_a5Oj
+$krep_a5Oj = KindRepTyConApp $tcQ (: $krep_a5Ok [])
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5OD
+$krep_a5OD = KindRepFun $krep_a5Og $krep_a5Oj
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5OB
+$krep_a5OB = KindRepFun $krep_a5OC $krep_a5OD
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'Map
+$tc'Map
+  = TyCon
+      14379505272008014040##
+      10084327610682124345##
+      $trModule
+      (TrNameS "'Map"#)
+      2#
+      $krep_a5OB
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5OT
+$krep_a5OT = KindRepFun $krep_a5Oj $krep_a5Oj
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5OW
+$krep_a5OW = KindRepFun $krep_a5Oh $krep_a5OT
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5OU
+$krep_a5OU = KindRepFun $krep_a5OV $krep_a5OW
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'Take
+$tc'Take
+  = TyCon
+      18145023462564812289##
+      14897176176755836167##
+      $trModule
+      (TrNameS "'Take"#)
+      2#
+      $krep_a5OU
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5OR
+$krep_a5OR = KindRepFun $krep_a5OS $krep_a5OT
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5OP
+$krep_a5OP = KindRepFun $krep_a5OQ $krep_a5OR
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'OrderBy
+$tc'OrderBy
+  = TyCon
+      14908185740511951096##
+      14008337868706905896##
+      $trModule
+      (TrNameS "'OrderBy"#)
+      2#
+      $krep_a5OP
+
+-- RHS size: {terms: 5, types: 2, coercions: 0, joins: 0/0}
+$krep_a5Ol
+$krep_a5Ol = KindRepTyConApp $tcQ (: $krep_a5Om [])
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5Oi
+$krep_a5Oi = KindRepFun $krep_a5Oj $krep_a5Ol
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5Of
+$krep_a5Of = KindRepFun $krep_a5Og $krep_a5Oi
+
+-- RHS size: {terms: 5, types: 2, coercions: 0, joins: 0/0}
+$krep_a5OI
+$krep_a5OI = KindRepTyConApp $tcQ (: $krep_a5OJ [])
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5OH
+$krep_a5OH = KindRepFun $krep_a5Og $krep_a5OI
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5OG
+$krep_a5OG = KindRepFun $krep_a5OC $krep_a5OH
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'GroupBy
+$tc'GroupBy
+  = TyCon
+      13670223224869757845##
+      8697476818672593631##
+      $trModule
+      (TrNameS "'GroupBy"#)
+      2#
+      $krep_a5OG
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tcSQ
+$tcSQ
+  = TyCon
+      7724225419132177098##
+      14063341351447723075##
+      $trModule
+      (TrNameS "SQ"#)
+      0#
+      krep$*Arr*
+
+-- RHS size: {terms: 5, types: 2, coercions: 0, joins: 0/0}
+$krep_a5Ow
+$krep_a5Ow = KindRepTyConApp $tcSQ (: $krep_a5Ok [])
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5OL
+$krep_a5OL = KindRepFun $krep_a5Oh $krep_a5Ow
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5OK
+$krep_a5OK = KindRepFun $krep_a5OL $krep_a5OD
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'MapSQ
+$tc'MapSQ
+  = TyCon
+      1443944143463630897##
+      6245638742163314951##
+      $trModule
+      (TrNameS "'MapSQ"#)
+      2#
+      $krep_a5OK
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5Ov
+$krep_a5Ov = KindRepFun $krep_a5Og $krep_a5Ow
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5Os
+$krep_a5Os = KindRepFun $krep_a5Ot $krep_a5Ov
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'StateFold
+$tc'StateFold
+  = TyCon
+      18411259465723880701##
+      4094594497890411514##
+      $trModule
+      (TrNameS "'StateFold"#)
+      3#
+      $krep_a5Os
+
+-- RHS size: {terms: 5, types: 2, coercions: 0, joins: 0/0}
+$krep_a5Oq
+$krep_a5Oq = KindRepTyConApp $tcSQ (: $krep_a5Or [])
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5Oo
+$krep_a5Oo = KindRepFun $krep_a5Op $krep_a5Oq
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'FetchRow
+$tc'FetchRow
+  = TyCon
+      10701926302208271525##
+      2310866770539922913##
+      $trModule
+      (TrNameS "'FetchRow"#)
+      1#
+      $krep_a5Oo
+
+-- RHS size: {terms: 5, types: 2, coercions: 0, joins: 0/0}
+$krep_a5OO
+$krep_a5OO = KindRepTyConApp $tcSQ (: $krep_a5Oz [])
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5ON
+$krep_a5ON = KindRepFun $krep_a5Oh $krep_a5OO
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5OM
+$krep_a5OM = KindRepFun $krep_a5ON $krep_a5OA
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'FilterSQ
+$tc'FilterSQ
+  = TyCon
+      3550822472285476798##
+      14511159754611735049##
+      $trModule
+      (TrNameS "'FilterSQ"#)
+      1#
+      $krep_a5OM
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tcNatJoin
+$tcNatJoin
+  = TyCon
+      4754972827294106747##
+      18091397365184212835##
+      $trModule
+      (TrNameS "NatJoin"#)
+      0#
+      $krep_a5Ob
+
+-- RHS size: {terms: 7, types: 3, coercions: 0, joins: 0/0}
+$krep_a5On
+$krep_a5On
+  = KindRepTyConApp $tcNatJoin (: $krep_a5Oh (: $krep_a5Ok []))
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a5Oe
+$krep_a5Oe = KindRepFun $krep_a5Of $krep_a5On
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'C:NatJoin
+$tc'C:NatJoin
+  = TyCon
+      1773075345423852451##
+      14997350799920276371##
+      $trModule
+      (TrNameS "'C:NatJoin"#)
+      2#
+      $krep_a5Oe
+
+
+
+[7 of 8] Compiling FDB.FDB          ( FDB/FDB.hs, FDB/FDB.o )
+
+==================== Desugar (after optimization) ====================
+Result size of Desugar (after optimization)
+  = {terms: 6, types: 1, coercions: 0, joins: 0/0}
+
+-- RHS size: {terms: 5, types: 0, coercions: 0, joins: 0/0}
+$trModule
+$trModule = Module (TrNameS "main"#) (TrNameS "FDB.FDB"#)
+
+
+
+[8 of 8] Compiling TPCH.Functional.Schema ( ghc-dumps/../TPCH/Functional/Schema.hs, ghc-dumps/../TPCH/Functional/Schema.o )
+
+==================== Desugar (after optimization) ====================
+Result size of Desugar (after optimization)
+  = {terms: 1,125, types: 1,036, coercions: 154, joins: 1/1}
+
+-- RHS size: {terms: 9, types: 4, coercions: 0, joins: 0/0}
+$c==_a6QL
+$c==_a6QL
+  = \ ds_d71m ds_d71n ->
+      case ds_d71m of { EMEA -> case ds_d71n of { EMEA -> True } }
+
+Rec {
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$fEqRegion
+$fEqRegion = C:Eq $c==_a6QL $c/=_a6QP
+
+-- RHS size: {terms: 2, types: 1, coercions: 0, joins: 0/0}
+$c/=_a6QP
+$c/=_a6QP = $dm/= $fEqRegion
+end Rec }
+
+-- RHS size: {terms: 23, types: 8, coercions: 0, joins: 1/1}
+$c==_a6Qz
+$c==_a6Qz
+  = \ ds_d71i ds_d71j ->
+      join {
+        fail_d71k
+        fail_d71k _ = False } in
+      case ds_d71i of {
+        France ->
+          case ds_d71j of {
+            __DEFAULT -> jump fail_d71k void#;
+            France -> True
+          };
+        Germany ->
+          case ds_d71j of {
+            __DEFAULT -> jump fail_d71k void#;
+            Germany -> True
+          }
+      }
+
+Rec {
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$fEqNation
+$fEqNation = C:Eq $c==_a6Qz $c/=_a6QD
+
+-- RHS size: {terms: 2, types: 1, coercions: 0, joins: 0/0}
+$c/=_a6QD
+$c/=_a6QD = $dm/= $fEqNation
+end Rec }
+
+-- RHS size: {terms: 5, types: 10, coercions: 0, joins: 0/0}
+p_comment
+p_comment
+  = \ ds_d719 ->
+      case ds_d719 of { Part _ _ _ _ _ _ _ ds_d71h -> ds_d71h }
+
+-- RHS size: {terms: 5, types: 10, coercions: 0, joins: 0/0}
+p_retailprice
+p_retailprice
+  = \ ds_d710 ->
+      case ds_d710 of { Part _ _ _ _ _ _ ds_d717 _ -> ds_d717 }
+
+-- RHS size: {terms: 5, types: 10, coercions: 0, joins: 0/0}
+p_container
+p_container
+  = \ ds_d70R ->
+      case ds_d70R of { Part _ _ _ _ _ ds_d70X _ _ -> ds_d70X }
+
+-- RHS size: {terms: 5, types: 10, coercions: 0, joins: 0/0}
+p_size
+p_size
+  = \ ds_d70I ->
+      case ds_d70I of { Part _ _ _ _ ds_d70N _ _ _ -> ds_d70N }
+
+-- RHS size: {terms: 5, types: 10, coercions: 0, joins: 0/0}
+p_type
+p_type
+  = \ ds_d70z ->
+      case ds_d70z of { Part _ _ _ ds_d70D _ _ _ _ -> ds_d70D }
+
+-- RHS size: {terms: 5, types: 10, coercions: 0, joins: 0/0}
+p_brand
+p_brand
+  = \ ds_d70q ->
+      case ds_d70q of { Part _ _ ds_d70t _ _ _ _ _ -> ds_d70t }
+
+-- RHS size: {terms: 5, types: 10, coercions: 0, joins: 0/0}
+p_mfgr
+p_mfgr
+  = \ ds_d70h ->
+      case ds_d70h of { Part _ ds_d70j _ _ _ _ _ _ -> ds_d70j }
+
+-- RHS size: {terms: 5, types: 10, coercions: 0, joins: 0/0}
+p_name
+p_name
+  = \ ds_d708 ->
+      case ds_d708 of { Part ds_d709 _ _ _ _ _ _ _ -> ds_d709 }
+
+-- RHS size: {terms: 5, types: 9, coercions: 0, joins: 0/0}
+c_comment
+c_comment
+  = \ ds_d700 ->
+      case ds_d700 of { Customer _ _ _ _ _ _ ds_d707 -> ds_d707 }
+
+-- RHS size: {terms: 5, types: 9, coercions: 0, joins: 0/0}
+c_mktsegment
+c_mktsegment
+  = \ ds_d6ZS ->
+      case ds_d6ZS of { Customer _ _ _ _ _ ds_d6ZY _ -> ds_d6ZY }
+
+-- RHS size: {terms: 5, types: 9, coercions: 0, joins: 0/0}
+c_acctbal
+c_acctbal
+  = \ ds_d6ZK ->
+      case ds_d6ZK of { Customer _ _ _ _ ds_d6ZP _ _ -> ds_d6ZP }
+
+-- RHS size: {terms: 5, types: 9, coercions: 0, joins: 0/0}
+c_phone
+c_phone
+  = \ ds_d6ZC ->
+      case ds_d6ZC of { Customer _ _ _ ds_d6ZG _ _ _ -> ds_d6ZG }
+
+-- RHS size: {terms: 5, types: 9, coercions: 0, joins: 0/0}
+c_nation
+c_nation
+  = \ ds_d6Zu ->
+      case ds_d6Zu of { Customer _ _ ds_d6Zx _ _ _ _ -> ds_d6Zx }
+
+-- RHS size: {terms: 5, types: 9, coercions: 0, joins: 0/0}
+c_address
+c_address
+  = \ ds_d6Zm ->
+      case ds_d6Zm of { Customer _ ds_d6Zo _ _ _ _ _ -> ds_d6Zo }
+
+-- RHS size: {terms: 5, types: 9, coercions: 0, joins: 0/0}
+c_name
+c_name
+  = \ ds_d6Ze ->
+      case ds_d6Ze of { Customer ds_d6Zf _ _ _ _ _ _ -> ds_d6Zf }
+
+-- RHS size: {terms: 5, types: 11, coercions: 0, joins: 0/0}
+o_comment
+o_comment
+  = \ ds_d6Z5 ->
+      case ds_d6Z5 of { Order _ _ _ _ _ _ _ ds_d6Zd -> ds_d6Zd }
+
+-- RHS size: {terms: 5, types: 11, coercions: 0, joins: 0/0}
+o_shippriority
+o_shippriority
+  = \ ds_d6YW ->
+      case ds_d6YW of { Order _ _ _ _ _ _ ds_d6Z3 _ -> ds_d6Z3 }
+
+-- RHS size: {terms: 5, types: 11, coercions: 0, joins: 0/0}
+o_clerk
+o_clerk
+  = \ ds_d6YN ->
+      case ds_d6YN of { Order _ _ _ _ _ ds_d6YT _ _ -> ds_d6YT }
+
+-- RHS size: {terms: 5, types: 11, coercions: 0, joins: 0/0}
+o_orderpriority
+o_orderpriority
+  = \ ds_d6YE ->
+      case ds_d6YE of { Order _ _ _ _ ds_d6YJ _ _ _ -> ds_d6YJ }
+
+-- RHS size: {terms: 5, types: 11, coercions: 0, joins: 0/0}
+o_orderdate
+o_orderdate
+  = \ ds_d6Yv ->
+      case ds_d6Yv of { Order _ _ _ ds_d6Yz _ _ _ _ -> ds_d6Yz }
+
+-- RHS size: {terms: 5, types: 11, coercions: 0, joins: 0/0}
+o_totalprice
+o_totalprice
+  = \ ds_d6Ym ->
+      case ds_d6Ym of { Order _ _ ds_d6Yp _ _ _ _ _ -> ds_d6Yp }
+
+-- RHS size: {terms: 5, types: 11, coercions: 0, joins: 0/0}
+o_orderstatus
+o_orderstatus
+  = \ ds_d6Yd ->
+      case ds_d6Yd of { Order _ ds_d6Yf _ _ _ _ _ _ -> ds_d6Yf }
+
+-- RHS size: {terms: 5, types: 11, coercions: 0, joins: 0/0}
+o_custref
+o_custref
+  = \ ds_d6Y4 ->
+      case ds_d6Y4 of { Order ds_d6Y5 _ _ _ _ _ _ _ -> ds_d6Y5 }
+
+-- RHS size: {terms: 5, types: 8, coercions: 0, joins: 0/0}
+s_comment
+s_comment
+  = \ ds_d6XX ->
+      case ds_d6XX of { Supplier _ _ _ _ _ ds_d6Y3 -> ds_d6Y3 }
+
+-- RHS size: {terms: 5, types: 8, coercions: 0, joins: 0/0}
+s_acctbal
+s_acctbal
+  = \ ds_d6XQ ->
+      case ds_d6XQ of { Supplier _ _ _ _ ds_d6XV _ -> ds_d6XV }
+
+-- RHS size: {terms: 5, types: 8, coercions: 0, joins: 0/0}
+s_phone
+s_phone
+  = \ ds_d6XJ ->
+      case ds_d6XJ of { Supplier _ _ _ ds_d6XN _ _ -> ds_d6XN }
+
+-- RHS size: {terms: 5, types: 8, coercions: 0, joins: 0/0}
+s_nation
+s_nation
+  = \ ds_d6XC ->
+      case ds_d6XC of { Supplier _ _ ds_d6XF _ _ _ -> ds_d6XF }
+
+-- RHS size: {terms: 5, types: 8, coercions: 0, joins: 0/0}
+s_address
+s_address
+  = \ ds_d6Xv ->
+      case ds_d6Xv of { Supplier _ ds_d6Xx _ _ _ _ -> ds_d6Xx }
+
+-- RHS size: {terms: 5, types: 8, coercions: 0, joins: 0/0}
+s_name
+s_name
+  = \ ds_d6Xo ->
+      case ds_d6Xo of { Supplier ds_d6Xp _ _ _ _ _ -> ds_d6Xp }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_comment
+l_comment
+  = \ ds_d6X7 ->
+      case ds_d6X7 of { LineItem _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ ds_d6Xn ->
+      ds_d6Xn
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_shipmode
+l_shipmode
+  = \ ds_d6WQ ->
+      case ds_d6WQ of { LineItem _ _ _ _ _ _ _ _ _ _ _ _ _ _ ds_d6X5 _ ->
+      ds_d6X5
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_shipinstruct
+l_shipinstruct
+  = \ ds_d6Wz ->
+      case ds_d6Wz of { LineItem _ _ _ _ _ _ _ _ _ _ _ _ _ ds_d6WN _ _ ->
+      ds_d6WN
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_receiptdate
+l_receiptdate
+  = \ ds_d6Wi ->
+      case ds_d6Wi of { LineItem _ _ _ _ _ _ _ _ _ _ _ _ ds_d6Wv _ _ _ ->
+      ds_d6Wv
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_commitdate
+l_commitdate
+  = \ ds_d6W1 ->
+      case ds_d6W1 of { LineItem _ _ _ _ _ _ _ _ _ _ _ ds_d6Wd _ _ _ _ ->
+      ds_d6Wd
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_shipdate
+l_shipdate
+  = \ ds_d6VK ->
+      case ds_d6VK of { LineItem _ _ _ _ _ _ _ _ _ _ ds_d6VV _ _ _ _ _ ->
+      ds_d6VV
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_linestatus
+l_linestatus
+  = \ ds_d6Vt ->
+      case ds_d6Vt of { LineItem _ _ _ _ _ _ _ _ _ ds_d6VD _ _ _ _ _ _ ->
+      ds_d6VD
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_returnflag
+l_returnflag
+  = \ ds_d6Vc ->
+      case ds_d6Vc of { LineItem _ _ _ _ _ _ _ _ ds_d6Vl _ _ _ _ _ _ _ ->
+      ds_d6Vl
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_tax
+l_tax
+  = \ ds_d6UV ->
+      case ds_d6UV of { LineItem _ _ _ _ _ _ _ ds_d6V3 _ _ _ _ _ _ _ _ ->
+      ds_d6V3
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_discount
+l_discount
+  = \ ds_d6UE ->
+      case ds_d6UE of { LineItem _ _ _ _ _ _ ds_d6UL _ _ _ _ _ _ _ _ _ ->
+      ds_d6UL
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_extendedprice
+l_extendedprice
+  = \ ds_d6Un ->
+      case ds_d6Un of { LineItem _ _ _ _ _ ds_d6Ut _ _ _ _ _ _ _ _ _ _ ->
+      ds_d6Ut
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_quantity
+l_quantity
+  = \ ds_d6U6 ->
+      case ds_d6U6 of { LineItem _ _ _ _ ds_d6Ub _ _ _ _ _ _ _ _ _ _ _ ->
+      ds_d6Ub
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_linenumber
+l_linenumber
+  = \ ds_d6TP ->
+      case ds_d6TP of { LineItem _ _ _ ds_d6TT _ _ _ _ _ _ _ _ _ _ _ _ ->
+      ds_d6TT
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_suppref
+l_suppref
+  = \ ds_d6Ty ->
+      case ds_d6Ty of { LineItem _ _ ds_d6TB _ _ _ _ _ _ _ _ _ _ _ _ _ ->
+      ds_d6TB
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_partref
+l_partref
+  = \ ds_d6Th ->
+      case ds_d6Th of { LineItem _ ds_d6Tj _ _ _ _ _ _ _ _ _ _ _ _ _ _ ->
+      ds_d6Tj
+      }
+
+-- RHS size: {terms: 5, types: 21, coercions: 0, joins: 0/0}
+l_orderref
+l_orderref
+  = \ ds_d6T0 ->
+      case ds_d6T0 of { LineItem ds_d6T1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ ->
+      ds_d6T1
+      }
+
+-- RHS size: {terms: 5, types: 9, coercions: 0, joins: 0/0}
+ps_comment
+ps_comment
+  = \ ds_d6SU ->
+      case ds_d6SU of { PartSupp _ _ _ _ ds_d6SZ -> ds_d6SZ }
+
+-- RHS size: {terms: 5, types: 9, coercions: 0, joins: 0/0}
+ps_supplycost
+ps_supplycost
+  = \ ds_d6SO ->
+      case ds_d6SO of { PartSupp _ _ _ ds_d6SS _ -> ds_d6SS }
+
+-- RHS size: {terms: 5, types: 9, coercions: 0, joins: 0/0}
+ps_availqty
+ps_availqty
+  = \ ds_d6SI ->
+      case ds_d6SI of { PartSupp _ _ ds_d6SL _ _ -> ds_d6SL }
+
+-- RHS size: {terms: 5, types: 9, coercions: 0, joins: 0/0}
+ps_suppref
+ps_suppref
+  = \ ds_d6SC ->
+      case ds_d6SC of { PartSupp _ ds_d6SE _ _ _ -> ds_d6SE }
+
+-- RHS size: {terms: 5, types: 9, coercions: 0, joins: 0/0}
+ps_partref
+ps_partref
+  = \ ds_d6Sw ->
+      case ds_d6Sw of { PartSupp ds_d6Sx _ _ _ _ -> ds_d6Sx }
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+lineitems
+lineitems = findTable (unpackCString# "LineItems"#)
+
+-- RHS size: {terms: 5, types: 0, coercions: 0, joins: 0/0}
+$trModule
+$trModule
+  = Module (TrNameS "main"#) (TrNameS "TPCH.Functional.Schema"#)
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep_a6RE
+$krep_a6RE = KindRepTyConApp $tc() []
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep_a6Rp
+$krep_a6Rp = KindRepTyConApp $tcChar []
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep_a6Rm
+$krep_a6Rm = KindRepTyConApp $tcDouble []
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep_a6Rk
+$krep_a6Rk = KindRepTyConApp $tcInt []
+
+-- RHS size: {terms: 5, types: 2, coercions: 0, joins: 0/0}
+$krep_a6Ro
+$krep_a6Ro = KindRepTyConApp $tc[] (: $krep_a6Rp [])
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tcPart
+$tcPart
+  = TyCon
+      12636939280764832122##
+      2042036841775798596##
+      $trModule
+      (TrNameS "Part"#)
+      0#
+      krep$*
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep_a6Rf
+$krep_a6Rf = KindRepTyConApp $tcPart []
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6Sg
+$krep_a6Sg = KindRepFun $krep_a6Ro $krep_a6Rf
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6Sf
+$krep_a6Sf = KindRepFun $krep_a6Rm $krep_a6Sg
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6Se
+$krep_a6Se = KindRepFun $krep_a6Ro $krep_a6Sf
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6Sd
+$krep_a6Sd = KindRepFun $krep_a6Rk $krep_a6Se
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6Sc
+$krep_a6Sc = KindRepFun $krep_a6Ro $krep_a6Sd
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6Sb
+$krep_a6Sb = KindRepFun $krep_a6Ro $krep_a6Sc
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6Sa
+$krep_a6Sa = KindRepFun $krep_a6Ro $krep_a6Sb
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6S9
+$krep_a6S9 = KindRepFun $krep_a6Ro $krep_a6Sa
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'Part
+$tc'Part
+  = TyCon
+      2861360684592645105##
+      14440751847480628405##
+      $trModule
+      (TrNameS "'Part"#)
+      0#
+      $krep_a6S9
+
+-- RHS size: {terms: 5, types: 2, coercions: 0, joins: 0/0}
+$krep_a6Re
+$krep_a6Re = KindRepTyConApp $tcRowRef (: $krep_a6Rf [])
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tcNation
+$tcNation
+  = TyCon
+      10710764971294019521##
+      2958077427421035359##
+      $trModule
+      (TrNameS "Nation"#)
+      0#
+      krep$*
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep_a6RO
+$krep_a6RO = KindRepTyConApp $tcNation []
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'France
+$tc'France
+  = TyCon
+      15209813697351554211##
+      883766417185207263##
+      $trModule
+      (TrNameS "'France"#)
+      0#
+      $krep_a6RO
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'Germany
+$tc'Germany
+  = TyCon
+      1372385427742964851##
+      11954998232734438622##
+      $trModule
+      (TrNameS "'Germany"#)
+      0#
+      $krep_a6RO
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tcCustomer
+$tcCustomer
+  = TyCon
+      7146533123847939809##
+      6452800127542812900##
+      $trModule
+      (TrNameS "Customer"#)
+      0#
+      krep$*
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep_a6RU
+$krep_a6RU = KindRepTyConApp $tcCustomer []
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6S8
+$krep_a6S8 = KindRepFun $krep_a6Ro $krep_a6RU
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6S7
+$krep_a6S7 = KindRepFun $krep_a6Ro $krep_a6S8
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6S6
+$krep_a6S6 = KindRepFun $krep_a6Rm $krep_a6S7
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6S5
+$krep_a6S5 = KindRepFun $krep_a6RE $krep_a6S6
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6S4
+$krep_a6S4 = KindRepFun $krep_a6RO $krep_a6S5
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6S3
+$krep_a6S3 = KindRepFun $krep_a6Ro $krep_a6S4
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6S2
+$krep_a6S2 = KindRepFun $krep_a6Ro $krep_a6S3
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'Customer
+$tc'Customer
+  = TyCon
+      14764552819634216928##
+      6068166705854968441##
+      $trModule
+      (TrNameS "'Customer"#)
+      0#
+      $krep_a6S2
+
+-- RHS size: {terms: 5, types: 2, coercions: 0, joins: 0/0}
+$krep_a6RT
+$krep_a6RT = KindRepTyConApp $tcRowRef (: $krep_a6RU [])
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tcOrder
+$tcOrder
+  = TyCon
+      10277513951169694645##
+      16962993689770346345##
+      $trModule
+      (TrNameS "Order"#)
+      0#
+      krep$*
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep_a6Rt
+$krep_a6Rt = KindRepTyConApp $tcOrder []
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6S1
+$krep_a6S1 = KindRepFun $krep_a6Ro $krep_a6Rt
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6S0
+$krep_a6S0 = KindRepFun $krep_a6Rk $krep_a6S1
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6RZ
+$krep_a6RZ = KindRepFun $krep_a6Ro $krep_a6S0
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6RY
+$krep_a6RY = KindRepFun $krep_a6Ro $krep_a6RZ
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6RX
+$krep_a6RX = KindRepFun $krep_a6RE $krep_a6RY
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6RW
+$krep_a6RW = KindRepFun $krep_a6Rm $krep_a6RX
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6RV
+$krep_a6RV = KindRepFun $krep_a6Rp $krep_a6RW
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6RS
+$krep_a6RS = KindRepFun $krep_a6RT $krep_a6RV
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'Order
+$tc'Order
+  = TyCon
+      13153087065208477111##
+      17701592658522406836##
+      $trModule
+      (TrNameS "'Order"#)
+      0#
+      $krep_a6RS
+
+-- RHS size: {terms: 5, types: 2, coercions: 0, joins: 0/0}
+$krep_a6Rs
+$krep_a6Rs = KindRepTyConApp $tcRowRef (: $krep_a6Rt [])
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tcSupplier
+$tcSupplier
+  = TyCon
+      5537664870048215054##
+      6807973368023935809##
+      $trModule
+      (TrNameS "Supplier"#)
+      0#
+      krep$*
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep_a6Ri
+$krep_a6Ri = KindRepTyConApp $tcSupplier []
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6RR
+$krep_a6RR = KindRepFun $krep_a6Ro $krep_a6Ri
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6RQ
+$krep_a6RQ = KindRepFun $krep_a6Rm $krep_a6RR
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6RP
+$krep_a6RP = KindRepFun $krep_a6RE $krep_a6RQ
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6RN
+$krep_a6RN = KindRepFun $krep_a6RO $krep_a6RP
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6RM
+$krep_a6RM = KindRepFun $krep_a6Ro $krep_a6RN
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6RL
+$krep_a6RL = KindRepFun $krep_a6Ro $krep_a6RM
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'Supplier
+$tc'Supplier
+  = TyCon
+      3112581097731694837##
+      5980504949697491730##
+      $trModule
+      (TrNameS "'Supplier"#)
+      0#
+      $krep_a6RL
+
+-- RHS size: {terms: 5, types: 2, coercions: 0, joins: 0/0}
+$krep_a6Rh
+$krep_a6Rh = KindRepTyConApp $tcRowRef (: $krep_a6Ri [])
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tcLineItem
+$tcLineItem
+  = TyCon
+      4413522648051142635##
+      4580059422389727633##
+      $trModule
+      (TrNameS "LineItem"#)
+      0#
+      krep$*
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep_a6RK
+$krep_a6RK = KindRepTyConApp $tcLineItem []
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6RJ
+$krep_a6RJ = KindRepFun $krep_a6Ro $krep_a6RK
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6RI
+$krep_a6RI = KindRepFun $krep_a6Ro $krep_a6RJ
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6RH
+$krep_a6RH = KindRepFun $krep_a6Ro $krep_a6RI
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6RG
+$krep_a6RG = KindRepFun $krep_a6RE $krep_a6RH
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6RF
+$krep_a6RF = KindRepFun $krep_a6RE $krep_a6RG
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6RD
+$krep_a6RD = KindRepFun $krep_a6RE $krep_a6RF
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6RC
+$krep_a6RC = KindRepFun $krep_a6Rp $krep_a6RD
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6RB
+$krep_a6RB = KindRepFun $krep_a6Rp $krep_a6RC
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6RA
+$krep_a6RA = KindRepFun $krep_a6Rm $krep_a6RB
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6Rz
+$krep_a6Rz = KindRepFun $krep_a6Rm $krep_a6RA
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6Ry
+$krep_a6Ry = KindRepFun $krep_a6Rm $krep_a6Rz
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6Rx
+$krep_a6Rx = KindRepFun $krep_a6Rm $krep_a6Ry
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6Rw
+$krep_a6Rw = KindRepFun $krep_a6Rk $krep_a6Rx
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6Rv
+$krep_a6Rv = KindRepFun $krep_a6Rh $krep_a6Rw
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6Ru
+$krep_a6Ru = KindRepFun $krep_a6Re $krep_a6Rv
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6Rr
+$krep_a6Rr = KindRepFun $krep_a6Rs $krep_a6Ru
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'LineItem
+$tc'LineItem
+  = TyCon
+      8539620922902222438##
+      9565303329789687194##
+      $trModule
+      (TrNameS "'LineItem"#)
+      0#
+      $krep_a6Rr
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tcPartSupp
+$tcPartSupp
+  = TyCon
+      10849560314591573693##
+      11581864324186551291##
+      $trModule
+      (TrNameS "PartSupp"#)
+      0#
+      krep$*
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep_a6Rq
+$krep_a6Rq = KindRepTyConApp $tcPartSupp []
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6Rn
+$krep_a6Rn = KindRepFun $krep_a6Ro $krep_a6Rq
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6Rl
+$krep_a6Rl = KindRepFun $krep_a6Rm $krep_a6Rn
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6Rj
+$krep_a6Rj = KindRepFun $krep_a6Rk $krep_a6Rl
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6Rg
+$krep_a6Rg = KindRepFun $krep_a6Rh $krep_a6Rj
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+$krep_a6Rd
+$krep_a6Rd = KindRepFun $krep_a6Re $krep_a6Rg
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'PartSupp
+$tc'PartSupp
+  = TyCon
+      10754361947780373833##
+      14007972955674632504##
+      $trModule
+      (TrNameS "'PartSupp"#)
+      0#
+      $krep_a6Rd
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tcRegion
+$tcRegion
+  = TyCon
+      17005900331151520450##
+      2933480038519603125##
+      $trModule
+      (TrNameS "Region"#)
+      0#
+      krep$*
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+$krep_a6Rc
+$krep_a6Rc = KindRepTyConApp $tcRegion []
+
+-- RHS size: {terms: 8, types: 0, coercions: 0, joins: 0/0}
+$tc'EMEA
+$tc'EMEA
+  = TyCon
+      8266201620596383484##
+      3675984000706788314##
+      $trModule
+      (TrNameS "'EMEA"#)
+      0#
+      $krep_a6Rc
+
+-- RHS size: {terms: 20, types: 3, coercions: 11, joins: 0/0}
+$dIP_a6Qx
+$dIP_a6Qx
+  = (pushCallStack
+       (unpackCString# "undefined"#,
+        SrcLoc
+          (unpackCString# "main"#)
+          (unpackCString# "TPCH.Functional.Schema"#)
+          (unpackCString# "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+          (I# 21#)
+          (I# 9#)
+          (I# 21#)
+          (I# 18#))
+       ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+    `cast` <Co:4>
+
+-- RHS size: {terms: 2, types: 3, coercions: 0, joins: 0/0}
+parts
+parts = undefined $dIP_a6Qx
+
+-- RHS size: {terms: 20, types: 3, coercions: 11, joins: 0/0}
+$dIP_a6Qt
+$dIP_a6Qt
+  = (pushCallStack
+       (unpackCString# "undefined"#,
+        SrcLoc
+          (unpackCString# "main"#)
+          (unpackCString# "TPCH.Functional.Schema"#)
+          (unpackCString# "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+          (I# 34#)
+          (I# 13#)
+          (I# 34#)
+          (I# 22#))
+       ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+    `cast` <Co:4>
+
+-- RHS size: {terms: 2, types: 3, coercions: 0, joins: 0/0}
+suppliers
+suppliers = undefined $dIP_a6Qt
+
+-- RHS size: {terms: 20, types: 3, coercions: 11, joins: 0/0}
+$dIP_a6Qp
+$dIP_a6Qp
+  = (pushCallStack
+       (unpackCString# "undefined"#,
+        SrcLoc
+          (unpackCString# "main"#)
+          (unpackCString# "TPCH.Functional.Schema"#)
+          (unpackCString# "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+          (I# 46#)
+          (I# 13#)
+          (I# 46#)
+          (I# 22#))
+       ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+    `cast` <Co:4>
+
+-- RHS size: {terms: 2, types: 3, coercions: 0, joins: 0/0}
+partsupps
+partsupps = undefined $dIP_a6Qp
+
+-- RHS size: {terms: 20, types: 3, coercions: 11, joins: 0/0}
+$dIP_a6Ql
+$dIP_a6Ql
+  = (pushCallStack
+       (unpackCString# "undefined"#,
+        SrcLoc
+          (unpackCString# "main"#)
+          (unpackCString# "TPCH.Functional.Schema"#)
+          (unpackCString# "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+          (I# 60#)
+          (I# 13#)
+          (I# 60#)
+          (I# 22#))
+       ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+    `cast` <Co:4>
+
+-- RHS size: {terms: 2, types: 3, coercions: 0, joins: 0/0}
+customers
+customers = undefined $dIP_a6Ql
+
+-- RHS size: {terms: 20, types: 3, coercions: 11, joins: 0/0}
+$dIP_a6Qh
+$dIP_a6Qh
+  = (pushCallStack
+       (unpackCString# "undefined"#,
+        SrcLoc
+          (unpackCString# "main"#)
+          (unpackCString# "TPCH.Functional.Schema"#)
+          (unpackCString# "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+          (I# 75#)
+          (I# 10#)
+          (I# 75#)
+          (I# 19#))
+       ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+    `cast` <Co:4>
+
+-- RHS size: {terms: 2, types: 3, coercions: 0, joins: 0/0}
+orders
+orders = undefined $dIP_a6Qh
+
+-- RHS size: {terms: 20, types: 3, coercions: 11, joins: 0/0}
+$dIP_a6Qb
+$dIP_a6Qb
+  = (pushCallStack
+       (unpackCString# "undefined"#,
+        SrcLoc
+          (unpackCString# "main"#)
+          (unpackCString# "TPCH.Functional.Schema"#)
+          (unpackCString# "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+          (I# 106#)
+          (I# 10#)
+          (I# 106#)
+          (I# 19#))
+       ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+    `cast` <Co:4>
+
+-- RHS size: {terms: 2, types: 3, coercions: 0, joins: 0/0}
+n_name
+n_name = undefined $dIP_a6Qb
+
+-- RHS size: {terms: 20, types: 3, coercions: 11, joins: 0/0}
+$dIP_a6Q7
+$dIP_a6Q7
+  = (pushCallStack
+       (unpackCString# "undefined"#,
+        SrcLoc
+          (unpackCString# "main"#)
+          (unpackCString# "TPCH.Functional.Schema"#)
+          (unpackCString# "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+          (I# 109#)
+          (I# 12#)
+          (I# 109#)
+          (I# 21#))
+       ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+    `cast` <Co:4>
+
+-- RHS size: {terms: 2, types: 3, coercions: 0, joins: 0/0}
+n_region
+n_region = undefined $dIP_a6Q7
+
+-- RHS size: {terms: 20, types: 3, coercions: 11, joins: 0/0}
+$dIP_a6Q3
+$dIP_a6Q3
+  = (pushCallStack
+       (unpackCString# "undefined"#,
+        SrcLoc
+          (unpackCString# "main"#)
+          (unpackCString# "TPCH.Functional.Schema"#)
+          (unpackCString# "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+          (I# 112#)
+          (I# 13#)
+          (I# 112#)
+          (I# 22#))
+       ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+    `cast` <Co:4>
+
+-- RHS size: {terms: 2, types: 3, coercions: 0, joins: 0/0}
+n_comment
+n_comment = undefined $dIP_a6Q3
+
+-- RHS size: {terms: 20, types: 3, coercions: 11, joins: 0/0}
+$dIP_a6PZ
+$dIP_a6PZ
+  = (pushCallStack
+       (unpackCString# "undefined"#,
+        SrcLoc
+          (unpackCString# "main"#)
+          (unpackCString# "TPCH.Functional.Schema"#)
+          (unpackCString# "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+          (I# 115#)
+          (I# 14#)
+          (I# 115#)
+          (I# 23#))
+       ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+    `cast` <Co:4>
+
+-- RHS size: {terms: 2, types: 3, coercions: 0, joins: 0/0}
+allNations
+allNations = undefined $dIP_a6PZ
+
+-- RHS size: {terms: 20, types: 3, coercions: 11, joins: 0/0}
+$dIP_a6PV
+$dIP_a6PV
+  = (pushCallStack
+       (unpackCString# "undefined"#,
+        SrcLoc
+          (unpackCString# "main"#)
+          (unpackCString# "TPCH.Functional.Schema"#)
+          (unpackCString# "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+          (I# 123#)
+          (I# 10#)
+          (I# 123#)
+          (I# 19#))
+       ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+    `cast` <Co:4>
+
+-- RHS size: {terms: 2, types: 3, coercions: 0, joins: 0/0}
+r_name
+r_name = undefined $dIP_a6PV
+
+-- RHS size: {terms: 20, types: 3, coercions: 11, joins: 0/0}
+$dIP_a6PR
+$dIP_a6PR
+  = (pushCallStack
+       (unpackCString# "undefined"#,
+        SrcLoc
+          (unpackCString# "main"#)
+          (unpackCString# "TPCH.Functional.Schema"#)
+          (unpackCString# "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+          (I# 126#)
+          (I# 13#)
+          (I# 126#)
+          (I# 22#))
+       ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+    `cast` <Co:4>
+
+-- RHS size: {terms: 2, types: 3, coercions: 0, joins: 0/0}
+r_comment
+r_comment = undefined $dIP_a6PR
+
+-- RHS size: {terms: 20, types: 3, coercions: 11, joins: 0/0}
+$dIP_a6PN
+$dIP_a6PN
+  = (pushCallStack
+       (unpackCString# "undefined"#,
+        SrcLoc
+          (unpackCString# "main"#)
+          (unpackCString# "TPCH.Functional.Schema"#)
+          (unpackCString# "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+          (I# 129#)
+          (I# 14#)
+          (I# 129#)
+          (I# 23#))
+       ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+    `cast` <Co:4>
+
+-- RHS size: {terms: 2, types: 3, coercions: 0, joins: 0/0}
+allRegions
+allRegions = undefined $dIP_a6PN
+
+-- RHS size: {terms: 20, types: 3, coercions: 11, joins: 0/0}
+$dIP_a6PJ
+$dIP_a6PJ
+  = (pushCallStack
+       (unpackCString# "undefined"#,
+        SrcLoc
+          (unpackCString# "main"#)
+          (unpackCString# "TPCH.Functional.Schema"#)
+          (unpackCString# "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+          (I# 132#)
+          (I# 14#)
+          (I# 132#)
+          (I# 23#))
+       ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+    `cast` <Co:4>
+
+-- RHS size: {terms: 2, types: 3, coercions: 0, joins: 0/0}
+findRegion
+findRegion = undefined $dIP_a6PJ
+
+-- RHS size: {terms: 20, types: 3, coercions: 11, joins: 0/0}
+$dIP_a6PF
+$dIP_a6PF
+  = (pushCallStack
+       (unpackCString# "undefined"#,
+        SrcLoc
+          (unpackCString# "main"#)
+          (unpackCString# "TPCH.Functional.Schema"#)
+          (unpackCString# "ghc-dumps/../TPCH/Functional/Schema.hs"#)
+          (I# 135#)
+          (I# 13#)
+          (I# 135#)
+          (I# 22#))
+       ((emptyCallStack `cast` <Co:4>) `cast` <Co:3>))
+    `cast` <Co:4>
+
+-- RHS size: {terms: 2, types: 4, coercions: 0, joins: 0/0}
+nationsIn
+nationsIn = undefined $dIP_a6PF
+
+
+

@@ -1,0 +1,1525 @@
+[1 of 8] Compiling FDB.MoreTypes    ( FDB/MoreTypes.hs, FDB/MoreTypes.o )
+TYPE SIGNATURES
+  FDB.MoreTypes.Day :: Int -> DateInterval
+  dateFromString :: String -> Date
+  minusInterval :: Date -> DateInterval -> Date
+  tryDateFromString :: String -> Maybe Date
+TYPE CONSTRUCTORS
+  type Date = ()
+  data DateInterval = Day Int
+  type Decimal = Double
+  type PhoneNumber = ()
+COERCION AXIOMS
+Dependent modules: []
+Dependent packages: [base-4.12.0.0, ghc-prim-0.5.3,
+                     integer-gmp-1.0.2.0]
+
+==================== Typechecker ====================
+FDB.MoreTypes.$tcDateInterval
+  = GHC.Types.TyCon
+      18376018677496580262##
+      7294864336028437579##
+      FDB.MoreTypes.$trModule
+      (GHC.Types.TrNameS "DateInterval"#)
+      0
+      GHC.Types.krep$*
+FDB.MoreTypes.$tc'Day
+  = GHC.Types.TyCon
+      2870245755353241826##
+      3795114783946290854##
+      FDB.MoreTypes.$trModule
+      (GHC.Types.TrNameS "'Day"#)
+      0
+      $krep_a2qt
+$krep_a2qt [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a2qu $krep_a2qv
+$krep_a2qu [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp GHC.Types.$tcInt []
+$krep_a2qv [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp FDB.MoreTypes.$tcDateInterval []
+FDB.MoreTypes.$trModule
+  = GHC.Types.Module
+      (GHC.Types.TrNameS "main"#) (GHC.Types.TrNameS "FDB.MoreTypes"#)
+minusInterval_a1cf = undefined
+tryDateFromString_a2ey = undefined
+dateFromString_a2eC = undefined
+
+[2 of 8] Compiling FDB.Utils        ( FDB/Utils.hs, FDB/Utils.o )
+TYPE SIGNATURES
+  .: ::
+    forall t1 t2 t3 t4.
+    (t1 -> t2) -> (t3 -> t4 -> t1) -> t3 -> t4 -> t2
+  <&> ::
+    forall (f :: * -> *) a b. Functor f => f a -> (a -> b) -> f b
+  compose2 ::
+    forall t1 t2 t3 t4.
+    (t1 -> t2) -> (t3 -> t4 -> t1) -> t3 -> t4 -> t2
+TYPE CONSTRUCTORS
+COERCION AXIOMS
+Dependent modules: []
+Dependent packages: [base-4.12.0.0, ghc-prim-0.5.3,
+                     integer-gmp-1.0.2.0]
+
+==================== Typechecker ====================
+FDB.Utils.$trModule
+  = GHC.Types.Module
+      (GHC.Types.TrNameS "main"#) (GHC.Types.TrNameS "FDB.Utils"#)
+(<&>_a2As) as_a2zn f_a2zo = f_a2zo <$> as_a2zn
+compose2 f_a2zh g_a2zi x_a2zj y_a2zk
+  = f_a2zh (g_a2zi x_a2zj y_a2zk)
+(.:) f_a2zl g_a2zm = f_a2zl `compose2` g_a2zm
+
+[3 of 8] Compiling Utils.List       ( Utils/List.hs, Utils/List.o )
+TYPE SIGNATURES
+  groupByKeyVal ::
+    forall k a v. Eq k => (a -> k) -> (a -> v) -> [a] -> [(k, [v])]
+  noDuplicates :: forall a. Ord a => [a] -> [a]
+  zipWithIndex :: forall a. [a] -> [(Int, a)]
+  zipWithIndexRight :: forall a. [a] -> [(a, Int)]
+TYPE CONSTRUCTORS
+COERCION AXIOMS
+Dependent modules: []
+Dependent packages: [array-0.5.3.0, base-4.12.0.0,
+                     containers-0.6.0.1, deepseq-1.4.4.0, ghc-prim-0.5.3,
+                     integer-gmp-1.0.2.0]
+
+==================== Typechecker ====================
+Utils.List.$trModule
+  = GHC.Types.Module
+      (GHC.Types.TrNameS "main"#) (GHC.Types.TrNameS "Utils.List"#)
+groupByKeyVal_a302 key_a2Re val_a2Rf xs_a2Rg
+  = map transformGroup_a2Ri naiveGroups_a2Rh
+  where
+      naiveGroups_a2Rh
+        = List.groupBy
+            (\ x1_a2TY x2_a2TZ -> (key_a2Re x1_a2TY) == (key_a2Re x2_a2TZ))
+            xs_a2Rg
+      transformGroup_a2Ri thisGroup_a2U0
+        = (thisGroupKey_a2U1, thisGroupVals_a2U2)
+        where
+            thisGroupKey_a2U1 = key_a2Re (head thisGroup_a2U0)
+            thisGroupVals_a2U2 = val_a2Rf <$> thisGroup_a2U0
+zipWithIndex_a310 = zip [0 .. ]
+zipWithIndexRight_a3cw = map swap . zipWithIndex
+noDuplicates_a3cL = Set.toList . Set.fromList
+
+[4 of 8] Compiling Utils.Prelude    ( Utils/Prelude.hs, Utils/Prelude.o )
+TYPE SIGNATURES
+  .: ::
+    forall b c a1 a2. (b -> c) -> (a1 -> a2 -> b) -> a1 -> a2 -> c
+  <&> ::
+    forall (f :: * -> *) a b. Functor f => f a -> (a -> b) -> f b
+  compose2 ::
+    forall b c a1 a2. (b -> c) -> (a1 -> a2 -> b) -> a1 -> a2 -> c
+  doNothing :: IO ()
+  ignore :: forall a. a -> ()
+TYPE CONSTRUCTORS
+COERCION AXIOMS
+Dependent modules: []
+Dependent packages: [base-4.12.0.0, ghc-prim-0.5.3,
+                     integer-gmp-1.0.2.0]
+
+==================== Typechecker ====================
+Utils.Prelude.$trModule
+  = GHC.Types.Module
+      (GHC.Types.TrNameS "main"#) (GHC.Types.TrNameS "Utils.Prelude"#)
+ignore_a3hs = const ()
+doNothing_a3hx = return ()
+(<&>_a3hO) as_a3gA f_a3gB = f_a3gB <$> as_a3gA
+compose2 = (.) . (.)
+(.:) = compose2
+
+[5 of 8] Compiling Utils.AbstractGraph ( Utils/AbstractGraph.hs, Utils/AbstractGraph.o )
+TYPE SIGNATURES
+  Utils.AbstractGraph.Graph ::
+    forall v e. [v] -> [(v, e, v)] -> Graph v e
+  Utils.AbstractGraph.Tree ::
+    forall v e. v -> [(e, Tree v e)] -> Tree v e
+  allTreeEdges :: forall v e. Tree v e -> [(v, e, v)]
+  allTreeNodes :: forall v e. Tree v e -> [v]
+  assignTreeIds :: forall v e. Tree v e -> Tree (v, Int) e
+  assignUniqueIds ::
+    forall v e. Ord v => Graph v e -> (Graph (v, Int) e, Map v Int)
+  buildTree ::
+    forall t v e. (t -> v) -> (t -> [(e, t)]) -> t -> Tree v e
+  edgeTriplets :: forall v e. Graph v e -> [(v, e, v)]
+  eliminateDuplicateVertices ::
+    forall v e. Ord v => Graph v e -> Graph v e
+  getNode :: forall v e. Tree v e -> v
+  graphFromTree :: forall v e. Tree v e -> Graph v e
+  mapEdgeFromTriplet :: forall e f v. (e -> f) -> (v, e, v) -> f
+  mapEdgeInTriplet ::
+    forall e f v. (e -> f) -> (v, e, v) -> (v, f, v)
+  mapEdgeTriplets ::
+    forall v e f. ((v, e, v) -> f) -> Graph v e -> Graph v f
+  mapEdges :: forall e f v. (e -> f) -> Graph v e -> Graph v f
+  mapGraphTriplets ::
+    forall v1 v2 e1 e2.
+    (v1 -> v2) -> ((v1, e1, v1) -> e2) -> Graph v1 e1 -> Graph v2 e2
+  mapTreeNodes :: forall v w e. (v -> w) -> Tree v e -> Tree w e
+  mapVertices :: forall v w e. (v -> w) -> Graph v e -> Graph w e
+  rootNode :: forall v e. Tree v e -> v
+  singleton :: forall v e. v -> Graph v e
+  subtreeNodes :: forall v e. Tree v e -> [v]
+  subtrees :: forall v e. Tree v e -> [Tree v e]
+  vertices :: forall v e. Graph v e -> [v]
+TYPE CONSTRUCTORS
+  data Graph v e = Graph [v] [(v, e, v)]
+  data Tree v e = Tree v [(e, Tree v e)]
+COERCION AXIOMS
+INSTANCES
+  instance Bifunctor Graph -- Defined at Utils/AbstractGraph.hs:22:10
+  instance Semigroup (Graph v e)
+    -- Defined at Utils/AbstractGraph.hs:28:10
+  instance Monoid (Graph v e)
+    -- Defined at Utils/AbstractGraph.hs:31:10
+Dependent modules: [(Utils.List, False), (Utils.Prelude, False)]
+Dependent packages: [array-0.5.3.0, base-4.12.0.0,
+                     containers-0.6.0.1, deepseq-1.4.4.0, ghc-prim-0.5.3,
+                     integer-gmp-1.0.2.0]
+
+==================== Typechecker ====================
+Utils.AbstractGraph.$tcTree
+  = GHC.Types.TyCon
+      6515252302738829926##
+      7116435001695257579##
+      Utils.AbstractGraph.$trModule
+      (GHC.Types.TrNameS "Tree"#)
+      0
+      GHC.Types.krep$*->*->*
+Utils.AbstractGraph.$tc'Tree
+  = GHC.Types.TyCon
+      1962891149104463300##
+      12402799480339590078##
+      Utils.AbstractGraph.$trModule
+      (GHC.Types.TrNameS "'Tree"#)
+      2
+      $krep_a4wv
+Utils.AbstractGraph.$tcGraph
+  = GHC.Types.TyCon
+      11750601768977025181##
+      11539868905161674652##
+      Utils.AbstractGraph.$trModule
+      (GHC.Types.TrNameS "Graph"#)
+      0
+      GHC.Types.krep$*->*->*
+Utils.AbstractGraph.$tc'Graph
+  = GHC.Types.TyCon
+      17329342475042821334##
+      15132150088727508783##
+      Utils.AbstractGraph.$trModule
+      (GHC.Types.TrNameS "'Graph"#)
+      2
+      $krep_a4wC
+$krep_a4ww [InlPrag=NOUSERINLINE[~]] = GHC.Types.KindRepVar 0
+$krep_a4wA [InlPrag=NOUSERINLINE[~]] = GHC.Types.KindRepVar 1
+$krep_a4wv [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a4ww $krep_a4wx
+$krep_a4wC [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a4wD $krep_a4wE
+$krep_a4wE [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a4wF $krep_a4wH
+$krep_a4wx [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a4wy $krep_a4wB
+$krep_a4wG [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      GHC.Tuple.$tc(,,)
+      ((:) $krep_a4ww ((:) $krep_a4wA ((:) $krep_a4ww [])))
+$krep_a4wB [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      Utils.AbstractGraph.$tcTree ((:) $krep_a4ww ((:) $krep_a4wA []))
+$krep_a4wz [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      GHC.Tuple.$tc(,) ((:) $krep_a4wA ((:) $krep_a4wB []))
+$krep_a4wH [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      Utils.AbstractGraph.$tcGraph ((:) $krep_a4ww ((:) $krep_a4wA []))
+$krep_a4wD [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp GHC.Types.$tc[] ((:) $krep_a4ww [])
+$krep_a4wF [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp GHC.Types.$tc[] ((:) $krep_a4wG [])
+$krep_a4wy [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp GHC.Types.$tc[] ((:) $krep_a4wz [])
+Utils.AbstractGraph.$trModule
+  = GHC.Types.Module
+      (GHC.Types.TrNameS "main"#)
+      (GHC.Types.TrNameS "Utils.AbstractGraph"#)
+mapTreeNodes_a4ep f_a44P (Tree root_a44Q edges_a44R)
+  = Tree
+      (f_a44P root_a44Q)
+      [(edge_a44S, mapTreeNodes f_a44P subtree_a44T) |
+         (edge_a44S, subtree_a44T) <- edges_a44R]
+subtrees_a4ey (Tree _ edges_a44O) = map snd edges_a44O
+rootNode_a4eH (Tree root_a44N _) = root_a44N
+subtreeNodes_a4eK = map rootNode . subtrees
+allTreeNodes_a4eW t_a44M
+  = (rootNode t_a44M) : (subtrees t_a44M >>= allTreeNodes)
+allTreeEdges_a4fd (Tree root_a44F children_a44G)
+  = rootEdges_a44H ++ subtreeEdges_a44I
+  where
+      rootEdges_a44H
+        = [(root_a44F, edge_a44J, (rootNode subtree_a44K)) |
+             (edge_a44J, subtree_a44K) <- children_a44G]
+      subtreeEdges_a44I
+        = do (_, subtree_a44L) <- children_a44G
+             allTreeEdges subtree_a44L
+assignTreeIds_a4fL root_a44k
+  = fst (recAssignIds_a44l 0 root_a44k)
+  where
+      recAssignIds_a44l ::
+        Int -> Tree v_a44m e_a44n -> (Tree (v_a44m, Int) e_a44n, Int)
+      recAssignIds_a4g8 id_a44o (Tree node_a44p children_a44q)
+        = (Tree (node_a44p, id_a44o) childrenWithId_a44r, nextId_a44s)
+        where
+            (childrenWithId_a4ha, nextId_a4hc)
+              = assignInSequence_a44t (id_a44o + 1) children_a44q
+            assignInSequence_a44t ::
+              Int
+              -> [(e_a44u, Tree v_a44v e_a44u)]
+                 -> ([(e_a44u, Tree (v_a44v, Int) e_a44u)], Int)
+            assignInSequence_a4gw
+              freeId_a44w
+              ((edge_a44x, thisSubtree_a44y) : remEdges_a44z)
+              = let
+                  (thisSubtreeWithId_a4gD, idAfterThisSubtree_a4gF)
+                    = recAssignIds_a44l freeId_a44w thisSubtree_a44y
+                  (remEdgesWithId_a4gS, nextFreeId_a4gU)
+                    = assignInSequence_a44t idAfterThisSubtree_a44B remEdges_a44z
+                in
+                  ((edge_a44x, thisSubtreeWithId_a44A) : remEdgesWithId_a44C, 
+                   nextFreeId_a44D)
+            assignInSequence_a4gw freeId_a44E [] = ([], freeId_a44E)
+buildTree_a4hB toNode_a44b children_a44c root_a44d
+  = let
+      rootNode_a44e = toNode_a44b root_a44d
+      rootChildren_a44f = children_a44c root_a44d
+      subtrees_a44g
+        = [(edge_a44i, recBuildTree_a44h child_a44j) |
+             (edge_a44i, child_a44j) <- rootChildren_a44f]
+      recBuildTree_a44h = buildTree toNode_a44b children_a44c
+    in Tree rootNode_a44e subtrees_a44g
+eliminateDuplicateVertices_a4ig (Graph vs_a449 es_a44a)
+  = Graph (ListUtils.noDuplicates vs_a449) es_a44a
+mapEdgeFromTriplet_a4iq f_a443 (_, e_a444, _) = f_a443 e_a444
+mapEdgeInTriplet_a4iu f_a43Z (s_a440, e_a441, d_a442)
+  = (s_a440, f_a43Z e_a441, d_a442)
+mapGraphTriplets_a4iz fv_a43R fe_a43S (Graph vs_a43T es_a43U)
+  = Graph (map fv_a43R vs_a43T) (map fvev_a43V es_a43U)
+  where
+      fvev_a43V (s_a43W, e_a43X, d_a43Y)
+        = (fv_a43R s_a43W, fe_a43S (s_a43W, e_a43X, d_a43Y), 
+           fv_a43R d_a43Y)
+mapEdgeTriplets_a4j0 f_a43L (Graph vs_a43M es_a43N)
+  = Graph
+      vs_a43M
+      (es_a43N
+         <&>
+           (\ (s_a43O, e_a43P, d_a43Q)
+              -> (s_a43O, f_a43L (s_a43O, e_a43P, d_a43Q), d_a43Q)))
+mapEdges_a4je = second
+mapVertices_a4jr = first
+edgeTriplets_a4jD (Graph _ es_a43K) = es_a43K
+vertices_a4jG (Graph vs_a43J _) = vs_a43J
+assignUniqueIds_a4jJ g_a445
+  = let
+      idMap_a446 = Map.fromList (zipWithIndexRight (vertices g_a445))
+      gWithIds_a447
+        = mapVertices (\ v_a448 -> (v_a448, idMap_a446 ! v_a448)) g_a445
+    in (gWithIds_a447, idMap_a446)
+singleton_a4kw v_a43I = Graph [v_a43I] []
+getNode_a4kB (Tree node_a43H _) = node_a43H
+graphFromTree_a4kE (Tree node_a43z children_a43A)
+  = let
+      edgeTriplets_a43B
+        = [(node_a43z, edge_a43E, getNode child_a43F) |
+             (edge_a43E, child_a43F) <- children_a43A]
+      subGraphs_a43C
+        = [graphFromTree child_a43G | (_, child_a43G) <- children_a43A]
+      localGraph_a43D = Graph [node_a43z] edgeTriplets_a43B
+    in localGraph_a43D <> (mconcat subGraphs_a43C)
+$dMonoid_a4lK
+  = GHC.Base.C:Monoid
+      $cp1Monoid_a4lp $cmempty_a4lr $cmappend_a4lx $cmconcat_a4lE
+mempty_a4lt = Graph [] []
+mappend_a4lz = (<>)
+mconcat_a4lG
+  = GHC.Base.$dmmconcat @(Graph v_a4lk[ssk:1] e_a4ll[ssk:1])
+$dSemigroup_a4vp
+  = GHC.Base.C:Semigroup $c<>_a4lO $csconcat_a4lZ $cstimes_a4v1
+(<>_a4lQ) (Graph lv_a3No le_a3Np) (Graph rv_a3Nq re_a3Nr)
+  = Graph (lv_a3No <> rv_a3Nq) (le_a3Np <> re_a3Nr)
+sconcat_a4m1
+  = GHC.Base.$dmsconcat @(Graph v_a4lL[ssk:1] e_a4lM[ssk:1])
+stimes_a4vh
+  = GHC.Base.$dmstimes @(Graph v_a4lL[ssk:1] e_a4lM[ssk:1])
+$dBifunctor_a4we
+  = Data.Bifunctor.C:Bifunctor
+      $cbimap_a4vr $cfirst_a4vO $csecond_a4w1
+bimap_a4vB fv_a3Ns fe_a3Nt
+  = mapGraphTriplets fv_a3Ns (mapEdgeFromTriplet fe_a3Nt)
+first_a4vT = Data.Bifunctor.$dmfirst @(Graph)
+second_a4w6 fe_a3Nu = mapEdgeTriplets (mapEdgeFromTriplet fe_a3Nu)
+
+[6 of 8] Compiling FDB.GADTForall   ( FDB/GADTForall.hs, FDB/GADTForall.o )
+TYPE SIGNATURES
+  -|><|-> :: forall a b. NatJoin a b => Q a -> Q b -> Q b
+  <-|><|- :: forall a b. NatJoin a b => Q a -> Q b -> Q a
+  FDB.GADTForall.Agg ::
+    forall a b s. (s -> a -> s) -> s -> (s -> b) -> Agg a b s
+  FDB.GADTForall.FetchRow ::
+    forall a1 a2. (a1 ~ Row a2) => RowRef a2 -> SQ a1
+  FDB.GADTForall.Filter :: forall a. (a -> Bool) -> Q a -> Q a
+  FDB.GADTForall.FilterSQ :: forall a. (a -> SQ Bool) -> Q a -> Q a
+  FDB.GADTForall.GroupBy ::
+    forall a v k. (a ~ (k, Q v)) => (v -> k) -> Q v -> Q a
+  FDB.GADTForall.Map :: forall a b. (b -> a) -> Q b -> Q a
+  FDB.GADTForall.MapSQ :: forall b v. (v -> SQ b) -> Q v -> Q b
+  FDB.GADTForall.OrderBy ::
+    forall a b. Ord b => (a -> b) -> Q a -> Q a
+  FDB.GADTForall.Read :: forall a. Table a -> Q a
+  FDB.GADTForall.Row :: forall a. RowRef a -> a -> Row a
+  FDB.GADTForall.RowId :: Word64 -> RowId
+  FDB.GADTForall.RowRef :: forall a. TableId -> RowId -> RowRef a
+  FDB.GADTForall.StateFold :: forall b a s. Agg a b s -> Q a -> SQ b
+  FDB.GADTForall.Table :: forall a. String -> Table a
+  FDB.GADTForall.TableId :: Word16 -> TableId
+  FDB.GADTForall.Take :: forall a n. Integral n => n -> Q a -> Q a
+  agg :: forall a b s. Agg a b s -> Q a -> SQ b
+  avgAgg :: forall a. Fractional a => Agg a a (a, a)
+  count :: forall n a. Integral n => Q a -> SQ n
+  emptyQ :: forall a. Q a
+  eqFilter :: forall b a. Eq b => (a -> b) -> b -> Q a -> Q a
+  equiJoin ::
+    forall c a b.
+    Eq c =>
+    (a -> c) -> (b -> c) -> Q a -> Q b -> Q (a, b)
+  exists :: forall a. Q a -> SQ Bool
+  fetchForeign :: forall a. RowRef a -> SQ a
+  fetchRow :: forall a. RowRef a -> SQ (Row a)
+  filterQ :: forall a. (a -> Bool) -> Q a -> Q a
+  findTable :: forall a. String -> Table a
+  groupByQ :: forall k a. Ord k => (a -> k) -> Q a -> Q (Q a)
+  groupByWithKey ::
+    forall k a. Ord k => (a -> k) -> Q a -> Q (k, Q a)
+  mapAgg :: forall b c s a. Agg b c s -> (a -> b) -> Q a -> SQ c
+  mapQ :: forall a b. (a -> b) -> Q a -> Q b
+  mapToQ :: forall a b. (a -> Q b) -> SQ a -> Q b
+  minAgg :: forall a. Ord a => Fold1 a
+  orderBy :: forall b a. Ord b => (a -> b) -> Q a -> Q a
+  pull :: forall a. Q a -> a
+  readT :: forall a. Table a -> Q a
+  rowRef :: forall a. Row a -> RowRef a
+  rowVal :: forall a. Row a -> a
+  subqFilter :: forall a. (a -> SQ Bool) -> Q a -> Q a
+  subqMap :: forall a b. (a -> SQ b) -> Q a -> Q b
+  sumAgg :: forall a. Num a => Fold1 a
+  takeQ :: forall n a. Integral n => n -> Q a -> Q a
+  toQ :: forall a. SQ a -> Q a
+  |><| :: forall a b. NatJoin a b => Q a -> Q b -> Q (a, b)
+TYPE CONSTRUCTORS
+  data Agg a b s = Agg (s -> a -> s) s (s -> b)
+  type Fold a b = Agg a b b
+  type Fold1 a = Agg a a a
+  class NatJoin a b where
+    (|><|) :: Q a -> Q b -> Q (a, b)
+    {-# MINIMAL (|><|) #-}
+  type role Q nominal
+  data Q a where
+    Filter :: (a -> Bool) -> (Q a) -> Q a
+    Map :: (b -> a) -> (Q b) -> Q a
+    Read :: (Table a) -> Q a
+    GroupBy :: (v -> k) -> (Q v) -> Q (k, Q v)
+    MapSQ :: (v -> SQ a) -> (Q v) -> Q a
+    FilterSQ :: (a -> SQ Bool) -> (Q a) -> Q a
+    OrderBy :: Ord b => (a -> b) -> (Q a) -> Q a
+    Take :: Integral n => n -> (Q a) -> Q a
+  data Row a = Row (RowRef a) a
+  newtype RowId = RowId Word64
+  type role RowRef phantom
+  data RowRef a = RowRef TableId RowId
+  type role SQ nominal
+  data SQ a where
+    FetchRow :: (RowRef a1) -> SQ (Row a1)
+    StateFold :: (Agg a1 a s) -> (Q a1) -> SQ a
+  type role Table phantom
+  newtype Table a = Table String
+  newtype TableId = TableId Word16
+  type TableRef a = RowRef a
+COERCION AXIOMS
+  axiom FDB.GADTForall.N:Table ::
+    Table a = String -- Defined at FDB/GADTForall.hs:12:1
+  axiom FDB.GADTForall.N:RowId ::
+    RowId = Word64 -- Defined at FDB/GADTForall.hs:185:1
+  axiom FDB.GADTForall.N:TableId ::
+    TableId = Word16 -- Defined at FDB/GADTForall.hs:188:1
+  axiom FDB.GADTForall.N:NatJoin ::
+    NatJoin a b = Q a -> Q b -> Q (a, b)
+      -- Defined at FDB/GADTForall.hs:161:1
+INSTANCES
+  instance Eq (RowRef a) -- Defined at FDB/GADTForall.hs:183:12
+  instance Eq TableId -- Defined at FDB/GADTForall.hs:189:12
+  instance Eq RowId -- Defined at FDB/GADTForall.hs:186:12
+  instance Functor Q -- Defined at FDB/GADTForall.hs:77:10
+  instance Applicative Q -- Defined at FDB/GADTForall.hs:80:10
+  instance Monad Q -- Defined at FDB/GADTForall.hs:84:10
+  instance Functor SQ -- Defined at FDB/GADTForall.hs:103:10
+  instance Applicative SQ -- Defined at FDB/GADTForall.hs:106:10
+  instance Monad SQ -- Defined at FDB/GADTForall.hs:110:10
+Dependent modules: [(FDB.Utils, False),
+                    (Utils.AbstractGraph, False), (Utils.List, False),
+                    (Utils.Prelude, False)]
+Dependent packages: [array-0.5.3.0, base-4.12.0.0,
+                     containers-0.6.0.1, deepseq-1.4.4.0, ghc-prim-0.5.3,
+                     integer-gmp-1.0.2.0]
+
+==================== Typechecker ====================
+FDB.GADTForall.$tcNatJoin
+  = GHC.Types.TyCon
+      4754972827294106747##
+      18091397365184212835##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "NatJoin"#)
+      0
+      $krep_a5Ob
+FDB.GADTForall.$tc'C:NatJoin
+  = GHC.Types.TyCon
+      1773075345423852451##
+      14997350799920276371##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'C:NatJoin"#)
+      2
+      $krep_a5Oe
+FDB.GADTForall.$tcSQ
+  = GHC.Types.TyCon
+      7724225419132177098##
+      14063341351447723075##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "SQ"#)
+      0
+      GHC.Types.krep$*Arr*
+FDB.GADTForall.$tc'FetchRow
+  = GHC.Types.TyCon
+      10701926302208271525##
+      2310866770539922913##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'FetchRow"#)
+      1
+      $krep_a5Oo
+FDB.GADTForall.$tc'StateFold
+  = GHC.Types.TyCon
+      18411259465723880701##
+      4094594497890411514##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'StateFold"#)
+      3
+      $krep_a5Os
+FDB.GADTForall.$tcQ
+  = GHC.Types.TyCon
+      18238656953556965988##
+      5882741213209533844##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "Q"#)
+      0
+      GHC.Types.krep$*Arr*
+FDB.GADTForall.$tc'Filter
+  = GHC.Types.TyCon
+      3342106065591891117##
+      5504432989845619796##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'Filter"#)
+      1
+      $krep_a5Ox
+FDB.GADTForall.$tc'Map
+  = GHC.Types.TyCon
+      14379505272008014040##
+      10084327610682124345##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'Map"#)
+      2
+      $krep_a5OB
+FDB.GADTForall.$tc'Read
+  = GHC.Types.TyCon
+      5506696017368664421##
+      2631673073369786685##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'Read"#)
+      1
+      $krep_a5OE
+FDB.GADTForall.$tc'GroupBy
+  = GHC.Types.TyCon
+      13670223224869757845##
+      8697476818672593631##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'GroupBy"#)
+      2
+      $krep_a5OG
+FDB.GADTForall.$tc'MapSQ
+  = GHC.Types.TyCon
+      1443944143463630897##
+      6245638742163314951##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'MapSQ"#)
+      2
+      $krep_a5OK
+FDB.GADTForall.$tc'FilterSQ
+  = GHC.Types.TyCon
+      3550822472285476798##
+      14511159754611735049##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'FilterSQ"#)
+      1
+      $krep_a5OM
+FDB.GADTForall.$tc'OrderBy
+  = GHC.Types.TyCon
+      14908185740511951096##
+      14008337868706905896##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'OrderBy"#)
+      2
+      $krep_a5OP
+FDB.GADTForall.$tc'Take
+  = GHC.Types.TyCon
+      18145023462564812289##
+      14897176176755836167##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'Take"#)
+      2
+      $krep_a5OU
+FDB.GADTForall.$tcRow
+  = GHC.Types.TyCon
+      7837339403267824689##
+      11319950323759755044##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "Row"#)
+      0
+      GHC.Types.krep$*Arr*
+FDB.GADTForall.$tc'Row
+  = GHC.Types.TyCon
+      16802854983749163630##
+      1951157969764704594##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'Row"#)
+      1
+      $krep_a5OX
+FDB.GADTForall.$tcRowRef
+  = GHC.Types.TyCon
+      6167723302899116461##
+      12820464192123209494##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "RowRef"#)
+      0
+      GHC.Types.krep$*Arr*
+FDB.GADTForall.$tc'RowRef
+  = GHC.Types.TyCon
+      1951283466925547487##
+      17778823377038719573##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'RowRef"#)
+      1
+      $krep_a5OZ
+FDB.GADTForall.$tcTableId
+  = GHC.Types.TyCon
+      221136922417672250##
+      2647284849506157507##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "TableId"#)
+      0
+      GHC.Types.krep$*
+FDB.GADTForall.$tc'TableId
+  = GHC.Types.TyCon
+      299570635528495236##
+      7767331940541179554##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'TableId"#)
+      0
+      $krep_a5P3
+FDB.GADTForall.$tcRowId
+  = GHC.Types.TyCon
+      6564313131908661638##
+      391072849311021736##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "RowId"#)
+      0
+      GHC.Types.krep$*
+FDB.GADTForall.$tc'RowId
+  = GHC.Types.TyCon
+      11182397406630558385##
+      2250286617457619889##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'RowId"#)
+      0
+      $krep_a5P5
+FDB.GADTForall.$tcAgg
+  = GHC.Types.TyCon
+      6997330576107404323##
+      12350032399431940804##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "Agg"#)
+      0
+      $krep_a5P7
+FDB.GADTForall.$tc'Agg
+  = GHC.Types.TyCon
+      8300879811530789064##
+      621423574753608316##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'Agg"#)
+      3
+      $krep_a5P8
+FDB.GADTForall.$tcTable
+  = GHC.Types.TyCon
+      6112764465777374685##
+      4824890021682489453##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "Table"#)
+      0
+      GHC.Types.krep$*Arr*
+FDB.GADTForall.$tc'Table
+  = GHC.Types.TyCon
+      10871517142501221515##
+      4325455715354573628##
+      FDB.GADTForall.$trModule
+      (GHC.Types.TrNameS "'Table"#)
+      1
+      $krep_a5Pe
+$krep_a5Oh [InlPrag=NOUSERINLINE[~]] = GHC.Types.KindRepVar 0
+$krep_a5Ok [InlPrag=NOUSERINLINE[~]] = GHC.Types.KindRepVar 1
+$krep_a5Ou [InlPrag=NOUSERINLINE[~]] = GHC.Types.KindRepVar 2
+$krep_a5OC [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Oh $krep_a5Ok
+$krep_a5Pa [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Oh $krep_a5Ou
+$krep_a5OW [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Oh $krep_a5OT
+$krep_a5OL [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Oh $krep_a5Ow
+$krep_a5ON [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Oh $krep_a5OO
+$krep_a5OY [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Oh $krep_a5Or
+$krep_a5Oy [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Oh $krep_a5Oz
+$krep_a5OS [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Ok $krep_a5Oh
+$krep_a5Pd [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Ou $krep_a5Ok
+$krep_a5P9 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Ou $krep_a5Pa
+$krep_a5Pb [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Ou $krep_a5Pc
+$krep_a5OB [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5OC $krep_a5OD
+$krep_a5OG [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5OC $krep_a5OH
+$krep_a5OK [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5OL $krep_a5OD
+$krep_a5OM [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5ON $krep_a5OA
+$krep_a5Ox [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Oy $krep_a5OA
+$krep_a5OR [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5OS $krep_a5OT
+$krep_a5Pc [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Pd $krep_a5Ot
+$krep_a5P8 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5P9 $krep_a5Pb
+$krep_a5Oe [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Of $krep_a5On
+$krep_a5Os [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Ot $krep_a5Ov
+$krep_a5OE [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5OF $krep_a5Og
+$krep_a5Of [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Og $krep_a5Oi
+$krep_a5Ov [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Og $krep_a5Ow
+$krep_a5OA [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Og $krep_a5Og
+$krep_a5OD [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Og $krep_a5Oj
+$krep_a5OH [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Og $krep_a5OI
+$krep_a5OT [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Oj $krep_a5Oj
+$krep_a5Oi [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Oj $krep_a5Ol
+$krep_a5OP [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5OQ $krep_a5OR
+$krep_a5OU [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5OV $krep_a5OW
+$krep_a5OX [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Op $krep_a5OY
+$krep_a5Oo [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Op $krep_a5Oq
+$krep_a5P7 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun GHC.Types.krep$* GHC.Types.krep$*->*->*
+$krep_a5Ob [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun GHC.Types.krep$* $krep_a5Oc
+$krep_a5Oc [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun GHC.Types.krep$* $krep_a5Od
+$krep_a5Pe [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5Pf $krep_a5OF
+$krep_a5P1 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5P2 $krep_a5Op
+$krep_a5OZ [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5P0 $krep_a5P1
+$krep_a5P3 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5P4 $krep_a5P0
+$krep_a5P5 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a5P6 $krep_a5P2
+$krep_a5Ot [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcAgg
+      ((:) $krep_a5Oh ((:) $krep_a5Ok ((:) $krep_a5Ou [])))
+$krep_a5Om [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      GHC.Tuple.$tc(,) ((:) $krep_a5Oh ((:) $krep_a5Ok []))
+$krep_a5OJ [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      GHC.Tuple.$tc(,) ((:) $krep_a5Ok ((:) $krep_a5Og []))
+$krep_a5Op [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcRowRef ((:) $krep_a5Oh [])
+$krep_a5Or [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcRow ((:) $krep_a5Oh [])
+$krep_a5OF [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcTable ((:) $krep_a5Oh [])
+$krep_a5Og [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp FDB.GADTForall.$tcQ ((:) $krep_a5Oh [])
+$krep_a5Oj [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp FDB.GADTForall.$tcQ ((:) $krep_a5Ok [])
+$krep_a5Ol [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp FDB.GADTForall.$tcQ ((:) $krep_a5Om [])
+$krep_a5OI [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp FDB.GADTForall.$tcQ ((:) $krep_a5OJ [])
+$krep_a5Ow [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcSQ ((:) $krep_a5Ok [])
+$krep_a5Oq [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcSQ ((:) $krep_a5Or [])
+$krep_a5OO [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcSQ ((:) $krep_a5Oz [])
+$krep_a5Pf [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp GHC.Types.$tc[] ((:) $krep_a5Pg [])
+$krep_a5Od [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp GHC.Types.$tcConstraint []
+$krep_a5Oz [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp GHC.Types.$tcBool []
+$krep_a5P0 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp FDB.GADTForall.$tcTableId []
+$krep_a5P2 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp FDB.GADTForall.$tcRowId []
+$krep_a5P4 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp GHC.Word.$tcWord16 []
+$krep_a5P6 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp GHC.Word.$tcWord64 []
+$krep_a5Pg [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp GHC.Types.$tcChar []
+$krep_a5On [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcNatJoin ((:) $krep_a5Oh ((:) $krep_a5Ok []))
+$krep_a5OQ [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp GHC.Classes.$tcOrd ((:) $krep_a5Oh [])
+$krep_a5OV [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      GHC.Real.$tcIntegral ((:) $krep_a5Oh [])
+FDB.GADTForall.$trModule
+  = GHC.Types.Module
+      (GHC.Types.TrNameS "main"#) (GHC.Types.TrNameS "FDB.GADTForall"#)
+rowRef_a5Ct (Row ref_a5jU _) = ref_a5jU
+rowVal_a5Cv (Row _ val_a5jT) = val_a5jT
+minAgg_a5Cx = undefined
+count_a5CF = undefined
+avgAgg_a5CM = undefined
+sumAgg_a5CT = undefined
+agg_a5D2 = StateFold
+toQ_a5D7 = undefined
+mapToQ_a5De = undefined
+subqFilter_a5Dk = FilterSQ
+subqMap_a5Do = MapSQ
+fetchRow_a5Ds = FetchRow
+fetchForeign_a5Dv ref_a5jJ = fetchRow ref_a5jJ <&> rowVal
+equiJoin_a5DG = undefined
+eqFilter_a5DO = undefined
+emptyQ_a5DV = undefined
+takeQ_a5E2 = Take
+exists_a5E9 q_a5jK
+  = do c_a5jL <- count $ takeQ 1 q_a5jK
+       return (c_a5jL > 0)
+orderBy_a5EB = OrderBy
+groupByWithKey_a5EJ = GroupBy
+filterQ_a5EP = Filter
+mapQ_a5ET = Map
+groupByQ_a5EY = mapQ snd .: groupByWithKey
+mapAgg_a5Fg g_a5jM f_a5jN q_a5jO = agg g_a5jM (mapQ f_a5jN q_a5jO)
+(-|><|->_a5Fo) x_a5jP y_a5jQ = mapQ snd (x_a5jP |><| y_a5jQ)
+(<-|><|-_a5FA) a_a5jR b_a5jS = mapQ fst (a_a5jR |><| b_a5jS)
+readT_a5FL = Read
+pull_a5FO rec_a5jD@(Filter p_a5jE q_a5jF)
+  = let x_a5jG = pull q_a5jF
+    in if p_a5jE x_a5jG then x_a5jG else pull rec_a5jD
+pull_a5FO (Map f_a5jH q_a5jI) = f_a5jH (pull q_a5jI)
+findTable_a5FY = Table
+$dEq_a5GU = GHC.Classes.C:Eq $c==_a5G2 $c/=_a5Gt
+(==_a5G4)
+  = GHC.Prim.coerce
+      @(Word64 -> Word64 -> Bool) @(RowId -> RowId -> Bool) (==) ::
+      RowId -> RowId -> Bool
+(/=_a5Gv)
+  = GHC.Prim.coerce
+      @(Word64 -> Word64 -> Bool) @(RowId -> RowId -> Bool) (/=) ::
+      RowId -> RowId -> Bool
+$dEq_a5HO = GHC.Classes.C:Eq $c==_a5GW $c/=_a5Hn
+(==_a5GY)
+  = GHC.Prim.coerce
+      @(Word16 -> Word16 -> Bool) @(TableId -> TableId -> Bool) (==) ::
+      TableId -> TableId -> Bool
+(/=_a5Hp)
+  = GHC.Prim.coerce
+      @(Word16 -> Word16 -> Bool) @(TableId -> TableId -> Bool) (/=) ::
+      TableId -> TableId -> Bool
+$dEq_a5I6 = GHC.Classes.C:Eq $c==_a5HR $c/=_a5I0
+(==_a5HT) (RowRef a1_a5sv a2_a5sw) (RowRef b1_a5sx b2_a5sy)
+  = (((a1_a5sv == b1_a5sx)) && ((a2_a5sw == b2_a5sy)))
+(/=_a5I2) = GHC.Classes.$dm/= @(RowRef a_a5HP[ssk:1])
+$dMonad_a5IZ
+  = GHC.Base.C:Monad
+      $cp1Monad_a5Ia $c>>=_a5Ic $c>>_a5Ip $creturn_a5IE $cfail_a5IP
+(>>=_a5Ig) = undefined
+(>>_a5Iv) = GHC.Base.$dm>> @(SQ)
+return_a5IH = GHC.Base.$dmreturn @(SQ)
+fail_a5IT = GHC.Base.$dmfail @(SQ)
+$dApplicative_a5Kh
+  = GHC.Base.C:Applicative
+      $cp1Applicative_a5J3
+      $cpure_a5J5
+      $c<*>_a5Jf
+      $cliftA2_a5Jv
+      $c*>_a5JO
+      $c<*_a5K4
+pure_a5J9 = undefined
+(<*>_a5Jl) = undefined
+liftA2_a5JD = GHC.Base.$dmliftA2 @(SQ)
+(*>_a5JU) = GHC.Base.$dm*> @(SQ)
+(<*_a5Ka) = GHC.Base.$dm<* @(SQ)
+$dFunctor_a5KL = GHC.Base.C:Functor $cfmap_a5Kj $c<$_a5Ky
+fmap_a5Kp = undefined
+(<$_a5KE) = GHC.Base.$dm<$ @(SQ)
+$dMonad_a5Lu
+  = GHC.Base.C:Monad
+      $cp1Monad_a5KP $c>>=_a5KR $c>>_a5L1 $creturn_a5Lc $cfail_a5Ll
+(>>=_a5KV) = undefined
+(>>_a5L5) = GHC.Base.$dm>> @(Q)
+return_a5Lf = GHC.Base.$dmreturn @(Q)
+fail_a5Lo = GHC.Base.$dmfail @(Q)
+$dApplicative_a5Ms
+  = GHC.Base.C:Applicative
+      $cp1Applicative_a5Ly
+      $cpure_a5LA
+      $c<*>_a5LJ
+      $cliftA2_a5LT
+      $c*>_a5M6
+      $c<*_a5Mh
+pure_a5LD = undefined
+(<*>_a5LN) = undefined
+liftA2_a5LY = GHC.Base.$dmliftA2 @(Q)
+(*>_a5Ma) = GHC.Base.$dm*> @(Q)
+(<*_a5Ml) = GHC.Base.$dm<* @(Q)
+$dFunctor_a5MN = GHC.Base.C:Functor $cfmap_a5Mu $c<$_a5MC
+fmap_a5My = Map
+(<$_a5MG) = GHC.Base.$dm<$ @(Q)
+
+[7 of 8] Compiling FDB.FDB          ( FDB/FDB.hs, FDB/FDB.o )
+TYPE SIGNATURES
+TYPE CONSTRUCTORS
+COERCION AXIOMS
+Dependent modules: [(FDB.GADTForall, False), (FDB.Utils, False),
+                    (Utils.AbstractGraph, False), (Utils.List, False),
+                    (Utils.Prelude, False)]
+Dependent packages: [array-0.5.3.0, base-4.12.0.0,
+                     containers-0.6.0.1, deepseq-1.4.4.0, ghc-prim-0.5.3,
+                     integer-gmp-1.0.2.0]
+
+==================== Typechecker ====================
+FDB.FDB.$trModule
+  = GHC.Types.Module
+      (GHC.Types.TrNameS "main"#) (GHC.Types.TrNameS "FDB.FDB"#)
+
+[8 of 8] Compiling TPCH.Functional.Schema ( ghc-dumps/../TPCH/Functional/Schema.hs, ghc-dumps/../TPCH/Functional/Schema.o )
+TYPE SIGNATURES
+  TPCH.Functional.Schema.Customer ::
+    String
+    -> String
+    -> Nation
+    -> PhoneNumber
+    -> Decimal
+    -> String
+    -> String
+    -> Customer
+  TPCH.Functional.Schema.EMEA :: Region
+  TPCH.Functional.Schema.France :: Nation
+  TPCH.Functional.Schema.Germany :: Nation
+  TPCH.Functional.Schema.LineItem ::
+    TableRef Order
+    -> TableRef Part
+    -> TableRef Supplier
+    -> Int
+    -> Decimal
+    -> Decimal
+    -> Decimal
+    -> Decimal
+    -> Char
+    -> Char
+    -> Date
+    -> Date
+    -> Date
+    -> String
+    -> String
+    -> String
+    -> LineItem
+  TPCH.Functional.Schema.Order ::
+    TableRef Customer
+    -> Char
+    -> Decimal
+    -> Date
+    -> String
+    -> String
+    -> Int
+    -> String
+    -> Order
+  TPCH.Functional.Schema.Part ::
+    String
+    -> String
+    -> String
+    -> String
+    -> Int
+    -> String
+    -> Decimal
+    -> String
+    -> Part
+  TPCH.Functional.Schema.PartSupp ::
+    TableRef Part
+    -> TableRef Supplier -> Int -> Decimal -> String -> PartSupp
+  TPCH.Functional.Schema.Supplier ::
+    String
+    -> String -> Nation -> PhoneNumber -> Decimal -> String -> Supplier
+  allNations :: [Nation]
+  allRegions :: [Region]
+  c_acctbal :: Customer -> Decimal
+  c_address :: Customer -> String
+  c_comment :: Customer -> String
+  c_mktsegment :: Customer -> String
+  c_name :: Customer -> String
+  c_nation :: Customer -> Nation
+  c_phone :: Customer -> PhoneNumber
+  customers :: Table Customer
+  findRegion :: String -> Region
+  l_comment :: LineItem -> String
+  l_commitdate :: LineItem -> Date
+  l_discount :: LineItem -> Decimal
+  l_extendedprice :: LineItem -> Decimal
+  l_linenumber :: LineItem -> Int
+  l_linestatus :: LineItem -> Char
+  l_orderref :: LineItem -> TableRef Order
+  l_partref :: LineItem -> TableRef Part
+  l_quantity :: LineItem -> Decimal
+  l_receiptdate :: LineItem -> Date
+  l_returnflag :: LineItem -> Char
+  l_shipdate :: LineItem -> Date
+  l_shipinstruct :: LineItem -> String
+  l_shipmode :: LineItem -> String
+  l_suppref :: LineItem -> TableRef Supplier
+  l_tax :: LineItem -> Decimal
+  lineitems :: Table LineItem
+  n_comment :: Nation -> String
+  n_name :: Nation -> String
+  n_region :: Nation -> Region
+  nationsIn :: Region -> [Nation]
+  o_clerk :: Order -> String
+  o_comment :: Order -> String
+  o_custref :: Order -> TableRef Customer
+  o_orderdate :: Order -> Date
+  o_orderpriority :: Order -> String
+  o_orderstatus :: Order -> Char
+  o_shippriority :: Order -> Int
+  o_totalprice :: Order -> Decimal
+  orders :: Table Order
+  p_brand :: Part -> String
+  p_comment :: Part -> String
+  p_container :: Part -> String
+  p_mfgr :: Part -> String
+  p_name :: Part -> String
+  p_retailprice :: Part -> Decimal
+  p_size :: Part -> Int
+  p_type :: Part -> String
+  parts :: Table Part
+  partsupps :: Table PartSupp
+  ps_availqty :: PartSupp -> Int
+  ps_comment :: PartSupp -> String
+  ps_partref :: PartSupp -> TableRef Part
+  ps_supplycost :: PartSupp -> Decimal
+  ps_suppref :: PartSupp -> TableRef Supplier
+  r_comment :: Region -> String
+  r_name :: Region -> String
+  s_acctbal :: Supplier -> Decimal
+  s_address :: Supplier -> String
+  s_comment :: Supplier -> String
+  s_name :: Supplier -> String
+  s_nation :: Supplier -> Nation
+  s_phone :: Supplier -> PhoneNumber
+  suppliers :: Table Supplier
+TYPE CONSTRUCTORS
+  data Customer
+    = Customer {c_name :: String,
+                c_address :: String,
+                c_nation :: Nation,
+                c_phone :: PhoneNumber,
+                c_acctbal :: Decimal,
+                c_mktsegment :: String,
+                c_comment :: String}
+  data LineItem
+    = LineItem {l_orderref :: TableRef Order,
+                l_partref :: TableRef Part,
+                l_suppref :: TableRef Supplier,
+                l_linenumber :: Int,
+                l_quantity :: Decimal,
+                l_extendedprice :: Decimal,
+                l_discount :: Decimal,
+                l_tax :: Decimal,
+                l_returnflag :: Char,
+                l_linestatus :: Char,
+                l_shipdate :: Date,
+                l_commitdate :: Date,
+                l_receiptdate :: Date,
+                l_shipinstruct :: String,
+                l_shipmode :: String,
+                l_comment :: String}
+  data Nation = France | Germany
+  data Order
+    = Order {o_custref :: TableRef Customer,
+             o_orderstatus :: Char,
+             o_totalprice :: Decimal,
+             o_orderdate :: Date,
+             o_orderpriority :: String,
+             o_clerk :: String,
+             o_shippriority :: Int,
+             o_comment :: String}
+  data Part
+    = Part {p_name :: String,
+            p_mfgr :: String,
+            p_brand :: String,
+            p_type :: String,
+            p_size :: Int,
+            p_container :: String,
+            p_retailprice :: Decimal,
+            p_comment :: String}
+  data PartSupp
+    = PartSupp {ps_partref :: TableRef Part,
+                ps_suppref :: TableRef Supplier,
+                ps_availqty :: Int,
+                ps_supplycost :: Decimal,
+                ps_comment :: String}
+  data Region = EMEA
+  data Supplier
+    = Supplier {s_name :: String,
+                s_address :: String,
+                s_nation :: Nation,
+                s_phone :: PhoneNumber,
+                s_acctbal :: Decimal,
+                s_comment :: String}
+COERCION AXIOMS
+INSTANCES
+  instance Eq Region
+    -- Defined at ghc-dumps/../TPCH/Functional/Schema.hs:119:12
+  instance Eq Nation
+    -- Defined at ghc-dumps/../TPCH/Functional/Schema.hs:102:12
+Dependent modules: [(FDB.FDB, False), (FDB.GADTForall, False),
+                    (FDB.MoreTypes, False), (FDB.Utils, False),
+                    (Utils.AbstractGraph, False), (Utils.List, False),
+                    (Utils.Prelude, False)]
+Dependent packages: [array-0.5.3.0, base-4.12.0.0,
+                     containers-0.6.0.1, deepseq-1.4.4.0, ghc-prim-0.5.3,
+                     integer-gmp-1.0.2.0]
+
+==================== Typechecker ====================
+TPCH.Functional.Schema.$tcRegion
+  = GHC.Types.TyCon
+      17005900331151520450##
+      2933480038519603125##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "Region"#)
+      0
+      GHC.Types.krep$*
+TPCH.Functional.Schema.$tc'EMEA
+  = GHC.Types.TyCon
+      8266201620596383484##
+      3675984000706788314##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "'EMEA"#)
+      0
+      $krep_a6Rc
+TPCH.Functional.Schema.$tcPartSupp
+  = GHC.Types.TyCon
+      10849560314591573693##
+      11581864324186551291##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "PartSupp"#)
+      0
+      GHC.Types.krep$*
+TPCH.Functional.Schema.$tc'PartSupp
+  = GHC.Types.TyCon
+      10754361947780373833##
+      14007972955674632504##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "'PartSupp"#)
+      0
+      $krep_a6Rd
+TPCH.Functional.Schema.$tcLineItem
+  = GHC.Types.TyCon
+      4413522648051142635##
+      4580059422389727633##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "LineItem"#)
+      0
+      GHC.Types.krep$*
+TPCH.Functional.Schema.$tc'LineItem
+  = GHC.Types.TyCon
+      8539620922902222438##
+      9565303329789687194##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "'LineItem"#)
+      0
+      $krep_a6Rr
+TPCH.Functional.Schema.$tcSupplier
+  = GHC.Types.TyCon
+      5537664870048215054##
+      6807973368023935809##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "Supplier"#)
+      0
+      GHC.Types.krep$*
+TPCH.Functional.Schema.$tc'Supplier
+  = GHC.Types.TyCon
+      3112581097731694837##
+      5980504949697491730##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "'Supplier"#)
+      0
+      $krep_a6RL
+TPCH.Functional.Schema.$tcOrder
+  = GHC.Types.TyCon
+      10277513951169694645##
+      16962993689770346345##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "Order"#)
+      0
+      GHC.Types.krep$*
+TPCH.Functional.Schema.$tc'Order
+  = GHC.Types.TyCon
+      13153087065208477111##
+      17701592658522406836##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "'Order"#)
+      0
+      $krep_a6RS
+TPCH.Functional.Schema.$tcCustomer
+  = GHC.Types.TyCon
+      7146533123847939809##
+      6452800127542812900##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "Customer"#)
+      0
+      GHC.Types.krep$*
+TPCH.Functional.Schema.$tc'Customer
+  = GHC.Types.TyCon
+      14764552819634216928##
+      6068166705854968441##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "'Customer"#)
+      0
+      $krep_a6S2
+TPCH.Functional.Schema.$tcNation
+  = GHC.Types.TyCon
+      10710764971294019521##
+      2958077427421035359##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "Nation"#)
+      0
+      GHC.Types.krep$*
+TPCH.Functional.Schema.$tc'France
+  = GHC.Types.TyCon
+      15209813697351554211##
+      883766417185207263##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "'France"#)
+      0
+      $krep_a6RO
+TPCH.Functional.Schema.$tc'Germany
+  = GHC.Types.TyCon
+      1372385427742964851##
+      11954998232734438622##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "'Germany"#)
+      0
+      $krep_a6RO
+TPCH.Functional.Schema.$tcPart
+  = GHC.Types.TyCon
+      12636939280764832122##
+      2042036841775798596##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "Part"#)
+      0
+      GHC.Types.krep$*
+TPCH.Functional.Schema.$tc'Part
+  = GHC.Types.TyCon
+      2861360684592645105##
+      14440751847480628405##
+      TPCH.Functional.Schema.$trModule
+      (GHC.Types.TrNameS "'Part"#)
+      0
+      $krep_a6S9
+$krep_a6Rg [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rh $krep_a6Rj
+$krep_a6Rv [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rh $krep_a6Rw
+$krep_a6Rd [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Re $krep_a6Rg
+$krep_a6Ru [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Re $krep_a6Rv
+$krep_a6Rr [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rs $krep_a6Ru
+$krep_a6RS [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6RT $krep_a6RV
+$krep_a6S9 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6Sa
+$krep_a6Sa [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6Sb
+$krep_a6RH [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6RI
+$krep_a6S2 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6S3
+$krep_a6RL [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6RM
+$krep_a6Sb [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6Sc
+$krep_a6RY [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6RZ
+$krep_a6RI [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6RJ
+$krep_a6S7 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6S8
+$krep_a6S3 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6S4
+$krep_a6RM [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6RN
+$krep_a6Se [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6Sf
+$krep_a6Sc [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6Sd
+$krep_a6RZ [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6S0
+$krep_a6Rn [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6Rq
+$krep_a6RJ [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6RK
+$krep_a6RR [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6Ri
+$krep_a6S1 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6Rt
+$krep_a6S8 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6RU
+$krep_a6Sg [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Ro $krep_a6Rf
+$krep_a6RC [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rp $krep_a6RD
+$krep_a6RB [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rp $krep_a6RC
+$krep_a6RV [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rp $krep_a6RW
+$krep_a6RG [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6RE $krep_a6RH
+$krep_a6RX [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6RE $krep_a6RY
+$krep_a6RF [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6RE $krep_a6RG
+$krep_a6RD [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6RE $krep_a6RF
+$krep_a6S5 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6RE $krep_a6S6
+$krep_a6RP [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6RE $krep_a6RQ
+$krep_a6S4 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6RO $krep_a6S5
+$krep_a6RN [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6RO $krep_a6RP
+$krep_a6S6 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rm $krep_a6S7
+$krep_a6Rl [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rm $krep_a6Rn
+$krep_a6RQ [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rm $krep_a6RR
+$krep_a6Sf [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rm $krep_a6Sg
+$krep_a6RA [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rm $krep_a6RB
+$krep_a6Rz [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rm $krep_a6RA
+$krep_a6Ry [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rm $krep_a6Rz
+$krep_a6Rx [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rm $krep_a6Ry
+$krep_a6RW [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rm $krep_a6RX
+$krep_a6Sd [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rk $krep_a6Se
+$krep_a6S0 [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rk $krep_a6S1
+$krep_a6Rj [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rk $krep_a6Rl
+$krep_a6Rw [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepFun $krep_a6Rk $krep_a6Rx
+$krep_a6Ro [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp GHC.Types.$tc[] ((:) $krep_a6Rp [])
+$krep_a6Re [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcRowRef ((:) $krep_a6Rf [])
+$krep_a6Rh [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcRowRef ((:) $krep_a6Ri [])
+$krep_a6Rs [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcRowRef ((:) $krep_a6Rt [])
+$krep_a6RT [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp
+      FDB.GADTForall.$tcRowRef ((:) $krep_a6RU [])
+$krep_a6Rc [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp TPCH.Functional.Schema.$tcRegion []
+$krep_a6Rf [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp TPCH.Functional.Schema.$tcPart []
+$krep_a6Ri [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp TPCH.Functional.Schema.$tcSupplier []
+$krep_a6Rk [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp GHC.Types.$tcInt []
+$krep_a6Rm [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp GHC.Types.$tcDouble []
+$krep_a6Rp [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp GHC.Types.$tcChar []
+$krep_a6Rq [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp TPCH.Functional.Schema.$tcPartSupp []
+$krep_a6Rt [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp TPCH.Functional.Schema.$tcOrder []
+$krep_a6RE [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp GHC.Tuple.$tc() []
+$krep_a6RK [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp TPCH.Functional.Schema.$tcLineItem []
+$krep_a6RO [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp TPCH.Functional.Schema.$tcNation []
+$krep_a6RU [InlPrag=NOUSERINLINE[~]]
+  = GHC.Types.KindRepTyConApp TPCH.Functional.Schema.$tcCustomer []
+TPCH.Functional.Schema.$trModule
+  = GHC.Types.Module
+      (GHC.Types.TrNameS "main"#)
+      (GHC.Types.TrNameS "TPCH.Functional.Schema"#)
+nationsIn_a6PC = undefined
+findRegion_a6PG = undefined
+allRegions_a6PK = undefined
+r_comment_a6PO = undefined
+r_name_a6PS = undefined
+allNations_a6PW = undefined
+n_comment_a6Q0 = undefined
+n_region_a6Q4 = undefined
+n_name_a6Q8 = undefined
+lineitems_a6Qc = findTable "LineItems"
+orders_a6Qe = undefined
+customers_a6Qi = undefined
+partsupps_a6Qm = undefined
+suppliers_a6Qq = undefined
+parts_a6Qu = undefined
+ps_partref_a6No PartSupp {ps_partref = ps_partref_B1}
+  = ps_partref_B1
+ps_suppref_a6Np PartSupp {ps_suppref = ps_suppref_B1}
+  = ps_suppref_B1
+ps_availqty_a6Nq PartSupp {ps_availqty = ps_availqty_B1}
+  = ps_availqty_B1
+ps_supplycost_a6Nr PartSupp {ps_supplycost = ps_supplycost_B1}
+  = ps_supplycost_B1
+ps_comment_a6Ns PartSupp {ps_comment = ps_comment_B1}
+  = ps_comment_B1
+l_orderref_a6MO LineItem {l_orderref = l_orderref_B1}
+  = l_orderref_B1
+l_partref_a6MP LineItem {l_partref = l_partref_B1} = l_partref_B1
+l_suppref_a6MQ LineItem {l_suppref = l_suppref_B1} = l_suppref_B1
+l_linenumber_a6MR LineItem {l_linenumber = l_linenumber_B1}
+  = l_linenumber_B1
+l_quantity_a6MS LineItem {l_quantity = l_quantity_B1}
+  = l_quantity_B1
+l_extendedprice_a6MT
+  LineItem {l_extendedprice = l_extendedprice_B1}
+  = l_extendedprice_B1
+l_discount_a6MU LineItem {l_discount = l_discount_B1}
+  = l_discount_B1
+l_tax_a6MV LineItem {l_tax = l_tax_B1} = l_tax_B1
+l_returnflag_a6MW LineItem {l_returnflag = l_returnflag_B1}
+  = l_returnflag_B1
+l_linestatus_a6MX LineItem {l_linestatus = l_linestatus_B1}
+  = l_linestatus_B1
+l_shipdate_a6MY LineItem {l_shipdate = l_shipdate_B1}
+  = l_shipdate_B1
+l_commitdate_a6MZ LineItem {l_commitdate = l_commitdate_B1}
+  = l_commitdate_B1
+l_receiptdate_a6N0 LineItem {l_receiptdate = l_receiptdate_B1}
+  = l_receiptdate_B1
+l_shipinstruct_a6N1 LineItem {l_shipinstruct = l_shipinstruct_B1}
+  = l_shipinstruct_B1
+l_shipmode_a6N2 LineItem {l_shipmode = l_shipmode_B1}
+  = l_shipmode_B1
+l_comment_a6N3 LineItem {l_comment = l_comment_B1} = l_comment_B1
+s_name_a6Md Supplier {s_name = s_name_B1} = s_name_B1
+s_address_a6Me Supplier {s_address = s_address_B1} = s_address_B1
+s_nation_a6Mf Supplier {s_nation = s_nation_B1} = s_nation_B1
+s_phone_a6Mg Supplier {s_phone = s_phone_B1} = s_phone_B1
+s_acctbal_a6Mh Supplier {s_acctbal = s_acctbal_B1} = s_acctbal_B1
+s_comment_a6Mi Supplier {s_comment = s_comment_B1} = s_comment_B1
+o_custref_a6LK Order {o_custref = o_custref_B1} = o_custref_B1
+o_orderstatus_a6LL Order {o_orderstatus = o_orderstatus_B1}
+  = o_orderstatus_B1
+o_totalprice_a6LM Order {o_totalprice = o_totalprice_B1}
+  = o_totalprice_B1
+o_orderdate_a6LN Order {o_orderdate = o_orderdate_B1}
+  = o_orderdate_B1
+o_orderpriority_a6LO Order {o_orderpriority = o_orderpriority_B1}
+  = o_orderpriority_B1
+o_clerk_a6LP Order {o_clerk = o_clerk_B1} = o_clerk_B1
+o_shippriority_a6LQ Order {o_shippriority = o_shippriority_B1}
+  = o_shippriority_B1
+o_comment_a6LR Order {o_comment = o_comment_B1} = o_comment_B1
+c_name_a6Lg Customer {c_name = c_name_B1} = c_name_B1
+c_address_a6Lh Customer {c_address = c_address_B1} = c_address_B1
+c_nation_a6Li Customer {c_nation = c_nation_B1} = c_nation_B1
+c_phone_a6Lj Customer {c_phone = c_phone_B1} = c_phone_B1
+c_acctbal_a6Lk Customer {c_acctbal = c_acctbal_B1} = c_acctbal_B1
+c_mktsegment_a6Ll Customer {c_mktsegment = c_mktsegment_B1}
+  = c_mktsegment_B1
+c_comment_a6Lm Customer {c_comment = c_comment_B1} = c_comment_B1
+p_name_a6Kq Part {p_name = p_name_B1} = p_name_B1
+p_mfgr_a6Kr Part {p_mfgr = p_mfgr_B1} = p_mfgr_B1
+p_brand_a6Ks Part {p_brand = p_brand_B1} = p_brand_B1
+p_type_a6Kt Part {p_type = p_type_B1} = p_type_B1
+p_size_a6Ku Part {p_size = p_size_B1} = p_size_B1
+p_container_a6Kv Part {p_container = p_container_B1}
+  = p_container_B1
+p_retailprice_a6Kw Part {p_retailprice = p_retailprice_B1}
+  = p_retailprice_B1
+p_comment_a6Kx Part {p_comment = p_comment_B1} = p_comment_B1
+$dEq_a6QJ = GHC.Classes.C:Eq $c==_a6Qz $c/=_a6QD
+(==_a6QB) (France) (France) = True
+(==_a6QB) (Germany) (Germany) = True
+(==_a6QB) _ _ = False
+(/=_a6QF) = GHC.Classes.$dm/= @(Nation)
+$dEq_a6QV = GHC.Classes.C:Eq $c==_a6QL $c/=_a6QP
+(==_a6QN) (EMEA) (EMEA) = True
+(/=_a6QR) = GHC.Classes.$dm/= @(Region)
+
