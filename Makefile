@@ -6,9 +6,11 @@ TPCH_FLAGS = -no-hs-main -no-link
 TEST_BIN = $(BIN_DIR)/fdb-test
 TEST_MAIN_O = $(BIN_DIR)/Test/Main.o
 TEST_MAIN_HS = Test/Main.hs
-FFI_O = $(BIN_DIR)/cffi.o
-FFI_H = Test/cffi.h
-FFI_C = Test/cffi.c
+CFFI_O = $(BIN_DIR)/cffi.o
+CFFI_H = Test/cffi.h
+CFFI_C = Test/cffi.c
+RFFI_A = $(BIN_DIR)/librffi.a
+RFFI_RS = Test/rffi.rs
 
 all: tpch test
 
@@ -23,11 +25,14 @@ clean:
 test: compile-test
 	$(TEST_BIN)
 
-compile-test: $(FFI_O)
-	ghc $(GHC_FLAGS) -o $(TEST_BIN) $(TEST_MAIN_HS) $(FFI_O)
+compile-test: $(CFFI_O) $(RFFI_A)
+	ghc $(GHC_FLAGS) -o $(TEST_BIN) $(TEST_MAIN_HS) $(CFFI_O) $(RFFI_A)
 
-$(FFI_O): $(FFI_H) $(FFI_C)
-	gcc -c $(FFI_C) -o $(FFI_O)
+$(CFFI_O): $(CFFI_H) $(CFFI_C)
+	gcc -c $(CFFI_C) -o $(CFFI_O)
+
+$(RFFI_A): $(RFFI_RS)
+	rustc --crate-type staticlib $(RFFI_RS) -o $(RFFI_A)
 
 #$(TEST_BIN): $(TEST_MAIN_O)
 #	cp $(TEST_MAIN_O) $(TEST_BIN)

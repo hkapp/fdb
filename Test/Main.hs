@@ -17,8 +17,9 @@ main = ffiTest
 
 foreign import ccall "exp" c_exp :: Double -> Double
 foreign import ccall "foo" c_foo :: Double -> Double
+foreign import ccall "bar" rust_bar :: Double -> Double
 
-ffiTest = print $ c_foo 2.0
+ffiTest = print $ rust_bar 2.0
 
 -- Query Test
 
