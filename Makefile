@@ -6,6 +6,9 @@ TPCH_FLAGS = -no-hs-main -no-link
 TEST_BIN = $(BIN_DIR)/fdb-test
 TEST_MAIN_O = $(BIN_DIR)/Test/Main.o
 TEST_MAIN_HS = Test/Main.hs
+FFI_O = $(BIN_DIR)/cffi.o
+FFI_H = Test/cffi.h
+FFI_C = Test/cffi.c
 
 all: tpch test
 
@@ -20,8 +23,11 @@ clean:
 test: compile-test
 	$(TEST_BIN)
 
-compile-test:
-	ghc $(GHC_FLAGS) -o $(TEST_BIN) $(TEST_MAIN_HS)
+compile-test: $(FFI_O)
+	ghc $(GHC_FLAGS) -o $(TEST_BIN) $(TEST_MAIN_HS) $(FFI_O)
+
+$(FFI_O): $(FFI_H) $(FFI_C)
+	gcc -c $(FFI_C) -o $(FFI_O)
 
 #$(TEST_BIN): $(TEST_MAIN_O)
 #	cp $(TEST_MAIN_O) $(TEST_BIN)

@@ -1,0 +1,2 @@
+
+double foo(double d);
