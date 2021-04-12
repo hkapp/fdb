@@ -5,3 +5,4 @@
 hs/bin/
 rs/target/
 *.lock
+data/

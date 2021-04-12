@@ -7,7 +7,9 @@ TPCH_FLAGS = -no-hs-main -no-link
 TEST_BIN = $(BIN_DIR)/fdb-test
 TEST_MAIN_O = $(BIN_DIR)/Test/Main.o
 TEST_MAIN_HS = $(SRC_DIR)/Test/Main.hs
+
 RUST_LIB = ../rs/target/debug/libfdb.a
+LIBS = $(RUST_LIB) -lsqlite3
 
 all: tpch test
 
@@ -23,4 +25,7 @@ test: compile-test
 	$(TEST_BIN)
 
 compile-test: $(CFFI_O) $(RUST_LIB)
-	ghc $(GHC_FLAGS) -o $(TEST_BIN) $(TEST_MAIN_HS) $(CFFI_O) $(RUST_LIB)
+	ghc $(GHC_FLAGS) -o $(TEST_BIN) $(TEST_MAIN_HS) $(LIBS)
+
+# Additional dependencies:
+#  sqlite3 libsqlite3-dev
