@@ -27,17 +27,34 @@ fn baz() -> Result<()> {
     Ok(())
 }
 
+fn query_sqlite() -> Result<Vec<QVal>> {
+    let conn = Connection::open(DB_FILENAME)?;
+
+    let mut stmt = conn.prepare("SELECT * FROM foo;")?;
+    let mut rows = stmt.query([])?;
+    let mut qres = vec!();
+
+    /* TODO use collect instead */
+    while let Some(row) = rows.next()? {
+        qres.push(row.get(0)?);
+    }
+
+    Ok(qres)
+}
+
 type QResultPtr = *mut QResult;
+
+type QVal = u32;
 
 #[repr(C)]
 pub struct QResult {
     length: usize,
-    array:  *mut u32
+    array:  *mut QVal
 }
 
 #[no_mangle]
 pub extern fn execQ() -> QResultPtr {
-    let mut rvec = vec!(1, 2, 5);
+    let mut rvec = query_sqlite().unwrap_or_default();
 
     let carray = QResult {
         length: rvec.len(),
