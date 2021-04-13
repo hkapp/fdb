@@ -26,3 +26,39 @@ fn baz() -> Result<()> {
 
     Ok(())
 }
+
+type QResultPtr = *mut QResult;
+
+#[repr(C)]
+pub struct QResult {
+    length: usize,
+    array:  *mut u32
+}
+
+#[no_mangle]
+pub extern fn execQ() -> QResultPtr {
+    let mut rvec = vec!(1, 2, 5);
+
+    let carray = QResult {
+        length: rvec.len(),
+        array:  rvec.as_mut_ptr()
+    };
+
+    /* Do not call rvec's destructor.
+     * So the inner buffer will remain live.
+     */
+    std::mem::forget(rvec);
+
+    Box::into_raw(Box::new(carray))
+}
+
+#[no_mangle]
+pub extern fn closeQ(cptr: QResultPtr) {
+    let qres = unsafe {
+        Box::from_raw(cptr)
+    };
+    let _boxed_array = unsafe {
+        Box::from_raw(qres.array)
+    };
+    /* Both pointers are dropped and freed here */
+}
