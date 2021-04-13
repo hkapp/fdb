@@ -1,5 +1,11 @@
 #![crate_type = "lib"]
 use rusqlite::{Connection, Result};
+use std::str;
+use std::slice;
+use std::os::raw::c_char;
+
+#[allow(non_camel_case_types)]
+type c_sizet = usize;
 
 #[no_mangle]
 pub extern fn bar(x: f64) -> f64 {
@@ -27,10 +33,10 @@ fn baz() -> Result<()> {
     Ok(())
 }
 
-fn query_sqlite() -> Result<Vec<QVal>> {
+fn query_sqlite(query: &str) -> Result<Vec<QVal>> {
     let conn = Connection::open(DB_FILENAME)?;
 
-    let mut stmt = conn.prepare("SELECT * FROM foo;")?;
+    let mut stmt = conn.prepare(query)?;
     let mut rows = stmt.query([])?;
     let mut qres = vec!();
 
@@ -53,8 +59,16 @@ pub struct QResult {
 }
 
 #[no_mangle]
-pub extern fn execQ() -> QResultPtr {
-    let mut rvec = query_sqlite().unwrap_or_default();
+pub extern fn execQ(str_buf: *const c_char, str_len: c_sizet) -> QResultPtr {
+    let tab_name: &str = unsafe {
+        let useable_slice = slice::from_raw_parts(str_buf as *const u8, str_len);
+        str::from_utf8(useable_slice).unwrap()
+    };
+
+    let sql_query = format!("SELECT * FROM {};", tab_name);
+    println!("{}", sql_query);
+
+    let mut rvec = query_sqlite(&sql_query).unwrap_or_default();
 
     let carray = QResult {
         length: rvec.len(),

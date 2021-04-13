@@ -12,14 +12,15 @@ import qualified Utils.Dot as Dot
 import Foreign.Storable
 import Foreign (Storable, Ptr, ForeignPtr, FunPtr,
                 newForeignPtr, withForeignPtr)
-import Foreign.C (CSize, CUInt)
+import Foreign.C (CSize(..), CUInt)
+import Foreign.C.String (CString, newCStringLen)
 
 main :: IO ()
 main = execQTest
 
 -- execQ test
 
-foreign import ccall "execQ"  rust_execQ  :: IO QResultPtr
+foreign import ccall "execQ"  rust_execQ  :: CString -> CSize -> IO QResultPtr
 foreign import ccall "&closeQ" rust_closeQ :: FunPtr (QResultPtr -> IO ())
 
 type CUInt32 = CUInt
@@ -41,15 +42,16 @@ instance Storable QResult where
 
 execQTest =
   do
-    resPtr <- execQ
+    resPtr <- execQ "foo"
     resVal <- foreignPeek resPtr
     printQRes resVal
     {-rust_closeQ resPtr-}
 
-execQ :: IO (ForeignPtr QResult)
-execQ =
+execQ :: String -> IO (ForeignPtr QResult)
+execQ tabName =
   do
-    rawPtr <- rust_execQ
+    (strBuf, strLen) <- newCStringLen tabName
+    rawPtr           <- rust_execQ strBuf (fromIntegral strLen)
     newForeignPtr rust_closeQ rawPtr
 
 printQRes (QResult len arr) =
