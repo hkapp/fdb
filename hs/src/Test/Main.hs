@@ -10,7 +10,8 @@ import TPCH.Functional.Q1 (q1)
 import qualified Utils.Dot as Dot
 
 import Foreign.Storable
-import Foreign (Storable, Ptr)
+import Foreign (Storable, Ptr, ForeignPtr, FunPtr,
+                newForeignPtr, withForeignPtr)
 import Foreign.C (CSize, CUInt)
 
 main :: IO ()
@@ -19,7 +20,7 @@ main = execQTest
 -- execQ test
 
 foreign import ccall "execQ"  rust_execQ  :: IO QResultPtr
-foreign import ccall "closeQ" rust_closeQ :: QResultPtr -> IO ()
+foreign import ccall "&closeQ" rust_closeQ :: FunPtr (QResultPtr -> IO ())
 
 type CUInt32 = CUInt
 
@@ -40,10 +41,16 @@ instance Storable QResult where
 
 execQTest =
   do
-    resPtr <- rust_execQ
-    resVal <- peek resPtr
+    resPtr <- execQ
+    resVal <- foreignPeek resPtr
     printQRes resVal
-    rust_closeQ resPtr
+    {-rust_closeQ resPtr-}
+
+execQ :: IO (ForeignPtr QResult)
+execQ =
+  do
+    rawPtr <- rust_execQ
+    newForeignPtr rust_closeQ rawPtr
 
 printQRes (QResult len arr) =
   let
@@ -52,6 +59,9 @@ printQRes (QResult len arr) =
     values = indices <&> (peekElemOff arr)
   in
     foldMap (\v -> v >>= print) values
+
+foreignPeek :: (Storable a) => ForeignPtr a -> IO a
+foreignPeek fgnPtr = withForeignPtr fgnPtr peek
 
 -- FFI test
 

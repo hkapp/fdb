@@ -77,5 +77,6 @@ pub extern fn closeQ(cptr: QResultPtr) {
     let _boxed_array = unsafe {
         Box::from_raw(qres.array)
     };
+    println!("Closing the cursor...")
     /* Both pointers are dropped and freed here */
 }
