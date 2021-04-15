@@ -1,5 +1,5 @@
 #![crate_type = "lib"]
-use rusqlite::{Connection, Result};
+use rusqlite as sqlite;
 use std::str;
 use std::slice;
 use std::os::raw::c_char;
@@ -7,34 +7,71 @@ use std::os::raw::c_char;
 #[allow(non_camel_case_types)]
 type c_sizet = usize;
 
-#[no_mangle]
-pub extern fn bar(x: f64) -> f64 {
-    match baz() {
-        Ok(_) => println!("SQLite success"),
-        Err(_) => println!("SQLite failure")
-    };
+type QVal = u32;
 
-    x - 1.0
+type QPlanPtr = *const QPlan;
+
+pub enum QPlan {
+    Read (String),
+    Filter
+}
+
+type HsStrBuf = *const c_char;
+type HsStrLen = c_sizet;
+
+/* Strings from Haskell are always borrowed */
+unsafe fn str_from_hs<'a>(str_buf: HsStrBuf, str_len: HsStrLen)
+    -> Result<&'a str, str::Utf8Error>
+{
+    let useable_slice = slice::from_raw_parts(str_buf as *const u8, str_len);
+    str::from_utf8(useable_slice)
+}
+
+/* Pointers returned to Haskell will be owned by the Haskell runtime.
+ * They will call the corresponding "release" function upon GC.
+ */
+unsafe fn to_hs_ptr<T>(val: T) -> *const T {
+    Box::into_raw(Box::new(val))
+}
+
+/* We trust Haskell to return us the same pointer */
+unsafe fn from_hs_ptr<'a, T>(ptr: *const T) -> &'a T {
+    &*ptr
+}
+
+/* This pointer was allocated by Rust, passed to Haskell,
+ * and now the Haskell GC determined we need to free it.
+ */
+unsafe fn release_hs_ptr<T>(ptr: *mut T) {
+    drop(own_hs_ptr(ptr))
+}
+
+/* We now want Rust to own this memory.
+ * This must be a pointer that was allocated by Rust initially.
+ */
+unsafe fn own_hs_ptr<T>(ptr: *mut T) -> Box<T> {
+    Box::from_raw(ptr)
+}
+
+#[no_mangle]
+pub extern fn readT(str_buf: *const c_char, str_len: c_sizet) -> QPlanPtr {
+    let tab_name: &str = unsafe { str_from_hs(str_buf, str_len).unwrap() };
+    /* String::from must copy the &str, or we might be in big trouble */
+    let qplan = QPlan::Read(String::from(tab_name));
+
+    unsafe { to_hs_ptr(qplan) }
+}
+
+#[no_mangle]
+pub extern fn release_qplan(qptr: *mut QPlan) {
+    println!("Closing the cursor...");
+    unsafe { release_hs_ptr(qptr) }
 }
 
 const DB_FILENAME: &str = "../data/fdb.db";
 
-fn baz() -> Result<()> {
-    let conn = Connection::open(DB_FILENAME)?;
-
-    let mut stmt = conn.prepare("SELECT * FROM foo;")?;
-    let mut rows = stmt.query([])?;
-
-    while let Some(row) = rows.next()? {
-        let x: u32 = row.get(0)?;
-        println!("{}", x);
-    }
-
-    Ok(())
-}
-
-fn query_sqlite(query: &str) -> Result<Vec<QVal>> {
-    let conn = Connection::open(DB_FILENAME)?;
+fn query_sqlite(query: &str) -> sqlite::Result<Vec<QVal>> {
+    let conn = sqlite::Connection::open(DB_FILENAME)?;
 
     let mut stmt = conn.prepare(query)?;
     let mut rows = stmt.query([])?;
@@ -48,49 +85,41 @@ fn query_sqlite(query: &str) -> Result<Vec<QVal>> {
     Ok(qres)
 }
 
-type QResultPtr = *mut QResult;
+fn query_sqlite_into(query: &str, res_buf: &mut [QVal]) -> sqlite::Result<usize> {
+    let conn = sqlite::Connection::open(DB_FILENAME)?;
 
-type QVal = u32;
+    let mut stmt = conn.prepare(query)?;
+    let mut rows = stmt.query([])?;
+    let mut arr_pos = 0;
 
-#[repr(C)]
-pub struct QResult {
-    length: usize,
-    array:  *mut QVal
+    while let Some(row) = rows.next()? {
+        res_buf[arr_pos] = row.get(0)?;
+        arr_pos += 1;
+    }
+
+    Ok(arr_pos)
+}
+
+fn to_sql(qplan: &QPlan) -> String {
+    use QPlan::*;
+    match qplan {
+        Read(tab_name) => format!("SELECT * FROM {};", tab_name),
+        Filter          => String::from("error!")
+    }
 }
 
 #[no_mangle]
-pub extern fn execQ(str_buf: *const c_char, str_len: c_sizet) -> QResultPtr {
-    let tab_name: &str = unsafe {
-        let useable_slice = slice::from_raw_parts(str_buf as *const u8, str_len);
-        str::from_utf8(useable_slice).unwrap()
+pub extern fn execQ(plan_ptr: *const QPlan, buf_ptr: *mut QVal, n_alloc: c_sizet) -> c_sizet {
+    let qplan = unsafe {
+        from_hs_ptr(plan_ptr)
     };
 
-    let sql_query = format!("SELECT * FROM {};", tab_name);
+    let sql_query = to_sql(qplan);
     println!("{}", sql_query);
 
-    let mut rvec = query_sqlite(&sql_query).unwrap_or_default();
-
-    let carray = QResult {
-        length: rvec.len(),
-        array:  rvec.as_mut_ptr()
+    let res_buf = unsafe {
+        slice::from_raw_parts_mut(buf_ptr, n_alloc)
     };
 
-    /* Do not call rvec's destructor.
-     * So the inner buffer will remain live.
-     */
-    std::mem::forget(rvec);
-
-    Box::into_raw(Box::new(carray))
-}
-
-#[no_mangle]
-pub extern fn closeQ(cptr: QResultPtr) {
-    let qres = unsafe {
-        Box::from_raw(cptr)
-    };
-    let _boxed_array = unsafe {
-        Box::from_raw(qres.array)
-    };
-    println!("Closing the cursor...")
-    /* Both pointers are dropped and freed here */
+    query_sqlite_into(&sql_query, res_buf).unwrap()
 }
