@@ -19,7 +19,7 @@ test: rs-lib
 	$(HS_MAKE) test
 
 compile: rs-lib
-	$(HS_MAKE) compile-test
+	$(HS_MAKE) compile
 
 rs-lib:
 	$(CARGO) build
