@@ -64,7 +64,7 @@ pub extern fn readT(str_buf: *const c_char, str_len: c_sizet) -> QPlanPtr {
 
 #[no_mangle]
 pub extern fn release_qplan(qptr: *mut QPlan) {
-    println!("Closing the cursor...");
+    println!("Releasing the query plan...");
     unsafe { release_hs_ptr(qptr) }
 }
 

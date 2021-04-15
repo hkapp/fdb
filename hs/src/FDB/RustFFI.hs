@@ -25,9 +25,9 @@ foreign import ccall "execQ"
 type Void = ();
 newtype QPlan a = QPlan Void;
 
-type Q a = IO (ForeignPtr (QPlan a))
+type Q a = ForeignPtr (QPlan a)
 
-makeQ :: Ptr (QPlan a) -> Q a
+makeQ :: Ptr (QPlan a) -> IO (Q a)
 makeQ = newForeignPtr rs_releaseQPlan
 
 type CUInt32 = CUInt
@@ -36,9 +36,8 @@ execQ :: (Storable a) => Q a -> IO [a]
 execQ =
   let
     maxRowCount = 5
-    writeToBuf qplanAct buffer =
+    writeToBuf qplanFgn buffer =
       do
-        qplanFgn    <- qplanAct
         resRowCount <- withForeignPtr qplanFgn (wrapExecQ buffer)
         let intRowCount   = fromIntegral resRowCount
         let validRowCount = assert (intRowCount >= 0 && intRowCount < maxRowCount) intRowCount
@@ -47,7 +46,7 @@ execQ =
   in
     allocaArray maxRowCount . writeToBuf
 
-readT :: String -> Q a
+readT :: String -> IO (Q a)
 readT tabName =
   let
     wrapReadT (strBuf, strLen) =

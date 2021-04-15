@@ -16,7 +16,7 @@ main = execQTest
 
 type QVal = CUInt32;
 
-execQTest = execAndPrint ((readT "foo") :: Q QVal)
+execQTest = ((readT "foo") :: IO (Q QVal)) >>= execAndPrint
 
 -- execAndPrint :: Q QVal -> IO ()
 -- execAndPrint query =
