@@ -95,6 +95,7 @@ impl<'a> Parser<'a> {
     }
 
     fn match_re(&mut self, re: &Regex) -> Option<&'a str> {
+        self.skip_spaces();
         match re.find(self.0) {
             Some(mtch) => {
                 if mtch.start() != 0 {

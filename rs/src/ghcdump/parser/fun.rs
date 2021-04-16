@@ -36,7 +36,9 @@ pub struct Symbol (String);
 
 fn parse_symbol(parser: &mut Parser) -> Result<Symbol, Err> {
     lazy_static! {
-        static ref SYMBOL_RE: Regex = Regex::new(r"\w+").unwrap();
+        static ref SYMBOL_RE: Regex =
+            Regex::new(r"^([a-zA-Z][a-zA-Z0-9_]*\.)*[a-zA-Z][a-zA-Z0-9_]*")
+                .unwrap();
     }
     match parser.match_re(&SYMBOL_RE) {
         Some(mtch) =>
