@@ -1,4 +1,5 @@
 use std::fs;
+use std::io;
 
 mod typ;
 mod fun;
@@ -6,9 +7,14 @@ mod fun;
 use super::files::DumpFile;
 
 pub type ParseResult = (typ::TypInfo, fun::FunInfo);
-pub type ParseErr = std::io::Error;
 
-pub fn parse_all<I: Iterator<Item = DumpFile>>(dump_files: I) -> Result<ParseResult, ParseErr> {
+#[derive(Debug)]
+pub enum Err {
+    Io(io::Error),
+    Fun(fun::Err)
+}
+
+pub fn parse_all<I: Iterator<Item = DumpFile>>(dump_files: I) -> Result<ParseResult, Err> {
     let mut typ_ctx = typ::TypInfo::default();
     let mut fun_ctx = fun::FunInfo::default();
 
@@ -25,4 +31,18 @@ pub fn parse_all<I: Iterator<Item = DumpFile>>(dump_files: I) -> Result<ParseRes
     }
 
     Ok((typ_ctx, fun_ctx))
+}
+
+// Error conversion
+
+impl From<io::Error> for Err {
+    fn from(err: io::Error) -> Self {
+        Err::Io(err)
+    }
+}
+
+impl From<fun::Err> for Err {
+    fn from(err: fun::Err) -> Self {
+        Err::Fun(err)
+    }
 }

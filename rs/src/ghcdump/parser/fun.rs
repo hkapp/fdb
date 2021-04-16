@@ -1,7 +1,7 @@
 pub type FunInfo = ();
-pub type FunErr = std::io::Error;
+pub type Err = String;
 
-pub fn parse(parse_context: &mut FunInfo, input: &str) -> Result<(), FunErr> {
+pub fn parse(parse_context: &mut FunInfo, input: &str) -> Result<(), Err> {
     println!("Skipping {} chars...", input.len());
     Ok (())
 }
