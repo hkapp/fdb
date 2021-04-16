@@ -1,3 +1,5 @@
+use super::Parse;
+
 pub type FunInfo = ();
 pub type Err = String;
 
