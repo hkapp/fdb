@@ -1,4 +1,5 @@
 use regex::Regex;
+use lazy_static::lazy_static;
 
 use super::Parser;
 
@@ -34,9 +35,10 @@ pub fn merge(mut file_prods: Vec<Prod>) -> Result<Prod, Err> {
 pub struct Symbol (String);
 
 fn parse_symbol(parser: &mut Parser) -> Result<Symbol, Err> {
-    /* TODO use lazy_something */
-    let re = Regex::new(r"\w+")?;
-    match parser.match_re(re) {
+    lazy_static! {
+        static ref SYMBOL_RE: Regex = Regex::new(r"\w+").unwrap();
+    }
+    match parser.match_re(&SYMBOL_RE) {
         Some(mtch) =>
             Ok(Symbol(
                 String::from(mtch))),

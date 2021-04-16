@@ -13,3 +13,4 @@ crate-type=["staticlib"]  # Allow linking with foreign languages
 rusqlite = "0.25.0"
 walkdir = "2.3.2"
 regex = "1.4.5"
+lazy_static = "1.4.0"

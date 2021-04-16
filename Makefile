@@ -19,7 +19,7 @@ test: rs-lib
 	$(HS_MAKE) test
 
 test-speed: rs-lib-release
-	$(HS_MAKE) test
+	$(HS_MAKE) test-speed
 
 compile: rs-lib
 	$(HS_MAKE) compile

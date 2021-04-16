@@ -1,6 +1,7 @@
 use std::fs;
 use std::io;
 use regex::Regex;
+use lazy_static::lazy_static;
 
 use super::files::DumpFile;
 
@@ -93,7 +94,7 @@ impl<'a> Parser<'a> {
         self.next_with(T::parse)
     }
 
-    fn match_re(&mut self, re: Regex) -> Option<&'a str> {
+    fn match_re(&mut self, re: &Regex) -> Option<&'a str> {
         match re.find(self.0) {
             Some(mtch) => {
                 if mtch.start() != 0 {
@@ -115,10 +116,11 @@ impl<'a> Parser<'a> {
     }
 
     fn skip_curr_line(&mut self) {
-        /* TODO use lazy_static */
         /* FIXME this does not support Windows and Mac formats (\r) */
-        let re = Regex::new(r"^[^\n]*\n").unwrap();
-        let mtch = self.match_re(re);
+        lazy_static! {
+            static ref SKIP_LINE_RE: Regex = Regex::new(r"^[^\n]*\n").unwrap();
+        }
+        let mtch = self.match_re(&SKIP_LINE_RE);
         if mtch.is_none() {
             /* There was no end of line character.
              * We must be at the end the string.

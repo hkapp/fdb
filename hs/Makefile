@@ -17,8 +17,10 @@ TEST_MAIN_DUMP1 = $(BIN_DIR)/$(SRC_DIR)/$(TEST_MAIN_PATH).$(GHC_DUMP_OPTION_NAME
 TEST_MAIN_DUMP2 = $(BIN_DIR)/$(SRC_DIR)/$(TEST_MAIN_PATH).$(GHC_DUMP_OPTION_NAME2)
 GHC_DUMP_PRODS = $(TEST_MAIN_DUMP1) $(TEST_MAIN_DUMP2)
 
-RUST_LIB = ../rs/target/debug/libfdb.a
-LIBS = $(RUST_LIB) -lsqlite3
+RUST_LIB_DEV = ../rs/target/debug/libfdb.a
+RUST_LIB_RELEASE = ../rs/target/release/libfdb.a
+LIBS_DEV = $(RUST_LIB_DEV) -lsqlite3
+LIBS_RELEASE = $(RUST_LIB_RELEASE) -lsqlite3
 
 all: tpch test
 
@@ -36,14 +38,21 @@ clean:
 
 # Only compile the Haskell code
 compile:
-	ghc $(GHC_FLAGS) -o $(TEST_BIN) $(TEST_MAIN_HS) $(LIBS)
+	ghc $(GHC_FLAGS) -o $(TEST_BIN) $(TEST_MAIN_HS) $(LIBS_DEV)
 
-test: compile-test $(GHC_DUMP_PRODS)
+test: compile-test
+	$(TEST_BIN)
+
+test-speed: compile-test-speed
 	$(TEST_BIN)
 
 # Compile and generate the dump files
-compile-test: $(RUST_LIB)
-	ghc $(GHC_FLAGS) $(GHC_DUMP_FLAGS) -o $(TEST_BIN) $(TEST_MAIN_HS) $(LIBS)
+compile-test: $(RUST_LIB_DEV)
+	ghc $(GHC_FLAGS) $(GHC_DUMP_FLAGS) -o $(TEST_BIN) $(TEST_MAIN_HS) $(LIBS_DEV)
+
+# Compile and generate the dump files (with the release rust)
+compile-test-speed: $(RUST_LIB_RELEASE)
+	ghc $(GHC_FLAGS) $(GHC_DUMP_FLAGS) -o $(TEST_BIN) $(TEST_MAIN_HS) $(LIBS_RELEASE)
 
 dump: compile-test
 
