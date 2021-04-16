@@ -127,14 +127,15 @@ pub extern fn execQ(plan_ptr: *const QPlan, buf_ptr: *mut QVal, n_alloc: c_sizet
     query_sqlite_into(&sql_query, res_buf).unwrap()
 }
 
-type DbCtx = ();
+type DbCtx = ghcdump::Ctx;
 
 const GHC_DUMP_DIR: &str = "../hs/bin/src";
 
 #[no_mangle]
 pub extern fn initDB() -> *const DbCtx {
-    ghcdump::load_everything_under(&Path::new(GHC_DUMP_DIR));
-    unsafe { to_hs_ptr(()) }
+    let ctx = ghcdump::load_everything_under(&Path::new(GHC_DUMP_DIR))
+                .unwrap(); /* TODO handle errors better */
+    unsafe { to_hs_ptr(ctx) }
 }
 
 #[no_mangle]

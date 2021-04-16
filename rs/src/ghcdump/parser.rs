@@ -1,30 +1,28 @@
-use std::path::Path;
+use std::fs;
+
+mod typ;
+mod fun;
 
 use super::files::DumpFile;
 
-pub fn parse_all<I: Iterator<Item = DumpFile>>(dump_files: I) {
-    let mut typ_ctx = TypParseContext::default();
-    let mut fun_ctx = FunParseContext::default();
+pub type ParseResult = (typ::TypInfo, fun::FunInfo);
+pub type ParseErr = std::io::Error;
+
+pub fn parse_all<I: Iterator<Item = DumpFile>>(dump_files: I) -> Result<ParseResult, ParseErr> {
+    let mut typ_ctx = typ::TypInfo::default();
+    let mut fun_ctx = fun::FunInfo::default();
 
     for ghc_dump in dump_files {
         match ghc_dump {
             DumpFile::TypDump(file_path) =>
-                parse_types(&mut typ_ctx, &file_path),
+                typ::parse(&mut typ_ctx, &file_path),
 
-            DumpFile::FunDump(file_path) =>
-                parse_functions(&mut fun_ctx, &file_path),
+            DumpFile::FunDump(file_path) => {
+                let file_content = fs::read_to_string(&file_path)?;
+                fun::parse(&mut fun_ctx, &file_content)?
+            }
         }
     }
-}
 
-type TypParseContext = ();
-
-fn parse_types(parse_context: &mut TypParseContext, file_path: &Path) {
-    println!("Skipping {}...", file_path.display())
-}
-
-type FunParseContext = ();
-
-fn parse_functions(parse_context: &mut FunParseContext, file_path: &Path) {
-    println!("Skipping {}...", file_path.display())
+    Ok((typ_ctx, fun_ctx))
 }
