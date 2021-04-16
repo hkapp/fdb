@@ -5,7 +5,7 @@ use std::slice;
 use std::os::raw::c_char;
 use std::path::Path;
 
-mod gpl;
+mod ghcdump;
 
 #[allow(non_camel_case_types)]
 type c_sizet = usize;
@@ -133,7 +133,7 @@ const GHC_DUMP_DIR: &str = "../hs/bin/src";
 
 #[no_mangle]
 pub extern fn initDB() -> *const DbCtx {
-    gpl::load_everything_under(&Path::new(GHC_DUMP_DIR));
+    ghcdump::load_everything_under(&Path::new(GHC_DUMP_DIR));
     unsafe { to_hs_ptr(()) }
 }
 

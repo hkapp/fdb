@@ -26,8 +26,8 @@ fn all_dump_files(root_dir: &Path) -> impl Iterator<Item = GhcDump> {
 type PathString = PathBuf;
 
 enum GhcDump {
-    DumpHi(PathString),
-    DumpPrep(PathString)
+    DumpHi(PathString),   /* Functions */
+    DumpPrep(PathString)  /* Types */
 }
 
 fn as_ghc_dump(file_md: walkdir::DirEntry) -> Option<GhcDump> {
