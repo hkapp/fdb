@@ -18,8 +18,14 @@ clean:
 test: rs-lib
 	$(HS_MAKE) test
 
+test-speed: rs-lib-release
+	$(HS_MAKE) test
+
 compile: rs-lib
 	$(HS_MAKE) compile
 
 rs-lib:
 	$(CARGO) build
+
+rs-lib-release:
+	$(CARGO) build --release
