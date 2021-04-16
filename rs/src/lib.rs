@@ -3,6 +3,9 @@ use rusqlite as sqlite;
 use std::str;
 use std::slice;
 use std::os::raw::c_char;
+use std::path::Path;
+
+mod gpl;
 
 #[allow(non_camel_case_types)]
 type c_sizet = usize;
@@ -126,8 +129,11 @@ pub extern fn execQ(plan_ptr: *const QPlan, buf_ptr: *mut QVal, n_alloc: c_sizet
 
 type DbCtx = ();
 
+const GHC_DUMP_DIR: &str = "../hs/bin/src";
+
 #[no_mangle]
 pub extern fn initDB() -> *const DbCtx {
+    gpl::load_everything_under(&Path::new(GHC_DUMP_DIR));
     unsafe { to_hs_ptr(()) }
 }
 
