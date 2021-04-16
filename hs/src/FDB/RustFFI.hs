@@ -11,13 +11,19 @@ import Foreign.Marshal.Array (allocaArray, peekArray)
 
 {- Import Rust functions -}
 
-{- 1. QPlan API -}
+{- 1. Ctx API -}
+foreign import ccall "initDB"
+  rs_initDB :: IO (Ptr DbCtx)
+foreign import ccall "&release_ctx"
+  rs_releaseCtx :: FunPtr (Ptr DbCtx -> IO ())
+
+{- 2. QPlan API -}
 foreign import ccall "readT"
   rs_readT :: CString -> CSize -> IO (Ptr (QPlan a))
 foreign import ccall "&release_qplan"
   rs_releaseQPlan :: FunPtr (Ptr (QPlan a) -> IO ())
 
-{- 2. QBuf API -}
+{- 3. execQ API -}
 foreign import ccall "execQ"
   rs_execQ :: Ptr (QPlan a) -> Ptr a -> CSize -> IO CSize
 
@@ -55,3 +61,9 @@ readT tabName =
         makeQ rawPtr
   in
     withCStringLen tabName wrapReadT
+
+
+newtype DbCtx = DbCtx Void
+
+initDB :: IO (ForeignPtr DbCtx)
+initDB = rs_initDB >>= (newForeignPtr rs_releaseCtx)

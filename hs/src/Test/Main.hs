@@ -6,7 +6,7 @@ import FDB.Dot (toDotGraph)
 import qualified Utils.Dot as Dot
 
 import Foreign (Storable)
-import FDB.RustFFI(Q, CUInt32, readT, execQ)
+import FDB.RustFFI(Q, CUInt32, readT, execQ, initDB)
 import Data.Foldable(traverse_)
 
 main :: IO ()
@@ -14,24 +14,24 @@ main = execQTest
 
 -- execQ test
 
+
+execQTest = qry >>= execAndPrint
+
 type QVal = CUInt32;
 
-execQTest = ((readT "foo") :: IO (Q QVal)) >>= execAndPrint
+qry :: IO (Q QVal)
+qry =
+  do
+    ctx <- initDB
+    readT "foo"
 
--- execAndPrint :: Q QVal -> IO ()
--- execAndPrint query =
-  -- do
-    -- resList <- execQ query
-    -- traverse_  print resList
-
--- This signature does not work: why?
 execAndPrint :: (Show a, Storable a) => Q a -> IO ()
 execAndPrint query =
   do
     resList <- execQ query
     traverse_  print resList
 
--- Query Test
+-- Old query Test
 
 queryTest = writeFile fileName text
 

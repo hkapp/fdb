@@ -123,3 +123,16 @@ pub extern fn execQ(plan_ptr: *const QPlan, buf_ptr: *mut QVal, n_alloc: c_sizet
 
     query_sqlite_into(&sql_query, res_buf).unwrap()
 }
+
+type DbCtx = ();
+
+#[no_mangle]
+pub extern fn initDB() -> *const DbCtx {
+    unsafe { to_hs_ptr(()) }
+}
+
+#[no_mangle]
+pub extern fn release_ctx(ctx: *mut DbCtx) {
+    println!("Releasing context...");
+    unsafe { release_hs_ptr(ctx) }
+}
