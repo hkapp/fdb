@@ -7,6 +7,7 @@ use super::files::DumpFile;
 
 mod typ;
 mod fun;
+mod errpos;
 
 pub type ParseResult = (typ::TypInfo, fun::Prod);
 
