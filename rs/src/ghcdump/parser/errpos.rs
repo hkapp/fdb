@@ -33,10 +33,11 @@ impl ErrPos {
 
 // Report building
 
-pub fn report(err_pos: ErrPos, full_input: &str) -> Result<String, Error> {
+pub fn report(err_pos: &ErrPos, full_input: &str) -> Result<String, Error> {
     use ErrPos::*;
     match err_pos {
-        Point(ptr_pos) => {
+        Point(ptr_ref) => {
+            let ptr_pos = *ptr_ref;  /* we have a &*const u8 because err_pos is a ref */
             let input_pos = unsafe {
                 index_in_str(ptr_pos, full_input)?
             };
@@ -102,6 +103,7 @@ fn build_marker_line(line: &str, ptr_pos: *const u8) -> Result<String, Error> {
 
     let prefix = " ".repeat(str_pos);
     let indicator = '^';
+    /* thread '<unnamed>' panicked at 'attempt to subtract with overflow', src/ghcdump/parser/errpos.rs:106:29 */
     let suffix = " ".repeat(line.len() - str_pos - 1);
 
     let marker_line = format!("{}{}{}", prefix, indicator, suffix);

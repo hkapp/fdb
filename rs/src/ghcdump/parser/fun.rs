@@ -2,6 +2,7 @@ use regex::Regex;
 use lazy_static::lazy_static;
 
 use super::Parser;
+use super::errpos;
 
 type Error = super::Error;
 
@@ -26,7 +27,7 @@ pub fn parse(input: &str) -> Result<Prod, Error> {
                 declarations.push(decl);
             }
             Err(err) => {
-                match try_handling_err(err) {
+                match try_handling_err(&err, input) {
                     Ok(None) => {
                         /* no report, just skip it */
                         parser.skip_curr_line();
@@ -34,6 +35,7 @@ pub fn parse(input: &str) -> Result<Prod, Error> {
 
                     Ok(Some(report)) =>  {
                         /* error report generated, print it */
+                        println!("{:?}:", err.reason);
                         println!("{}", report);
                         parser.skip_curr_line();
                     },
@@ -185,11 +187,14 @@ fn parser_err<T>(parser: &mut Parser, reason: Reason) -> Result<T, Error> {
             super::Reason::Fun(reason)))
 }
 
-fn try_handling_err(err: Error) -> Result<Option<String>, Error> {
+fn try_handling_err(err: &Error, original_input: &str) -> Result<Option<String>, Error> {
     /* Same as before: we know how to handle GlobalNotFound, but nothing else */
-    match &err.reason {
+    match err.reason {
         super::Reason::Fun(
             Reason::GlobalNotFound) => Ok(None),
-        _                           => Err(err),
+        _                           =>
+            Ok(
+                errpos::report(&err.pos, original_input).ok()),  /* FIXME we're losing the
+                                                                  *report error here, if any */
     }
 }
