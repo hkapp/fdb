@@ -12,20 +12,31 @@ mod errpos;
 pub type ParseResult = (typ::TypInfo, fun::Prod);
 
 #[derive(Debug)]
-pub enum Err {
-    Fun(fun::Err),
+pub struct Error {
+    pos:    ErrPos,
+    reason: Reason
+}
+
+type ErrPos = errpos::ErrPos;
+
+#[derive(Debug)]
+pub enum Reason {
+    /* Classic parsing errors */
+    ExpectedKeyword(String),
     /* Parenthesis errors */
     ExpectedOpeningParenthesis(char),
     ExpectedClosingParenthesis(char),
     NoMatchingOpeningParenthesis(char),
     ParenthesisMismatch(char, char),
     ParenthesisStackNotEmpty(ParensStack),
+    /* More specific parsing errors */
+    Fun(fun::Reason),
     /* File / content errors */
     Io(io::Error),
     ReachedEndOfFile
 }
 
-pub fn parse_all<I: Iterator<Item = DumpFile>>(dump_files: I) -> Result<ParseResult, Err> {
+pub fn parse_all<I: Iterator<Item = DumpFile>>(dump_files: I) -> Result<ParseResult, Error> {
     let mut typ_ctx = typ::TypInfo::default();
     let mut parsed_funs = Vec::new();
 
@@ -36,14 +47,15 @@ pub fn parse_all<I: Iterator<Item = DumpFile>>(dump_files: I) -> Result<ParseRes
             },
 
             DumpFile::FunDump(file_path) => {
-                let file_content = fs::read_to_string(&file_path)?;
+                let file_content = fs::read_to_string(&file_path)
+                                    .map_err(convert_io_err)?;
                 let parsed = fun::parse(&file_content)?;
                 parsed_funs.push(parsed);
             }
         }
     }
 
-    let final_funs = fun::merge(parsed_funs)?;
+    let final_funs = fun::merge(parsed_funs);
     Ok((typ_ctx, final_funs))
 }
 
@@ -58,8 +70,8 @@ struct Parsed<'a, T> {
 trait Parse
     where Self: std::marker::Sized
 {
-    type Err;
-    fn parse<'a>(input: &'a str) -> Result<Parsed<'a, Self>, Self::Err>;
+    type Error;
+    fn parse<'a>(input: &'a str) -> Result<Parsed<'a, Self>, Self::Error>;
 }
 
 struct Parser<'a > {
@@ -81,13 +93,29 @@ impl<'a> Parser<'a> {
         self.rem_input.len() > 0
     }
 
-    fn finalize<T>(self, res: T) -> Result<T, Err> {
+    fn finalize<T>(self, res: T) -> Result<T, Error> {
         if !self.parens_stack.is_empty() {
-            Err(
-                Err::ParenthesisStackNotEmpty(self.parens_stack))
+            let reason = Reason::ParenthesisStackNotEmpty(self.parens_stack);
+            let err = self.err_since(reason);
+            Err(err)
         }
         else {
             Ok(res)
+        }
+    }
+
+    fn err(&self, reason: Reason) -> Error {
+        Error {
+            pos: ErrPos::at(self.rem_input),
+            reason
+        }
+    }
+
+    fn err_since(&self, reason: Reason, prev_pos: ErrPos) -> Error {
+        let pos = ErrPos::between(prev_pos, self.rem_input).unwrap();
+        Error {
+            pos,
+            reason
         }
     }
 
@@ -111,8 +139,8 @@ impl<'a> Parser<'a> {
 
     #[allow(dead_code)]
     fn next<T, E>(&mut self) -> Result<T, E>
-        where T: Parse<Err = E>,
-              E: Into<Err>
+        where T: Parse<Error = E>,
+              E: Into<Error>
     {
         self.next_with(T::parse)
     }
@@ -140,25 +168,30 @@ impl<'a> Parser<'a> {
         }
     }
 
-    fn match_keyword(&mut self, keyword: &str) -> Option<()> {
+    fn match_keyword(&mut self, keyword: &str) -> Result<(), Error> {
+        /* lazy value (closure) */
+        let gen_err = || Err(self.err(
+                            Reason::ExpectedKeyword(
+                                String::from(keyword))));
+
         self.skip_spaces();
 
         if !self.rem_input.starts_with(keyword) {
-            return None;
+            return gen_err();
         }
 
         /* The next char must be a space, otherwise the keyword did not
          * actually match ('::>' vs. '::' for example)
          */
         match is_space_at(self.rem_input, keyword.len()) {
-            Some(true)  => {},           /* is a space: ok */
-            Some(false) => return None,  /* not a space: not ok */
-            None        => {},           /* end of string: still fine */
+            Some(true)  => {},                /* is a space: ok */
+            Some(false) => return gen_err(),  /* not a space: not ok */
+            None        => {},                /* end of string: still fine */
         }
 
         /* '+1' is still safe even if we reached the end of the string */
         self.advance(keyword.len()+1);
-        Some(())
+        Ok(())
     }
 
     fn skip_spaces(&mut self) {
@@ -179,7 +212,7 @@ impl<'a> Parser<'a> {
         }
     }
 
-    fn open(&mut self, opening_parens: char) -> Result<(), Err> {
+    fn open(&mut self, opening_parens: char) -> Result<(), Error> {
         self.skip_spaces();
         match str_first(self.rem_input) {
             Some(c) if c == opening_parens => {
@@ -189,14 +222,16 @@ impl<'a> Parser<'a> {
             },
 
             Some(_) =>
-                Err(Err::ExpectedOpeningParenthesis(opening_parens)),
+                Err(self.err(
+                    Reason::ExpectedOpeningParenthesis(opening_parens))),
 
             None =>
-                Err(Err::ReachedEndOfFile)
+                Err(self.err(
+                    Reason::ReachedEndOfFile))
         }
     }
 
-    fn close(&mut self, closing_parens: char) -> Result<(), Err> {
+    fn close(&mut self, closing_parens: char) -> Result<(), Error> {
         self.skip_spaces();
 
         match str_first(self.rem_input) {
@@ -205,10 +240,12 @@ impl<'a> Parser<'a> {
             },
 
             Some(_) =>
-                return Err(Err::ExpectedClosingParenthesis(closing_parens)),
+                return Err(self.err(
+                    Reason::ExpectedClosingParenthesis(closing_parens))),
 
             None =>
-                return Err(Err::ReachedEndOfFile)
+                return Err(self.err(
+                    Reason::ReachedEndOfFile))
         };
 
         let opening_parens = match self.parens_stack.pop() {
@@ -216,7 +253,8 @@ impl<'a> Parser<'a> {
                 top_parens,
 
             None =>
-                return Err(Err::NoMatchingOpeningParenthesis(closing_parens))
+                return Err(self.err(
+                    Reason::NoMatchingOpeningParenthesis(closing_parens)))
         };
 
         match (opening_parens, closing_parens) {
@@ -225,7 +263,8 @@ impl<'a> Parser<'a> {
             ('[', ']') => Ok(()),
 
             _  =>
-                Err(Err::ParenthesisMismatch(opening_parens, closing_parens))
+                Err(self.err(
+                    Reason::ParenthesisMismatch(opening_parens, closing_parens)))
         }
     }
 }
@@ -244,14 +283,14 @@ fn is_space_at(s: &str, pos: usize) -> Option<bool> {
 
 // Error conversion
 
-impl From<io::Error> for Err {
-    fn from(err: io::Error) -> Self {
-        Err::Io(err)
-    }
-}
+fn convert_io_err(err: io::Error) -> Error {
+    let pos = unsafe {
+        ErrPos::none()
+    };
+    let reason = Reason::Io(err);
 
-impl From<fun::Err> for Err {
-    fn from(err: fun::Err) -> Self {
-        Err::Fun(err)
+    Error {
+        pos,
+        reason
     }
 }

@@ -3,11 +3,20 @@ use lazy_static::lazy_static;
 
 use super::Parser;
 
+type Error = super::Error;
+
+#[derive(Debug)]
+pub enum Reason {
+    GlobalNotFound,
+    LocalNotFound,
+    RegexError(regex::Error), /* TODO remove? */
+}
+
 // Export
 
 pub type Prod = Vec<Decl>;
 
-pub fn parse(input: &str) -> Result<Prod, super::Err> {
+pub fn parse(input: &str) -> Result<Prod, Error> {
     let mut parser = Parser::new(input);
     let mut declarations = Vec::new();
 
@@ -42,12 +51,12 @@ pub fn parse(input: &str) -> Result<Prod, super::Err> {
     parser.finalize(declarations)
 }
 
-pub fn merge(file_prods: Vec<Prod>) -> Result<Prod, Err> {
+pub fn merge(file_prods: Vec<Prod>) -> Prod {
     let mut final_res = Vec::new();
     for mut decls in file_prods.into_iter() {
         final_res.append(&mut decls);
     }
-    Ok(final_res)
+    final_res
 }
 
 // Decl
@@ -58,7 +67,7 @@ pub struct Decl {
     body: Expr
 }
 
-fn parse_decl(parser: &mut Parser) -> Result<Decl, super::Err> {
+fn parse_decl(parser: &mut Parser) -> Result<Decl, Error> {
     let fun_name = parse_global(parser)?;
     match_keyword(parser, "=")?;
     let body = parse_expression(parser)?;
@@ -68,9 +77,8 @@ fn parse_decl(parser: &mut Parser) -> Result<Decl, super::Err> {
     })
 }
 
-fn match_keyword(parser: &mut Parser, keyword: &str) -> Result<(), Err> {
+fn match_keyword(parser: &mut Parser, keyword: &str) -> Result<(), Error> {
     parser.match_keyword(keyword)
-        .ok_or_else(|| Err::ExpectedKeyword(String::from(keyword)))
 }
 
 // Expr
@@ -82,7 +90,7 @@ enum Expr {
     Nothing /* TODO remove */
 }
 
-fn parse_expression(parser: &mut Parser) -> Result<Expr, Err> {
+fn parse_expression(parser: &mut Parser) -> Result<Expr, Error> {
     /* For now we only support anonymous function */
     parse_anon_fun(parser)
         .map(|anon_fun| Expr::AnonFun(anon_fun))
@@ -99,7 +107,7 @@ struct AnonFun {
     body:         Box<Expr>  /* avoid recursive type */
 }
 
-fn parse_anon_fun(parser: &mut Parser) -> Result<AnonFun, Err> {
+fn parse_anon_fun(parser: &mut Parser) -> Result<AnonFun, Error> {
     match_keyword(parser, "\\")?;
     let polytyp_args = repeat_match(parser, parse_polytyp_argument);
     Ok(AnonFun {
@@ -122,7 +130,7 @@ fn repeat_match<T, E, F>(parser: &mut Parser, parse_once: F) -> Vec<T>
 
 type ArgName = Local;
 
-fn parse_polytyp_argument(parser: &mut Parser) -> Result<ArgName, super::Err> {
+fn parse_polytyp_argument(parser: &mut Parser) -> Result<ArgName, Error> {
     parser.open('(')?;
     match_keyword(parser, "@")?;
     let arg_name = parse_local(parser)?;
@@ -135,7 +143,7 @@ fn parse_polytyp_argument(parser: &mut Parser) -> Result<ArgName, super::Err> {
 #[derive(Debug)]
 struct Local (String);
 
-fn parse_local(parser: &mut Parser) -> Result<Local, Err> {
+fn parse_local(parser: &mut Parser) -> Result<Local, Error> {
     lazy_static! {
         static ref LOCAL_NAME_RE: Regex =
             Regex::new(r"^[a-zA-Z][a-zA-Z0-9_]*")
@@ -146,7 +154,7 @@ fn parse_local(parser: &mut Parser) -> Result<Local, Err> {
             Ok(Local(
                 String::from(mtch))),
         None =>
-            Err(Err::LocalNotFound)
+            parser_err(parser, Reason::LocalNotFound)
     }
 }
 
@@ -155,7 +163,7 @@ fn parse_local(parser: &mut Parser) -> Result<Local, Err> {
 #[derive(Debug)]
 pub struct Global (String);
 
-fn parse_global(parser: &mut Parser) -> Result<Global, Err> {
+fn parse_global(parser: &mut Parser) -> Result<Global, Error> {
     lazy_static! {
         static ref GLOBAL_RE: Regex =
             Regex::new(r"^([a-zA-Z][a-zA-Z0-9_]*\.)*[a-zA-Z][a-zA-Z0-9_]*")
@@ -166,34 +174,23 @@ fn parse_global(parser: &mut Parser) -> Result<Global, Err> {
             Ok(Global(
                 String::from(mtch))),
         None =>
-            Err(Err::SymbolNotFound)
+            parser_err(parser, Reason::GlobalNotFound)
     }
 }
 
-// Errors
+// Error convertion
 
-#[derive(Debug)]
-pub enum Err {
-    SymbolNotFound,
-    LocalNotFound,
-    RegexError(regex::Error), /* TODO remove? */
-    ExpectedKeyword(String)
+fn parser_err<T>(parser: &mut Parser, reason: Reason) -> Result<T, Error> {
+    Err(
+        parser.err(
+            super::Reason::Fun(reason)))
 }
 
-impl From<regex::Error> for Err {
-    fn from(err: regex::Error) -> Self {
-        Err::RegexError(err)
-    }
-}
-
-fn try_handling_err(err: super::Err) -> Result<Option<String>, super::Err> {
-    /* Same as before: we know how to handle SymbolNotFound, but nothing else */
-    match &err {
-        super::Err::Fun(local_err) =>
-            match local_err {
-                Err::SymbolNotFound => Ok(None),
-                _                   => Err(err),
-            }
-        _                        => Err(err),
+fn try_handling_err(err: Error) -> Result<Option<String>, Error> {
+    /* Same as before: we know how to handle GlobalNotFound, but nothing else */
+    match &err.reason {
+        super::Reason::Fun(
+            Reason::GlobalNotFound) => Ok(None),
+        _                           => Err(err),
     }
 }

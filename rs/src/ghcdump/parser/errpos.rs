@@ -1,8 +1,37 @@
+use std::ptr;
 
+// ErrPos basics
+
+#[derive(Debug)]
 pub enum ErrPos {
     Point(*const u8),
     Range(*const u8, *const u8)
 }
+
+impl ErrPos {
+    pub fn at(curr_input: &str) -> ErrPos {
+        ErrPos::Point(curr_input.as_ptr())
+    }
+
+    pub fn between(prev_pos: ErrPos, curr_input: &str) -> Option<ErrPos> {
+        use ErrPos::*;
+        match prev_pos {
+            Point(prev_ptr) =>
+                Some(Range(prev_ptr, curr_input.as_ptr())),
+            Range(..) =>
+                None
+        }
+    }
+
+    /* This is unsafe because we're using the NULL pointer.
+     * The resulting ErrPos should never be used to call "report".
+     */
+    pub unsafe fn none() -> ErrPos {
+        ErrPos::Point(ptr::null())
+    }
+}
+
+// Report building
 
 pub fn report(err_pos: ErrPos, full_input: &str) -> Result<String, Error> {
     use ErrPos::*;
