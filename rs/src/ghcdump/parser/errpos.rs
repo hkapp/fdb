@@ -88,6 +88,11 @@ fn current_line_begin(full_input: &str, pos: usize) -> usize {
 fn current_line_end(full_input: &str, pos: usize) -> usize {
     /* FIXME this doesn't work with \r */
     match full_input[pos..].find('\n') {
+        /* FIXME something is wrong here:
+         * Result size of CorePre
+         * is understood as the current line
+         * (missing the final 'p')
+         */
         Some(newline_pos) => pos + newline_pos - 1,  /* skip the newline char */
         None              => full_input.len(),       /* no newline char,
                                                       * so end of line is end
@@ -108,6 +113,50 @@ fn build_marker_line(line: &str, ptr_pos: *const u8) -> Result<String, Error> {
 
     let marker_line = format!("{}{}{}", prefix, indicator, suffix);
     Ok(marker_line)
+}
+
+// Various external helpers
+
+#[allow(unused_unsafe)]
+pub unsafe fn is_at_beginning_of_line(err_pos: &ErrPos, full_input: &str) -> Result<bool, Error> {
+    use ErrPos::*;
+    let pos_ptr = match err_pos {
+        Point(ptr)          => *ptr,
+        Range(start_ptr, _) => *start_ptr
+    };
+
+    let curr_pos = unsafe {
+        index_in_str(pos_ptr, full_input)?
+    };
+    let line_begin = current_line_begin(full_input, curr_pos);
+
+    Ok(line_begin == curr_pos)
+}
+
+#[allow(unused_unsafe)]
+pub unsafe fn retrieve_slice<'a, 'b>(err_pos: &'a ErrPos, full_input: &'b str)
+    -> Result<&'b str, Error>
+{
+    use ErrPos::*;
+    let (begin, end) = match err_pos {
+        Point(ptr) => {
+            let begin = unsafe {
+                index_in_str(*ptr, full_input)?
+            };
+            let end = full_input.len();
+            (begin, end)
+        }
+
+        Range(begin_ptr, end_ptr) => {
+            unsafe {
+                let begin = index_in_str(*begin_ptr, full_input)?;
+                let end = index_in_str(*end_ptr, full_input)?;
+                (begin, end)
+            }
+        }
+    };
+
+    Ok(&full_input[begin..end])
 }
 
 // Error

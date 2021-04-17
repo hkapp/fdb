@@ -1,7 +1,7 @@
 use regex::Regex;
 use lazy_static::lazy_static;
 
-use super::Parser;
+use super::{Parser, ErrPos};
 use super::errpos;
 
 type Error = super::Error;
@@ -165,6 +165,15 @@ fn parse_local(parser: &mut Parser) -> Result<Local, Error> {
 pub struct Global (String);
 
 fn parse_global(parser: &mut Parser) -> Result<Global, Error> {
+    /* FIXME: the next char after this must be a space (or end of line)
+     * Currently we have:
+     * ExpectedKeyword("="):
+     * GHC.Base.
+     *         ^
+     * It should not parse the identifier properly.
+     * Could maybe use "lookaheads":
+     *   https://www.regular-expressions.info/lookaround.html
+     */
     lazy_static! {
         static ref GLOBAL_RE: Regex =
             Regex::new(r"^([a-zA-Z][a-zA-Z0-9_]*\.)*[a-zA-Z][a-zA-Z0-9_]*")
@@ -189,12 +198,44 @@ fn parser_err<T>(parser: &mut Parser, reason: Reason) -> Result<T, Error> {
 
 fn try_handling_err(err: &Error, original_input: &str) -> Result<Option<String>, Error> {
     /* Same as before: we know how to handle GlobalNotFound, but nothing else */
-    match err.reason {
-        super::Reason::Fun(
-            Reason::GlobalNotFound) => Ok(None),
-        _                           =>
+    use super::Reason as GenReason;
+    let safely_ignore = Ok(None);
+    let err_pos = &err.pos;
+
+    return match &err.reason {
+        /* GlobalNotFound is the first possible error when parsing a declaration.
+         * If it's at the beginning of the line, we just couldn't parse the symbol
+         * in the declaration. This is usually a statement we don't support (e.g. comments).
+         */
+        GenReason::Fun(Reason::GlobalNotFound)
+            if is_at_beginning_of_line(err_pos, original_input)
+            => safely_ignore,
+
+        /* ignore 'Result size of CorePrep' */
+        GenReason::ExpectedKeyword(keyword)
+            if keyword == "="
+                && is_result_size_of_core_prep(err_pos, original_input)
+            => safely_ignore,
+
+        _  =>
             Ok(
-                errpos::report(&err.pos, original_input).ok()),  /* FIXME we're losing the
-                                                                  *report error here, if any */
+                errpos::report(err_pos, original_input).ok()),  /* FIXME we're losing the
+                                                                 * report error here, if any */
+    };
+
+    fn is_at_beginning_of_line(err_pos: &ErrPos, input: &str) -> bool {
+        unsafe {
+            errpos::is_at_beginning_of_line(err_pos, input)
+                .unwrap_or(false)
+        }
+    }
+
+    fn is_result_size_of_core_prep(err_pos: &ErrPos, input: &str) -> bool {
+        unsafe {
+            match errpos::retrieve_slice(err_pos, input) {
+                Ok(s)  => s.starts_with("size of CorePrep"),
+                Err(_) => false,
+            }
+        }
     }
 }
