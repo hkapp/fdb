@@ -9,7 +9,6 @@ type Error = super::Error;
 pub enum Reason {
     GlobalNotFound,
     LocalNotFound,
-    RegexError(regex::Error), /* TODO remove? */
 }
 
 // Export

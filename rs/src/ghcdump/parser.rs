@@ -27,7 +27,7 @@ pub enum Reason {
     ExpectedOpeningParenthesis(char),
     ExpectedClosingParenthesis(char),
     NoMatchingOpeningParenthesis(char),
-    ParenthesisMismatch(char, char),
+    ParenthesesMismatch(char, char),
     ParenthesisStackNotEmpty(ParensStack),
     /* More specific parsing errors */
     Fun(fun::Reason),
@@ -79,7 +79,7 @@ struct Parser<'a > {
     parens_stack: ParensStack  /* stack of open parentheses */
 }
 
-pub type ParensStack = Vec<char>;
+pub type ParensStack = Vec<(char, ErrPos)>;
 
 impl<'a> Parser<'a> {
     fn new(input: &'a str) -> Self {
@@ -93,10 +93,17 @@ impl<'a> Parser<'a> {
         self.rem_input.len() > 0
     }
 
-    fn finalize<T>(self, res: T) -> Result<T, Error> {
+    fn finalize<T>(mut self, res: T) -> Result<T, Error> {
         if !self.parens_stack.is_empty() {
-            let reason = Reason::ParenthesisStackNotEmpty(self.parens_stack);
-            let err = self.err_since(reason);
+            let parens_stack = self.parens_stack;
+            self.parens_stack = Vec::new();  /* move occurs above */
+
+            let first_parens = parens_stack.first().unwrap();
+            let first_parens_pos = first_parens.1.clone();
+
+            let reason = Reason::ParenthesisStackNotEmpty(parens_stack);
+            let err = self.err_since(reason, first_parens_pos);
+
             Err(err)
         }
         else {
@@ -169,24 +176,29 @@ impl<'a> Parser<'a> {
     }
 
     fn match_keyword(&mut self, keyword: &str) -> Result<(), Error> {
-        /* lazy value (closure) */
-        let gen_err = || Err(self.err(
-                            Reason::ExpectedKeyword(
-                                String::from(keyword))));
+        /* acts as a lazy value (can't use a closure because it
+         * creates multiple mutable references)
+         */
+        fn gen_err(parser: &mut Parser, keyword: &str) -> Result<(), Error> {
+            Err(parser.err(
+                Reason::ExpectedKeyword(
+                    String::from(keyword))))
+        }
 
         self.skip_spaces();
 
         if !self.rem_input.starts_with(keyword) {
-            return gen_err();
+            return gen_err(self, keyword);
         }
 
         /* The next char must be a space, otherwise the keyword did not
          * actually match ('::>' vs. '::' for example)
          */
         match is_space_at(self.rem_input, keyword.len()) {
-            Some(true)  => {},                /* is a space: ok */
-            Some(false) => return gen_err(),  /* not a space: not ok */
-            None        => {},                /* end of string: still fine */
+            Some(true)  => {},  /* is a space: ok */
+            Some(false) =>      /* not a space: not ok */
+                return gen_err(self, keyword),
+            None        => {},  /* end of string: still fine */
         }
 
         /* '+1' is still safe even if we reached the end of the string */
@@ -216,7 +228,8 @@ impl<'a> Parser<'a> {
         self.skip_spaces();
         match str_first(self.rem_input) {
             Some(c) if c == opening_parens => {
-                self.parens_stack.push(opening_parens);
+                let save = (opening_parens, ErrPos::at(self.rem_input));
+                self.parens_stack.push(save);
                 self.advance(1);
                 Ok(())
             },
@@ -248,14 +261,15 @@ impl<'a> Parser<'a> {
                     Reason::ReachedEndOfFile))
         };
 
-        let opening_parens = match self.parens_stack.pop() {
-            Some(top_parens) =>
-                top_parens,
+        let (opening_parens, opening_pos) =
+            match self.parens_stack.pop() {
+                Some(top_parens) =>
+                    top_parens,
 
-            None =>
-                return Err(self.err(
-                    Reason::NoMatchingOpeningParenthesis(closing_parens)))
-        };
+                None =>
+                    return Err(self.err(
+                        Reason::NoMatchingOpeningParenthesis(closing_parens)))
+            };
 
         match (opening_parens, closing_parens) {
             ('(', ')') => Ok(()),
@@ -263,8 +277,9 @@ impl<'a> Parser<'a> {
             ('[', ']') => Ok(()),
 
             _  =>
-                Err(self.err(
-                    Reason::ParenthesisMismatch(opening_parens, closing_parens)))
+                Err(self.err_since(
+                        Reason::ParenthesesMismatch(opening_parens, closing_parens),
+                        opening_pos))
         }
     }
 }

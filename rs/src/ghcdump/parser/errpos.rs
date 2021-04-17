@@ -2,7 +2,7 @@ use std::ptr;
 
 // ErrPos basics
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ErrPos {
     Point(*const u8),
     Range(*const u8, *const u8)
