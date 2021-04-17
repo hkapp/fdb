@@ -73,6 +73,7 @@ pub extern fn release_qplan(qptr: *mut QPlan) {
 
 const DB_FILENAME: &str = "../data/fdb.db";
 
+#[allow(dead_code)]
 fn query_sqlite(query: &str) -> sqlite::Result<Vec<QVal>> {
     let conn = sqlite::Connection::open(DB_FILENAME)?;
 

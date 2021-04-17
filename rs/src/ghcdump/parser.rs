@@ -12,8 +12,16 @@ pub type ParseResult = (typ::TypInfo, fun::Prod);
 
 #[derive(Debug)]
 pub enum Err {
+    Fun(fun::Err),
+    /* Parenthesis errors */
+    ExpectedOpeningParenthesis(char),
+    ExpectedClosingParenthesis(char),
+    NoMatchingOpeningParenthesis(char),
+    ParenthesisMismatch(char, char),
+    ParenthesisStackNotEmpty(ParensStack),
+    /* File / content errors */
     Io(io::Error),
-    Fun(fun::Err)
+    ReachedEndOfFile
 }
 
 pub fn parse_all<I: Iterator<Item = DumpFile>>(dump_files: I) -> Result<ParseResult, Err> {
@@ -40,6 +48,7 @@ pub fn parse_all<I: Iterator<Item = DumpFile>>(dump_files: I) -> Result<ParseRes
 
 // Parser helpers
 
+#[allow(dead_code)]
 struct Parsed<'a, T> {
     value:    T,
     leftover: &'a str
@@ -52,33 +61,45 @@ trait Parse
     fn parse<'a>(input: &'a str) -> Result<Parsed<'a, Self>, Self::Err>;
 }
 
-struct Parser<'a > (&'a str);
+struct Parser<'a > {
+    rem_input:    &'a str,     /* remaining input */
+    parens_stack: ParensStack  /* stack of open parentheses */
+}
+
+pub type ParensStack = Vec<char>;
 
 impl<'a> Parser<'a> {
     fn new(input: &'a str) -> Self {
-        Parser(input)
-    }
-
-    fn has_input_left(&self) -> bool {
-        self.0.len() > 0
-    }
-
-    fn into_parsed<T>(self, res: T) -> Parsed<'a, T> {
-        Parsed {
-            value:    res,
-            leftover: self.0
+        Parser {
+            rem_input:    input,
+            parens_stack: Vec::new()
         }
     }
 
+    fn has_input_left(&self) -> bool {
+        self.rem_input.len() > 0
+    }
+
+    fn finalize<T>(self, res: T) -> Result<T, Err> {
+        if !self.parens_stack.is_empty() {
+            Err(
+                Err::ParenthesisStackNotEmpty(self.parens_stack))
+        }
+        else {
+            Ok(res)
+        }
+    }
+
+    #[allow(dead_code)]
     fn next_with<F, T, E>(&mut self, parse_fun: F) -> Result<T, E>
         where F: FnOnce(&'a str) -> Result<Parsed<'a, T>, E>,
               T: Sized
     {
         /* We just assume that the caller expects no spaces before their function is called */
         self.skip_spaces();
-        match parse_fun(self.0) {
+        match parse_fun(self.rem_input) {
             Ok(parsed) => {
-                self.0 = parsed.leftover;
+                self.rem_input = parsed.leftover;
                 Ok(parsed.value)
             }
             Err(err) => {
@@ -87,6 +108,7 @@ impl<'a> Parser<'a> {
         }
     }
 
+    #[allow(dead_code)]
     fn next<T, E>(&mut self) -> Result<T, E>
         where T: Parse<Err = E>,
               E: Into<Err>
@@ -94,15 +116,20 @@ impl<'a> Parser<'a> {
         self.next_with(T::parse)
     }
 
+    /* internal only normally */
+    fn advance(&mut self, n_chars: usize) {
+        self.rem_input = &self.rem_input[n_chars..];
+    }
+
     fn match_re(&mut self, re: &Regex) -> Option<&'a str> {
         self.skip_spaces();
-        match re.find(self.0) {
+        match re.find(self.rem_input) {
             Some(mtch) => {
                 if mtch.start() != 0 {
                     None
                 }
                 else {
-                    self.0 = &self.0[mtch.end()..];
+                    self.advance(mtch.end());
                     Some(mtch.as_str())
                 }
             },
@@ -112,8 +139,29 @@ impl<'a> Parser<'a> {
         }
     }
 
+    fn match_keyword(&mut self, keyword: &str) -> Option<()> {
+        self.skip_spaces();
+
+        if !self.rem_input.starts_with(keyword) {
+            return None;
+        }
+
+        /* The next char must be a space, otherwise the keyword did not
+         * actually match ('::>' vs. '::' for example)
+         */
+        match is_space_at(self.rem_input, keyword.len()) {
+            Some(true)  => {},           /* is a space: ok */
+            Some(false) => return None,  /* not a space: not ok */
+            None        => {},           /* end of string: still fine */
+        }
+
+        /* '+1' is still safe even if we reached the end of the string */
+        self.advance(keyword.len()+1);
+        Some(())
+    }
+
     fn skip_spaces(&mut self) {
-        self.0 = self.0.trim_start()
+        self.rem_input = self.rem_input.trim_start()
     }
 
     fn skip_curr_line(&mut self) {
@@ -126,9 +174,71 @@ impl<'a> Parser<'a> {
             /* There was no end of line character.
              * We must be at the end the string.
              */
-            self.0 = "";
+            self.rem_input = "";
         }
     }
+
+    fn open(&mut self, opening_parens: char) -> Result<(), Err> {
+        self.skip_spaces();
+        match str_first(self.rem_input) {
+            Some(c) if c == opening_parens => {
+                self.parens_stack.push(opening_parens);
+                self.advance(1);
+                Ok(())
+            },
+
+            Some(_) =>
+                Err(Err::ExpectedOpeningParenthesis(opening_parens)),
+
+            None =>
+                Err(Err::ReachedEndOfFile)
+        }
+    }
+
+    fn close(&mut self, closing_parens: char) -> Result<(), Err> {
+        self.skip_spaces();
+
+        match str_first(self.rem_input) {
+            Some(c) if c == closing_parens => {
+                self.advance(1);
+            },
+
+            Some(_) =>
+                return Err(Err::ExpectedClosingParenthesis(closing_parens)),
+
+            None =>
+                return Err(Err::ReachedEndOfFile)
+        };
+
+        let opening_parens = match self.parens_stack.pop() {
+            Some(top_parens) =>
+                top_parens,
+
+            None =>
+                return Err(Err::NoMatchingOpeningParenthesis(closing_parens))
+        };
+
+        match (opening_parens, closing_parens) {
+            ('(', ')') => Ok(()),
+            ('{', '}') => Ok(()),
+            ('[', ']') => Ok(()),
+
+            _  =>
+                Err(Err::ParenthesisMismatch(opening_parens, closing_parens))
+        }
+    }
+}
+
+fn str_first(s: &str) -> Option<char> {
+    s.chars().next()
+}
+
+/* Returns None if there are not enough chars in the slice */
+fn is_space_at(s: &str, pos: usize) -> Option<bool> {
+    s.chars()
+        .skip(pos)  /* pos = 0 => skip(0) */
+        .next()
+        .map(|c| c.is_whitespace())
 }
 
 // Error conversion
