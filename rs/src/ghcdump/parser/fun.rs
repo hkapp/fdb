@@ -239,6 +239,14 @@ fn try_handling_err(err: &Error, original_input: &str) -> Result<Option<String>,
                 && is_result_size_of_core_prep(err_pos, original_input)
             => safely_ignore,
 
+        /* ignore type signatures
+         * ex: 'Utils.Prelude.ignore :: forall a. a -> ()'
+         */
+        GenReason::ExpectedKeyword(keyword)
+            if keyword == "="
+                && is_signature_decl(err_pos, original_input)
+            => safely_ignore,
+
         _  =>
             Ok(
                 errpos::report(err_pos, original_input).ok()),  /* FIXME we're losing the
@@ -252,12 +260,20 @@ fn try_handling_err(err: &Error, original_input: &str) -> Result<Option<String>,
         }
     }
 
-    fn is_result_size_of_core_prep(err_pos: &ErrPos, input: &str) -> bool {
+    fn err_str_starts_with(err_pos: &ErrPos, input: &str, prefix: &str) -> bool {
         unsafe {
             match errpos::retrieve_slice(err_pos, input) {
-                Ok(s)  => s.starts_with("size of CorePrep"),
+                Ok(s)  => s.starts_with(prefix),
                 Err(_) => false,
             }
         }
+    }
+
+    fn is_result_size_of_core_prep(err_pos: &ErrPos, input: &str) -> bool {
+        err_str_starts_with(err_pos, input, "size of CorePrep")
+    }
+
+    fn is_signature_decl(err_pos: &ErrPos, input: &str) -> bool {
+        err_str_starts_with(err_pos, input, ":: ")
     }
 }
