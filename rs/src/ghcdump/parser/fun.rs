@@ -1,4 +1,4 @@
-use regex::{Regex, RegexBuilder};
+use regex::Regex;
 use lazy_static::lazy_static;
 
 use super::{Parser, ErrPos};
@@ -187,24 +187,25 @@ fn parse_local(parser: &mut Parser) -> Result<Local, Error> {
 pub struct Global (String);
 
 fn parse_global(parser: &mut Parser) -> Result<Global, Error> {
-    /* FIXME: the next char after this must be a space (or end of line)
-     * Currently we have:
+    /* FIXED: the next char after the name must be a space (or end of line)
+     * Otherwise we get:
      * ExpectedKeyword("="):
      * GHC.Base.
      *         ^
-     * It should not parse the identifier properly.
-     * Could maybe use "lookaheads":
-     *   https://www.regular-expressions.info/lookaround.html
+     * The Rust Regex library does not support "lookaheads".
+     * Instead, add a '\s' at the end of the regex and capture the rest.
      */
     lazy_static! {
         static ref GLOBAL_RE: Regex =
-            Regex::new(r"^([a-zA-Z][a-zA-Z0-9_]*\.)*[a-zA-Z][a-zA-Z0-9_]*")
+            Regex::new(r"^((?:[a-zA-Z][a-zA-Z0-9_]*\.)*[a-zA-Z][a-zA-Z0-9_]*)\s")
                 .unwrap();
     }
-    match parser.match_re(&GLOBAL_RE) {
-        Some(mtch) =>
+    match parser.match_re_captures(&GLOBAL_RE) {
+        Some(groups) => {
+            let mtch = groups.get(1).unwrap();
             Ok(Global(
-                String::from(mtch))),
+                String::from(mtch.as_str())))
+        },
         None =>
             parser_err(parser, Reason::GlobalNotFound)
     }

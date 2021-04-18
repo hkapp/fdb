@@ -157,17 +157,41 @@ impl<'a> Parser<'a> {
         self.rem_input = &self.rem_input[n_chars..];
     }
 
+    /* should be internal */
+    fn advance_match(&mut self, mtch: regex::Match<'a>)
+        -> Option<regex::Match<'a>>
+    {
+        if mtch.start() != 0 {
+            None
+        }
+        else {
+            self.advance(mtch.end());
+            Some(mtch)
+        }
+    }
+
     fn match_re(&mut self, re: &Regex) -> Option<&'a str> {
         self.skip_spaces();
         match re.find(self.rem_input) {
             Some(mtch) => {
-                if mtch.start() != 0 {
-                    None
-                }
-                else {
-                    self.advance(mtch.end());
-                    Some(mtch.as_str())
-                }
+                self.advance_match(mtch)
+                    .map(|m| m.as_str())
+            },
+            None => {
+                None
+            }
+        }
+    }
+
+    fn match_re_captures(&mut self, re: &Regex)
+        -> Option<regex::Captures<'a>>
+    {
+        self.skip_spaces();
+        match re.captures(self.rem_input) {
+            Some(mtch) => {
+                let whole_match = mtch.get(0).unwrap();
+                self.advance_match(whole_match)
+                    .map(|_| mtch)
             },
             None => {
                 None
