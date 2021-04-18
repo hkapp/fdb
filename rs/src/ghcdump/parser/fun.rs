@@ -1,5 +1,6 @@
 use regex::Regex;
 use lazy_static::lazy_static;
+use std::path;
 
 use super::{Parser, ErrPos};
 use super::errpos;
@@ -16,7 +17,7 @@ pub enum Reason {
 
 pub type Prod = Vec<Decl>;
 
-pub fn parse(input: &str) -> Result<Prod, Error> {
+pub fn parse(input: &str, file_name: &path::Path) -> Result<Prod, Error> {
     let mut parser = Parser::new(input);
     let mut declarations = Vec::new();
 
@@ -36,7 +37,11 @@ pub fn parse(input: &str) -> Result<Prod, Error> {
                     Ok(Some(report)) =>  {
                         /* error report generated, print it */
                         /* TODO also print filename and line number */
-                        println!("{:?}:", err.reason);
+                        let line_number = unsafe {
+                            errpos::line_number(&err.pos, input).unwrap()
+                        };
+                        println!("\n{}, line {}:", file_name.display(), line_number);
+                        println!("{:?}", err.reason);
                         println!("{}", report);
                         skip_after_empty_line(&mut parser);
                     },

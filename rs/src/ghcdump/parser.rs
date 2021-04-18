@@ -49,7 +49,7 @@ pub fn parse_all<I: Iterator<Item = DumpFile>>(dump_files: I) -> Result<ParseRes
             DumpFile::FunDump(file_path) => {
                 let file_content = fs::read_to_string(&file_path)
                                     .map_err(convert_io_err)?;
-                let parsed = fun::parse(&file_content)?;
+                let parsed = fun::parse(&file_content, file_path.as_path())?;
                 parsed_funs.push(parsed);
             }
         }

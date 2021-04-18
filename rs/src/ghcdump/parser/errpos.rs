@@ -29,6 +29,14 @@ impl ErrPos {
     pub unsafe fn none() -> ErrPos {
         ErrPos::Point(ptr::null())
     }
+
+    fn start_ptr(&self) -> *const u8 {
+        use ErrPos::*;
+        match self {
+            Point(ptr)          => *ptr,
+            Range(start_ptr, _) => *start_ptr
+        }
+    }
 }
 
 // Report building
@@ -119,11 +127,7 @@ fn build_marker_line(line: &str, ptr_pos: *const u8) -> Result<String, Error> {
 
 #[allow(unused_unsafe)]
 pub unsafe fn is_at_beginning_of_line(err_pos: &ErrPos, full_input: &str) -> Result<bool, Error> {
-    use ErrPos::*;
-    let pos_ptr = match err_pos {
-        Point(ptr)          => *ptr,
-        Range(start_ptr, _) => *start_ptr
-    };
+    let pos_ptr = err_pos.start_ptr();
 
     let curr_pos = unsafe {
         index_in_str(pos_ptr, full_input)?
@@ -157,6 +161,36 @@ pub unsafe fn retrieve_slice<'a, 'b>(err_pos: &'a ErrPos, full_input: &'b str)
     };
 
     Ok(&full_input[begin..end])
+}
+
+// Line number
+
+pub unsafe fn line_number(err_pos: &ErrPos, input: &str) -> Option<usize> {
+    let mut n = 1;
+    let err_ptr = err_pos.start_ptr();
+
+    if index_in_str(err_ptr, input).is_err() {
+        /* The start pointer is not even in the full input */
+        return None;
+    }
+
+    for ln in input.lines() {
+        match index_in_str(err_ptr, ln) {
+            Ok(_) =>                      /* found it, return */
+                return Some(n),
+
+            Err(Error::AfterStrEnd) =>    /* further, keep iterating */
+                n += 1,
+
+            Err(Error::BeforeStrBegin) => /* impossible, raise an error */
+                unreachable!("line_number: unreachable state 1"),
+        }
+    }
+
+    /* We can't reach here: the pointer was validated to be
+     * in the full string.
+     */
+    unreachable!("line_number: unreachable state 2");
 }
 
 // Error
