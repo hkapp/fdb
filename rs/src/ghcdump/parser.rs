@@ -210,6 +210,7 @@ impl<'a> Parser<'a> {
         self.rem_input = self.rem_input.trim_start()
     }
 
+    #[allow(dead_code)]
     fn skip_curr_line(&mut self) {
         /* FIXME this does not support Windows and Mac formats (\r) */
         lazy_static! {
@@ -281,6 +282,24 @@ impl<'a> Parser<'a> {
                         Reason::ParenthesesMismatch(opening_parens, closing_parens),
                         opening_pos))
         }
+    }
+
+    fn control<F>(&mut self, arbitrary_fun: F)
+        where
+            F: FnOnce(&str) -> usize
+    {
+        let skip_n = arbitrary_fun(self.rem_input);
+        if skip_n > 0 {
+            self.advance(skip_n);
+            println!("after control: {}", &self.rem_input[0..20]);
+        }
+    }
+
+    fn peek<F, T>(&mut self, arbitrary_fun: F) -> T
+        where
+            F: FnOnce(&str) -> T
+    {
+        arbitrary_fun(self.rem_input)
     }
 }
 

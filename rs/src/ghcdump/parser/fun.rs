@@ -1,4 +1,4 @@
-use regex::Regex;
+use regex::{Regex, RegexBuilder};
 use lazy_static::lazy_static;
 
 use super::{Parser, ErrPos};
@@ -30,14 +30,15 @@ pub fn parse(input: &str) -> Result<Prod, Error> {
                 match try_handling_err(&err, input) {
                     Ok(None) => {
                         /* no report, just skip it */
-                        parser.skip_curr_line();
+                        skip_after_empty_line(&mut parser);
                     },
 
                     Ok(Some(report)) =>  {
                         /* error report generated, print it */
+                        /* TODO also print filename and line number */
                         println!("{:?}:", err.reason);
                         println!("{}", report);
-                        parser.skip_curr_line();
+                        skip_after_empty_line(&mut parser);
                     },
 
                     Err(fatal_err) => {
@@ -50,6 +51,27 @@ pub fn parse(input: &str) -> Result<Prod, Error> {
     }
 
     parser.finalize(declarations)
+}
+
+fn skip_after_empty_line(parser: &mut Parser) {
+    fn should_skip_again(input: &str) -> bool {
+        super::str_first(input)
+            .map(|c| c == ' ')  /* Dump files indented by space */
+            .unwrap_or(false)   /* end of file: avoid infinite loop */
+    }
+
+    /* Skip lines until we reach unindented code.
+     * This means skipping lines until the first char is not a space.
+     *
+     * Note: trying to match an empty line will fail overall because
+     * the type signature is just above the declaration. So the entire block
+     * signature + declaration would be skipped, and we wouldn't parse anything.
+     */
+    parser.skip_curr_line();
+    while parser.peek(should_skip_again)
+    {
+        parser.skip_curr_line();
+    }
 }
 
 pub fn merge(file_prods: Vec<Prod>) -> Prod {
