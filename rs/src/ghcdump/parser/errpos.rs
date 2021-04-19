@@ -193,6 +193,21 @@ pub unsafe fn line_number(err_pos: &ErrPos, input: &str) -> Option<usize> {
     unreachable!("line_number: unreachable state 2");
 }
 
+// Error composition
+
+/* This is a pretty bad comparison behaviour */
+/* The better approach seems to be to return Option<Ordering>,
+ * where a point ending inside a range doesn't compare.
+ */
+pub unsafe fn compare(err_pos1: &ErrPos, err_pos2: &ErrPos) -> std::cmp::Ordering {
+    /* Should we use the end position here? */
+    let ptr1 = err_pos1.start_ptr();
+    let ptr2 = err_pos2.start_ptr();
+    let diff = ptr1.offset_from(ptr2);
+
+    isize::cmp(&diff, &0)
+}
+
 // Error
 
 pub enum Error {

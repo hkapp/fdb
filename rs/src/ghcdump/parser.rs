@@ -74,6 +74,7 @@ trait Parse
     fn parse<'a>(input: &'a str) -> Result<Parsed<'a, Self>, Self::Error>;
 }
 
+#[derive(Clone)]
 struct Parser<'a > {
     rem_input:    &'a str,     /* remaining input */
     parens_stack: ParensStack  /* stack of open parentheses */

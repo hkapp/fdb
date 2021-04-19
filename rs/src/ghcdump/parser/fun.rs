@@ -115,33 +115,82 @@ fn match_keyword(parser: &mut Parser, keyword: &str) -> Result<(), Error> {
 #[derive(Debug)]
 enum Expr {
     AnonFun(AnonFun),
+    FunCall(FunCall),
     Nothing /* TODO remove */
 }
 
 fn parse_expression(parser: &mut Parser) -> Result<Expr, Error> {
     /* For now we only support anonymous function */
-    parse_anon_fun(parser)
-        .map(|anon_fun| Expr::AnonFun(anon_fun))
+    /* FIXME we need to do a savepoint of the parser */
+    //parse_anon_fun(parser)
+        //.map(|anon_fun| Expr::AnonFun(anon_fun))
+        //.or_else(|_| parse_fun_call(parser)
+                        //.map(|fun_call| Expr::FunCall(fun_call)))
+    return
+        fallback(parser,
+            parse_anon_fun_expr,
+            parse_fun_call_expr);
+
+    fn parse_anon_fun_expr(parser: &mut Parser) -> Result<Expr, Error> {
+        parse_anon_fun(parser)
+            .map(|anon_fun| Expr::AnonFun(anon_fun))
+    }
+
+    fn parse_fun_call_expr(parser: &mut Parser) -> Result<Expr, Error> {
+        parse_fun_call(parser)
+            .map(|fun_call| Expr::FunCall(fun_call))
+    }
+}
+
+fn fallback<F1, F2, T>(parser: &mut Parser, parse_fun1: F1, parse_fun2: F2)
+    -> Result<T, Error>
+    where
+        F1: FnOnce(&mut Parser) -> Result<T, Error>,
+        F2: FnOnce(&mut Parser) -> Result<T, Error>,
+{
+    fn pick_furthest(err1: Error, err2: Error) -> Error {
+        use std::cmp::Ordering::*;
+        let ord = unsafe {
+            errpos::compare(&err1.pos, &err2.pos)
+        };
+        match ord {
+            Greater | Equal => err1,
+            Less            => err2,
+        }
+    }
+
+    let savepoint = parser.clone();
+
+    parse_fun1(parser)
+        .or_else(|prev_err| {
+            *parser = savepoint;
+            parse_fun2(parser)
+                .map_err(|new_err| pick_furthest(prev_err, new_err))
+        })
 }
 
 // AnonFun
 
-type FTypArg = Local;
+type TypeParamF = Local;
+type ValParam = Local;
 
 #[derive(Debug)]
 struct AnonFun {
-    polytyp_args: Vec<FTypArg>,
-    val_args:     Vec<Local>,
-    body:         Box<Expr>  /* avoid recursive type */
+    type_params: Vec<TypeParamF>,
+    val_params:  Vec<ValParam>,
+    body:        Box<Expr>  /* avoid recursive type */
 }
 
 fn parse_anon_fun(parser: &mut Parser) -> Result<AnonFun, Error> {
     match_keyword(parser, "\\")?;
-    let polytyp_args = repeat_match(parser, parse_polytyp_argument);
+    let type_params = repeat_match(parser, parse_fun_type_param);
+    /* TODO parse regular arguments */
+    match_keyword(parser, "->")?;
+    let body = parse_expression(parser)?;
     Ok(AnonFun {
-        polytyp_args,
-        val_args: Vec::new(),
-        body:     Box::new(Expr::Nothing)
+        type_params,
+        val_params: Vec::new(),
+        body:     Box::new(body)
     })
 }
 
@@ -158,12 +207,34 @@ fn repeat_match<T, E, F>(parser: &mut Parser, parse_once: F) -> Vec<T>
 
 type ArgName = Local;
 
-fn parse_polytyp_argument(parser: &mut Parser) -> Result<ArgName, Error> {
+fn parse_fun_type_param(parser: &mut Parser) -> Result<ArgName, Error> {
     parser.open('(')?;
     match_keyword(parser, "@")?;
     let arg_name = parse_local(parser)?;
     parser.close(')')?;
     Ok(arg_name)
+}
+
+// FunCall
+
+type TypeArg = Local;
+type ValArg = Local;
+
+#[derive(Debug)]
+struct FunCall {
+    called_fun: Global,
+    type_args:  Vec<TypeArg>,
+    val_args:   Vec<ValArg>
+}
+
+fn parse_fun_call(parser: &mut Parser) -> Result<FunCall, Error> {
+    let called_fun = parse_global(parser)?;
+    /* TODO parse the arguments */
+    Ok(FunCall {
+        called_fun,
+        type_args: Vec::new(),
+        val_args:  Vec::new()
+    })
 }
 
 // Local
