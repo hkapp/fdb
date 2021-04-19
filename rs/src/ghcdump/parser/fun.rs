@@ -1,6 +1,8 @@
 use regex::Regex;
 use lazy_static::lazy_static;
 use std::path;
+use std::collections::HashMap;
+use std::fmt;
 
 use super::{Parser, ErrPos};
 use super::errpos;
@@ -15,14 +17,93 @@ pub enum Reason {
 
 // Export
 
-pub type Prod = Vec<Decl>;
+pub type Prod = HashMap<Global, Result<Decl, String>>;
 
 pub fn parse(input: &str, file_name: &path::Path) -> Result<Prod, Error> {
     let mut parser = Parser::new(input);
-    let mut declarations = Vec::new();
+    let mut declarations = HashMap::new();
+
+    let mut insert_val = |key, value| {
+        match (declarations.get(&key), &value) {
+            (None, _) => {
+                let _ = declarations.insert(key, value);
+            }
+
+            (Some(Err(prev_err)), Ok(decl)) => {
+                println!("Ignored error {}", prev_err);
+                let _ = declarations.insert(key, value);
+            }
+
+            (Some(Err(prev_err)), Err(_new_err)) => {
+                /* For now we'll keep the new error as it's the most likely
+                 * to be the important one.
+                 */
+                /* TODO we should use the previous filtering system
+                 * to weed out early useless errors and have this case
+                 * be very rare.
+                 */
+                println!("Ignored error {}", prev_err);
+                let _ = declarations.insert(key, value);
+            }
+
+            (Some(Ok(decl)), Err(new_err)) => {
+                /* Ignore the error and keep the value. */
+                println!("Ignored error {}", new_err);
+            }
+
+            (Some(Ok(prev_decl)), Ok(new_decl)) => {
+                /* Duplicate declaration: this shouldn't happen.
+                 * May happen with locals though.
+                 *
+                 * For now, we keep the current value.
+                 */
+                println!("Duplicate definition found for {}", key);
+            }
+        }
+    };
 
     while parser.has_input_left() {
-        match parse_decl(&mut parser) {
+        let parsed_global = parse_global(&mut parser);
+        match parsed_global {
+            /* There is a global symbol.
+             * Try to parse a declaration.
+             */
+            Ok(symbol) => {
+                let parsed_decl = parse_decl(&mut parser, &symbol);
+                match parsed_decl {
+                    /* Successful parsed a declaration.
+                     * Store it in the hashmap.
+                     */
+                    /* TODO use parser.finalize here */
+                    Ok (decl) => {
+                        insert_val(symbol, Ok(decl))
+                    },
+
+                    /* Failed parsing.
+                     * Format the error report and remember
+                     * it in the HashMap.
+                     */
+                    Err(err) => {
+                        let gen_report = format_parsing_error(&err, input, file_name);
+                        match gen_report {
+                            Ok(report) => {
+                                insert_val(symbol, Err(report))
+                            }
+
+                            Err(fatal_err) =>
+                                println!("{}", fatal_err),
+                        }
+                    },
+                }
+            },
+
+            /* We couldn't even parse a symbol at the beginning of the line.
+             * Give up on parsing this declaration.
+             */
+            Err(_) =>
+                skip_after_empty_line(&mut parser),
+        }
+        /*match parse_decl(&mut parser) {
             Ok(decl) => {
                 println!("{:?} ", decl);
                 declarations.push(decl);
@@ -52,7 +133,7 @@ pub fn parse(input: &str, file_name: &path::Path) -> Result<Prod, Error> {
                     }
                 }
             }
-        }
+        }*/
     }
 
     parser.finalize(declarations)
@@ -80,11 +161,23 @@ fn skip_after_empty_line(parser: &mut Parser) {
 }
 
 pub fn merge(file_prods: Vec<Prod>) -> Prod {
-    let mut final_res = Vec::new();
-    for mut decls in file_prods.into_iter() {
-        final_res.append(&mut decls);
+    let mut final_res = HashMap::new();
+
+    for mut file_decls in file_prods.into_iter() {
+        for (new_key, new_value) in file_decls.into_iter() {
+            print!("{} ", &new_key);
+            if final_res.contains_key(&new_key) {
+                println!("Conflicting definitions for {} in different files",
+                        new_key);
+            }
+            else {
+                let dup = final_res.insert(new_key, new_value);
+                assert!(dup.is_none());
+            }
+        }
     }
-    final_res
+
+    return final_res;
 }
 
 // Decl
@@ -95,8 +188,8 @@ pub struct Decl {
     body: Expr
 }
 
-fn parse_decl(parser: &mut Parser) -> Result<Decl, Error> {
-    let fun_name = parse_global(parser)?;
+fn parse_decl(parser: &mut Parser, symbol: &Global) -> Result<Decl, Error> {
+    let fun_name = symbol.clone();
     match_keyword(parser, "=")?;
     let body = parse_expression(parser)?;
     Ok(Decl {
@@ -259,7 +352,7 @@ fn parse_local(parser: &mut Parser) -> Result<Local, Error> {
 
 // Global
 
-#[derive(Debug)]
+#[derive(Debug, Hash, Eq, Ord, PartialOrd, PartialEq, Clone)]
 pub struct Global (String);
 
 fn parse_global(parser: &mut Parser) -> Result<Global, Error> {
@@ -287,12 +380,45 @@ fn parse_global(parser: &mut Parser) -> Result<Global, Error> {
     }
 }
 
+impl fmt::Display for Global {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        self.0.fmt(f)
+    }
+}
+
 // Error convertion
 
 fn parser_err<T>(parser: &mut Parser, reason: Reason) -> Result<T, Error> {
     Err(
         parser.err(
             super::Reason::Fun(reason)))
+}
+
+fn format_parsing_error(err: &Error, original_input: &str, file_name: &path::Path)
+    -> Result<String, String>
+{
+    let fatal_err = ||
+        format!("Fatal error: couldn't generate a report for {:?} in {}",
+            err.reason,
+            file_name.display());
+
+    let line_number = unsafe {
+        errpos::line_number(&err.pos, original_input)
+            .ok_or_else(fatal_err)?
+    };
+
+    let input_marking =
+        errpos::report(&err.pos, original_input)
+            .map_err(|_| fatal_err())?;
+
+    let final_report =
+        format!("{}, line {}:\n{:?}\n{}",
+            file_name.display(),
+            line_number,
+            err.reason,
+            input_marking);
+
+    Ok(final_report)
 }
 
 fn try_handling_err(err: &Error, original_input: &str) -> Result<Option<String>, Error> {
