@@ -54,7 +54,7 @@ pub fn report(err_pos: &ErrPos, full_input: &str) -> Result<String, Error> {
             let report = format!("{}\n{}", curr_line, marker_line);
             Ok(report)
         }
-        Range(ptr_start, ptr_end) =>
+        Range(_ptr_start, _ptr_end) =>
             Ok(String::new()) /* TODO */
     }
 }

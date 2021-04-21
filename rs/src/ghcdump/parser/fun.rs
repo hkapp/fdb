@@ -29,12 +29,12 @@ pub fn parse(input: &str, file_name: &path::Path) -> Result<Prod, Error> {
                 let _ = declarations.insert(key, value);
             }
 
-            (Some(Err(prev_err)), Ok(decl)) => {
+            (Some(Err(prev_err)), Ok(_decl)) => {
                 println!("Ignored error {}", prev_err);
                 let _ = declarations.insert(key, value);
             }
 
-            (Some(Err(prev_err)), Err(new_err)) => {
+            (Some(Err(prev_err)), Err(_new_err)) => {
                 /* Ignore the previous error and replace it
                  * with the new one.
                  */
@@ -42,11 +42,12 @@ pub fn parse(input: &str, file_name: &path::Path) -> Result<Prod, Error> {
                 let _ = declarations.insert(key, value);
             }
 
-            (Some(Ok(decl)), Err(new_err)) => {
-                /* Silently ignore the error and keep the value */
+            (Some(Ok(_decl)), Err(new_err)) => {
+                /* Ignore the error and keep the value */
+                println!("Ignored error {}", new_err);
             }
 
-            (Some(Ok(prev_decl)), Ok(new_decl)) => {
+            (Some(Ok(_prev_decl)), Ok(_new_decl)) => {
                 /* Duplicate declaration: this shouldn't happen.
                  * May happen with locals though.
                  *
@@ -165,7 +166,7 @@ fn skip_after_empty_line(parser: &mut Parser) {
 pub fn merge(file_prods: Vec<Prod>) -> Prod {
     let mut final_res = HashMap::new();
 
-    for mut file_decls in file_prods.into_iter() {
+    for file_decls in file_prods.into_iter() {
         for (new_key, new_value) in file_decls.into_iter() {
             print!("{} ", &new_key);
             if final_res.contains_key(&new_key) {
@@ -211,7 +212,6 @@ fn match_keyword(parser: &mut Parser, keyword: &str) -> Result<(), Error> {
 enum Expr {
     AnonFun(AnonFun),
     FunCall(FunCall),
-    Nothing /* TODO remove */
 }
 
 fn parse_expression(parser: &mut Parser) -> Result<Expr, Error> {
@@ -421,66 +421,6 @@ fn format_parsing_error(err: &Error, original_input: &str, file_name: &path::Pat
             input_marking);
 
     Ok(final_report)
-}
-
-fn try_handling_err(err: &Error, original_input: &str) -> Result<Option<String>, Error> {
-    /* Same as before: we know how to handle GlobalNotFound, but nothing else */
-    use super::Reason as GenReason;
-    let safely_ignore = Ok(None);
-    let err_pos = &err.pos;
-
-    return match &err.reason {
-        /* GlobalNotFound is the first possible error when parsing a declaration.
-         * If it's at the beginning of the line, we just couldn't parse the symbol
-         * in the declaration. This is usually a statement we don't support (e.g. comments).
-         */
-        GenReason::Fun(Reason::GlobalNotFound)
-            if is_at_beginning_of_line(err_pos, original_input)
-            => safely_ignore,
-
-        /* ignore 'Result size of CorePrep' */
-        GenReason::ExpectedKeyword(keyword)
-            if keyword == "="
-                && is_result_size_of_core_prep(err_pos, original_input)
-            => safely_ignore,
-
-        /* ignore type signatures
-         * ex: 'Utils.Prelude.ignore :: forall a. a -> ()'
-         */
-        GenReason::ExpectedKeyword(keyword)
-            if keyword == "="
-                && is_signature_decl(err_pos, original_input)
-            => safely_ignore,
-
-        _  =>
-            Ok(
-                errpos::report(err_pos, original_input).ok()),  /* FIXME we're losing the
-                                                                 * report error here, if any */
-    };
-
-    fn is_at_beginning_of_line(err_pos: &ErrPos, input: &str) -> bool {
-        unsafe {
-            errpos::is_at_beginning_of_line(err_pos, input)
-                .unwrap_or(false)
-        }
-    }
-
-    fn err_str_starts_with(err_pos: &ErrPos, input: &str, prefix: &str) -> bool {
-        unsafe {
-            match errpos::retrieve_slice(err_pos, input) {
-                Ok(s)  => s.starts_with(prefix),
-                Err(_) => false,
-            }
-        }
-    }
-
-    fn is_result_size_of_core_prep(err_pos: &ErrPos, input: &str) -> bool {
-        err_str_starts_with(err_pos, input, "size of CorePrep")
-    }
-
-    fn is_signature_decl(err_pos: &ErrPos, input: &str) -> bool {
-        err_str_starts_with(err_pos, input, ":: ")
-    }
 }
 
 fn ignore_decl_error(err: &Error, original_input: &str) -> bool {

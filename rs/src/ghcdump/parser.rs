@@ -309,6 +309,7 @@ impl<'a> Parser<'a> {
         }
     }
 
+    #[allow(dead_code)]
     fn control<F>(&mut self, arbitrary_fun: F)
         where
             F: FnOnce(&str) -> usize
