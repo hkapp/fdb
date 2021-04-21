@@ -21,7 +21,7 @@ pub type Prod = HashMap<Global, Result<Decl, String>>;
 
 pub fn parse(input: &str, file_name: &path::Path) -> Result<Prod, Error> {
     let mut parser = Parser::new(input);
-    let mut declarations = HashMap::new();
+    let mut declarations: Prod = HashMap::new();
 
     let mut insert_val = |key, value| {
         match (declarations.get(&key), &value) {
@@ -34,21 +34,16 @@ pub fn parse(input: &str, file_name: &path::Path) -> Result<Prod, Error> {
                 let _ = declarations.insert(key, value);
             }
 
-            (Some(Err(prev_err)), Err(_new_err)) => {
-                /* For now we'll keep the new error as it's the most likely
-                 * to be the important one.
-                 */
-                /* TODO we should use the previous filtering system
-                 * to weed out early useless errors and have this case
-                 * be very rare.
+            (Some(Err(prev_err)), Err(new_err)) => {
+                /* Ignore the previous error and replace it
+                 * with the new one.
                  */
                 println!("Ignored error {}", prev_err);
                 let _ = declarations.insert(key, value);
             }
 
             (Some(Ok(decl)), Err(new_err)) => {
-                /* Ignore the error and keep the value. */
-                println!("Ignored error {}", new_err);
+                /* Silently ignore the error and keep the value */
             }
 
             (Some(Ok(prev_decl)), Ok(new_decl)) => {
@@ -74,25 +69,32 @@ pub fn parse(input: &str, file_name: &path::Path) -> Result<Prod, Error> {
                     /* Successful parsed a declaration.
                      * Store it in the hashmap.
                      */
-                    /* TODO use parser.finalize here */
                     Ok (decl) => {
+                        /* TODO use parser.finalize here */
                         insert_val(symbol, Ok(decl))
                     },
 
-                    /* Failed parsing.
-                     * Format the error report and remember
-                     * it in the HashMap.
-                     */
+                    /* Couldn't parse a declaration */
                     Err(err) => {
-                        let gen_report = format_parsing_error(&err, input, file_name);
-                        match gen_report {
-                            Ok(report) => {
-                                insert_val(symbol, Err(report))
-                            }
-
-                            Err(fatal_err) =>
-                                println!("{}", fatal_err),
+                        if ignore_decl_error(&err, input) {
+                            /* Silently ignore this error */
                         }
+                        else {
+                            /* Format the error report and remember
+                             * it in the HashMap.
+                             */
+                            let gen_report = format_parsing_error(&err, input, file_name);
+                            match gen_report {
+                                Ok(report) => {
+                                    insert_val(symbol, Err(report))
+                                }
+
+                                Err(fatal_err) =>
+                                    println!("{}", fatal_err),
+                            }
+                        }
+                        /* In both cases, skip the current line */
+                        skip_after_empty_line(&mut parser);
                     },
                 }
             },
@@ -454,6 +456,65 @@ fn try_handling_err(err: &Error, original_input: &str) -> Result<Option<String>,
             Ok(
                 errpos::report(err_pos, original_input).ok()),  /* FIXME we're losing the
                                                                  * report error here, if any */
+    };
+
+    fn is_at_beginning_of_line(err_pos: &ErrPos, input: &str) -> bool {
+        unsafe {
+            errpos::is_at_beginning_of_line(err_pos, input)
+                .unwrap_or(false)
+        }
+    }
+
+    fn err_str_starts_with(err_pos: &ErrPos, input: &str, prefix: &str) -> bool {
+        unsafe {
+            match errpos::retrieve_slice(err_pos, input) {
+                Ok(s)  => s.starts_with(prefix),
+                Err(_) => false,
+            }
+        }
+    }
+
+    fn is_result_size_of_core_prep(err_pos: &ErrPos, input: &str) -> bool {
+        err_str_starts_with(err_pos, input, "size of CorePrep")
+    }
+
+    fn is_signature_decl(err_pos: &ErrPos, input: &str) -> bool {
+        err_str_starts_with(err_pos, input, ":: ")
+    }
+}
+
+fn ignore_decl_error(err: &Error, original_input: &str) -> bool {
+    /* Same as before: we know how to handle GlobalNotFound, but nothing else */
+    use super::Reason as GenReason;
+    let safely_ignore = true;
+    let dont_ignore = true;
+    let err_pos = &err.pos;
+
+    return match &err.reason {
+        /* GlobalNotFound is the first possible error when parsing a declaration.
+         * If it's at the beginning of the line, we just couldn't parse the symbol
+         * in the declaration. This is usually a statement we don't support (e.g. comments).
+         */
+        GenReason::Fun(Reason::GlobalNotFound)
+            if is_at_beginning_of_line(err_pos, original_input)
+            => safely_ignore,
+
+        /* ignore 'Result size of CorePrep' */
+        GenReason::ExpectedKeyword(keyword)
+            if keyword == "="
+                && is_result_size_of_core_prep(err_pos, original_input)
+            => safely_ignore,
+
+        /* ignore type signatures
+         * ex: 'Utils.Prelude.ignore :: forall a. a -> ()'
+         */
+        GenReason::ExpectedKeyword(keyword)
+            if keyword == "="
+                && is_signature_decl(err_pos, original_input)
+            => safely_ignore,
+
+        /* Any other case */
+        _  => dont_ignore,
     };
 
     fn is_at_beginning_of_line(err_pos: &ErrPos, input: &str) -> bool {
