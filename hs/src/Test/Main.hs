@@ -23,7 +23,7 @@ qry :: IO (Q QVal)
 qry =
   do
     ctx <- initDB
-    readT "foo"
+    readT ctx "foo"
 
 execAndPrint :: (Show a, Storable a) => Q a -> IO ()
 execAndPrint query =

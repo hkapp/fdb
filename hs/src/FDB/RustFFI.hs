@@ -19,48 +19,88 @@ foreign import ccall "&release_ctx"
 
 {- 2. QPlan API -}
 foreign import ccall "readT"
-  rs_readT :: CString -> CSize -> IO (Ptr (QPlan a))
+  rs_readT :: Ptr DbCtx -> CString -> CSize -> IO (Ptr (QPlan a))
+foreign import ccall "filterQ"
+  rs_filterQ :: Ptr DbCtx -> Ptr (QPlan a) -> CString -> CSize -> IO (Ptr (QPlan a))
 foreign import ccall "&release_qplan"
   rs_releaseQPlan :: FunPtr (Ptr (QPlan a) -> IO ())
 
 {- 3. execQ API -}
 foreign import ccall "execQ"
-  rs_execQ :: Ptr (QPlan a) -> Ptr a -> CSize -> IO CSize
+  rs_execQ :: Ptr DbCtx -> Ptr (QPlan a) -> Ptr a -> CSize -> IO CSize
 
 {- The pointer returned by Rust is effectively (void *) -}
 type Void = ();
 newtype QPlan a = QPlan Void;
 
-type Q a = ForeignPtr (QPlan a)
+data Q a = Q (ForeignPtr DbCtx) (ForeignPtr (QPlan a))
 
-makeQ :: Ptr (QPlan a) -> IO (Q a)
-makeQ = newForeignPtr rs_releaseQPlan
+makeQ :: ForeignPtr DbCtx -> Ptr (QPlan a) -> IO (Q a)
+makeQ ctxFgn planRaw =
+  do
+    planFgn <- newForeignPtr rs_releaseQPlan planRaw
+    return (Q ctxFgn planFgn)
+
+makeQFrom :: Q a -> Ptr (QPlan a) -> IO (Q a)
+makeQFrom (Q ctxFgn _) = makeQ ctxFgn
+
+withQ :: Q a -> (Ptr DbCtx -> Ptr (QPlan a) -> IO b) -> IO b
+withQ (Q ctxFgn planFgn) f =
+    withForeignPtr ctxFgn (\ctxRaw ->
+      withForeignPtr planFgn (\planRaw -> (
+        f ctxRaw planRaw)))
+
+transformQ :: Q a -> (Ptr DbCtx -> Ptr (QPlan a) -> IO (Ptr (QPlan a))) -> IO (Q a)
+transformQ qctx f =
+  let
+    wrapF ctxRaw planRaw =
+      (f ctxRaw planRaw) >>= (makeQFrom qctx)
+  in
+    withQ qctx wrapF
 
 type CUInt32 = CUInt
 
 execQ :: (Storable a) => Q a -> IO [a]
-execQ =
+execQ qctx =
   let
     maxRowCount = 5
-    writeToBuf qplanFgn buffer =
-      do
-        resRowCount <- withForeignPtr qplanFgn (wrapExecQ buffer)
-        let intRowCount   = fromIntegral resRowCount
-        let validRowCount = assert (intRowCount >= 0 && intRowCount < maxRowCount) intRowCount
-        peekArray validRowCount buffer
-    wrapExecQ buffer qplan = rs_execQ qplan buffer (fromIntegral maxRowCount)
-  in
-    allocaArray maxRowCount . writeToBuf
 
-readT :: String -> IO (Q a)
-readT tabName =
-  let
-    wrapReadT (strBuf, strLen) =
+    writeToBuf buffer =
       do
-        rawPtr <- rs_readT strBuf (fromIntegral strLen)
-        makeQ rawPtr
+        resRowCount <- withQ qctx (wrapExecQ buffer)
+        peekArray (validate resRowCount) buffer
+
+    wrapExecQ buffer dbctx qplan =
+      rs_execQ dbctx qplan buffer (fromIntegral maxRowCount)
+
+    validate resRowCount =
+        let
+          intRowCount   = fromIntegral resRowCount
+          isValid       = (intRowCount >= 0 && intRowCount < maxRowCount)
+        in
+          assert isValid intRowCount
   in
-    withCStringLen tabName wrapReadT
+    allocaArray maxRowCount writeToBuf
+
+readT :: ForeignPtr DbCtx -> String -> IO (Q a)
+readT ctxFgn tabName =
+  let
+    wrapReadT ctxRaw (strBuf, strLen) =
+      do
+        planRaw <- rs_readT ctxRaw strBuf (fromIntegral strLen)
+        makeQ ctxFgn planRaw
+  in
+    withForeignPtr ctxFgn (\ctxRaw ->
+      withCStringLen tabName (wrapReadT ctxRaw))
+
+filterQ :: Q a -> (a -> Bool) -> String -> IO (Q a)
+filterQ prevQ _ funName =
+  let
+    wrapFilterQ ctxRaw prevPlanRaw (strBuf, strLen) =
+      rs_filterQ ctxRaw prevPlanRaw strBuf (fromIntegral strLen)
+  in
+    transformQ prevQ (\ctxRaw prevPlanRaw ->
+      withCStringLen funName (wrapFilterQ ctxRaw prevPlanRaw))
 
 
 newtype DbCtx = DbCtx Void
