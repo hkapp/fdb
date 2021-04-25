@@ -23,6 +23,7 @@ pub fn parse(input: &str, file_name: &path::Path) -> Prod
 {
     let mut parser = Parser::new(input);
     let mut declarations: Prod = HashMap::new();
+    let verbose_replace = false;
 
     let mut insert_val = |key, value| {
         match (declarations.get(&key), &value) {
@@ -31,7 +32,9 @@ pub fn parse(input: &str, file_name: &path::Path) -> Prod
             }
 
             (Some(Err(prev_err)), Ok(_decl)) => {
-                println!("Ignored error {}", prev_err);
+                if verbose_replace {
+                    println!("Ignored error {}", prev_err);
+                }
                 let _ = declarations.insert(key, value);
             }
 
@@ -39,13 +42,17 @@ pub fn parse(input: &str, file_name: &path::Path) -> Prod
                 /* Ignore the previous error and replace it
                  * with the new one.
                  */
-                println!("Ignored error {}", prev_err);
+                if verbose_replace {
+                    println!("Ignored error {}", prev_err);
+                }
                 let _ = declarations.insert(key, value);
             }
 
             (Some(Ok(_decl)), Err(new_err)) => {
                 /* Ignore the error and keep the value */
-                println!("Ignored error {}", new_err);
+                if verbose_replace {
+                    println!("Ignored error {}", new_err);
+                }
             }
 
             (Some(Ok(_prev_decl)), Ok(_new_decl)) => {
@@ -54,7 +61,9 @@ pub fn parse(input: &str, file_name: &path::Path) -> Prod
                  *
                  * For now, we keep the current value.
                  */
-                println!("Duplicate definition found for {}", key);
+                if verbose_replace {
+                    println!("Duplicate definition found for {}", key);
+                }
             }
         }
     };
