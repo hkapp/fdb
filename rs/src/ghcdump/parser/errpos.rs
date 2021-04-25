@@ -1,3 +1,5 @@
+use std::cmp;
+
 // ErrPos basics
 
 #[derive(Debug, Clone)]
@@ -67,10 +69,16 @@ unsafe fn index_in_str(ptr: *const u8, slice: &str) -> Result<usize, Error> {
     }
 }
 
+fn subslice(full_input: &str, begin_incl: usize, end_incl: usize) -> &str {
+    /* Also include the character at the last mentioned position */
+    let slice_end = cmp::min(end_incl+1, full_input.len());
+    &full_input[begin_incl..slice_end]
+}
+
 fn current_line(full_input: &str, pos: usize) -> &str {
     let begin = current_line_begin(full_input, pos);
     let end = current_line_end(full_input, pos);
-    &full_input[begin..end]
+    subslice(full_input, begin, end)
 }
 
 fn current_line_begin(full_input: &str, pos: usize) -> usize {
@@ -108,7 +116,17 @@ fn build_marker_line(line: &str, ptr_pos: *const u8) -> Result<String, Error> {
     let prefix = " ".repeat(str_pos);
     let indicator = '^';
     /* thread '<unnamed>' panicked at 'attempt to subtract with overflow', src/ghcdump/parser/errpos.rs:106:29 */
-    let suffix = " ".repeat(line.len() - str_pos - 1);
+    //let suffix = " ".repeat(line.len() - str_pos - 1);
+    let suffix = match std::panic::catch_unwind(|| " ".repeat(line.len() - str_pos - 1)) {
+        Ok(s) => s,
+        Err(e) => {
+            println!("Thread panicked!");
+            println!("  line = \"{}\"", line);
+            println!("  line.len() = {}", line.len());
+            println!("  str_pos = {}", str_pos);
+            String::from("")
+        }
+    };
 
     let marker_line = format!("{}{}{}", prefix, indicator, suffix);
     Ok(marker_line)
@@ -151,7 +169,8 @@ pub unsafe fn retrieve_slice<'a, 'b>(err_pos: &'a ErrPos, full_input: &'b str)
         }
     };
 
-    Ok(&full_input[begin..end])
+    let subslice = subslice(full_input, begin, end);
+    Ok(subslice)
 }
 
 // Line number

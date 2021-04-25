@@ -149,6 +149,7 @@ pub fn merge(file_prods: Vec<Prod>) -> Prod {
             }
         }
     }
+    println!("");
 
     return final_res;
 }
@@ -403,7 +404,7 @@ fn ignore_decl_error(err: &Error, original_input: &str) -> bool {
     /* Same as before: we know how to handle GlobalNotFound, but nothing else */
     use super::Reason as GenReason;
     let safely_ignore = true;
-    let dont_ignore = true;
+    let dont_ignore = false;
     let err_pos = &err.pos;
 
     return match &err.reason {
