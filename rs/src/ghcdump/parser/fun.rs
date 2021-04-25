@@ -19,7 +19,8 @@ pub enum Reason {
 
 pub type Prod = HashMap<Global, Result<Decl, String>>;
 
-pub fn parse(input: &str, file_name: &path::Path) -> Result<Prod, Error> {
+pub fn parse(input: &str, file_name: &path::Path) -> Prod
+{
     let mut parser = Parser::new(input);
     let mut declarations: Prod = HashMap::new();
 
@@ -106,40 +107,9 @@ pub fn parse(input: &str, file_name: &path::Path) -> Result<Prod, Error> {
             Err(_) =>
                 skip_after_empty_line(&mut parser),
         }
-        /*match parse_decl(&mut parser) {
-            Ok(decl) => {
-                println!("{:?} ", decl);
-                declarations.push(decl);
-            }
-            Err(err) => {
-                match try_handling_err(&err, input) {
-                    Ok(None) => {
-                        /* no report, just skip it */
-                        skip_after_empty_line(&mut parser);
-                    },
-
-                    Ok(Some(report)) =>  {
-                        /* error report generated, print it */
-                        /* TODO also print filename and line number */
-                        let line_number = unsafe {
-                            errpos::line_number(&err.pos, input).unwrap()
-                        };
-                        println!("\n{}, line {}:", file_name.display(), line_number);
-                        println!("{:?}", err.reason);
-                        println!("{}", report);
-                        skip_after_empty_line(&mut parser);
-                    },
-
-                    Err(fatal_err) => {
-                        /* don't know how to handle this, propagate up */
-                        return Err(fatal_err)
-                    }
-                }
-            }
-        }*/
     }
 
-    parser.finalize(declarations)
+    declarations
 }
 
 fn skip_after_empty_line(parser: &mut Parser) {
@@ -385,6 +355,12 @@ fn parse_global(parser: &mut Parser) -> Result<Global, Error> {
 impl fmt::Display for Global {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         self.0.fmt(f)
+    }
+}
+
+impl Into<String> for Global {
+    fn into(self) -> String {
+        self.0
     }
 }
 

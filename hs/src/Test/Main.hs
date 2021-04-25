@@ -6,7 +6,7 @@ import FDB.Dot (toDotGraph)
 import qualified Utils.Dot as Dot
 
 import Foreign (Storable)
-import FDB.RustFFI(Q, CUInt32, readT, execQ, initDB)
+import FDB.RustFFI(Q, CUInt32, readT, filterQ, execQ, initDB)
 import Data.Foldable(traverse_)
 
 main :: IO ()
@@ -23,7 +23,16 @@ qry :: IO (Q QVal)
 qry =
   do
     ctx <- initDB
-    readT ctx "foo"
+    q1  <- readT ctx "foo"
+    q2  <- filterQ topLevelFilter "Main.topLevelFilter" q1
+    return q2
+
+topLevelFilter :: QVal -> Bool
+topLevelFilter x = x <= 3
+
+topLevelFilter2 x = x <= 3
+
+topLevelFilter3 = (>) 3
 
 execAndPrint :: (Show a, Storable a) => Q a -> IO ()
 execAndPrint query =

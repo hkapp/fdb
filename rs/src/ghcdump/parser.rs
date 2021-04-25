@@ -1,5 +1,4 @@
 use std::fs;
-use std::io;
 use regex::Regex;
 use lazy_static::lazy_static;
 
@@ -9,7 +8,7 @@ mod typ;
 mod fun;
 mod errpos;
 
-pub type ParseResult = (typ::TypInfo, fun::Prod);
+pub use fun::Decl;
 
 #[derive(Debug)]
 pub struct Error {
@@ -32,11 +31,12 @@ pub enum Reason {
     /* More specific parsing errors */
     Fun(fun::Reason),
     /* File / content errors */
-    Io(io::Error),
     ReachedEndOfFile
 }
 
-pub fn parse_all<I: Iterator<Item = DumpFile>>(dump_files: I) -> Result<ParseResult, Error> {
+pub type ParseResult = fun::Prod;
+
+pub fn parse_all<I: Iterator<Item = DumpFile>>(dump_files: I) -> Result<ParseResult, super::FatalError> {
     let mut typ_ctx = typ::TypInfo::default();
     let mut parsed_funs = Vec::new();
 
@@ -48,15 +48,15 @@ pub fn parse_all<I: Iterator<Item = DumpFile>>(dump_files: I) -> Result<ParseRes
 
             DumpFile::FunDump(file_path) => {
                 let file_content = fs::read_to_string(&file_path)
-                                    .map_err(convert_io_err)?;
-                let parsed = fun::parse(&file_content, file_path.as_path())?;
+                                    .map_err(super::convert_io_err)?;
+                let parsed = fun::parse(&file_content, file_path.as_path());
                 parsed_funs.push(parsed);
             }
         }
     }
 
     let final_funs = fun::merge(parsed_funs);
-    Ok((typ_ctx, final_funs))
+    Ok(final_funs)
 }
 
 // Parser helpers
@@ -94,6 +94,7 @@ impl<'a> Parser<'a> {
         self.rem_input.len() > 0
     }
 
+    #[allow(dead_code)]
     fn finalize<T>(mut self, res: T) -> Result<T, Error> {
         if !self.parens_stack.is_empty() {
             let parens_stack = self.parens_stack;
@@ -339,18 +340,4 @@ fn is_space_at(s: &str, pos: usize) -> Option<bool> {
         .skip(pos)  /* pos = 0 => skip(0) */
         .next()
         .map(|c| c.is_whitespace())
-}
-
-// Error conversion
-
-fn convert_io_err(err: io::Error) -> Error {
-    let pos = unsafe {
-        ErrPos::none()
-    };
-    let reason = Reason::Io(err);
-
-    Error {
-        pos,
-        reason
-    }
 }

@@ -2,9 +2,10 @@ use rusqlite as sqlite;
 use std::str;
 use std::slice;
 use std::os::raw::c_char;
-use std::path::Path;
 
-use crate::ghcdump;
+use crate::ctx::DbCtx;
+use crate::objstore;
+use crate::ctx;
 
 #[allow(non_camel_case_types)]
 type c_sizet = usize;
@@ -13,9 +14,10 @@ type QVal = u32;
 
 type QPlanPtr = *const QPlan;
 
+#[derive(Clone)]
 pub enum QPlan {
     Read (String),
-    Filter
+    Filter (objstore::Symbol, Box<QPlan>)
 }
 
 type HsStrBuf = *const c_char;
@@ -37,15 +39,8 @@ unsafe fn to_hs_ptr<T>(val: T) -> *const T {
 }
 
 /* We trust Haskell to return us the same pointer */
-unsafe fn from_hs_ptr<'a, T>(ptr: *const T) -> &'a T {
+unsafe fn borrow_hs_ptr<'a, T>(ptr: *const T) -> &'a T {
     &*ptr
-}
-
-/* This pointer was allocated by Rust, passed to Haskell,
- * and now the Haskell GC determined we need to free it.
- */
-unsafe fn release_hs_ptr<T>(ptr: *mut T) {
-    drop(own_hs_ptr(ptr))
 }
 
 /* We now want Rust to own this memory.
@@ -55,8 +50,15 @@ unsafe fn own_hs_ptr<T>(ptr: *mut T) -> Box<T> {
     Box::from_raw(ptr)
 }
 
+/* This pointer was allocated by Rust, passed to Haskell,
+ * and now the Haskell GC determined we need to free it.
+ */
+unsafe fn release_hs_ptr<T>(ptr: *mut T) {
+    drop(own_hs_ptr(ptr))
+}
+
 #[no_mangle]
-pub extern fn readT(str_buf: *const c_char, str_len: c_sizet) -> QPlanPtr {
+pub extern fn readT(_db: *const DbCtx, str_buf: *const c_char, str_len: c_sizet) -> QPlanPtr {
     let tab_name: &str = unsafe { str_from_hs(str_buf, str_len).unwrap() };
     /* String::from must copy the &str, or we might be in big trouble */
     let qplan = QPlan::Read(String::from(tab_name));
@@ -107,14 +109,16 @@ fn to_sql(qplan: &QPlan) -> String {
     use QPlan::*;
     match qplan {
         Read(tab_name) => format!("SELECT * FROM {};", tab_name),
-        Filter          => String::from("error!")
+        Filter(..)          => String::from("error!")
     }
 }
 
 #[no_mangle]
-pub extern fn execQ(plan_ptr: *const QPlan, buf_ptr: *mut QVal, n_alloc: c_sizet) -> c_sizet {
+pub extern fn execQ(_db: *const DbCtx, plan_ptr: *const QPlan, buf_ptr: *mut QVal, n_alloc: c_sizet)
+    -> c_sizet
+{
     let qplan = unsafe {
-        from_hs_ptr(plan_ptr)
+        borrow_hs_ptr(plan_ptr)
     };
 
     let sql_query = to_sql(qplan);
@@ -127,14 +131,66 @@ pub extern fn execQ(plan_ptr: *const QPlan, buf_ptr: *mut QVal, n_alloc: c_sizet
     query_sqlite_into(&sql_query, res_buf).unwrap()
 }
 
-type DbCtx = ghcdump::Ctx;
+#[no_mangle]
+pub extern fn filterQ(
+    db_ptr:        *const DbCtx,
+    prev_plan_ptr: *const QPlan,
+    fun_name_buf:  *const c_char,
+    fun_name_len:  c_sizet)
+    -> *const QPlan
+{
+    let db_ctx = unsafe {
+        borrow_hs_ptr(db_ptr)
+    };
 
-const GHC_DUMP_DIR: &str = "../hs/bin/src";
+    let prev_plan = unsafe {
+        borrow_hs_ptr(prev_plan_ptr)
+    };
+
+    let fun_name: &str = unsafe {
+        str_from_hs(fun_name_buf, fun_name_len)
+            .unwrap()  /* do something more here? */
+    };
+
+    let symbol =
+        objstore::Symbol::new(
+            String::from(fun_name));
+
+    match db_ctx.obj_store.find(&symbol) {
+        Some(obj) => {
+            match obj.as_result() {
+                /* TODO we should also check that the declaration at the end is actually a function
+                 * and not a constant.
+                 */
+                Ok(_) => (),
+
+                Err(objstore::FailedObj::ParseError(err_msg)) => {
+                    println!("Object \"{}\" has parsing errors:", fun_name);
+                    println!("{}", &err_msg);
+                    panic!("Object \"{}\" had parsing errors", fun_name)
+                }
+            }
+        }
+
+        None =>
+            panic!("Filter function \"{}\" was never defined", fun_name),
+    }
+
+    let prev_plan_cp = Box::new(prev_plan.clone());
+    let new_plan = QPlan::Filter(symbol, prev_plan_cp);
+                        /* need to clone to ensure Haskell doesn't ask
+                         * the same memory to be cleaned twice */
+
+    unsafe {
+        to_hs_ptr(new_plan)
+    }
+}
 
 #[no_mangle]
 pub extern fn initDB() -> *const DbCtx {
-    let ctx = ghcdump::load_everything_under(&Path::new(GHC_DUMP_DIR))
-                .unwrap(); /* TODO handle errors better */
+    let ctx =
+        ctx::init_db()
+            .expect("Failed to initialize the DB");
     unsafe { to_hs_ptr(ctx) }
 }
 

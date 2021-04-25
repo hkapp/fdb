@@ -93,8 +93,8 @@ readT ctxFgn tabName =
     withForeignPtr ctxFgn (\ctxRaw ->
       withCStringLen tabName (wrapReadT ctxRaw))
 
-filterQ :: Q a -> (a -> Bool) -> String -> IO (Q a)
-filterQ prevQ _ funName =
+filterQ :: (a -> Bool) -> String -> Q a -> IO (Q a)
+filterQ _ funName prevQ =
   let
     wrapFilterQ ctxRaw prevPlanRaw (strBuf, strLen) =
       rs_filterQ ctxRaw prevPlanRaw strBuf (fromIntegral strLen)

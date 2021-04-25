@@ -1,5 +1,3 @@
-use std::ptr;
-
 // ErrPos basics
 
 #[derive(Debug, Clone)]
@@ -21,13 +19,6 @@ impl ErrPos {
             Range(..) =>
                 None
         }
-    }
-
-    /* This is unsafe because we're using the NULL pointer.
-     * The resulting ErrPos should never be used to call "report".
-     */
-    pub unsafe fn none() -> ErrPos {
-        ErrPos::Point(ptr::null())
     }
 
     fn start_ptr(&self) -> *const u8 {
