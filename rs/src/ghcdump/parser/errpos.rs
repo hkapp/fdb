@@ -115,18 +115,7 @@ fn build_marker_line(line: &str, ptr_pos: *const u8) -> Result<String, Error> {
 
     let prefix = " ".repeat(str_pos);
     let indicator = '^';
-    /* thread '<unnamed>' panicked at 'attempt to subtract with overflow', src/ghcdump/parser/errpos.rs:106:29 */
-    //let suffix = " ".repeat(line.len() - str_pos - 1);
-    let suffix = match std::panic::catch_unwind(|| " ".repeat(line.len() - str_pos - 1)) {
-        Ok(s) => s,
-        Err(e) => {
-            println!("Thread panicked!");
-            println!("  line = \"{}\"", line);
-            println!("  line.len() = {}", line.len());
-            println!("  str_pos = {}", str_pos);
-            String::from("")
-        }
-    };
+    let suffix = " ".repeat(line.len() - str_pos - 1);
 
     let marker_line = format!("{}{}{}", prefix, indicator, suffix);
     Ok(marker_line)

@@ -2,10 +2,12 @@ use rusqlite as sqlite;
 use std::str;
 use std::slice;
 use std::os::raw::c_char;
+use std::ptr;
+use std::fmt::Debug;
 
 use crate::ctx::DbCtx;
-use crate::objstore;
 use crate::ctx;
+use crate::fql::{self, QPlan};
 
 #[allow(non_camel_case_types)]
 type c_sizet = usize;
@@ -13,12 +15,6 @@ type c_sizet = usize;
 type QVal = u32;
 
 type QPlanPtr = *const QPlan;
-
-#[derive(Clone)]
-pub enum QPlan {
-    Read (String),
-    Filter (objstore::Symbol, Box<QPlan>)
-}
 
 type HsStrBuf = *const c_char;
 type HsStrLen = c_sizet;
@@ -36,6 +32,21 @@ unsafe fn str_from_hs<'a>(str_buf: HsStrBuf, str_len: HsStrLen)
  */
 unsafe fn to_hs_ptr<T>(val: T) -> *const T {
     Box::into_raw(Box::new(val))
+}
+
+/* If there was an error, print it and return NULL.
+ * The Haskell runtime will abort and nicely free the memory.
+ */
+unsafe fn to_hs_res<T, E: Debug>(res: Result<T, E>) -> *const T {
+    match res {
+        Ok(val) =>
+            to_hs_ptr(val),
+
+        Err(e)  => {
+            println!("{:?}", &e);
+            ptr::null()
+        }
+    }
 }
 
 /* We trust Haskell to return us the same pointer */
@@ -152,37 +163,11 @@ pub extern fn filterQ(
             .unwrap()  /* do something more here? */
     };
 
-    let symbol =
-        objstore::Symbol::new(
-            String::from(fun_name));
-
-    match db_ctx.obj_store.find(&symbol) {
-        Some(obj) => {
-            match obj.as_result() {
-                /* TODO we should also check that the declaration at the end is actually a function
-                 * and not a constant.
-                 */
-                Ok(_) => (),
-
-                Err(objstore::FailedObj::ParseError(err_msg)) => {
-                    println!("Object \"{}\" has parsing errors:", fun_name);
-                    println!("{}", &err_msg);
-                    panic!("Object \"{}\" had parsing errors", fun_name)
-                }
-            }
-        }
-
-        None =>
-            panic!("Filter function \"{}\" was never defined", fun_name),
-    }
-
-    let prev_plan_cp = Box::new(prev_plan.clone());
-    let new_plan = QPlan::Filter(symbol, prev_plan_cp);
-                        /* need to clone to ensure Haskell doesn't ask
-                         * the same memory to be cleaned twice */
+    let new_plan = fql::filter(prev_plan, fun_name, db_ctx);
 
     unsafe {
-        to_hs_ptr(new_plan)
+        /* TODO check in Haskell Rust FFI that the pointer is not NULL */
+        to_hs_res(new_plan)
     }
 }
 

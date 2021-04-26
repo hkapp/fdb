@@ -2,6 +2,6 @@
 
 mod ghcdump;
 mod hsffi;
-//mod fql;
+mod fql;
 mod ctx;
 mod objstore;
