@@ -7,6 +7,7 @@ import Foreign (Storable, Ptr, ForeignPtr, FunPtr,
                 newForeignPtr, withForeignPtr)
 import Foreign.C (CSize(..), CUInt)
 import Foreign.C.String (CString, withCStringLen)
+import Foreign.Ptr (nullPtr)
 import Foreign.Marshal.Array (allocaArray, peekArray)
 
 {- Import Rust functions -}
@@ -35,10 +36,14 @@ newtype QPlan a = QPlan Void;
 
 data Q a = Q (ForeignPtr DbCtx) (ForeignPtr (QPlan a))
 
+assertNotNull :: Ptr a -> Ptr a
+assertNotNull ptr = assert (ptr /= nullPtr) ptr
+
 makeQ :: ForeignPtr DbCtx -> Ptr (QPlan a) -> IO (Q a)
 makeQ ctxFgn planRaw =
   do
-    planFgn <- newForeignPtr rs_releaseQPlan planRaw
+    let planValid = assertNotNull planRaw
+    planFgn <- newForeignPtr rs_releaseQPlan planValid
     return (Q ctxFgn planFgn)
 
 makeQFrom :: Q a -> Ptr (QPlan a) -> IO (Q a)
@@ -106,4 +111,9 @@ filterQ _ funName prevQ =
 newtype DbCtx = DbCtx Void
 
 initDB :: IO (ForeignPtr DbCtx)
-initDB = rs_initDB >>= (newForeignPtr rs_releaseCtx)
+initDB =
+  do
+    ctxRaw      <- rs_initDB
+    let ctxValid = assertNotNull ctxRaw
+    ctxFgn      <- newForeignPtr rs_releaseCtx ctxValid
+    return ctxFgn

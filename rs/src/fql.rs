@@ -1,13 +1,18 @@
 use crate::objstore;
 use crate::ctx::DbCtx;
+use crate::objstore::Symbol;
 
 #[derive(Clone)]
 pub enum QPlan {
     Read (String),
-    Filter (objstore::Symbol, Box<QPlan>)
+    Filter (Symbol, Box<QPlan>)
 }
 
-type Error = ();
+#[derive(Debug)]
+pub enum Error {
+  SymbolNotDefined(Symbol),
+  ObjectHasErrors(Symbol)
+}
 
 pub fn filter(prev_plan: &QPlan, fun_name: &str, db_ctx: &DbCtx) -> Result<QPlan, Error> {
     let symbol =
@@ -25,15 +30,15 @@ pub fn filter(prev_plan: &QPlan, fun_name: &str, db_ctx: &DbCtx) -> Result<QPlan
                 Err(objstore::FailedObj::ParseError(err_msg)) => {
                     println!("Object \"{}\" has parsing errors:", fun_name);
                     println!("{}", &err_msg);
-                    /* TODO turn panic into Err(_) */
-                    panic!("Object \"{}\" had parsing errors", fun_name)
+                    return Err(
+                        Error::ObjectHasErrors(symbol));
                 }
             }
         }
 
         None =>
-            /* TODO turn panic into Err(_) */
-            panic!("Filter function \"{}\" was never defined", fun_name),
+            return Err(
+                Error::SymbolNotDefined(symbol)),
     }
 
     let prev_plan_cp = Box::new(prev_plan.clone());
