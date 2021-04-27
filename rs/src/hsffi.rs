@@ -1,4 +1,3 @@
-use rusqlite as sqlite;
 use std::str;
 use std::slice;
 use std::os::raw::c_char;
@@ -7,14 +6,14 @@ use std::fmt::Debug;
 
 use crate::ctx::DbCtx;
 use crate::ctx;
-use crate::fql::{self, QPlan};
+use crate::fql::{self, QPlan, QVal};
 
 #[allow(non_camel_case_types)]
 type c_sizet = usize;
 
-type QVal = u32;
-
 type QPlanPtr = *const QPlan;
+
+/* GENERIC HASKELL FFI HELPERS */
 
 type HsStrBuf = *const c_char;
 type HsStrLen = c_sizet;
@@ -68,78 +67,47 @@ unsafe fn release_hs_ptr<T>(ptr: *mut T) {
     drop(own_hs_ptr(ptr))
 }
 
-#[no_mangle]
-pub extern fn readT(_db: *const DbCtx, str_buf: *const c_char, str_len: c_sizet) -> QPlanPtr {
-    let tab_name: &str = unsafe { str_from_hs(str_buf, str_len).unwrap() };
-    /* String::from must copy the &str, or we might be in big trouble */
-    let qplan = QPlan::Read(String::from(tab_name));
+/* DB FFI */
 
-    unsafe { to_hs_ptr(qplan) }
+#[no_mangle]
+pub extern fn initDB() -> *const DbCtx {
+    let ctx = ctx::init_db();
+
+    unsafe {
+        to_hs_res(ctx)
+    }
 }
+
+#[no_mangle]
+pub extern fn release_ctx(ctx: *mut DbCtx) {
+    println!("Releasing context...");
+
+    unsafe {
+        release_hs_ptr(ctx)
+    }
+}
+
+/* QUERY FFI */
 
 #[no_mangle]
 pub extern fn release_qplan(qptr: *mut QPlan) {
     println!("Releasing the query plan...");
-    unsafe { release_hs_ptr(qptr) }
-}
 
-const DB_FILENAME: &str = "../data/fdb.db";
-
-#[allow(dead_code)]
-fn query_sqlite(query: &str) -> sqlite::Result<Vec<QVal>> {
-    let conn = sqlite::Connection::open(DB_FILENAME)?;
-
-    let mut stmt = conn.prepare(query)?;
-    let mut rows = stmt.query([])?;
-    let mut qres = vec!();
-
-    /* TODO use collect instead */
-    while let Some(row) = rows.next()? {
-        qres.push(row.get(0)?);
-    }
-
-    Ok(qres)
-}
-
-fn query_sqlite_into(query: &str, res_buf: &mut [QVal]) -> sqlite::Result<usize> {
-    let conn = sqlite::Connection::open(DB_FILENAME)?;
-
-    let mut stmt = conn.prepare(query)?;
-    let mut rows = stmt.query([])?;
-    let mut arr_pos = 0;
-
-    while let Some(row) = rows.next()? {
-        res_buf[arr_pos] = row.get(0)?;
-        arr_pos += 1;
-    }
-
-    Ok(arr_pos)
-}
-
-fn to_sql(qplan: &QPlan) -> String {
-    use QPlan::*;
-    match qplan {
-        Read(tab_name) => format!("SELECT * FROM {};", tab_name),
-        Filter(..)          => String::from("error!")
+    unsafe {
+        release_hs_ptr(qptr)
     }
 }
 
 #[no_mangle]
-pub extern fn execQ(_db: *const DbCtx, plan_ptr: *const QPlan, buf_ptr: *mut QVal, n_alloc: c_sizet)
-    -> c_sizet
-{
-    let qplan = unsafe {
-        borrow_hs_ptr(plan_ptr)
-    };
+pub extern fn readT(_db: *const DbCtx, str_buf: *const c_char, str_len: c_sizet) -> QPlanPtr {
+    let tab_name: &str = unsafe { str_from_hs(str_buf, str_len).unwrap() };
+    /* String::from must copy the &str, or we might be in big trouble */
+    /* TODO move to 'fql' */
+    let qplan = QPlan::Read(String::from(tab_name));
 
-    let sql_query = to_sql(qplan);
-    println!("{}", sql_query);
-
-    let res_buf = unsafe {
-        slice::from_raw_parts_mut(buf_ptr, n_alloc)
-    };
-
-    query_sqlite_into(&sql_query, res_buf).unwrap()
+    unsafe {
+        to_hs_ptr(qplan)
+    }
 }
 
 #[no_mangle]
@@ -166,21 +134,25 @@ pub extern fn filterQ(
     let new_plan = fql::filter(prev_plan, fun_name, db_ctx);
 
     unsafe {
-        /* TODO check in Haskell Rust FFI that the pointer is not NULL */
         to_hs_res(new_plan)
     }
 }
 
 #[no_mangle]
-pub extern fn initDB() -> *const DbCtx {
-    let ctx =
-        ctx::init_db()
-            .expect("Failed to initialize the DB");
-    unsafe { to_hs_ptr(ctx) }
-}
+pub extern fn execQ(_db: *const DbCtx, plan_ptr: *const QPlan, buf_ptr: *mut QVal, n_alloc: c_sizet)
+    -> c_sizet
+{
+    let qplan = unsafe {
+        borrow_hs_ptr(plan_ptr)
+    };
 
-#[no_mangle]
-pub extern fn release_ctx(ctx: *mut DbCtx) {
-    println!("Releasing context...");
-    unsafe { release_hs_ptr(ctx) }
+    let res_buf = unsafe {
+        slice::from_raw_parts_mut(buf_ptr, n_alloc)
+    };
+
+    fql::exec_into(&qplan, res_buf)
+        .unwrap_or_else(|e| {
+            println!("{:?}", e);
+            0  /* TODO change to -1? requires moving from usize to isize */
+        })
 }
