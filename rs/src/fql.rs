@@ -73,11 +73,20 @@ fn query_sqlite_into(query: &str, res_buf: &mut [QVal]) -> sqlite::Result<usize>
     Ok(arr_pos)
 }
 
+const COLUMN_NAME: &str = "bar";
+
 fn to_sql(qplan: &QPlan) -> String {
     use QPlan::*;
     match qplan {
-        Read(tab_name) => format!("SELECT * FROM {};", tab_name),
-        Filter(..)     => String::from("error!")
+        Read(tab_name) =>
+            format!("SELECT {} FROM {};", COLUMN_NAME, tab_name),
+
+        Filter(fun_name, rec_qplan) => {
+            let rec_sql = to_sql(&rec_qplan);
+            format!("SELECT {} FROM ({}) WHERE {}",
+                    COLUMN_NAME, rec_sql, fun_name)
+                    /* TODO understand the filter function */
+        },
     }
 }
 
