@@ -37,7 +37,9 @@ newtype QPlan a = QPlan Void;
 data Q a = Q (ForeignPtr DbCtx) (ForeignPtr (QPlan a))
 
 assertNotNull :: Ptr a -> Ptr a
-assertNotNull ptr = assert (ptr /= nullPtr) ptr
+assertNotNull ptr = if (ptr == nullPtr)
+                      then error "Rust returned a NULL pointer"
+                      else ptr
 
 makeQ :: ForeignPtr DbCtx -> Ptr (QPlan a) -> IO (Q a)
 makeQ ctxFgn planRaw =
