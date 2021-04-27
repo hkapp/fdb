@@ -328,6 +328,14 @@ impl<'a> Parser<'a> {
     {
         arbitrary_fun(self.rem_input)
     }
+
+    fn savepoint(&self) -> Self {
+        self.clone()
+    }
+
+    fn restore(&mut self, savepoint: Parser<'a>) {
+        *self = savepoint;
+    }
 }
 
 fn str_first(s: &str) -> Option<char> {

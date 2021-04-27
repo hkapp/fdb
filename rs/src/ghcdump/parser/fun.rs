@@ -217,37 +217,34 @@ fn parse_expression(parser: &mut Parser) -> Result<Expr, Error> {
     }
 }
 
+fn pick_furthest(err1: Error, err2: Error) -> Error {
+    use std::cmp::Ordering::*;
+    let ord = unsafe {
+        errpos::compare(&err1.pos, &err2.pos)
+    };
+    match ord {
+        Greater | Equal => err1,
+        Less            => err2,
+    }
+}
+
 fn fallback<F1, F2, T>(parser: &mut Parser, parse_fun1: F1, parse_fun2: F2)
     -> Result<T, Error>
     where
         F1: FnOnce(&mut Parser) -> Result<T, Error>,
         F2: FnOnce(&mut Parser) -> Result<T, Error>,
 {
-    fn pick_furthest(err1: Error, err2: Error) -> Error {
-        use std::cmp::Ordering::*;
-        let ord = unsafe {
-            errpos::compare(&err1.pos, &err2.pos)
-        };
-        match ord {
-            Greater | Equal => err1,
-            Less            => err2,
-        }
-    }
-
-    let savepoint = parser.clone();
+    let savepoint = parser.savepoint();
 
     parse_fun1(parser)
         .or_else(|prev_err| {
-            *parser = savepoint;
+            parser.restore(savepoint);
             parse_fun2(parser)
                 .map_err(|new_err| pick_furthest(prev_err, new_err))
         })
 }
 
 // AnonFun
-
-type TypeParamF = Local;
-type ValParam = Local;
 
 #[derive(Debug)]
 struct AnonFun {
@@ -258,36 +255,110 @@ struct AnonFun {
 
 fn parse_anon_fun(parser: &mut Parser) -> Result<AnonFun, Error> {
     match_keyword(parser, "\\")?;
-    let type_params = repeat_match(parser, parse_fun_type_param);
-    /* TODO parse regular arguments */
-    match_keyword(parser, "->")?;
+
+    let (type_params, tp_err) = repeat_match(parser, parse_fun_type_param);
+
+    let (val_params,  vp_err) = repeat_match(parser, parse_val_param);
+
+    match_keyword(parser, "->")
+        .map_err(|arr_err| {
+            /* To provide a better error position, pick the furthest
+             * error message out of the three previous errors.
+             */
+            pick_furthest(arr_err,
+                pick_furthest(tp_err, vp_err))
+        })?;
+
     let body = parse_expression(parser)?;
+
     Ok(AnonFun {
         type_params,
-        val_params: Vec::new(),
-        body:     Box::new(body)
+        val_params,
+        body: Box::new(body)
     })
 }
 
-fn repeat_match<T, E, F>(parser: &mut Parser, parse_once: F) -> Vec<T>
+fn repeat_match<T, E, F>(parser: &mut Parser, parse_once: F) -> (Vec<T>, E)
     where
         F: Fn(&mut Parser) -> Result<T, E>
 {
     let mut all_matches = Vec::new();
-    while let Ok(new_match) = parse_once(parser) {
+    let mut savepoint = parser.savepoint();
+    let mut last_parse = parse_once(parser);
+
+    while let Ok(new_match) = last_parse {
         all_matches.push(new_match);
+        savepoint = parser.savepoint();
+        last_parse = parse_once(parser);
     }
-    return all_matches;
+
+    /* Last parsing failed, so we need to restore the parser state */
+    parser.restore(savepoint);
+
+    let last_err = last_parse.map(|_| ()).unwrap_err();
+    (all_matches, last_err)
 }
 
-type ArgName = Local;
+// TypeParamF(unctions)
 
-fn parse_fun_type_param(parser: &mut Parser) -> Result<ArgName, Error> {
+type TypeParamF = Local;
+
+fn parse_fun_type_param(parser: &mut Parser) -> Result<TypeParamF, Error> {
     parser.open('(')?;
     match_keyword(parser, "@")?;
-    let arg_name = parse_local(parser)?;
+    let param_name = parse_local(parser)?;
     parser.close(')')?;
-    Ok(arg_name)
+    Ok(param_name)
+}
+
+// ValParam
+
+#[derive(Debug)]
+struct ValParam {
+    name: Local,
+    typ:  Type
+}
+
+fn parse_val_param(parser: &mut Parser) -> Result<ValParam, Error> {
+    /* '(x_segA [Occ=Once] :: Main.QVal)' */
+    parser.open('(')?;
+    let name = parse_local(parser)?;
+
+    /* Ignore the occurrence mark from GHC */
+    /* '[Occ=Once]' */
+    /* Note: parsing this properly requires adding an option to the Parser,
+     * otherwise it expects that there is a space right after the "=", which
+     * is not the case here.
+     */
+    lazy_static! {
+        static ref OCC_RE: Regex =
+            Regex::new(r"^\[[^\]]*\]")
+                .unwrap();
+    }
+    let _ = parser.match_re(&OCC_RE);
+      /* Note: even if the Regex did not match, we don't care */
+
+    match_keyword(parser, "::")?;
+
+    let param_type = parse_type(parser)?;
+
+    parser.close(')')?;
+
+    let val_param =
+        ValParam {
+            name,
+            typ: param_type
+        };
+    Ok(val_param)
+}
+
+// Type
+
+type Type = Global;
+
+fn parse_type(parser: &mut Parser) -> Result<Type, Error> {
+    /* For now we only support non-argumented types */
+    parse_global(parser)
 }
 
 // FunCall
@@ -346,6 +417,16 @@ fn parse_global(parser: &mut Parser) -> Result<Global, Error> {
      * The Rust Regex library does not support "lookaheads".
      * Instead, add a '\s' at the end of the regex and capture the rest.
      */
+     /* FIXME we actually can only do a 'peek' on the next character.
+      * Otherwise the following fails:
+      * '(x_segA [Occ=Once] :: Main.QVal)'
+      * because there is no space right after the Global.
+      * And we can't gobble up the parenthesis in the Regex, as the enclosing
+      * parsing function does expect it.
+      * So the simplest is to peek right after the basic Regex to see if the
+      * next character is a space or ')' and reject anything else.
+      * This 'peek' operation should be done here.
+      */
     lazy_static! {
         static ref GLOBAL_RE: Regex =
             Regex::new(r"^((?:[a-zA-Z][a-zA-Z0-9_]*\.)*[a-zA-Z][a-zA-Z0-9_]*)\s")
