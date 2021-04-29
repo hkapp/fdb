@@ -321,7 +321,7 @@ impl<'a> Parser<'a> {
         }
     }
 
-    fn peek<F, T>(&mut self, arbitrary_fun: F) -> T
+    fn peek<F, T>(&self, arbitrary_fun: F) -> T
         where
             F: FnOnce(&str) -> T
     {

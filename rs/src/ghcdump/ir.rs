@@ -53,7 +53,7 @@ pub struct LetExpr {
 
 /* Local */
 
-#[derive(Debug)]
+#[derive(Debug, Eq, PartialEq)]
 pub struct Local (pub String);
 
 pub type TypeParamF = Local;

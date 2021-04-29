@@ -14,6 +14,9 @@ pub enum Reason {
     GlobalNotFound,
     LocalNotFound,
     IdentifierNotProperlyEnded,
+    MismatchedLetNames{ signature_name: Local, body_name: Local },
+    MissingGhcAnnotation,
+    KeywordNotAnIdentifier(String),
 }
 
 // Export
@@ -191,8 +194,15 @@ fn parse_expression(parser: &mut Parser) -> Result<Expr, Error> {
                         //.map(|fun_call| Expr::FunCall(fun_call)))
     return
         fallback(parser,
-            parse_anon_fun_expr,
-            parse_fun_call_expr);
+            parse_let_expr,
+            |prs| fallback(prs,
+                parse_anon_fun_expr,
+                parse_fun_call_expr));
+
+    fn parse_let_expr(parser: &mut Parser) -> Result<Expr, Error> {
+        parse_let(parser)
+            .map(|let_expr| Expr::LetExpr(let_expr))
+    }
 
     fn parse_anon_fun_expr(parser: &mut Parser) -> Result<Expr, Error> {
         parse_anon_fun(parser)
@@ -230,6 +240,56 @@ fn fallback<F1, F2, T>(parser: &mut Parser, parse_fun1: F1, parse_fun2: F2)
             parse_fun2(parser)
                 .map_err(|new_err| pick_furthest(prev_err, new_err))
         })
+}
+
+/* TODO cascade macro */
+
+/* LetExpr */
+
+fn parse_let(parser: &mut Parser) -> Result<LetExpr, Error> {
+    /* Example: */
+    /* let {
+         sat_segB [Occ=Once] :: GHC.Integer.Type.Integer
+         [LclId]
+         sat_segB = %expr } in
+       %expr
+     */
+
+    match_keyword(parser, "let")?;
+    parser.open('{')?;
+
+    let var_name = parse_local(parser)?;
+    ignore_decl_annot(parser)?;
+    match_keyword(parser, "::")?;
+    let var_type = parse_type(parser)?;
+
+    ignore_decl_annot(parser)?;
+    let var_name2 = parse_local(parser)?;
+
+    if var_name2 != var_name {
+        /* Some weird parsing scenario where we parsed another
+         * declaration instead of the body declaration?
+         */
+        return parser_err(parser,
+                    Reason::MismatchedLetNames {
+                        signature_name: var_name,
+                        body_name:      var_name2
+                    });
+    }
+
+    match_keyword(parser, "=")?;
+    let body = parse_expression(parser)?;
+
+    parser.close('}')?;
+
+
+    let let_expr =
+        LetExpr {
+            var_name,
+            var_type,
+            body: Box::new(body)
+        };
+    Ok(let_expr)
 }
 
 // AnonFun
@@ -299,17 +359,7 @@ fn parse_val_param(parser: &mut Parser) -> Result<ValParam, Error> {
 
     /* Ignore the occurrence mark from GHC */
     /* '[Occ=Once]' */
-    /* Note: parsing this properly requires adding an option to the Parser,
-     * otherwise it expects that there is a space right after the "=", which
-     * is not the case here.
-     */
-    lazy_static! {
-        static ref OCC_RE: Regex =
-            Regex::new(r"^\[[^\]]*\]")
-                .unwrap();
-    }
-    let _ = parser.match_re(&OCC_RE);
-      /* Note: even if the Regex did not match, we don't care */
+    ignore_decl_annot(parser)?;
 
     match_keyword(parser, "::")?;
 
@@ -323,6 +373,24 @@ fn parse_val_param(parser: &mut Parser) -> Result<ValParam, Error> {
             typ: param_type
         };
     Ok(val_param)
+}
+
+fn ignore_decl_annot(parser: &mut Parser) -> Result<(), Error> {
+    /* Ignore square brackets annotations from GHC */
+    /* ex: '[Occ=Once]' */
+    /* Note: parsing this properly requires adding an option to the Parser,
+     * otherwise it expects that there is a space right after the "=", which
+     * is not the case here.
+     */
+    lazy_static! {
+        static ref OCC_RE: Regex =
+            Regex::new(r"^\[[^\]]*\]")
+                .unwrap();
+    }
+
+    parser.match_re(&OCC_RE)
+        .map(|_| ())
+        .ok_or_else(|| parser_error(parser, Reason::MissingGhcAnnotation))
 }
 
 // Type
@@ -359,6 +427,8 @@ fn parse_local(parser: &mut Parser) -> Result<Local, Error> {
         None =>
             parser_err(parser, Reason::LocalNotFound)
     }
+
+    /* TODO validate the identifier */
 }
 
 // Global
@@ -393,32 +463,41 @@ fn parse_global(parser: &mut Parser) -> Result<Global, Error> {
 
     let global = Global(
                     String::from(global_name));
-    end_identifier(parser, global)
+
+    validate_identifier(parser, global_name, global)
 }
 
 const IDENTIFIER_ENDERS: [char; 3] = [' ', '\n', ')'];
 
-fn end_identifier<T>(parser: &mut Parser, iden_value: T) -> Result<T, Error> {
+fn validate_identifier<T>(parser: &Parser, iden_str: &str, iden_val: T) -> Result<T, Error> {
+    /* 1. Check if the identifier ends correctly */
     let ends_correctly =
         parser.peek(|s|
             (s.len() == 0) || (s.starts_with(&IDENTIFIER_ENDERS[..])));
 
-    if ends_correctly {
-        Ok(iden_value)
+    if !ends_correctly {
+        return parser_err(parser, Reason::IdentifierNotProperlyEnded);
     }
-    else {
-        parser_err(parser, Reason::IdentifierNotProperlyEnded)
+
+    /* 2. Check if the identifier is a keyword */
+    if iden_str == "let" {
+        /* FIXME the error position is wrong here */
+        return parser_err(parser,
+                    Reason::KeywordNotAnIdentifier(
+                        String::from(iden_str)));
     }
+
+    Ok(iden_val)
 }
 
 // Error conversion
 
-fn parser_err<T>(parser: &mut Parser, reason: Reason) -> Result<T, Error> {
+fn parser_err<T>(parser: &Parser, reason: Reason) -> Result<T, Error> {
     Err(
         parser_error(parser, reason))
 }
 
-fn parser_error(parser: &mut Parser, reason: Reason) -> Error {
+fn parser_error(parser: &Parser, reason: Reason) -> Error {
     parser.err(
         super::Reason::Fun(reason))
 }
