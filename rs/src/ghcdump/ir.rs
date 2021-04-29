@@ -14,6 +14,7 @@ pub enum Expr {
     AnonFun(AnonFun),
     FunCall(FunCall),
     LetExpr(LetExpr),
+    LitConv(LitConv)
 }
 
 /* AnonFun */
@@ -49,6 +50,19 @@ pub struct LetExpr {
     pub var_name: Local,
     pub var_type: Type,
     pub body:     Box<Expr>
+}
+
+/* LitConv */
+
+#[derive(Debug)]
+pub struct LitConv {
+    pub conv_fun: Global,
+    pub raw_lit:  RawLit
+}
+
+#[derive(Debug)]
+pub enum RawLit {
+    IntLit(i32)
 }
 
 /* Local */

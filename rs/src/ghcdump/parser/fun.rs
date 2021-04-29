@@ -17,6 +17,9 @@ pub enum Reason {
     MismatchedLetNames{ signature_name: Local, body_name: Local },
     MissingGhcAnnotation,
     KeywordNotAnIdentifier(String),
+    ExpectedIdentifier,
+    ExpectedALiteral,
+    InvalidIntLit { int_lit_str: String, parse_int_err: std::num::ParseIntError },
 }
 
 // Export
@@ -186,18 +189,15 @@ fn match_keyword(parser: &mut Parser, keyword: &str) -> Result<(), Error> {
 // Expr
 
 fn parse_expression(parser: &mut Parser) -> Result<Expr, Error> {
-    /* For now we only support anonymous function */
-    /* FIXME we need to do a savepoint of the parser */
-    //parse_anon_fun(parser)
-        //.map(|anon_fun| Expr::AnonFun(anon_fun))
-        //.or_else(|_| parse_fun_call(parser)
-                        //.map(|fun_call| Expr::FunCall(fun_call)))
+    /* TODO implement the cascade macro */
     return
         fallback(parser,
             parse_let_expr,
             |prs| fallback(prs,
                 parse_anon_fun_expr,
-                parse_fun_call_expr));
+                |prs| fallback(prs,
+                    parse_lit_conv_expr,
+                    parse_fun_call_expr)));
 
     fn parse_let_expr(parser: &mut Parser) -> Result<Expr, Error> {
         parse_let(parser)
@@ -207,6 +207,11 @@ fn parse_expression(parser: &mut Parser) -> Result<Expr, Error> {
     fn parse_anon_fun_expr(parser: &mut Parser) -> Result<Expr, Error> {
         parse_anon_fun(parser)
             .map(|anon_fun| Expr::AnonFun(anon_fun))
+    }
+
+    fn parse_lit_conv_expr(parser: &mut Parser) -> Result<Expr, Error> {
+        parse_lit_conv(parser)
+            .map(|lit_conv| Expr::LitConv(lit_conv))
     }
 
     fn parse_fun_call_expr(parser: &mut Parser) -> Result<Expr, Error> {
@@ -400,6 +405,58 @@ fn parse_type(parser: &mut Parser) -> Result<Type, Error> {
     parse_global(parser)
 }
 
+// LitConv
+
+fn parse_lit_conv(parser: &mut Parser) -> Result<LitConv, Error> {
+    /* ex: 'GHC.Types.I# 13#' */
+    let conv_fun = parse_lit_conv_fun_name(parser)?;
+    let raw_lit = parse_raw_lit(parser)?;
+
+    Ok(LitConv {
+        conv_fun,
+        raw_lit
+    })
+}
+
+fn parse_lit_conv_fun_name(parser: &mut Parser) -> Result<Global, Error> {
+    /* Basically a Global that ends with '#' */
+    lazy_static! {
+        static ref LIT_CONV_FUN_RE: Regex = {
+            let mut regex_pattern = global_regex_pattern();
+            regex_pattern.push_str("#");
+
+            Regex::new(&regex_pattern).unwrap()
+        };
+    }
+
+    parse_identifier(parser, &LIT_CONV_FUN_RE)
+        .map(|s| Global(String::from(s)))
+}
+
+fn parse_raw_lit(parser: &mut Parser) -> Result<RawLit, Error> {
+    /* TODO also parse string literals */
+    lazy_static! {
+        static ref RAW_LIT_INT_RE: Regex = {
+            Regex::new(r"([0-9]+)#").unwrap()
+        };
+    }
+
+    let captured = parser.match_re_captures(&RAW_LIT_INT_RE)
+                    .ok_or_else(|| parser_error(parser, Reason::ExpectedALiteral))?;
+
+    let int_as_str: &str = captured.get(1).unwrap().as_str();
+    let int_lit = int_as_str.parse()
+                    .map_err(|parse_int_err|
+                        parser_error(parser,
+                            Reason::InvalidIntLit {
+                                int_lit_str: String::from(int_as_str),
+                                parse_int_err
+                            }))?;
+                    /* FIXME the error position is wrong here */
+    let raw_lit = RawLit::IntLit(int_lit);
+    Ok(raw_lit)
+}
+
 // FunCall
 
 fn parse_fun_call(parser: &mut Parser) -> Result<FunCall, Error> {
@@ -440,31 +497,38 @@ const PKG_BODY_PAT:  &str = r"[a-zA-Z0-9_]";
 
 const VAR_START_PAT:     &str = IDEN_START_PAT;
 const VAR_BODY_PAT:      &str = r"[a-zA-Z0-9_]";
-const VAR_LAST_SPECIAL:  &str = r"[#]";
 
-/* TODO check that the identifier isn't a keyword (e.g. 'let') */
+fn global_regex_pattern() -> String {
+    format!(r"^(?:{}{}*\.)*{}{}*",
+            PKG_START_PAT, PKG_BODY_PAT,
+            VAR_START_PAT, VAR_BODY_PAT)
+}
+
 fn parse_global(parser: &mut Parser) -> Result<Global, Error> {
     lazy_static! {
         static ref GLOBAL_RE: Regex = {
-            let regex_str = format!(r"^(?:{}{}*\.)*{}{}*{}?",
-                                    PKG_START_PAT, PKG_BODY_PAT,
-                                    VAR_START_PAT, VAR_BODY_PAT, VAR_LAST_SPECIAL);
+            let regex_str = global_regex_pattern();
             //Regex::new(r"^(?:[a-zA-Z][a-zA-Z0-9_]*\.)*[a-zA-Z][a-zA-Z0-9_]*")
             Regex::new(&regex_str).unwrap()
         };
     }
-    let global_name = parser.match_re(&GLOBAL_RE)
-                        .ok_or_else(|| parser_error(parser, Reason::GlobalNotFound))?;
 
-    let global = Global(
-                    String::from(global_name));
+    parse_identifier(parser, &GLOBAL_RE)
+        .map(|s| Global(String::from(s)))
+        .map_err(|_| parser_error(parser, Reason::GlobalNotFound))
+}
 
-    validate_identifier(parser, global_name, global)
+fn parse_identifier<'a, 'b>(parser: &'a mut Parser, regex: &'b Regex) -> Result<&'a str, Error> {
+    let raw_iden = parser.match_re(regex)
+                        .ok_or_else(|| parser_error(parser, Reason::ExpectedIdentifier))?;
+
+    validate_identifier(parser, raw_iden)
+        .map(|_| raw_iden)
 }
 
 const IDENTIFIER_ENDERS: [char; 3] = [' ', '\n', ')'];
 
-fn validate_identifier<T>(parser: &Parser, iden_str: &str, iden_val: T) -> Result<T, Error> {
+fn validate_identifier(parser: &Parser, iden_str: &str) -> Result<(), Error> {
     /* 1. Check if the identifier ends correctly */
     /* FIXED: the next char after the name must be a space (or end of line)
      * Otherwise we get:
@@ -491,7 +555,7 @@ fn validate_identifier<T>(parser: &Parser, iden_str: &str, iden_val: T) -> Resul
                         String::from(iden_str)));
     }
 
-    Ok(iden_val)
+    Ok(())
 }
 
 // Error conversion

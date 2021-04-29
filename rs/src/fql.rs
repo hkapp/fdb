@@ -121,6 +121,7 @@ fn inline_filter_sql(fun_name: &Symbol, db_ctx: &DbCtx) -> Result<String, Runtim
          */
         FunCall(_) => Err("Function call"),
         LetExpr(_) => Err("Let expression"),
+        LitConv(_) => Err("Literal conversion"),
     };
 
     let fun_body = mb_body.map_err(|what|
