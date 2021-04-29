@@ -13,7 +13,7 @@ pub struct Obj {
     body: Result<ValidObj, FailedObj>
 }
 
-pub type ValidObj = ghcdump::Decl;
+pub type ValidObj = ghcdump::ir::Decl;
 
 pub enum FailedObj {
     ParseError(ghcdump::ParseError)

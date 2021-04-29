@@ -2,7 +2,7 @@ use crate::objstore;
 use crate::ctx::DbCtx;
 use crate::objstore::Symbol;
 use rusqlite as sqlite;
-use crate::ghcdump::Decl;
+use crate::ghcdump::ir;
 
 #[derive(Clone)]
 pub enum QPlan {
@@ -15,7 +15,8 @@ pub type QVal = u32;
 #[derive(Debug)]
 pub enum CompileError {
   SymbolNotDefined(Symbol),
-  ObjectHasErrors(Symbol)
+  ObjectHasErrors(Symbol),
+  NotAFunction { symbol: Symbol, resolves_to: String },
 }
 
 /* QUERY CONSTRUCTION */
@@ -82,7 +83,7 @@ fn query_sqlite_into(query: &str, res_buf: &mut [QVal]) -> Result<usize, Runtime
 
 const COLUMN_NAME: &str = "bar";
 
-fn get_decl<'a, 'b>(symbol: &'a Symbol, db_ctx: &'b DbCtx) -> Result<&'b Decl, CompileError> {
+fn get_decl<'a, 'b>(symbol: &'a Symbol, db_ctx: &'b DbCtx) -> Result<&'b ir::Decl, CompileError> {
     /* Retrieve the declaration */
     match db_ctx.obj_store.find(symbol) {
         Some(obj) => {
@@ -108,9 +109,17 @@ fn get_decl<'a, 'b>(symbol: &'a Symbol, db_ctx: &'b DbCtx) -> Result<&'b Decl, C
 }
 
 fn inline_filter_sql(fun_name: &Symbol, db_ctx: &DbCtx) -> Result<String, RuntimeError> {
-    get_decl(fun_name, db_ctx)
-        .map(|_| String::from("a"))
-        .map_err(|e| e.into())
+    let fun_decl = get_decl(fun_name, db_ctx)?;
+    use ir::Expr::*;
+    match fun_decl.body {
+        AnonFun(_) => /* TODO do something */Ok(String::from("a")),
+        FunCall(_) => Err(
+                        RuntimeError::CompileError(
+                            CompileError::NotAFunction {
+                                symbol:      fun_name.clone(),
+                                resolves_to: String::from("Function call")
+                            })),
+    }
 }
 
 fn rec_to_sql(qplan: &QPlan, db_ctx: &DbCtx) -> Result<String, RuntimeError> {

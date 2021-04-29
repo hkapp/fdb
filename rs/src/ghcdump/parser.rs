@@ -8,8 +8,6 @@ mod typ;
 mod fun;
 mod errpos;
 
-pub use fun::Decl;
-
 #[derive(Debug)]
 pub struct Error {
     pos:    ErrPos,

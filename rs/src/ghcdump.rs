@@ -3,6 +3,7 @@ use std::io;
 
 mod files;
 mod parser;
+pub mod ir;
 
 #[derive(Debug)]
 pub enum FatalError {
@@ -10,8 +11,6 @@ pub enum FatalError {
 }
 
 pub type ParseError = String;
-
-pub use parser::Decl;
 
 const GHC_DUMP_DIR: &str = "../hs/bin/src";
 

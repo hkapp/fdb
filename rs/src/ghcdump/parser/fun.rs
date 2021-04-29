@@ -2,10 +2,10 @@ use regex::Regex;
 use lazy_static::lazy_static;
 use std::path;
 use std::collections::HashMap;
-use std::fmt;
 
 use super::{Parser, ErrPos};
 use super::errpos;
+use crate::ghcdump::ir::*;
 
 type Error = super::Error;
 
@@ -166,12 +166,6 @@ pub fn merge(file_prods: Vec<Prod>) -> Prod {
 
 // Decl
 
-#[derive(Debug)]
-pub struct Decl {
-    name: Global,
-    body: Expr
-}
-
 fn parse_decl(parser: &mut Parser, symbol: &Global) -> Result<Decl, Error> {
     let fun_name = symbol.clone();
     match_keyword(parser, "=")?;
@@ -187,13 +181,6 @@ fn match_keyword(parser: &mut Parser, keyword: &str) -> Result<(), Error> {
 }
 
 // Expr
-
-/* TODO consider type Expr = Box<Expr_> */
-#[derive(Debug)]
-enum Expr {
-    AnonFun(AnonFun),
-    FunCall(FunCall),
-}
 
 fn parse_expression(parser: &mut Parser) -> Result<Expr, Error> {
     /* For now we only support anonymous function */
@@ -247,13 +234,6 @@ fn fallback<F1, F2, T>(parser: &mut Parser, parse_fun1: F1, parse_fun2: F2)
 
 // AnonFun
 
-#[derive(Debug)]
-struct AnonFun {
-    type_params: Vec<TypeParamF>,
-    val_params:  Vec<ValParam>,
-    body:        Box<Expr>  /* avoid recursive type */
-}
-
 fn parse_anon_fun(parser: &mut Parser) -> Result<AnonFun, Error> {
     match_keyword(parser, "\\")?;
 
@@ -302,8 +282,6 @@ fn repeat_match<T, E, F>(parser: &mut Parser, parse_once: F) -> (Vec<T>, E)
 
 // TypeParamF(unctions)
 
-type TypeParamF = Local;
-
 fn parse_fun_type_param(parser: &mut Parser) -> Result<TypeParamF, Error> {
     parser.open('(')?;
     match_keyword(parser, "@")?;
@@ -313,12 +291,6 @@ fn parse_fun_type_param(parser: &mut Parser) -> Result<TypeParamF, Error> {
 }
 
 // ValParam
-
-#[derive(Debug)]
-struct ValParam {
-    name: Local,
-    typ:  Type
-}
 
 fn parse_val_param(parser: &mut Parser) -> Result<ValParam, Error> {
     /* '(x_segA [Occ=Once] :: Main.QVal)' */
@@ -355,24 +327,12 @@ fn parse_val_param(parser: &mut Parser) -> Result<ValParam, Error> {
 
 // Type
 
-type Type = Global;
-
 fn parse_type(parser: &mut Parser) -> Result<Type, Error> {
     /* For now we only support non-argumented types */
     parse_global(parser)
 }
 
 // FunCall
-
-type TypeArg = Local;
-type ValArg = Local;
-
-#[derive(Debug)]
-struct FunCall {
-    called_fun: Global,
-    type_args:  Vec<TypeArg>,
-    val_args:   Vec<ValArg>
-}
 
 fn parse_fun_call(parser: &mut Parser) -> Result<FunCall, Error> {
     let called_fun = parse_global(parser)?;
@@ -385,9 +345,6 @@ fn parse_fun_call(parser: &mut Parser) -> Result<FunCall, Error> {
 }
 
 // Local
-
-#[derive(Debug)]
-struct Local (String);
 
 fn parse_local(parser: &mut Parser) -> Result<Local, Error> {
     lazy_static! {
@@ -405,9 +362,6 @@ fn parse_local(parser: &mut Parser) -> Result<Local, Error> {
 }
 
 // Global
-
-#[derive(Debug, Hash, Eq, Ord, PartialOrd, PartialEq, Clone)]
-pub struct Global (String);
 
 fn parse_global(parser: &mut Parser) -> Result<Global, Error> {
     /* FIXED: the next char after the name must be a space (or end of line)
@@ -456,19 +410,7 @@ fn end_identifier<T>(parser: &mut Parser, iden_value: T) -> Result<T, Error> {
     }
 }
 
-impl fmt::Display for Global {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        self.0.fmt(f)
-    }
-}
-
-impl Into<String> for Global {
-    fn into(self) -> String {
-        self.0
-    }
-}
-
-// Error convertion
+// Error conversion
 
 fn parser_err<T>(parser: &mut Parser, reason: Reason) -> Result<T, Error> {
     Err(
