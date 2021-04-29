@@ -6,12 +6,17 @@ pub struct Decl {
     pub body: Expr
 }
 
+/* Expr */
+
 /* TODO consider type Expr = Box<Expr_> */
 #[derive(Debug)]
 pub enum Expr {
     AnonFun(AnonFun),
     FunCall(FunCall),
+    LetExpr(LetExpr),
 }
+
+/* AnonFun */
 
 #[derive(Debug)]
 pub struct AnonFun {
@@ -20,17 +25,30 @@ pub struct AnonFun {
     pub body:        Box<Expr>  /* avoid recursive type */
 }
 
+/* ValParam */
+
 #[derive(Debug)]
 pub struct ValParam {
     pub name: Local,
     pub typ:  Type
 }
 
+/* FunCall */
+
 #[derive(Debug)]
 pub struct FunCall {
     pub called_fun: Global,
     pub type_args:  Vec<TypeArg>,
     pub val_args:   Vec<ValArg>
+}
+
+/* LetExpr */
+
+#[derive(Debug)]
+pub struct LetExpr {
+    pub var_name: Local,
+    pub var_type: Type,
+    pub body:     Box<Expr>
 }
 
 /* Local */

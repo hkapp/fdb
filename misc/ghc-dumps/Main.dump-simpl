@@ -1,0 +1,175 @@
+
+==================== Tidy Core ====================
+2021-04-29 17:10:32.276122651 UTC
+
+Result size of Tidy Core
+  = {terms: 106, types: 134, coercions: 0, joins: 0/0}
+
+-- RHS size: {terms: 10, types: 9, coercions: 0, joins: 0/0}
+topLevelFilter2 :: forall a. (Ord a, Num a) => a -> Bool
+[GblId, Arity=3, Caf=NoCafRefs, Unf=OtherCon []]
+topLevelFilter2
+  = \ (@ a_aedN)
+      ($dOrd_aedV :: Ord a_aedN)
+      ($dNum_aedW :: Num a_aedN)
+      (x_ae2o :: a_aedN) ->
+      <= @ a_aedN $dOrd_aedV x_ae2o (fromInteger @ a_aedN $dNum_aedW 3)
+
+-- RHS size: {terms: 3, types: 1, coercions: 0, joins: 0/0}
+topLevelFilter3 :: Integer -> Bool
+[GblId]
+topLevelFilter3
+  = > @ Integer integer-gmp-1.0.2.0:GHC.Integer.Type.$fOrdInteger 3
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+fileName :: [Char]
+[GblId]
+fileName = GHC.CString.unpackCString# "out.dot"#
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+query
+  :: FDB.GADTForall.Q
+       ((Char, Char),
+        (FDB.MoreTypes.Decimal, FDB.MoreTypes.Decimal,
+         FDB.MoreTypes.Decimal, FDB.MoreTypes.Decimal,
+         FDB.MoreTypes.Decimal, FDB.MoreTypes.Decimal,
+         FDB.MoreTypes.Decimal, Integer))
+[GblId]
+query = q1 (GHC.Types.I# 13#)
+
+-- RHS size: {terms: 2, types: 13, coercions: 0, joins: 0/0}
+dotGraph :: Dot.DotGraph
+[GblId]
+dotGraph
+  = toDotGraph
+      @ ((Char, Char),
+         (FDB.MoreTypes.Decimal, FDB.MoreTypes.Decimal,
+          FDB.MoreTypes.Decimal, FDB.MoreTypes.Decimal,
+          FDB.MoreTypes.Decimal, FDB.MoreTypes.Decimal,
+          FDB.MoreTypes.Decimal, Integer))
+      query
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+text :: String
+[GblId]
+text = Dot.prettyPrint dotGraph
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+queryTest :: IO ()
+[GblId]
+queryTest = writeFile fileName text
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$trModule1_refm :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule1_refm = "main"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$trModule2_regi :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule2_regi = GHC.Types.TrNameS $trModule1_refm
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$trModule3_regj :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule3_regj = "Main"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$trModule4_regk :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+$trModule4_regk = GHC.Types.TrNameS $trModule3_regj
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+Main.$trModule :: GHC.Types.Module
+[GblId, Caf=NoCafRefs, Unf=OtherCon []]
+Main.$trModule = GHC.Types.Module $trModule2_regi $trModule4_regk
+
+-- RHS size: {terms: 16, types: 20, coercions: 0, joins: 0/0}
+execAndPrint :: forall a. (Show a, Storable a) => Q a -> IO ()
+[GblId, Arity=3, Unf=OtherCon []]
+execAndPrint
+  = \ (@ a_aeaJ)
+      ($dShow_aeaL :: Show a_aeaJ)
+      ($dStorable_aeaM :: Storable a_aeaJ)
+      (query1_ae2p :: Q a_aeaJ) ->
+      >>=
+        @ IO
+        GHC.Base.$fMonadIO
+        @ [a_aeaJ]
+        @ ()
+        (execQ @ a_aeaJ $dStorable_aeaM query1_ae2p)
+        (\ (resList_ae2q :: [a_aeaJ]) ->
+           traverse_
+             @ []
+             @ IO
+             @ a_aeaJ
+             @ ()
+             Data.Foldable.$fFoldable[]
+             GHC.Base.$fApplicativeIO
+             (print @ a_aeaJ $dShow_aeaL)
+             resList_ae2q)
+
+-- RHS size: {terms: 7, types: 3, coercions: 0, joins: 0/0}
+topLevelFilter :: QVal -> Bool
+[GblId, Arity=1, Unf=OtherCon []]
+topLevelFilter
+  = \ (x_ae2n :: QVal) ->
+      <=
+        @ QVal
+        Foreign.C.Types.$fOrdCUInt
+        x_ae2n
+        (fromInteger @ QVal Foreign.C.Types.$fNumCUInt 3)
+
+-- RHS size: {terms: 22, types: 26, coercions: 0, joins: 0/0}
+qry :: IO (Q QVal)
+[GblId]
+qry
+  = >>=
+      @ IO
+      GHC.Base.$fMonadIO
+      @ (GHC.ForeignPtr.ForeignPtr FDB.RustFFI.DbCtx)
+      @ (Q QVal)
+      initDB
+      (\ (ctx_ae2k :: GHC.ForeignPtr.ForeignPtr FDB.RustFFI.DbCtx) ->
+         >>=
+           @ IO
+           GHC.Base.$fMonadIO
+           @ (Q QVal)
+           @ (Q QVal)
+           (readT @ QVal ctx_ae2k (GHC.CString.unpackCString# "foo"#))
+           (\ (q1_ae2l :: Q QVal) ->
+              >>=
+                @ IO
+                GHC.Base.$fMonadIO
+                @ (Q QVal)
+                @ (Q QVal)
+                (filterQ
+                   @ QVal
+                   topLevelFilter
+                   (GHC.CString.unpackCString# "Main.topLevelFilter"#)
+                   q1_ae2l)
+                (\ (q2_ae2m :: Q QVal) ->
+                   return @ IO GHC.Base.$fMonadIO @ (Q QVal) q2_ae2m)))
+
+-- RHS size: {terms: 6, types: 5, coercions: 0, joins: 0/0}
+execQTest :: IO ()
+[GblId]
+execQTest
+  = >>=
+      @ IO
+      GHC.Base.$fMonadIO
+      @ (Q QVal)
+      @ ()
+      qry
+      (execAndPrint
+         @ QVal Foreign.C.Types.$fShowCUInt Foreign.C.Types.$fStorableCUInt)
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+main :: IO ()
+[GblId]
+main = execQTest
+
+-- RHS size: {terms: 2, types: 1, coercions: 0, joins: 0/0}
+:Main.main :: IO ()
+[GblId]
+:Main.main = GHC.TopHandler.runMainIO @ () execQTest

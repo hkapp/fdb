@@ -363,6 +363,7 @@ fn parse_local(parser: &mut Parser) -> Result<Local, Error> {
 
 // Global
 
+/* TODO check that the identifier isn't a keyword (e.g. 'let') */
 fn parse_global(parser: &mut Parser) -> Result<Global, Error> {
     /* FIXED: the next char after the name must be a space (or end of line)
      * Otherwise we get:

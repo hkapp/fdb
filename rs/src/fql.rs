@@ -111,15 +111,26 @@ fn get_decl<'a, 'b>(symbol: &'a Symbol, db_ctx: &'b DbCtx) -> Result<&'b ir::Dec
 fn inline_filter_sql(fun_name: &Symbol, db_ctx: &DbCtx) -> Result<String, RuntimeError> {
     let fun_decl = get_decl(fun_name, db_ctx)?;
     use ir::Expr::*;
-    match fun_decl.body {
-        AnonFun(_) => /* TODO do something */Ok(String::from("a")),
-        FunCall(_) => Err(
+    let mb_body = match &fun_decl.body {
+        /* This is the only accepted case */
+        AnonFun(anon_fun) =>
+            Ok(&anon_fun.body),
+
+        /* Every other case is an error.
+         * Gather exactly what it was for the error message.
+         */
+        FunCall(_) => Err("Function call"),
+        LetExpr(_) => Err("Let expression"),
+    };
+
+    let fun_body = mb_body.map_err(|what|
                         RuntimeError::CompileError(
                             CompileError::NotAFunction {
                                 symbol:      fun_name.clone(),
-                                resolves_to: String::from("Function call")
-                            })),
-    }
+                                resolves_to: String::from(what)
+                            }))?;
+
+    Ok(format!("{:?}", fun_body))
 }
 
 fn rec_to_sql(qplan: &QPlan, db_ctx: &DbCtx) -> Result<String, RuntimeError> {
