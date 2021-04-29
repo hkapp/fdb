@@ -2,6 +2,7 @@ use crate::objstore;
 use crate::ctx::DbCtx;
 use crate::objstore::Symbol;
 use rusqlite as sqlite;
+use crate::ghcdump::Decl;
 
 #[derive(Clone)]
 pub enum QPlan {
@@ -81,31 +82,35 @@ fn query_sqlite_into(query: &str, res_buf: &mut [QVal]) -> Result<usize, Runtime
 
 const COLUMN_NAME: &str = "bar";
 
-fn inline_filter_sql(fun_name: &Symbol, db_ctx: &DbCtx) -> Result<String, RuntimeError> {
+fn get_decl<'a, 'b>(symbol: &'a Symbol, db_ctx: &'b DbCtx) -> Result<&'b Decl, CompileError> {
     /* Retrieve the declaration */
-    match db_ctx.obj_store.find(fun_name) {
+    match db_ctx.obj_store.find(symbol) {
         Some(obj) => {
             match obj.as_result() {
                 /* TODO we should also check that the declaration at the end is actually a function
                  * and not a constant.
                  */
-                Ok(_) => Ok(String::from("")),
+                Ok(decl) => Ok(decl),
 
                 Err(objstore::FailedObj::ParseError(err_msg)) => {
-                    println!("Object \"{}\" has parsing errors:", fun_name);
+                    println!("Object \"{}\" has parsing errors:", symbol);
                     println!("{}", &err_msg);
                     return Err(
-                        RuntimeError::CompileError(
-                            CompileError::ObjectHasErrors(fun_name.clone())));
+                        CompileError::ObjectHasErrors(symbol.clone()));
                 }
             }
         }
 
         None =>
             return Err(
-                RuntimeError::CompileError(
-                    CompileError::SymbolNotDefined(fun_name.clone()))),
+                CompileError::SymbolNotDefined(symbol.clone())),
     }
+}
+
+fn inline_filter_sql(fun_name: &Symbol, db_ctx: &DbCtx) -> Result<String, RuntimeError> {
+    get_decl(fun_name, db_ctx)
+        .map(|_| String::from("a"))
+        .map_err(|e| e.into())
 }
 
 fn rec_to_sql(qplan: &QPlan, db_ctx: &DbCtx) -> Result<String, RuntimeError> {
@@ -146,5 +151,11 @@ pub fn exec_into(qplan: &QPlan, db_ctx: &DbCtx, res_buf: &mut [QVal]) -> Result<
 impl From<sqlite::Error> for RuntimeError {
     fn from(sql_err: sqlite::Error) -> Self {
         RuntimeError::SqliteError(sql_err)
+    }
+}
+
+impl From<CompileError> for RuntimeError {
+    fn from(err: CompileError) -> Self {
+        RuntimeError::CompileError(err)
     }
 }
