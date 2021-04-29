@@ -185,6 +185,7 @@ impl<'a> Parser<'a> {
         }
     }
 
+    #[allow(dead_code)]
     fn match_re_captures(&mut self, re: &Regex)
         -> Option<regex::Captures<'a>>
     {
