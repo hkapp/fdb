@@ -433,30 +433,25 @@ fn parse_local(parser: &mut Parser) -> Result<Local, Error> {
 
 // Global
 
+const IDEN_START_PAT: &str = r"[a-zA-Z]";
+
+const PKG_START_PAT: &str = IDEN_START_PAT;
+const PKG_BODY_PAT:  &str = r"[a-zA-Z0-9_]";
+
+const VAR_START_PAT:     &str = IDEN_START_PAT;
+const VAR_BODY_PAT:      &str = r"[a-zA-Z0-9_]";
+const VAR_LAST_SPECIAL:  &str = r"[#]";
+
 /* TODO check that the identifier isn't a keyword (e.g. 'let') */
 fn parse_global(parser: &mut Parser) -> Result<Global, Error> {
-    /* FIXED: the next char after the name must be a space (or end of line)
-     * Otherwise we get:
-     * ExpectedKeyword("="):
-     * GHC.Base.
-     *         ^
-     * The Rust Regex library does not support "lookaheads".
-     * Instead, add a '\s' at the end of the regex and capture the rest.
-     */
-     /* FIXME we actually can only do a 'peek' on the next character.
-      * Otherwise the following fails:
-      * '(x_segA [Occ=Once] :: Main.QVal)'
-      * because there is no space right after the Global.
-      * And we can't gobble up the parenthesis in the Regex, as the enclosing
-      * parsing function does expect it.
-      * So the simplest is to peek right after the basic Regex to see if the
-      * next character is a space or ')' and reject anything else.
-      * This 'peek' operation should be done here.
-      */
     lazy_static! {
-        static ref GLOBAL_RE: Regex =
-            Regex::new(r"^(?:[a-zA-Z][a-zA-Z0-9_]*\.)*[a-zA-Z][a-zA-Z0-9_]*")
-                .unwrap();
+        static ref GLOBAL_RE: Regex = {
+            let regex_str = format!(r"^(?:{}{}*\.)*{}{}*{}?",
+                                    PKG_START_PAT, PKG_BODY_PAT,
+                                    VAR_START_PAT, VAR_BODY_PAT, VAR_LAST_SPECIAL);
+            //Regex::new(r"^(?:[a-zA-Z][a-zA-Z0-9_]*\.)*[a-zA-Z][a-zA-Z0-9_]*")
+            Regex::new(&regex_str).unwrap()
+        };
     }
     let global_name = parser.match_re(&GLOBAL_RE)
                         .ok_or_else(|| parser_error(parser, Reason::GlobalNotFound))?;
@@ -471,6 +466,15 @@ const IDENTIFIER_ENDERS: [char; 3] = [' ', '\n', ')'];
 
 fn validate_identifier<T>(parser: &Parser, iden_str: &str, iden_val: T) -> Result<T, Error> {
     /* 1. Check if the identifier ends correctly */
+    /* FIXED: the next char after the name must be a space (or end of line)
+     * Otherwise we get:
+     * ExpectedKeyword("="):
+     * GHC.Base.
+     *         ^
+     * The Rust Regex library does not support "lookaheads".
+     * Instead, peek right after the basic Regex to see if the
+     * next character is a space or ')' and reject anything else.
+     */
     let ends_correctly =
         parser.peek(|s|
             (s.len() == 0) || (s.starts_with(&IDENTIFIER_ENDERS[..])));
