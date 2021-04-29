@@ -115,7 +115,14 @@ fn build_marker_line(line: &str, ptr_pos: *const u8) -> Result<String, Error> {
 
     let prefix = " ".repeat(str_pos);
     let indicator = '^';
-    let suffix = " ".repeat(line.len() - str_pos - 1);
+
+    let suffix =
+        if line.len() == str_pos {
+            String::from("")
+        }
+        else {
+            " ".repeat(line.len() - str_pos - 1)
+        };
 
     let marker_line = format!("{}{}{}", prefix, indicator, suffix);
     Ok(marker_line)
@@ -168,10 +175,13 @@ pub unsafe fn line_number(err_pos: &ErrPos, input: &str) -> Option<usize> {
     let mut n = 1;
     let err_ptr = err_pos.start_ptr();
 
-    if index_in_str(err_ptr, input).is_err() {
-        /* The start pointer is not even in the full input */
-        return None;
-    }
+    let index_in_full = match index_in_str(err_ptr, input) {
+        Ok(idx) =>
+            idx,
+
+        Err(_)  =>  /* The start pointer is not even in the full input */
+            return None,
+    };
 
     for ln in input.lines() {
         match index_in_str(err_ptr, ln) {
@@ -186,10 +196,11 @@ pub unsafe fn line_number(err_pos: &ErrPos, input: &str) -> Option<usize> {
         }
     }
 
-    /* We can't reach here: the pointer was validated to be
-     * in the full string.
+    /* The only scenario where this can happen is when the err_pos is at
+     * the very end of the string.
      */
-    unreachable!("line_number: unreachable state 2");
+    assert!(index_in_full == input.len());
+    return Some(n);
 }
 
 // Error composition

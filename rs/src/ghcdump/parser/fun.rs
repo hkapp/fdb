@@ -13,6 +13,7 @@ type Error = super::Error;
 pub enum Reason {
     GlobalNotFound,
     LocalNotFound,
+    IdentifierNotProperlyEnded,
 }
 
 // Export
@@ -429,17 +430,29 @@ fn parse_global(parser: &mut Parser) -> Result<Global, Error> {
       */
     lazy_static! {
         static ref GLOBAL_RE: Regex =
-            Regex::new(r"^((?:[a-zA-Z][a-zA-Z0-9_]*\.)*[a-zA-Z][a-zA-Z0-9_]*)\s")
+            Regex::new(r"^(?:[a-zA-Z][a-zA-Z0-9_]*\.)*[a-zA-Z][a-zA-Z0-9_]*")
                 .unwrap();
     }
-    match parser.match_re_captures(&GLOBAL_RE) {
-        Some(groups) => {
-            let mtch = groups.get(1).unwrap();
-            Ok(Global(
-                String::from(mtch.as_str())))
-        },
-        None =>
-            parser_err(parser, Reason::GlobalNotFound)
+    let global_name = parser.match_re(&GLOBAL_RE)
+                        .ok_or_else(|| parser_error(parser, Reason::GlobalNotFound))?;
+
+    let global = Global(
+                    String::from(global_name));
+    end_identifier(parser, global)
+}
+
+const IDENTIFIER_ENDERS: [char; 3] = [' ', '\n', ')'];
+
+fn end_identifier<T>(parser: &mut Parser, iden_value: T) -> Result<T, Error> {
+    let ends_correctly =
+        parser.peek(|s|
+            (s.len() == 0) || (s.starts_with(&IDENTIFIER_ENDERS[..])));
+
+    if ends_correctly {
+        Ok(iden_value)
+    }
+    else {
+        parser_err(parser, Reason::IdentifierNotProperlyEnded)
     }
 }
 
@@ -459,8 +472,12 @@ impl Into<String> for Global {
 
 fn parser_err<T>(parser: &mut Parser, reason: Reason) -> Result<T, Error> {
     Err(
-        parser.err(
-            super::Reason::Fun(reason)))
+        parser_error(parser, reason))
+}
+
+fn parser_error(parser: &mut Parser, reason: Reason) -> Error {
+    parser.err(
+        super::Reason::Fun(reason))
 }
 
 fn format_parsing_error(err: &Error, original_input: &str, file_name: &path::Path)
