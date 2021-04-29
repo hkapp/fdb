@@ -12,14 +12,14 @@ pub enum QPlan {
 pub type QVal = u32;
 
 #[derive(Debug)]
-pub enum Error {
+pub enum CompileError {
   SymbolNotDefined(Symbol),
   ObjectHasErrors(Symbol)
 }
 
 /* QUERY CONSTRUCTION */
 
-pub fn filter(prev_plan: &QPlan, fun_name: &str, db_ctx: &DbCtx) -> Result<QPlan, Error> {
+pub fn filter(prev_plan: &QPlan, fun_name: &str, db_ctx: &DbCtx) -> Result<QPlan, CompileError> {
     let symbol =
         objstore::Symbol::new(
             String::from(fun_name));
@@ -36,14 +36,14 @@ pub fn filter(prev_plan: &QPlan, fun_name: &str, db_ctx: &DbCtx) -> Result<QPlan
                     println!("Object \"{}\" has parsing errors:", fun_name);
                     println!("{}", &err_msg);
                     return Err(
-                        Error::ObjectHasErrors(symbol));
+                        CompileError::ObjectHasErrors(symbol));
                 }
             }
         }
 
         None =>
             return Err(
-                Error::SymbolNotDefined(symbol)),
+                CompileError::SymbolNotDefined(symbol)),
     }
 
     let prev_plan_cp = Box::new(prev_plan.clone());
@@ -56,9 +56,15 @@ pub fn filter(prev_plan: &QPlan, fun_name: &str, db_ctx: &DbCtx) -> Result<QPlan
 
 /* RUNTIME */
 
+#[derive(Debug)]
+pub enum RuntimeError {
+  SqliteError(sqlite::Error),
+  CompileError(CompileError)
+}
+
 const DB_FILENAME: &str = "../data/fdb.db";
 
-fn query_sqlite_into(query: &str, res_buf: &mut [QVal]) -> sqlite::Result<usize> {
+fn query_sqlite_into(query: &str, res_buf: &mut [QVal]) -> Result<usize, RuntimeError> {
     let conn = sqlite::Connection::open(DB_FILENAME)?;
 
     let mut stmt = conn.prepare(query)?;
@@ -75,33 +81,70 @@ fn query_sqlite_into(query: &str, res_buf: &mut [QVal]) -> sqlite::Result<usize>
 
 const COLUMN_NAME: &str = "bar";
 
-fn rec_to_sql(qplan: &QPlan) -> String {
+fn inline_filter_sql(fun_name: &Symbol, db_ctx: &DbCtx) -> Result<String, RuntimeError> {
+    /* Retrieve the declaration */
+    match db_ctx.obj_store.find(fun_name) {
+        Some(obj) => {
+            match obj.as_result() {
+                /* TODO we should also check that the declaration at the end is actually a function
+                 * and not a constant.
+                 */
+                Ok(_) => Ok(String::from("")),
+
+                Err(objstore::FailedObj::ParseError(err_msg)) => {
+                    println!("Object \"{}\" has parsing errors:", fun_name);
+                    println!("{}", &err_msg);
+                    return Err(
+                        RuntimeError::CompileError(
+                            CompileError::ObjectHasErrors(fun_name.clone())));
+                }
+            }
+        }
+
+        None =>
+            return Err(
+                RuntimeError::CompileError(
+                    CompileError::SymbolNotDefined(fun_name.clone()))),
+    }
+}
+
+fn rec_to_sql(qplan: &QPlan, db_ctx: &DbCtx) -> Result<String, RuntimeError> {
     use QPlan::*;
-    match qplan {
+    let sql = match qplan {
         Read(tab_name) =>
             format!("SELECT {} FROM {}", COLUMN_NAME, tab_name),
 
         Filter(fun_name, rec_qplan) => {
-            let rec_sql = rec_to_sql(&rec_qplan);
+            let rec_sql = rec_to_sql(&rec_qplan, db_ctx)?;
+            let where_clause = inline_filter_sql(&fun_name, db_ctx)?;
+
             format!("SELECT {} FROM ({}) WHERE {}",
-                    COLUMN_NAME, rec_sql, fun_name)
-                    /* TODO understand the filter function */
+                    COLUMN_NAME, rec_sql, where_clause)
         },
-    }
+    };
+    Ok(sql)
 }
 
-fn to_sql(qplan: &QPlan) -> String {
-    let mut sql = rec_to_sql(qplan);
+fn to_sql(qplan: &QPlan, db_ctx: &DbCtx) -> Result<String, RuntimeError> {
+    let mut sql = rec_to_sql(qplan, db_ctx)?;
     sql.push_str(";");
-    return sql;
+    Ok(sql)
 }
 
 /* TODO add enum codes like "HasMoreEntries" */
 type Status = usize;
 
-pub fn exec_into(qplan: &QPlan, res_buf: &mut [QVal]) -> Result<Status, sqlite::Error> {
-    let sql_query = to_sql(qplan);
+pub fn exec_into(qplan: &QPlan, db_ctx: &DbCtx, res_buf: &mut [QVal]) -> Result<Status, RuntimeError> {
+    let sql_query = to_sql(qplan, db_ctx)?;
     println!("{}", sql_query);
 
     query_sqlite_into(&sql_query, res_buf)
+}
+
+/* Error conversion */
+
+impl From<sqlite::Error> for RuntimeError {
+    fn from(sql_err: sqlite::Error) -> Self {
+        RuntimeError::SqliteError(sql_err)
+    }
 }

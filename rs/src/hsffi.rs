@@ -139,9 +139,13 @@ pub extern fn filterQ(
 }
 
 #[no_mangle]
-pub extern fn execQ(_db: *const DbCtx, plan_ptr: *const QPlan, buf_ptr: *mut QVal, n_alloc: c_sizet)
+pub extern fn execQ(db_ptr: *const DbCtx, plan_ptr: *const QPlan, buf_ptr: *mut QVal, n_alloc: c_sizet)
     -> c_sizet
 {
+    let db_ctx = unsafe {
+        borrow_hs_ptr(db_ptr)
+    };
+
     let qplan = unsafe {
         borrow_hs_ptr(plan_ptr)
     };
@@ -150,7 +154,7 @@ pub extern fn execQ(_db: *const DbCtx, plan_ptr: *const QPlan, buf_ptr: *mut QVa
         slice::from_raw_parts_mut(buf_ptr, n_alloc)
     };
 
-    fql::exec_into(&qplan, res_buf)
+    fql::exec_into(qplan, db_ctx, res_buf)
         .unwrap_or_else(|e| {
             println!("{:?}", e);
             0  /* TODO change to -1? requires moving from usize to isize */
