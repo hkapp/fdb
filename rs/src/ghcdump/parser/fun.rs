@@ -283,16 +283,18 @@ fn parse_let(parser: &mut Parser) -> Result<LetExpr, Error> {
     }
 
     match_keyword(parser, "=")?;
-    let body = parse_expression(parser)?;
-
+    let var_value = parse_expression(parser)?;
     parser.close('}')?;
 
+    match_keyword(parser, "in")?;
+    let body = parse_expression(parser)?;
 
     let let_expr =
         LetExpr {
             var_name,
             var_type,
-            body: Box::new(body)
+            var_value: Box::new(var_value),
+            body:      Box::new(body)
         };
     Ok(let_expr)
 }

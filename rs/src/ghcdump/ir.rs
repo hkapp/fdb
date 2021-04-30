@@ -47,9 +47,10 @@ pub struct FunCall {
 
 #[derive(Debug)]
 pub struct LetExpr {
-    pub var_name: Local,
-    pub var_type: Type,
-    pub body:     Box<Expr>
+    pub var_name:  Local,
+    pub var_type:  Type,
+    pub var_value: Box<Expr>,
+    pub body:      Box<Expr>
 }
 
 /* LitConv */
