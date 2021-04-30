@@ -38,9 +38,10 @@ pub struct ValParam {
 
 #[derive(Debug)]
 pub struct FunCall {
-    pub called_fun: Global,
-    pub type_args:  Vec<TypeArg>,
-    pub val_args:   Vec<ValArg>
+    pub called_fun:     Global,
+    pub type_args:      Vec<TypeArg>,
+    pub typeclass_args: Vec<TypeClassArg>,
+    pub val_args:       Vec<ValArg>
 }
 
 /* LetExpr */
@@ -72,7 +73,6 @@ pub enum RawLit {
 pub struct Local (pub String);
 
 pub type TypeParamF = Local;
-pub type TypeArg = Local;
 pub type ValArg = Local;
 
 /* Global */
@@ -81,6 +81,9 @@ pub type ValArg = Local;
 pub struct Global (pub String);
 
 pub type Type = Global;
+pub type TypeClassArg = Global;
+
+pub type TypeArg = Type;
 
 impl fmt::Display for Global {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {

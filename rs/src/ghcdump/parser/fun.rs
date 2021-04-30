@@ -462,13 +462,66 @@ fn parse_raw_lit(parser: &mut Parser) -> Result<RawLit, Error> {
 // FunCall
 
 fn parse_fun_call(parser: &mut Parser) -> Result<FunCall, Error> {
+    /* Example:
+     * GHC.Num.fromInteger
+     *   @ Main.QVal Foreign.C.Types.$fNumCUInt sat_segB
+     */
     let called_fun = parse_global(parser)?;
-    /* TODO parse the arguments */
-    Ok(FunCall {
-        called_fun,
-        type_args: Vec::new(),
-        val_args:  Vec::new()
-    })
+
+    let (type_args, _) =
+        repeat_match(parser, parse_fun_type_arg);
+
+    let (typeclass_args, _) =
+        repeat_match(parser, parse_fun_typeclass_arg);
+
+    let (val_args, _) =
+        repeat_match(parser, parse_fun_val_arg);
+
+    let fun_call =
+        FunCall {
+            called_fun,
+            type_args,
+            typeclass_args,
+            val_args
+        };
+    Ok(fun_call)
+}
+
+// TypeArg
+
+fn parse_fun_type_arg(parser: &mut Parser) -> Result<TypeArg, Error> {
+    /* ex: '@ Main.QVal' */
+    match_keyword(parser, "@")
+        .and_then(|_| parse_type(parser))
+}
+
+// TypeClassArg
+
+fn parse_fun_typeclass_arg(parser: &mut Parser) -> Result<TypeClassArg, Error> {
+    /* ex: 'Foreign.C.Types.$fNumCUInt' */
+    /* So a modified Global where the local name at the end
+     * starts with a '$'.
+     */
+    lazy_static! {
+        static ref TC_ARG_RE: Regex = {
+            let regex_pattern =
+                format!(r"^(?:{}{}*\.)*\${}{}*",
+                        PKG_START_PAT, PKG_BODY_PAT,
+                        VAR_START_PAT, VAR_BODY_PAT);
+
+            Regex::new(&regex_pattern).unwrap()
+        };
+    }
+
+    parse_identifier(parser, &TC_ARG_RE)
+        .map(|s| Global(String::from(s)))
+}
+
+// ValArg
+
+fn parse_fun_val_arg(parser: &mut Parser) -> Result<ValArg, Error> {
+    /* Only Locals are allowed here ? */
+    parse_local(parser)
 }
 
 // Local
