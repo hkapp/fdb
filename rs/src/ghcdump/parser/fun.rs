@@ -547,16 +547,19 @@ fn parse_local(parser: &mut Parser) -> Result<Local, Error> {
 
 const IDEN_START_PAT: &str = r"[a-zA-Z]";
 
-const PKG_START_PAT: &str = IDEN_START_PAT;
-const PKG_BODY_PAT:  &str = r"[a-zA-Z0-9_]";
+const PKG_START_PAT:  &str = IDEN_START_PAT;
+const PKG_BODY_PAT:   &str = r"[a-zA-Z0-9_]";
 
-const VAR_START_PAT:     &str = IDEN_START_PAT;
-const VAR_BODY_PAT:      &str = r"[a-zA-Z0-9_]";
+const VAR_START_PAT:  &str = IDEN_START_PAT;
+const VAR_BODY_PAT:   &str = r"[a-zA-Z0-9_]";
+
+const OPERATOR_SYMBOLS: &str = r"[<=]";
 
 fn global_regex_pattern() -> String {
-    format!(r"^(?:{}{}*\.)*{}{}*",
+    format!(r"^(?:{}{}*\.)*(?:(?:{}{}*)|(?:{}+))",
             PKG_START_PAT, PKG_BODY_PAT,
-            VAR_START_PAT, VAR_BODY_PAT)
+            VAR_START_PAT, VAR_BODY_PAT,
+            OPERATOR_SYMBOLS)
 }
 
 fn parse_global(parser: &mut Parser) -> Result<Global, Error> {
