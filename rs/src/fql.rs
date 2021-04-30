@@ -3,6 +3,7 @@ use crate::ctx::DbCtx;
 use crate::objstore::Symbol;
 use rusqlite as sqlite;
 use crate::ghcdump::ir;
+use std::collections::HashMap;
 
 #[derive(Clone)]
 pub enum QPlan {
@@ -61,7 +62,9 @@ pub fn filter(prev_plan: &QPlan, fun_name: &str, db_ctx: &DbCtx) -> Result<QPlan
 #[derive(Debug)]
 pub enum RuntimeError {
   SqliteError(sqlite::Error),
-  CompileError(CompileError)
+  CompileError(CompileError),
+  TooManyArguments(usize),
+  UnsupportedFunction(ir::Global),
 }
 
 const DB_FILENAME: &str = "../data/fdb.db";
@@ -108,30 +111,111 @@ fn get_decl<'a, 'b>(symbol: &'a Symbol, db_ctx: &'b DbCtx) -> Result<&'b ir::Dec
     }
 }
 
+fn rec_inline_filter_sql<'a>(
+    expr:       &'a ir::Expr,
+    eval_state: &mut HashMap<&'a ir::Local, String>)
+    -> Result<String, RuntimeError>
+{
+    use ir::Expr::*;
+    match expr {
+        /* TODO move this case up in the caller */
+        AnonFun(ir::AnonFun { val_params, body, .. }) => {
+            /* We only have one column for now */
+            if val_params.len() != 1 {
+                Err(RuntimeError::TooManyArguments(val_params.len()))
+            }
+            else {
+                let param = val_params.get(0).unwrap();
+                let param_name: &ir::Local = &param.name;
+                let column_name = String::from(COLUMN_NAME);
+
+                let conflict = eval_state.insert(param_name, column_name);
+                assert!(conflict.is_none());
+
+                rec_inline_filter_sql(body, eval_state)
+            }
+        }
+
+        LetExpr(ir::LetExpr { var_name, var_value, body, .. }) => {
+            /* FIXME might need to pop off state here if the let expression
+             * also declares variables whose name conflict with existing ones.
+             */
+            let sql_val = rec_inline_filter_sql(var_value, eval_state)?;
+
+            let conflict = eval_state.insert(var_name, sql_val);
+            assert!(conflict.is_none());
+
+            rec_inline_filter_sql(body, eval_state)
+        }
+
+        FunCall(ir::FunCall { called_fun, val_args, .. }) => {
+            /* Do we know this function? */
+            match &called_fun.0[..] {
+                "GHC.Num.fromInteger" => {
+                    assert!(val_args.len() == 1);
+                    let arg_name = val_args.get(0).unwrap();
+                    let arg_sql = eval_state.get(arg_name).unwrap();
+                    Ok(arg_sql.clone())
+                }
+
+                "GHC.Classes.<=" => {
+                    assert!(val_args.len() == 2);
+                    let arg_left  = val_args.get(0).unwrap();
+                    let arg_right = val_args.get(1).unwrap();
+
+                    let sql_left  = eval_state.get(arg_left).unwrap();
+                    let sql_right = eval_state.get(arg_right).unwrap();
+
+                    let sql = format!("{} <= {}", sql_left, sql_right);
+                    Ok(sql)
+                }
+
+                _ => {
+                    Err(
+                        RuntimeError::UnsupportedFunction(called_fun.clone()))
+                }
+            }
+        }
+
+        LitConv(ir::LitConv { raw_lit, .. }) => {
+            match raw_lit {
+                ir::RawLit::IntLit(n) =>
+                    Ok(n.to_string()),
+            }
+        }
+    }
+}
+
 fn inline_filter_sql(fun_name: &Symbol, db_ctx: &DbCtx) -> Result<String, RuntimeError> {
     let fun_decl = get_decl(fun_name, db_ctx)?;
+
     use ir::Expr::*;
-    let mb_body = match &fun_decl.body {
+    match &fun_decl.body {
         /* This is the only accepted case */
-        AnonFun(anon_fun) =>
-            Ok(&anon_fun.body),
+        AnonFun(_) => {
+            let mut eval_state = HashMap::default();
+            rec_inline_filter_sql(&fun_decl.body, &mut eval_state)
+        }
 
-        /* Every other case is an error.
-         * Gather exactly what it was for the error message.
-         */
-        FunCall(_) => Err("Function call"),
-        LetExpr(_) => Err("Let expression"),
-        LitConv(_) => Err("Literal conversion"),
-    };
+        /* Every other case is an error */
+        _ => {
+            /* Gather exactly what it was for the error message */
+            let what = match &fun_decl.body {
+                FunCall(_) => "Function call",
+                LetExpr(_) => "Let expression",
+                LitConv(_) => "Literal conversion",
 
-    let fun_body = mb_body.map_err(|what|
-                        RuntimeError::CompileError(
-                            CompileError::NotAFunction {
-                                symbol:      fun_name.clone(),
-                                resolves_to: String::from(what)
-                            }))?;
+                AnonFun(_) => unreachable!(),
+            };
 
-    Ok(format!("{:?}", fun_body))
+            Err(
+                RuntimeError::CompileError(
+                    CompileError::NotAFunction {
+                        symbol:      fun_name.clone(),
+                        resolves_to: String::from(what)
+                    }))
+        }
+    }
 }
 
 fn rec_to_sql(qplan: &QPlan, db_ctx: &DbCtx) -> Result<String, RuntimeError> {

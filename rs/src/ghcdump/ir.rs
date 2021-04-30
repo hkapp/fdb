@@ -69,7 +69,7 @@ pub enum RawLit {
 
 /* Local */
 
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Debug, Eq, PartialEq, Hash)]
 pub struct Local (pub String);
 
 pub type TypeParamF = Local;
