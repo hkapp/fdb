@@ -306,21 +306,25 @@ fn parse_anon_fun(parser: &mut Parser) -> Result<AnonFun, Error> {
 
     let (type_params, tp_err) = repeat_match(parser, parse_fun_type_param);
 
-    let (val_params,  vp_err) = repeat_match(parser, parse_val_param);
+    let (typeclass_params, tc_err) = repeat_match(parser, parse_typeclass_param);
+
+    let (val_params, vp_err) = repeat_match(parser, parse_val_param);
 
     match_keyword(parser, "->")
         .map_err(|arr_err| {
             /* To provide a better error position, pick the furthest
-             * error message out of the three previous errors.
+             * error message out of the four previous errors.
              */
             pick_furthest(arr_err,
-                pick_furthest(tp_err, vp_err))
+                pick_furthest(tc_err,
+                    pick_furthest(tp_err, vp_err)))
         })?;
 
     let body = parse_expression(parser)?;
 
     Ok(AnonFun {
         type_params,
+        typeclass_params,
         val_params,
         body: Box::new(body)
     })
@@ -355,6 +359,50 @@ fn parse_fun_type_param(parser: &mut Parser) -> Result<TypeParamF, Error> {
     let param_name = parse_local(parser)?;
     parser.close(')')?;
     Ok(param_name)
+}
+
+// TypeClassParam
+
+fn parse_typeclass_param(parser: &mut Parser) -> Result<TypeClassParam, Error> {
+    /*
+     * ($dOrd_segp [Occ=Once] :: GHC.Classes.Ord a_aedN)
+     */
+    parser.open('(')?;
+
+    let name = parse_typeclass_local(parser)?;
+
+    /* Ignore the occurrence mark from GHC */
+    /* '[Occ=Once]' */
+    ignore_decl_annot(parser)?;
+
+    match_keyword(parser, "::")?;
+
+    let typeclass = parse_type(parser)?;
+
+    parser.close(')')?;
+
+    let tc_param =
+        TypeClassParam {
+            name,
+            typeclass
+        };
+    Ok(tc_param)
+}
+
+fn parse_typeclass_local(parser: &mut Parser) -> Result<Local, Error> {
+    /* Basically a Local that starts with '$' */
+    lazy_static! {
+        static ref TC_LOCAL_RE: Regex = {
+            let basic_pattern = local_regex_pattern();
+            assert!(basic_pattern.starts_with("^"));
+            let regex_pattern = format!(r"^\${}", &basic_pattern[1..]);
+
+            Regex::new(&regex_pattern).unwrap()
+        };
+    }
+
+    parse_identifier(parser, &TC_LOCAL_RE)
+        .map(|s| Local(String::from(s)))
 }
 
 // ValParam
@@ -403,8 +451,16 @@ fn ignore_decl_annot(parser: &mut Parser) -> Result<(), Error> {
 // Type
 
 fn parse_type(parser: &mut Parser) -> Result<Type, Error> {
-    /* For now we only support non-argumented types */
-    parse_global(parser)
+    /* GHC.Classes.Ord a_aedN */
+    let name = parse_global(parser)?;
+    let (type_args, _) = repeat_match(parser, parse_type);
+
+    let typ =
+        Type {
+            name,
+            type_args
+        };
+    Ok(typ)
 }
 
 // LitConv
@@ -526,11 +582,16 @@ fn parse_fun_val_arg(parser: &mut Parser) -> Result<ValArg, Error> {
 
 // Local
 
+fn local_regex_pattern() -> String {
+    format!(r"^{}{}*", VAR_START_PAT, VAR_BODY_PAT)
+}
+
 fn parse_local(parser: &mut Parser) -> Result<Local, Error> {
     lazy_static! {
-        static ref LOCAL_NAME_RE: Regex =
-            Regex::new(r"^[a-zA-Z][a-zA-Z0-9_]*")
-                .unwrap();
+        static ref LOCAL_NAME_RE: Regex = {
+            let regex_str = local_regex_pattern();
+            Regex::new(&regex_str).unwrap()
+        };
     }
     match parser.match_re(&LOCAL_NAME_RE) {
         Some(mtch) =>
@@ -566,7 +627,6 @@ fn parse_global(parser: &mut Parser) -> Result<Global, Error> {
     lazy_static! {
         static ref GLOBAL_RE: Regex = {
             let regex_str = global_regex_pattern();
-            //Regex::new(r"^(?:[a-zA-Z][a-zA-Z0-9_]*\.)*[a-zA-Z][a-zA-Z0-9_]*")
             Regex::new(&regex_str).unwrap()
         };
     }
@@ -575,6 +635,8 @@ fn parse_global(parser: &mut Parser) -> Result<Global, Error> {
         .map(|s| Global(String::from(s)))
         .map_err(|_| parser_error(parser, Reason::GlobalNotFound))
 }
+
+// generic identifiers
 
 fn parse_identifier<'a, 'b>(parser: &'a mut Parser, regex: &'b Regex) -> Result<&'a str, Error> {
     let raw_iden = parser.match_re(regex)

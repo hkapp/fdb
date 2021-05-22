@@ -24,7 +24,7 @@ qry =
   do
     ctx <- initDB
     q1  <- readT ctx "foo"
-    q2  <- filterQ topLevelFilter "Main.topLevelFilter" q1
+    q2  <- filterQ topLevelFilter2 "Main.topLevelFilter2" q1
     return q2
 
 topLevelFilter :: QVal -> Bool

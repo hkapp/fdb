@@ -21,9 +21,18 @@ pub enum Expr {
 
 #[derive(Debug)]
 pub struct AnonFun {
-    pub type_params: Vec<TypeParamF>,
-    pub val_params:  Vec<ValParam>,
-    pub body:        Box<Expr>  /* avoid recursive type */
+    pub type_params:      Vec<TypeParamF>,
+    pub typeclass_params: Vec<TypeClassParam>,
+    pub val_params:       Vec<ValParam>,
+    pub body:             Box<Expr>  /* avoid recursive type */
+}
+
+/* TypeClassParam */
+
+#[derive(Debug)]
+pub struct TypeClassParam {
+    pub name:      Local,
+    pub typeclass: Type
 }
 
 /* ValParam */
@@ -67,6 +76,14 @@ pub enum RawLit {
     IntLit(i32)
 }
 
+/* Type */
+
+#[derive(Debug)]
+pub struct Type {
+    pub name:      Global,
+    pub type_args: Vec<Type>
+}
+
 /* Local */
 
 #[derive(Debug, Eq, PartialEq, Hash)]
@@ -80,7 +97,6 @@ pub type ValArg = Local;
 #[derive(Debug, Hash, Eq, Ord, PartialOrd, PartialEq, Clone)]
 pub struct Global (pub String);
 
-pub type Type = Global;
 pub type TypeClassArg = Global;
 
 pub type TypeArg = Type;
