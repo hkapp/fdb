@@ -70,7 +70,7 @@ type CUInt32 = CUInt
 execQ :: (Storable a) => Q a -> IO [a]
 execQ qctx =
   let
-    maxRowCount = 5
+    maxRowCount = 50 -- FIXME we could do with a smaller buffer here
 
     writeToBuf buffer =
       do

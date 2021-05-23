@@ -37,13 +37,13 @@ topLevelFilter2 x = x <= 3
 
 topLevelFilter3 = (>) 3
 
-data QValB = QValB Int Int
+data QValB = QValB CUInt32 CUInt32
 
 instance Show QValB where
   show (QValB x y) = "(" ++ (show x) ++ ", " ++ (show y) ++ ")"
 
 instance Storable QValB where
-  sizeOf _ = sizeOf (undefined :: Int) * 2
+  sizeOf _ = sizeOf (undefined :: CUInt32) * 2
 
   alignment = sizeOf
 

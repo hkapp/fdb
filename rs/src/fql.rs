@@ -67,6 +67,7 @@ pub enum RuntimeError {
   UnsupportedFunction(ir::Global),
   ConflictingDefForVar(String),
   TooManyCases(usize),
+  BufferTooSmall(usize),
 }
 
 const DB_FILENAME: &str = "../data/fdb.db";
@@ -76,17 +77,25 @@ fn query_sqlite_into(query: &str, res_buf: &mut [QVal]) -> Result<usize, Runtime
 
     let mut stmt = conn.prepare(query)?;
     let mut rows = stmt.query([])?;
+    let col_count = rows.column_count().unwrap();
     let mut arr_pos = 0;
 
+    /* For each row */
     while let Some(row) = rows.next()? {
-        res_buf[arr_pos] = row.get(0)?;
-        arr_pos += 1;
+        /* For each column */
+        for col_idx in 0..col_count {
+            if arr_pos >= res_buf.len() {
+                return Err(RuntimeError::BufferTooSmall(arr_pos));
+            }
+
+            res_buf[arr_pos] = row.get(col_idx)?;
+            arr_pos += 1;
+        }
     }
 
-    Ok(arr_pos)
+    let row_count = ((arr_pos - 1) / col_count) + 1;
+    Ok(row_count)
 }
-
-const COLUMN_NAME: &str = "bar";
 
 fn get_decl<'a, 'b>(symbol: &'a Symbol, db_ctx: &'b DbCtx) -> Result<&'b ir::Decl, CompileError> {
     /* Retrieve the declaration */
@@ -131,7 +140,7 @@ fn rec_inline_filter_sql<'a>(
             else {
                 let param = val_params.get(0).unwrap();
                 let param_name: &ir::Local = &param.name;
-                let column_name = String::from(COLUMN_NAME);
+                let column_name = String::from("col0");
 
                 let conflict = eval_state.insert(param_name, column_name);
                 assert!(conflict.is_none());
@@ -265,14 +274,14 @@ fn rec_to_sql(qplan: &QPlan, db_ctx: &DbCtx) -> Result<String, RuntimeError> {
     use QPlan::*;
     let sql = match qplan {
         Read(tab_name) =>
-            format!("SELECT {} FROM {}", COLUMN_NAME, tab_name),
+            format!("SELECT * FROM {}", tab_name),
 
         Filter(fun_name, rec_qplan) => {
             let rec_sql = rec_to_sql(&rec_qplan, db_ctx)?;
             let where_clause = inline_filter_sql(&fun_name, db_ctx)?;
 
-            format!("SELECT {} FROM ({}) WHERE {}",
-                    COLUMN_NAME, rec_sql, where_clause)
+            format!("SELECT * FROM ({}) WHERE {}",
+                    rec_sql, where_clause)
         },
     };
     Ok(sql)
