@@ -65,6 +65,8 @@ pub enum RuntimeError {
   CompileError(CompileError),
   TooManyArguments(usize),
   UnsupportedFunction(ir::Global),
+  ConflictingDefForVar(String),
+  TooManyCases(usize),
 }
 
 const DB_FILENAME: &str = "../data/fdb.db";
@@ -111,6 +113,8 @@ fn get_decl<'a, 'b>(symbol: &'a Symbol, db_ctx: &'b DbCtx) -> Result<&'b ir::Dec
     }
 }
 
+const STRUCT_COL_PREFIX: &str = "col";
+
 fn rec_inline_filter_sql<'a>(
     expr:       &'a ir::Expr,
     eval_state: &mut HashMap<&'a ir::Local, String>)
@@ -143,9 +147,47 @@ fn rec_inline_filter_sql<'a>(
             let sql_val = rec_inline_filter_sql(var_value, eval_state)?;
 
             let conflict = eval_state.insert(var_name, sql_val);
-            assert!(conflict.is_none());
+
+            if conflict.is_some() {
+                return Err(RuntimeError::ConflictingDefForVar(conflict.unwrap()));
+            }
 
             rec_inline_filter_sql(body, eval_state)
+        }
+
+        PatMatch(ir::PatMatch { matched_var: _, pat_cases }) => {
+            /* FIXME might need to pop off state here if the let expression
+             * also declares variables whose name conflict with existing ones.
+             */
+            if pat_cases.len() > 1 {
+                /* We don't support actual ADTs right now with the SQL backend
+                 * Only structs
+                 */
+                return Err(RuntimeError::TooManyCases(pat_cases.len()));
+            }
+
+            let deconstruct = pat_cases.get(0).unwrap();
+            let field_binds = &deconstruct.field_binds;
+
+            for field_index in 0..field_binds.len() {
+                let field_bind = field_binds.get(field_index).unwrap();
+
+                if field_bind.is_none() {
+                    /* this index is not bound */
+                    continue;
+                }
+                let field_bind = field_bind.as_ref().unwrap();
+
+                /* FIXME this only works for a single level of nesting */
+                let sql_col = format!("{}{}", STRUCT_COL_PREFIX, field_index);
+                let conflict = eval_state.insert(&field_bind, sql_col);
+
+                if conflict.is_some() {
+                    return Err(RuntimeError::ConflictingDefForVar(conflict.unwrap()));
+                }
+            }
+
+            rec_inline_filter_sql(&deconstruct.body, eval_state)
         }
 
         FunCall(ir::FunCall { called_fun, val_args, .. }) => {
@@ -201,11 +243,12 @@ fn inline_filter_sql(fun_name: &Symbol, db_ctx: &DbCtx) -> Result<String, Runtim
         _ => {
             /* Gather exactly what it was for the error message */
             let what = match &fun_decl.body {
-                FunCall(_) => "Function call",
-                LetExpr(_) => "Let expression",
-                LitConv(_) => "Literal conversion",
+                FunCall(_)  => "Function call",
+                LetExpr(_)  => "Let expression",
+                PatMatch(_) => "Pattern matching",
+                LitConv(_)  => "Literal conversion",
 
-                AnonFun(_) => unreachable!(),
+                AnonFun(_)  => unreachable!(),
             };
 
             Err(

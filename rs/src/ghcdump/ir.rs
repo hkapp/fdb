@@ -14,6 +14,7 @@ pub enum Expr {
     AnonFun(AnonFun),
     FunCall(FunCall),
     LetExpr(LetExpr),
+    PatMatch(PatMatch),
     LitConv(LitConv)
 }
 
@@ -61,6 +62,23 @@ pub struct LetExpr {
     pub var_type:  Type,
     pub var_value: Box<Expr>,
     pub body:      Box<Expr>
+}
+
+/* PatMatch */
+
+#[derive(Debug)]
+pub struct PatMatch {
+    pub matched_var: Local,
+    pub pat_cases:   Vec<PatCase>,
+}
+
+/* PatCase */
+
+#[derive(Debug)]
+pub struct PatCase {
+    pub constructor: Global,
+    pub field_binds: Vec<Option<Local>>,  /* order is important here! */
+    pub body:        Box<Expr>
 }
 
 /* LitConv */

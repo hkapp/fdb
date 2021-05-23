@@ -196,8 +196,10 @@ fn parse_expression(parser: &mut Parser) -> Result<Expr, Error> {
             |prs| fallback(prs,
                 parse_anon_fun_expr,
                 |prs| fallback(prs,
-                    parse_lit_conv_expr,
-                    parse_fun_call_expr)));
+                    parse_pattern_match_expr,
+                    |prs| fallback(prs,
+                        parse_lit_conv_expr,
+                        parse_fun_call_expr))));
 
     fn parse_let_expr(parser: &mut Parser) -> Result<Expr, Error> {
         parse_let(parser)
@@ -212,6 +214,11 @@ fn parse_expression(parser: &mut Parser) -> Result<Expr, Error> {
     fn parse_lit_conv_expr(parser: &mut Parser) -> Result<Expr, Error> {
         parse_lit_conv(parser)
             .map(|lit_conv| Expr::LitConv(lit_conv))
+    }
+
+    fn parse_pattern_match_expr(parser: &mut Parser) -> Result<Expr, Error> {
+        parse_pattern_match(parser)
+            .map(|pmatch| Expr::PatMatch(pmatch))
     }
 
     fn parse_fun_call_expr(parser: &mut Parser) -> Result<Expr, Error> {
@@ -463,6 +470,73 @@ fn parse_type(parser: &mut Parser) -> Result<Type, Error> {
     Ok(typ)
 }
 
+// PatMatch
+
+fn parse_pattern_match(parser: &mut Parser) -> Result<PatMatch, Error> {
+    /*
+     * case ds_semI of { Main.QValB x_semK [Occ=Once] y_semL [Occ=Once] ->
+     * GHC.Classes.<= @ GHC.Types.Int GHC.Classes.$fOrdInt x_semK y_semL
+     * }
+     *
+     */
+    match_keyword(parser, "case")?;
+
+    let matched_var = parse_local(parser)?;
+
+    match_keyword(parser, "of")?;
+
+    parser.open('{')?;
+
+    let (pat_cases, _pc_err) = repeat_match(parser, parse_pat_case);
+
+    parser.close('}')?;
+
+    let pat_match =
+        PatMatch {
+            matched_var,
+            pat_cases
+        };
+    Ok(pat_match)
+}
+
+// PatCase
+
+fn parse_pat_case(parser: &mut Parser) -> Result<PatCase, Error> {
+    /*
+     * Main.QValB x_semK [Occ=Once] y_semL [Occ=Once] ->
+     *   GHC.Classes.<= @ GHC.Types.Int GHC.Classes.$fOrdInt x_semK y_semL
+     */
+    let constructor = parse_global(parser)?;
+
+    let (field_binds, f_err) = repeat_match(parser, parse_field_bind);
+
+    if field_binds.len() == 0 {
+        return Err(f_err);
+    }
+
+    match_keyword(parser, "->")?;
+
+    let body = parse_expression(parser)?;
+
+    let pat_case =
+        PatCase {
+            constructor,
+            field_binds,
+            body: Box::new(body)
+        };
+
+    fn parse_field_bind(parser: &mut Parser) -> Result<Option<Local>, Error> {
+        /* x_semK [Occ=Once] */
+        let bind_name = parse_optional_local(parser)?;
+
+        ignore_decl_annot(parser)?;
+
+        Ok(bind_name)
+    }
+
+    Ok(pat_case)
+}
+
 // LitConv
 
 fn parse_lit_conv(parser: &mut Parser) -> Result<LitConv, Error> {
@@ -604,6 +678,15 @@ fn parse_local(parser: &mut Parser) -> Result<Local, Error> {
     /* TODO validate the identifier */
 }
 
+fn parse_optional_local(parser: &mut Parser) -> Result<Option<Local>, Error> {
+    parse_local(parser)
+        .map(|loc| Some(loc))
+        .or_else(|iderr|
+            match_keyword(parser, "_")
+                .map(|_| None)       /* successful, but there's no identifier */
+                .map_err(|_| iderr)) /* reuse the identifier error if both fail */
+}
+
 // Global
 
 const IDEN_START_PAT: &str = r"[a-zA-Z]";
@@ -668,11 +751,14 @@ fn validate_identifier(parser: &Parser, iden_str: &str) -> Result<(), Error> {
     }
 
     /* 2. Check if the identifier is a keyword */
-    if iden_str == "let" {
-        /* FIXME the error position is wrong here */
-        return parser_err(parser,
-                    Reason::KeywordNotAnIdentifier(
-                        String::from(iden_str)));
+    match iden_str {
+        "let" | "case" | "of" =>
+            /* FIXME the error position is wrong here */
+            return parser_err(parser,
+                        Reason::KeywordNotAnIdentifier(
+                            String::from(iden_str))),
+
+        _ => {},
     }
 
     Ok(())
