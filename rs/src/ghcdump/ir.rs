@@ -104,7 +104,7 @@ pub struct Type {
 
 /* Local */
 
-#[derive(Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Hash, Clone)]
 pub struct Local (pub String);
 
 pub type TypeParamF = Local;
