@@ -79,8 +79,12 @@ impl fmt::Display for Symbol {
 /* Obj API */
 
 impl Obj {
-    pub fn as_result(&self) -> &Result<ValidObj, FailedObj> {
-        &self.body
+    pub fn as_result(&self) -> Result<&ValidObj, &FailedObj> {
+        self.body.as_ref()
+    }
+
+    pub fn obj_name(&self) -> &Symbol {
+        &self.name
     }
 }
 
@@ -144,7 +148,8 @@ impl ObjStore {
         self.insert_obj(key, obj)
     }
 
-    pub fn find(&self, sym: &Symbol) -> Option<&Rc<Obj>> {
+    pub fn find(&self, sym: &Symbol) -> Option<Rc<Obj>> {
         self.symbols.get(sym)
+            .map(|o| Rc::clone(o))
     }
 }

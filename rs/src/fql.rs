@@ -4,6 +4,8 @@ use crate::objstore::Symbol;
 use rusqlite as sqlite;
 use crate::ghcdump::ir;
 use std::collections::HashMap;
+use std::ops;
+use std::rc::Rc;
 
 #[derive(Clone)]
 pub enum QPlan {
@@ -97,28 +99,53 @@ fn query_sqlite_into(query: &str, res_buf: &mut [QVal]) -> Result<usize, Runtime
     Ok(row_count)
 }
 
-fn get_decl<'a, 'b>(symbol: &'a Symbol, db_ctx: &'b DbCtx) -> Result<&'b ir::Decl, CompileError> {
-    /* Retrieve the declaration */
-    match db_ctx.obj_store.find(symbol) {
-        Some(obj) => {
-            match obj.as_result() {
-                /* TODO we should also check that the declaration at the end is actually a function
-                 * and not a constant.
-                 */
-                Ok(decl) => Ok(decl),
+/* Object store helpers */
 
-                Err(objstore::FailedObj::ParseError(err_msg)) => {
+fn resolve_symbol(symbol: &Symbol, db_ctx: &DbCtx) -> Result<Rc<objstore::Obj>, CompileError> {
+    /* Retrieve the declaration */
+    db_ctx.obj_store.find(symbol)
+        .ok_or_else(|| CompileError::SymbolNotDefined(symbol.clone()))
+}
+
+fn extract_decl(obj: &objstore::Obj) -> Result<&ir::Decl, CompileError> {
+    obj.as_result()
+        .map_err(|e|
+            match e {
+                objstore::FailedObj::ParseError(err_msg) => {
+                    let symbol = obj.obj_name();
                     println!("Object \"{}\" has parsing errors:", symbol);
                     println!("{}", &err_msg);
-                    return Err(
-                        CompileError::ObjectHasErrors(symbol.clone()));
+                    CompileError::ObjectHasErrors(symbol.clone())
                 }
             }
-        }
+        )
+}
 
-        None =>
-            return Err(
-                CompileError::SymbolNotDefined(symbol.clone())),
+fn check_is_fun_decl(decl: &ir::Decl) -> Result<&ir::AnonFun, CompileError> {
+    use ir::Expr::*;
+    match &decl.body {
+        /* This is the only accepted case */
+        AnonFun(anon_fun) => Ok(&anon_fun),
+
+        /* Every other case is an error */
+        _ => {
+            /* Gather exactly what it was for the error message */
+            let what = match &decl.body {
+                FunCall(_)  => "Function call",
+                LetExpr(_)  => "Let expression",
+                PatMatch(_) => "Pattern matching",
+                LitConv(_)  => "Literal conversion",
+
+                AnonFun(_)  => unreachable!(),
+            };
+            let fun_name = Symbol::new(decl.name.0.clone());
+
+            Err(
+                CompileError::NotAFunction {
+                    symbol:      fun_name,
+                    resolves_to: String::from(what)
+                })
+        }
     }
 }
 
@@ -238,36 +265,12 @@ fn rec_inline_filter_sql<'a>(
 }
 
 fn inline_filter_sql(fun_name: &Symbol, db_ctx: &DbCtx) -> Result<String, RuntimeError> {
-    let fun_decl = get_decl(fun_name, db_ctx)?;
+    let fun_obj = resolve_symbol(fun_name, db_ctx)?;
+    let fun_decl = extract_decl(&fun_obj)?;
+    check_is_fun_decl(fun_decl)?;
 
-    use ir::Expr::*;
-    match &fun_decl.body {
-        /* This is the only accepted case */
-        AnonFun(_) => {
-            let mut eval_state = HashMap::default();
-            rec_inline_filter_sql(&fun_decl.body, &mut eval_state)
-        }
-
-        /* Every other case is an error */
-        _ => {
-            /* Gather exactly what it was for the error message */
-            let what = match &fun_decl.body {
-                FunCall(_)  => "Function call",
-                LetExpr(_)  => "Let expression",
-                PatMatch(_) => "Pattern matching",
-                LitConv(_)  => "Literal conversion",
-
-                AnonFun(_)  => unreachable!(),
-            };
-
-            Err(
-                RuntimeError::CompileError(
-                    CompileError::NotAFunction {
-                        symbol:      fun_name.clone(),
-                        resolves_to: String::from(what)
-                    }))
-        }
-    }
+    let mut eval_state = HashMap::default();
+    rec_inline_filter_sql(&fun_decl.body, &mut eval_state)
 }
 
 fn rec_to_sql(qplan: &QPlan, db_ctx: &DbCtx) -> Result<String, RuntimeError> {
@@ -291,6 +294,70 @@ fn to_sql(qplan: &QPlan, db_ctx: &DbCtx) -> Result<String, RuntimeError> {
     let mut sql = rec_to_sql(qplan, db_ctx)?;
     sql.push_str(";");
     Ok(sql)
+}
+
+/* Interpreter */
+
+enum Cursor {
+    Read(ops::Range<Rowid>),
+    Filter { pred_obj: Rc<objstore::Obj>, child_cursor: Box<Cursor> }
+}
+
+type Rowid = u32;
+
+fn max_rowid(tab_name: &str) -> Result<Rowid, RuntimeError> {
+    let conn = sqlite::Connection::open(DB_FILENAME)?;
+
+    let query = format!("SELECT MAX(ROWID) FROM {}", tab_name);
+    let mut stmt = conn.prepare(&query)?;
+    let max_rowid = stmt.query_row([], |row| row.get(0))?;
+
+    Ok(max_rowid)
+}
+
+fn read_cursor(tab_name: &str) -> Result<Cursor, RuntimeError> {
+    let max_rowid = max_rowid(tab_name)?;
+
+    let rowid_range =
+        ops::Range {
+            start: 1 /* incl */,
+            end: max_rowid+1 /* excl */
+        };
+
+    let cursor = Cursor::Read(rowid_range);
+    Ok(cursor)
+}
+
+fn filter_cursor(fun_name: &Symbol, child_qplan: &QPlan, db_ctx: &DbCtx)
+    -> Result<Cursor, RuntimeError>
+{
+    let child_cursor = to_cursor(&child_qplan, db_ctx)?;
+
+    let pred_obj = {
+        let fun_obj = resolve_symbol(fun_name, db_ctx)?;
+        let fun_decl = extract_decl(&fun_obj)?;
+        check_is_fun_decl(fun_decl)?;
+
+        fun_obj
+    };
+
+    let cursor =
+        Cursor::Filter {
+            pred_obj,
+            child_cursor: Box::new(child_cursor)
+        };
+    Ok(cursor)
+}
+
+fn to_cursor(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeError> {
+    use QPlan::*;
+    match qplan {
+        Read(tab_name) =>
+            read_cursor(&tab_name),
+
+        Filter(fun_name, child_qplan) =>
+            filter_cursor(&fun_name, &child_qplan, db_ctx),
+    }
 }
 
 /* TODO add enum codes like "HasMoreEntries" */
