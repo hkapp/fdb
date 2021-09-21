@@ -638,14 +638,66 @@ fn cursor_fetch(cursor: &mut Cursor) -> Result<Option<Rowid>, RuntimeError> {
     }
 }
 
+fn gen_proj_query_from_dataguide(data_guide: &DataGuide, rowid: Rowid) -> String {
+    /* 1. Generate a comma-separated list of column names */
+    let col_names = data_guide.0
+                        .iter()
+                        .map(|e| &e.col_name as &str)
+                        .collect::<Vec<&str>>()
+                        .join(", ");
+    /* FIXME add assert to check table name always the same */
+    let table_name = &data_guide.0.get(0).unwrap().tab_name;
+
+    let sql_query = format!("SELECT {} FROM {} WHERE rowid = {}",
+                            col_names, table_name, rowid);
+
+    return sql_query;
+}
+
+fn query_sqlite_rowid_into(rowid: Rowid, data_guide: &DataGuide, res_buf: &mut [QVal])
+    -> Result<(), RuntimeError>
+{
+    let sql_query = gen_proj_query_from_dataguide(data_guide, rowid);
+    let _nrows = query_sqlite_into(&sql_query, res_buf)?;
+    /* TODO assert that returned number of rows is exactly one */
+    Ok(())
+}
+
+fn exec_interpreter_into(cursor: &mut Cursor, res_buf: &mut [QVal]) -> Result<Status, RuntimeError> {
+    let data_guide = cursor_data_guide(cursor); /* TODO we should add the final "result conversion / out projection" node in the cursor tree */
+    let mut buf_pos = 0;
+    while let Some(rowid) = cursor_fetch(cursor)? {
+        /* TODO: read row values from rowid
+         *   base code off of query_sqlite_into?
+         */
+        query_sqlite_rowid_into(rowid, &data_guide, &mut res_buf[buf_pos..])?;
+        buf_pos += 1;
+    }
+    Ok(buf_pos)
+}
+
 /* TODO add enum codes like "HasMoreEntries" */
 type Status = usize;
 
 pub fn exec_into(qplan: &QPlan, db_ctx: &DbCtx, res_buf: &mut [QVal]) -> Result<Status, RuntimeError> {
-    let sql_query = to_sql(qplan, db_ctx)?;
-    println!("{}", sql_query);
+    let sqlite_backend = false;
 
-    query_sqlite_into(&sql_query, res_buf)
+    if sqlite_backend {
+        /* Execute on full SQLite backend */
+        let sql_query = to_sql(qplan, db_ctx)?;
+
+        println!("SQLite execution:");
+        println!("{}", sql_query);
+
+        query_sqlite_into(&sql_query, res_buf)
+    }
+    else {
+        /* Execute on current interpreter backend */
+        let mut cursor = to_cursor(qplan, db_ctx)?;
+
+        println!("FDB interpreter:");
+        exec_interpreter_into(&mut cursor, res_buf)
+    }
 }
 
 /* Error conversion */
