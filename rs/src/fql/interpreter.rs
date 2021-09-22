@@ -371,12 +371,13 @@ fn query_sqlite_rowid_into(rowid: Rowid, data_guide: &DataGuide, res_buf: &mut [
 
 pub fn exec_interpreter_into(cursor: &mut Cursor, res_buf: &mut [QVal]) -> Result<Status, RuntimeError> {
     let data_guide = cursor_data_guide(cursor); /* TODO we should add the final "result conversion / out projection" node in the cursor tree */
+    let ncols = data_guide.0.len();
     let mut rowcount = 0;
     while let Some(rowid) = cursor_fetch(cursor)? {
         /* TODO: read row values from rowid
          *   base code off of query_sqlite_into?
          */
-        let buf_idx = 2 * rowcount; /* currently, read pairs of ints from the table */
+        let buf_idx = ncols * rowcount;
         query_sqlite_rowid_into(rowid, &data_guide, &mut res_buf[buf_idx..])?;
         rowcount += 1;
     }
