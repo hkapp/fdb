@@ -175,6 +175,14 @@ fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, rowid: Rowid, interpreter: &mu
             let deconstruct = pat_cases.get(0).unwrap();
             let field_binds = &deconstruct.field_binds;
 
+            /* For each field in the struct, assign the field value to a local variable.
+             * Example:
+             *   match s {
+             *     MyStruct(a, b, c) => f(a, b, c),
+             *   }
+             * Assign the actual field values to temp variables a, b and c, reading from s.
+             * Then execute f, which will read the variables a, b and c.
+             */
             for field_index in 0..field_binds.len() {
                 let field_bind = field_binds.get(field_index).unwrap();
 
@@ -263,33 +271,62 @@ fn interpret_row_fun(predicate: &ir::AnonFun, rowid: Rowid, data_guide: &DataGui
         let param_name: &ir::Local = &param.name;
 
         let mut interpreter: Interpreter = HashMap::new();
-        let conflict = interpreter.insert(param_name,
-                                          RtVal::DataGuide(data_guide.clone()));
+
+        let arg_value =
+          if data_guide.0.len() == 1 {
+            /* single column: treat as actual values
+             * FIXME: need to consider type vs. newtype here
+             */
+            resolve_dataguide_entry(data_guide, 0, rowid)?
+          }
+          else {
+            /* struct argument. Value is the data guide. */
+            RtVal::DataGuide(data_guide.clone())
+          };
+
+        let conflict = interpreter.insert(param_name, arg_value);
         assert!(conflict.is_none());
 
         rec_interpret_row_expr(&predicate.body, rowid, &mut interpreter)
     }
 }
 
-fn new_data_guide(tab_name: &str) -> DataGuide {
-    let ncols = 2; /* for now this is the max */
-    let mut cols = Vec::new();
-
-    for col_idx in 0..ncols {
-        let col_name = format!("{}{}", super::STRUCT_COL_PREFIX, col_idx);
-        let column =
-            ColId {
-                col_name,
-                tab_name: String::from(tab_name)
-            };
-
-        cols.push(column)
+fn new_data_guide(tab_name: &str) -> Result<DataGuide, RuntimeError> {
+    fn dg_foo(tab_name: &str) -> DataGuide {
+        let bar_col = ColId {
+            col_name: String::from("bar"),
+            tab_name: String::from(tab_name)
+        };
+        DataGuide(vec![bar_col])
     }
 
-    DataGuide(cols)
+    fn dg_pairs(tab_name: &str) -> DataGuide {
+        let ncols = 2;
+        let mut cols = Vec::new();
+
+        for col_idx in 0..ncols {
+            let col_name = format!("{}{}", super::STRUCT_COL_PREFIX, col_idx);
+            let column =
+                ColId {
+                    col_name,
+                    tab_name: String::from(tab_name)
+                };
+
+            cols.push(column)
+        }
+
+        DataGuide(cols)
+    }
+
+    /* FIXME for now the table schemas are hardcoded */
+    match tab_name {
+      "foo"   => Ok(dg_foo(tab_name)),
+      "pairs" => Ok(dg_pairs(tab_name)),
+      _       => Err(RuntimeError::UnknownTable(String::from(tab_name))),
+    }
 }
 
-fn cursor_data_guide(cursor: &Cursor) -> DataGuide {
+fn cursor_data_guide(cursor: &Cursor) -> Result<DataGuide, RuntimeError> {
     match cursor {
         Cursor::Read(cur_read) =>
             new_data_guide(&cur_read.tab_name),
@@ -304,7 +341,7 @@ fn cursor_fetch_filter(cur_filter: &mut CurFilter) -> Result<Option<Rowid>, Runt
     let pred_decl = super::extract_decl(&cur_filter.pred_obj)?;
     let pred_fun = super::check_is_fun_decl(pred_decl)?;
     let child_cursor = &mut cur_filter.child_cursor;
-    let data_guide = cursor_data_guide(child_cursor);
+    let data_guide = cursor_data_guide(child_cursor)?;
                     /* filter: data guide is unchanged (no map) */
 
     let mut child_row = cursor_fetch(child_cursor);
@@ -370,7 +407,7 @@ fn query_sqlite_rowid_into(rowid: Rowid, data_guide: &DataGuide, res_buf: &mut [
 }
 
 pub fn exec_interpreter_into(cursor: &mut Cursor, res_buf: &mut [QVal]) -> Result<Status, RuntimeError> {
-    let data_guide = cursor_data_guide(cursor); /* TODO we should add the final "result conversion / out projection" node in the cursor tree */
+    let data_guide = cursor_data_guide(cursor)?; /* TODO we should add the final "result conversion / out projection" node in the cursor tree */
     let ncols = data_guide.0.len();
     let mut rowcount = 0;
     while let Some(rowid) = cursor_fetch(cursor)? {

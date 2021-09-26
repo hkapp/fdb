@@ -20,7 +20,7 @@ execQTest = qry >>= execAndPrint
 
 type QVal = CUInt32;
 
-qry = qryb
+qry = qrya
 
 qrya :: IO (Q QVal)
 qrya =
