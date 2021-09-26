@@ -13,7 +13,7 @@ const STRUCT_COL_PREFIX: &str = "col";
 #[derive(Clone)]
 pub enum QPlan {
     Read { tab_name: String },
-    Filter { fun_name: Symbol, qchild: Box<QPlan> }
+    Filter { filter_fun: Rc<objstore::Obj>, qchild: Box<QPlan> }
 }
 
 pub type QVal = u32;
@@ -38,32 +38,33 @@ pub fn filter(prev_plan: &QPlan, fun_name: &str, db_ctx: &DbCtx) -> Result<QPlan
         objstore::Symbol::new(
             String::from(fun_name));
 
-    match db_ctx.obj_store.find(&symbol) {
-        Some(obj) => {
-            match obj.as_result() {
-                /* TODO we should also check that the declaration at the end is actually a function
-                 * and not a constant.
-                 */
-                Ok(_) => (),
+    let resolved_fun =
+        match db_ctx.obj_store.find(&symbol) {
+            Some(obj) => {
+                match obj.as_result() {
+                    /* TODO we should also check that the declaration at the end is actually a function
+                     * and not a constant.
+                     */
+                    Ok(_) => obj,
 
-                Err(objstore::FailedObj::ParseError(err_msg)) => {
-                    println!("Object \"{}\" has parsing errors:", fun_name);
-                    println!("{}", &err_msg);
-                    return Err(
-                        CompileError::ObjectHasErrors(symbol));
+                    Err(objstore::FailedObj::ParseError(err_msg)) => {
+                        println!("Object \"{}\" has parsing errors:", fun_name);
+                        println!("{}", &err_msg);
+                        return Err(
+                            CompileError::ObjectHasErrors(symbol));
+                    }
                 }
             }
-        }
 
-        None =>
-            return Err(
-                CompileError::SymbolNotDefined(symbol)),
-    }
+            None =>
+                return Err(
+                    CompileError::SymbolNotDefined(symbol)),
+        };
 
     let prev_plan_cp = Box::new(prev_plan.clone());
     let new_plan = QPlan::Filter {
-        fun_name: symbol,
-        qchild:   prev_plan_cp
+        filter_fun: resolved_fun,
+        qchild:     prev_plan_cp
     };
                         /* need to clone to ensure Haskell doesn't ask
                          * the same memory to be cleaned twice */

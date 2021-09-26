@@ -3,7 +3,7 @@ use rusqlite as sqlite;
 use crate::ctx::DbCtx;
 use crate::ghcdump::ir;
 use std::collections::HashMap;
-use crate::objstore::Symbol;
+use crate::objstore;
 
 /* Conversion QPlan -> SQL */
 
@@ -120,9 +120,8 @@ fn rec_inline_filter_sql<'a>(
     }
 }
 
-fn inline_filter_sql(fun_name: &Symbol, db_ctx: &DbCtx) -> Result<String, RuntimeError> {
-    let fun_obj = super::resolve_symbol(fun_name, db_ctx)?;
-    let fun_decl = super::extract_decl(&fun_obj)?;
+fn inline_filter_sql(filter_fun: &objstore::Obj, db_ctx: &DbCtx) -> Result<String, RuntimeError> {
+    let fun_decl = super::extract_decl(&filter_fun)?;
     super::check_is_fun_decl(fun_decl)?;
 
     let mut eval_state = HashMap::default();
@@ -135,9 +134,9 @@ fn rec_to_sql(qplan: &QPlan, db_ctx: &DbCtx) -> Result<String, RuntimeError> {
         Read { tab_name } =>
             format!("SELECT * FROM {}", tab_name),
 
-        Filter { fun_name, qchild: rec_qplan } => {
+        Filter { filter_fun, qchild: rec_qplan } => {
             let rec_sql = rec_to_sql(&rec_qplan, db_ctx)?;
-            let where_clause = inline_filter_sql(&fun_name, db_ctx)?;
+            let where_clause = inline_filter_sql(&filter_fun, db_ctx)?;
 
             format!("SELECT * FROM ({}) WHERE {}",
                     rec_sql, where_clause)

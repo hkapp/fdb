@@ -66,22 +66,18 @@ fn read_cursor(tab_name: &str) -> Result<Cursor, RuntimeError> {
     Ok(cursor)
 }
 
-fn filter_cursor(fun_name: &Symbol, child_qplan: &QPlan, db_ctx: &DbCtx)
+fn filter_cursor(filter_fun: Rc<objstore::Obj>, child_qplan: &QPlan, db_ctx: &DbCtx)
     -> Result<Cursor, RuntimeError>
 {
     let child_cursor = to_cursor(&child_qplan, db_ctx)?;
 
-    let pred_obj = {
-        let fun_obj = super::resolve_symbol(fun_name, db_ctx)?;
-        let fun_decl = super::extract_decl(&fun_obj)?;
-        super::check_is_fun_decl(fun_decl)?;
-
-        fun_obj
-    };
+    let fun_decl = super::extract_decl(&filter_fun)?;
+    /* TODO move this check at cursor build time */
+    super::check_is_fun_decl(fun_decl)?;
 
     let cur_filter =
         CurFilter {
-            pred_obj,
+            pred_obj:     filter_fun,
             child_cursor: Box::new(child_cursor)
         };
 
@@ -95,8 +91,8 @@ pub fn to_cursor(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeError> 
         Read { tab_name } =>
             read_cursor(&tab_name),
 
-        Filter { fun_name, qchild: child_qplan } =>
-            filter_cursor(&fun_name, &child_qplan, db_ctx),
+        Filter { filter_fun, qchild: child_qplan } =>
+            filter_cursor(Rc::clone(filter_fun), &child_qplan, db_ctx),
     }
 }
 
