@@ -132,10 +132,10 @@ fn inline_filter_sql(fun_name: &Symbol, db_ctx: &DbCtx) -> Result<String, Runtim
 fn rec_to_sql(qplan: &QPlan, db_ctx: &DbCtx) -> Result<String, RuntimeError> {
     use QPlan::*;
     let sql = match qplan {
-        Read(tab_name) =>
+        Read { tab_name } =>
             format!("SELECT * FROM {}", tab_name),
 
-        Filter(fun_name, rec_qplan) => {
+        Filter { fun_name, qchild: rec_qplan } => {
             let rec_sql = rec_to_sql(&rec_qplan, db_ctx)?;
             let where_clause = inline_filter_sql(&fun_name, db_ctx)?;
 

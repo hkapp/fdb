@@ -132,3 +132,20 @@ fn rtbag_read<'a, T>(bag: &'a RtBag, row_fmt: &RowFormat, field_path: &[FieldIdx
         Ok(&*buf_ptr)
     }
 }
+
+
+/* Top-level entry point */
+
+//fn apply_data_accesses_qread(tab_name: &str) -> RowFormat {
+    //TODO
+//}
+
+//fn apply_data_accesses_qfilter(fun_name: &str, )
+
+//pub fn apply_data_accesses(qplan: &mut QPlan) -> RowFormat {
+    /* Step 1: get row format from child node */
+    //match qplan {
+        //QPlan::Read(tab_name) => ..;
+        //QPlan::Filter(fun_name, child_query) => ..;
+    //}
+//}

@@ -103,7 +103,7 @@ pub extern fn readT(_db: *const DbCtx, str_buf: *const c_char, str_len: c_sizet)
     let tab_name: &str = unsafe { str_from_hs(str_buf, str_len).unwrap() };
     /* String::from must copy the &str, or we might be in big trouble */
     /* TODO move to 'fql' */
-    let qplan = QPlan::Read(String::from(tab_name));
+    let qplan = fql::read_table(tab_name);
 
     unsafe {
         to_hs_ptr(qplan)

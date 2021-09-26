@@ -92,10 +92,10 @@ fn filter_cursor(fun_name: &Symbol, child_qplan: &QPlan, db_ctx: &DbCtx)
 pub fn to_cursor(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeError> {
     use QPlan::*;
     match qplan {
-        Read(tab_name) =>
+        Read { tab_name } =>
             read_cursor(&tab_name),
 
-        Filter(fun_name, child_qplan) =>
+        Filter { fun_name, qchild: child_qplan } =>
             filter_cursor(&fun_name, &child_qplan, db_ctx),
     }
 }
