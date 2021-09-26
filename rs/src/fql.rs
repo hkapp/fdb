@@ -79,7 +79,9 @@ pub enum RuntimeError {
   PatternMatchNonStruct(ir::Local),
   UnsupportedComparison { left: interpreter::RtVal, right: interpreter::RtVal },
   FilterNotBoolean(interpreter::RtVal),
-  UnknownTable(String)
+  UnknownTable(String),
+  ScalarRowFormatHasNoFields,
+  FieldPathIncompletelyResolved
 }
 
 /* Object store helpers */
