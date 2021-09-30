@@ -1,0 +1,51 @@
+digraph G {
+  Decl
+  Decl -> DeclFields
+  DeclFields [shape=rect, label="name"]
+  Decl -> Expr
+
+  Expr
+  Expr -> AnonFun [arrowhead=none]
+  Expr -> FunCall [arrowhead=none]
+  Expr -> LetExpr [arrowhead=none]
+  Expr -> PatMatch [arrowhead=none]
+  Expr -> LitConv [arrowhead=none]
+
+  AnonFun
+  AnonFun -> AnonFunFields
+  AnonFunFields [shape=record, label="{type_params|typeclass_params|val_params}"]
+  AnonFun -> AnonFunBody [label=body]
+  AnonFunBody [label=Expr, style=dashed]
+
+  FunCall
+  FunCall -> FunCallFields
+  FunCallFields [shape=record, label="{called_fun|type_args|typeclass_args|val_args}"]
+
+  LetExpr
+  LetExpr -> LetExprFields
+  LetExprFields [shape=record, label="{var_name|var_type}"]
+  LetExpr -> LetExprValue [label=value]
+  LetExprValue [label=Expr, style=dashed]
+  LetExpr -> LetExprBody [label=body]
+  LetExprBody [label=Expr, style=dashed]
+
+  PatMatch
+  PatMatch -> PatMatchFields
+  PatMatchFields [shape=record, label="{matched_var}"]
+  PatMatch -> PatCase
+
+  PatCase
+  PatCase -> PatCaseFields
+  PatCaseFields [shape=record, label="{constructor|field_binds}"]
+  PatCase -> PatCaseBody [label=body]
+  PatCaseBody [label=Expr, style=dashed]
+
+  LitConv
+  LitConv -> LitConvFields
+  LitConvFields [shape=record, label="{conv_fun}"]
+  LitConv -> RawLit
+
+  RawLit
+  RawLit -> IntLit [arrowhead=none]
+
+}

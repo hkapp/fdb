@@ -1,6 +1,5 @@
 *.o
 *.hi
-*.dot
 *.png
 hs/bin/
 rs/target/
