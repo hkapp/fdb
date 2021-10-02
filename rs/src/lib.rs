@@ -5,3 +5,4 @@ mod hsffi;
 mod fql;
 mod ctx;
 mod objstore;
+mod ir;

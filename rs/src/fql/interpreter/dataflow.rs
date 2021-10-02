@@ -1,5 +1,8 @@
-use super::{QPlan, RuntimeError, ColId, Rowid, RtVal};
+use super::{QPlan, RuntimeError, ColId, Rowid, RtVal, DataGuide};
 use std::collections::HashMap;
+use crate::ghcdump::ir;
+use crate::objstore;
+use crate::fql;
 
 /* RowFormat / RowVal */
 
@@ -136,16 +139,162 @@ fn rtbag_read<'a, T>(bag: &'a RtBag, row_fmt: &RowFormat, field_path: &[FieldIdx
 
 /* Top-level entry point */
 
-//fn apply_data_accesses_qread(tab_name: &str) -> RowFormat {
-    //TODO
-//}
+fn apply_data_accesses_qread(tab_name: &str) -> DataGuide {
+    super::new_data_guide(tab_name)
+}
 
-//fn apply_data_accesses_qfilter(fun_name: &str, )
+/* TODO add support for it in the interpreter runtime */
+const DATA_ACCESS_FUN_NAME: &str = "data_access$";
 
-//pub fn apply_data_accesses(qplan: &mut QPlan) -> RowFormat {
-    /* Step 1: get row format from child node */
-    //match qplan {
-        //QPlan::Read(tab_name) => ..;
-        //QPlan::Filter(fun_name, child_query) => ..;
-    //}
-//}
+fn data_access_expr(dg_entry: usize, data_guide: &DataGuide) -> Box<ir::Expr> {
+    let col_locator = data_guide.0.get(dg_entry).unwrap();
+
+    let tab_name_expr = ir::Expr::RawLit(
+        ir::RawLit::StrLit(
+            String::from(col_locator.tab_name))
+    );
+
+    let col_name_expr = ir::Expr::RawLit(
+        ir::RawLit::StrLit(
+            String::from(col_locator.col_name))
+    );
+
+    let fun_call = ir::FunCall {
+        called_fun:     ir::Global::from(String::from(DATA_ACCESS_FUN_NAME)),
+        type_args:      Vec::new(), /* we would actually want some type arguments here */
+        typeclass_args: Vec::new(),
+        val_args:       vec![tab_name_expr, col_name_expr] /* FIXME add support for inline values */
+    };
+
+    Box::from(fun_call)
+}
+
+fn rec_apply_data_accesses_expr(expr: &mut ir::Expr, data_access_vars: HashMap<ir::Local, DataGuide>) {
+    /* Code mostly copied from crate::fql::interpreter::rec_interpret_row_expr */
+    use ir::Expr::*;
+    match expr {
+        PatMatch( ir::PatMatch { matched_var, pat_cases } ) => {
+            if pat_cases.len() > 1 {
+                /* FIXME we currently don't support product types, only pure sum types */
+                /* FIXME should be a compile error */
+                return Err(RuntimeError::TooManyCases(pat_cases.len()));
+            }
+
+            let deconstruct = pat_cases.get(0).unwrap();
+            let field_binds = &deconstruct.field_binds;
+
+            match data_access_vars.get(matched_var) {
+                Some(data_guide) => {
+                    /* Replace field references by data accesses
+                     *
+                     *   match s {
+                     *     MyStruct(a, b) => f(a, b)
+                     *   }
+                     *
+                     * ===>
+                     *
+                     *   let a = DataAccess(..)
+                     *   let b = DataAccess(..)
+                     *   f(a, b)
+                     */
+                    /* FIXME with DataGuide, we only support one-level structs, not nested */
+                    /* TODO would be better to loop in reverse order here */
+                    let mut replaced_expr = &mut deconstruct.body;
+                    for field_index in 0..field_binds.len() {
+                        let field_bind = field_binds.get(field_index).unwrap();
+
+                        if field_bind.is_none() {
+                            /* this index is not bound */
+                            continue;
+                        }
+                        let field_bind = field_bind.as_ref().unwrap();
+
+                        let data_access = data_access_expr(field_index, data_guide);
+                        replaced_expr =
+                            LetExpr (
+                                ir::LetExpr {
+                                    var_name:  field_bind.name,
+                                    var_type:  field_bind.typ,
+                                    var_value: data_access_expr,
+                                    body:      replaced_expr,
+                                }
+                            );
+                    }
+
+                    replaced_expr  /* use that to continue recursing */
+                }
+                None => { /* nothing to do */ }
+            }
+            /* Recurse in the body */
+            rec_apply_data_accesses_expr(&mut deconstruct.body, data_access_vars);
+        }
+    }
+}
+
+fn apply_data_accesses_fun_code(orig_code: &ir::AnonFun, input_dg: &DataGuide)
+    -> Result<ir::Expr, RuntimeError>
+{
+    /* need some context here, no? */
+    /* TODO init the context / code with the function arguments */
+    /* code copied from crate::fql::interpreter::interpret_row_fun */
+    let val_params = &orig_code.val_params;
+    if val_params.len() != 1 {
+        return Err(RuntimeError::TooManyArguments(val_params.len()));
+    }
+
+    let param = val_params.get(0).unwrap();
+    let param_name: &ir::Local = &param.name;
+
+    if input_dg.0.len() == 1 {
+        /* Input is a scalar.
+         * Easy case: just add a 'let' expression with the data access.
+         *
+         *   f x = x + 1
+         *
+         * ===>
+         *
+         *   let x = DataAccess(..)
+         *   x + 1
+         */
+
+        let data_access = data_access_expr(0, input_dg);
+
+        ir::LetExpr {
+            var_name:  param_name,
+            var_type:  param.typ,
+            var_value: data_access,
+            body:      Box::from(orig_code.body.clone()),
+        }
+    }
+    else {
+        let mut data_access_vars = HashMap::new();
+        let mut new_code = orig_code.body.clone();
+
+        let conflict = data_access_vars.insert(param_name, input_dg);
+        assert!(conflict.is_none());
+
+        rec_apply_data_accesses_expr(&mut new_code, &mut data_access_vars)
+    }
+}
+
+fn apply_data_accesses_qfilter(filter_fun: &objstore::Obj, qchild: &QPlan)
+    -> Result<DataGuide, RuntimeError>
+{
+    /* Step 1: Get row format from child node */
+    let child_dg = apply_data_accesses(qchild);
+
+    /* Step 2: Replace reads in filter code */
+    let filter_decl = fql::extract_decl(filter_fun)?;
+    let orig_filter_code = fql::check_is_fun_decl(filter_decl)?;
+    let new_filter_code = apply_data_accesses_fun_code(orig_filter_code, child_dg);
+}
+
+pub fn apply_data_accesses(qplan: &mut QPlan) -> RowFormat {
+    match qplan {
+        QPlan::Read { tab_name } =>
+            apply_data_accesses_qread(&tab_name),
+
+        QPlan::Filter { filter_fun, qchild } =>
+            apply_data_accesses_qfilter(&filter_fun, &qchild),
+    }
+}
