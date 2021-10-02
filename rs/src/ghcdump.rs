@@ -41,7 +41,7 @@ fn convert_all_decls(ghc_decls: parser::ParseResult) -> impl Iterator<Item=Parse
                         convir::conv_decl(&decl)
                             .map_err(|conv_err| format!("{:?}", conv_err))
                     );
-            let conv_name = convir::conv_global(name);
+            let conv_name = convir::conv_global(&name);
             (conv_name, conv_decl_or_err)
         })
 }

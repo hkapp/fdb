@@ -22,8 +22,8 @@ pub enum Expr {
 
 #[derive(Debug)]
 pub struct AnonFun {
-    pub type_params:      Vec<TypeParamF>,
-    pub typeclass_params: Vec<TypeClassParam>,
+    pub type_params:      (),  /* TODO remove */
+    pub typeclass_params: (), /* TODO remove */
     pub val_params:       Vec<ValParam>,
     pub body:             Box<Expr>  /* avoid recursive type */
 }
@@ -41,7 +41,7 @@ pub struct TypeClassParam {
 #[derive(Debug)]
 pub struct ValParam {
     pub name: Local,
-    pub typ:  Type
+    pub typ:  ()  /* TODO remove */
 }
 
 /* FunCall */
@@ -49,8 +49,8 @@ pub struct ValParam {
 #[derive(Debug)]
 pub struct FunCall {
     pub called_fun:     Global,
-    pub type_args:      Vec<TypeArg>,
-    pub typeclass_args: Vec<TypeClassArg>,
+    pub type_args:      Vec<()>,  /* TODO remove */
+    pub typeclass_args: Vec<()>,  /* TODO remove */
     pub val_args:       Vec<ValArg>
 }
 
@@ -59,7 +59,7 @@ pub struct FunCall {
 #[derive(Debug)]
 pub struct LetExpr {
     pub var_name:  Local,
-    pub var_type:  Type,
+    pub var_type:  (), /* TODO remove */
     pub var_value: Box<Expr>,
     pub body:      Box<Expr>
 }
