@@ -202,17 +202,17 @@ fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, rowid: Rowid, interpreter: &mu
             rec_interpret_row_expr(&deconstruct.body, rowid, interpreter)
         }
 
-        FunCall(ir::FunCall { called_fun, val_args, .. }) => {
-            /* Do we know this function? */
-            match &called_fun.0[..] {
-                "GHC.Num.fromInteger" => {
+        FunCall(ir::FunCall { operator, val_args }) => {
+            use ir::Operator;
+            match &operator {
+                Operator::Noop => {
                     assert!(val_args.len() == 1);
                     let arg_name = val_args.get(0).unwrap();
                     let arg_val = interpreter.get(arg_name).unwrap();
                     Ok(arg_val.clone())
                 }
 
-                "GHC.Classes.<=" => {
+                Operator::LessThanOrEqual => {
                     assert!(val_args.len() == 2);
                     let arg_left  = val_args.get(0).unwrap();
                     let arg_right = val_args.get(1).unwrap();
@@ -233,10 +233,6 @@ fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, rowid: Rowid, interpreter: &mu
                                 }),
                     }
                 }
-
-                _ =>
-                    Err(
-                        RuntimeError::UnsupportedFunction(called_fun.clone())),
             }
         }
 

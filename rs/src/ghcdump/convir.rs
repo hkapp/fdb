@@ -4,6 +4,7 @@ use crate::ir as cmnir;
 #[derive(Debug)]
 pub enum ConvError {
     TooManyPatCases(usize),
+    UnknownOperator(ghcir::Global),
 }
 
 /* Decl */
@@ -26,7 +27,7 @@ fn conv_expr(ghc_expr: &ghcir::Expr) -> Result<cmnir::Expr, ConvError> {
                 CmnExpr::AnonFun(conv_anon_fun(anon_fun)?),
 
             GhcExpr::FunCall(fun_call) =>
-                CmnExpr::FunCall(conv_fun_call(fun_call)),
+                CmnExpr::FunCall(conv_fun_call(fun_call)?),
 
             GhcExpr::LetExpr(let_expr) =>
                 CmnExpr::LetExpr(conv_let_expr(let_expr)?),
@@ -65,16 +66,38 @@ fn conv_anon_fun(anon_fun: &ghcir::AnonFun) -> Result<cmnir::AnonFun, ConvError>
 }
 
 /* FunCall */
-fn conv_fun_call(ghc_fun_call: &ghcir::FunCall) -> cmnir::FunCall {
-    let conv_called_fun = conv_global(&ghc_fun_call.called_fun);
-    let conv_val_args   = ghc_fun_call.val_args
+fn conv_fun_call(ghc_fun_call: &ghcir::FunCall) -> Result<cmnir::FunCall, ConvError> {
+    let conv_operator = resolve_operator(&ghc_fun_call.called_fun)?;
+    let conv_val_args = ghc_fun_call.val_args
                             .iter()
                             .map(conv_local)
                             .collect();
 
-    cmnir::FunCall {
-        called_fun:     conv_called_fun,
-        val_args:       conv_val_args,
+    let conv_fun_call =
+        cmnir::FunCall {
+            operator: conv_operator,
+            val_args: conv_val_args,
+        };
+
+    Ok(conv_fun_call)
+}
+
+fn resolve_operator(fun_name: &ghcir::Global) -> Result<cmnir::Operator, ConvError> {
+    /* TODO this might be better done as a separate lowering phase.
+     * Right now, we don't support generic function calls so we can't
+     * create the arbitrarily-named nodes.
+     */
+    /* Do we know this Haskell function? */
+    use cmnir::Operator;
+    match &fun_name.0[0..] {
+        "GHC.Num.fromInteger" =>
+            Ok(Operator::Noop),  /* for now, we do nothing here */
+
+        "GHC.Classes.<=" =>
+            Ok(Operator::LessThanOrEqual),
+
+        _ =>
+            Err(ConvError::UnknownOperator(fun_name.clone())),
     }
 }
 

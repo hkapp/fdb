@@ -33,12 +33,23 @@ pub struct ValParam {
 }
 
 /* FunCall */
-/* TODO temp replace by operators */
+/* Should we rename this? Most of the enum nodes will be operators actually.
+ * Actual function call is going to be a special case.
+ *
+ * Action and Call look like very bad names though.
+ * OpCall makes it sound not very functional.
+ */
 
 #[derive(Debug)]
 pub struct FunCall {
-    pub called_fun: Global,
-    pub val_args:   Vec<ValArg>
+    pub operator: Operator,
+    pub val_args: Vec<ValArg>
+}
+
+#[derive(Debug)]
+pub enum Operator {
+    Noop,
+    LessThanOrEqual
 }
 
 /* LetExpr */

@@ -79,7 +79,6 @@ pub enum RuntimeError {
   SqliteError(sqlite::Error),
   CompileError(CompileError),
   TooManyArguments(usize),
-  UnsupportedFunction(ir::Global),
   ConflictingDefForVar(ir::Local),
   BufferTooSmall(usize),
   IndexNotInDataGuide(usize),

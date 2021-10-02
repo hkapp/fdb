@@ -75,17 +75,17 @@ fn rec_inline_filter_sql<'a>(
             rec_inline_filter_sql(&deconstruct.body, eval_state)
         }
 
-        FunCall(ir::FunCall { called_fun, val_args, .. }) => {
-            /* Do we know this function? */
-            match &called_fun.0[..] {
-                "GHC.Num.fromInteger" => {
+        FunCall(ir::FunCall { operator, val_args }) => {
+            use ir::Operator;
+            match &operator {
+                Operator::Noop => {
                     assert!(val_args.len() == 1);
                     let arg_name = val_args.get(0).unwrap();
                     let arg_sql = eval_state.get(arg_name).unwrap();
                     Ok(arg_sql.clone())
                 }
 
-                "GHC.Classes.<=" => {
+                Operator::LessThanOrEqual => {
                     assert!(val_args.len() == 2);
                     let arg_left  = val_args.get(0).unwrap();
                     let arg_right = val_args.get(1).unwrap();
@@ -95,11 +95,6 @@ fn rec_inline_filter_sql<'a>(
 
                     let sql = format!("{} <= {}", sql_left, sql_right);
                     Ok(sql)
-                }
-
-                _ => {
-                    Err(
-                        RuntimeError::UnsupportedFunction(called_fun.clone()))
                 }
             }
         }
