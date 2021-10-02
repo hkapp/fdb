@@ -30,7 +30,7 @@ fn conv_expr(ghc_expr: &ghcir::Expr) -> cmnir::Expr {
             CmnExpr::PatMatch(conv_pat_match(pat_match)),
 
         GhcExpr::LitConv(lit_conv) =>
-            CmnExpr::LitConv(conv_lit_conv(lit_conv))
+            CmnExpr::LitVal(conv_lit_conv(lit_conv))
     }
 }
 
@@ -115,17 +115,10 @@ fn conv_pat_case(ghc_pat_case: &ghcir::PatCase) -> cmnir::PatCase {
 }
 
 /* LitConv */
-fn conv_lit_conv(ghc_lit_conv: &ghcir::LitConv) -> cmnir::LitConv {
-    fn conv_raw_lit(ghc_lit: &ghcir::RawLit) -> cmnir::RawLit {
-        match ghc_lit {
-            ghcir::RawLit::IntLit(n) =>
-                cmnir::RawLit::IntLit(*n)
-        }
-    }
-
-    cmnir::LitConv {
-        conv_fun: conv_global(&ghc_lit_conv.conv_fun),
-        raw_lit:  conv_raw_lit(&ghc_lit_conv.raw_lit),
+fn conv_lit_conv(ghc_lit_conv: &ghcir::LitConv) -> cmnir::LitVal {
+    match &ghc_lit_conv.raw_lit {
+        ghcir::RawLit::IntLit(n) =>
+            cmnir::LitVal::IntLit(*n)
     }
 }
 

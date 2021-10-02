@@ -247,9 +247,9 @@ fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, rowid: Rowid, interpreter: &mu
             }
         }
 
-        LitConv(ir::LitConv { raw_lit, .. }) => {
-            match raw_lit {
-                ir::RawLit::IntLit(n) =>
+        LitVal(lit) => {
+            match lit {
+                ir::LitVal::IntLit(n) =>
                     Ok(
                         RtVal::UInt32(*n as u32)),
             }

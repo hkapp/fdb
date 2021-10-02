@@ -111,9 +111,9 @@ fn rec_inline_filter_sql<'a>(
             }
         }
 
-        LitConv(ir::LitConv { raw_lit, .. }) => {
-            match raw_lit {
-                ir::RawLit::IntLit(n) =>
+        LitVal(lit) => {
+            match lit {
+                ir::LitVal::IntLit(n) =>
                     Ok(n.to_string()),
             }
         }

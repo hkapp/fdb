@@ -129,7 +129,7 @@ fn check_is_fun_decl(decl: &ir::Decl) -> Result<&ir::AnonFun, CompileError> {
                 FunCall(_)  => "Function call",
                 LetExpr(_)  => "Let expression",
                 PatMatch(_) => "Pattern matching",
-                LitConv(_)  => "Literal conversion",
+                LitVal(_)   => "Literal value",
 
                 AnonFun(_)  => unreachable!(),
             };

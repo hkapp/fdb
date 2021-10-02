@@ -14,7 +14,7 @@ pub enum Expr {
     FunCall(FunCall),
     LetExpr(LetExpr),
     PatMatch(PatMatch),
-    LitConv(LitConv)
+    LitVal(LitVal)
 }
 
 /* AnonFun */
@@ -33,6 +33,7 @@ pub struct ValParam {
 }
 
 /* FunCall */
+/* TODO temp replace by operators */
 
 #[derive(Debug)]
 pub struct FunCall {
@@ -54,7 +55,7 @@ pub struct LetExpr {
 #[derive(Debug)]
 pub struct PatMatch {
     pub matched_var: Local,
-    pub pat_cases:   Vec<PatCase>,
+    pub pat_cases:   Vec<PatCase>, /* replace by single patcase for now */
 }
 
 /* PatCase */
@@ -66,16 +67,10 @@ pub struct PatCase {
     pub body:        Box<Expr>
 }
 
-/* LitConv */
+/* LitVal */
 
 #[derive(Debug)]
-pub struct LitConv {
-    pub conv_fun: Global,
-    pub raw_lit:  RawLit
-}
-
-#[derive(Debug)]
-pub enum RawLit {
+pub enum LitVal {
     IntLit(i32)
 }
 
