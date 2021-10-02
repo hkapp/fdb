@@ -1,6 +1,6 @@
 /*mod dataflow;*/
 
-use crate::ghcdump::ir;
+use crate::ir;
 use super::{QPlan, RuntimeError, QVal, Status};
 use super::sqlexec;
 use crate::ctx::DbCtx;

@@ -1,7 +1,7 @@
 use super::{QVal, RuntimeError, QPlan};
 use rusqlite as sqlite;
 use crate::ctx::DbCtx;
-use crate::ghcdump::ir;
+use crate::ir;
 use std::collections::HashMap;
 use crate::objstore;
 

@@ -3,6 +3,7 @@ use std::rc::Rc;
 use std::fmt;
 
 use crate::ghcdump;
+use crate::ir;
 
 pub struct ObjStore {
     symbols: HashMap<Symbol, Rc<Obj>>,
@@ -13,7 +14,7 @@ pub struct Obj {
     body: Result<ValidObj, FailedObj>
 }
 
-pub type ValidObj = ghcdump::ir::Decl;
+pub type ValidObj = ir::Decl;
 
 pub enum FailedObj {
     ParseError(ghcdump::ParseError)
@@ -35,7 +36,7 @@ pub fn load() -> Result<ObjStore, Error> {
             .map_err(|e| Error::ParsingError(e))?;
 
     let symbols =
-        ghc_decls.into_iter()
+        ghc_decls
             .map(|(global, parse_res)| {
                 let sym = Symbol(global.into());
                 let key = sym.clone();

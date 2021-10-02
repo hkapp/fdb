@@ -4,7 +4,7 @@ mod interpreter;
 use crate::ctx::DbCtx;
 use crate::objstore::{self, Symbol};
 use rusqlite as sqlite;
-use crate::ghcdump::ir;
+use crate::ir;
 use std::rc::Rc;
 
 const DB_FILENAME: &str = "../data/fdb.db";
