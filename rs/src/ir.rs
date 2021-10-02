@@ -8,7 +8,6 @@ pub struct Decl {
 
 /* Expr */
 
-/* TODO consider type Expr = Box<Expr_> */
 #[derive(Debug)]
 pub enum Expr {
     AnonFun(AnonFun),
@@ -22,18 +21,8 @@ pub enum Expr {
 
 #[derive(Debug)]
 pub struct AnonFun {
-    pub type_params:      (),  /* TODO remove */
-    pub typeclass_params: (), /* TODO remove */
     pub val_params:       Vec<ValParam>,
-    pub body:             Box<Expr>  /* avoid recursive type */
-}
-
-/* TypeClassParam */
-
-#[derive(Debug)]
-pub struct TypeClassParam {
-    pub name:      Local,
-    pub typeclass: Type
+    pub body:             Box<Expr>
 }
 
 /* ValParam */
@@ -41,7 +30,6 @@ pub struct TypeClassParam {
 #[derive(Debug)]
 pub struct ValParam {
     pub name: Local,
-    pub typ:  ()  /* TODO remove */
 }
 
 /* FunCall */
@@ -49,8 +37,6 @@ pub struct ValParam {
 #[derive(Debug)]
 pub struct FunCall {
     pub called_fun:     Global,
-    pub type_args:      Vec<()>,  /* TODO remove */
-    pub typeclass_args: Vec<()>,  /* TODO remove */
     pub val_args:       Vec<ValArg>
 }
 
@@ -59,7 +45,6 @@ pub struct FunCall {
 #[derive(Debug)]
 pub struct LetExpr {
     pub var_name:  Local,
-    pub var_type:  (), /* TODO remove */
     pub var_value: Box<Expr>,
     pub body:      Box<Expr>
 }
@@ -94,30 +79,17 @@ pub enum RawLit {
     IntLit(i32)
 }
 
-/* Type */
-
-#[derive(Debug)]
-pub struct Type {
-    pub name:      Global,
-    pub type_args: Vec<Type>
-}
-
 /* Local */
 
 #[derive(Debug, Eq, PartialEq, Hash, Clone)]
 pub struct Local (pub String);
 
-pub type TypeParamF = Local;
 pub type ValArg = Local;
 
 /* Global */
 
 #[derive(Debug, Hash, Eq, Ord, PartialOrd, PartialEq, Clone)]
 pub struct Global (pub String);
-
-pub type TypeClassArg = Global;
-
-pub type TypeArg = Type;
 
 impl fmt::Display for Global {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {

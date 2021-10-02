@@ -39,7 +39,6 @@ fn conv_anon_fun(anon_fun: &ghcir::AnonFun) -> cmnir::AnonFun {
     fn conv_val_param(ghc_param: &ghcir::ValParam) -> cmnir::ValParam {
         cmnir::ValParam {
             name: conv_local(&ghc_param.name),
-            typ:  ()
         }
     }
 
@@ -50,8 +49,6 @@ fn conv_anon_fun(anon_fun: &ghcir::AnonFun) -> cmnir::AnonFun {
     let conv_body = conv_expr(&anon_fun.body);
 
     cmnir::AnonFun {
-        type_params:      (),
-        typeclass_params: (),
         val_params:       conv_val_params,
         body:             Box::new(conv_body),
     }
@@ -59,19 +56,14 @@ fn conv_anon_fun(anon_fun: &ghcir::AnonFun) -> cmnir::AnonFun {
 
 /* FunCall */
 fn conv_fun_call(ghc_fun_call: &ghcir::FunCall) -> cmnir::FunCall {
-    let conv_called_fun     = conv_global(&ghc_fun_call.called_fun);
-    let conv_type_args      = Vec::new();
-    let conv_typeclass_args = Vec::new();
-
-    let conv_val_args = ghc_fun_call.val_args
+    let conv_called_fun = conv_global(&ghc_fun_call.called_fun);
+    let conv_val_args   = ghc_fun_call.val_args
                             .iter()
                             .map(conv_local)
                             .collect();
 
     cmnir::FunCall {
         called_fun:     conv_called_fun,
-        type_args:      conv_type_args,
-        typeclass_args: conv_typeclass_args,
         val_args:       conv_val_args,
     }
 }
@@ -84,7 +76,6 @@ fn conv_let_expr(ghc_let: &ghcir::LetExpr) -> cmnir::LetExpr {
 
     cmnir::LetExpr {
         var_name:  conv_var_name,
-        var_type:  (),
         var_value: Box::new(conv_var_value),
         body:      Box::new(conv_body),
     }
