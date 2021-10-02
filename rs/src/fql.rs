@@ -81,7 +81,6 @@ pub enum RuntimeError {
   TooManyArguments(usize),
   UnsupportedFunction(ir::Global),
   ConflictingDefForVar(ir::Local),
-  TooManyCases(usize),
   BufferTooSmall(usize),
   IndexNotInDataGuide(usize),
   UnsupportedExpression(String),

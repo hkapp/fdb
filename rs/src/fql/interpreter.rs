@@ -159,18 +159,11 @@ fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, rowid: Rowid, interpreter: &mu
             rec_interpret_row_expr(body, rowid, interpreter)
         }
 
-        PatMatch(ir::PatMatch { matched_var, pat_cases }) => {
+        PatMatch(ir::PatMatch { matched_var, pat_case }) => {
             /* FIXME might need to pop off state here if the let expression
              * also declares variables whose name conflict with existing ones.
              */
-            if pat_cases.len() > 1 {
-                /* We don't support actual ADTs right now in the interpreter
-                 * Only structs
-                 */
-                return Err(RuntimeError::TooManyCases(pat_cases.len()));
-            }
-
-            let deconstruct = pat_cases.get(0).unwrap();
+            let deconstruct = pat_case;
             let field_binds = &deconstruct.field_binds;
 
             /* For each field in the struct, assign the field value to a local variable.

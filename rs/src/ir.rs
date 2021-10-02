@@ -21,8 +21,8 @@ pub enum Expr {
 
 #[derive(Debug)]
 pub struct AnonFun {
-    pub val_params:       Vec<ValParam>,
-    pub body:             Box<Expr>
+    pub val_params: Vec<ValParam>,
+    pub body:       Box<Expr>
 }
 
 /* ValParam */
@@ -37,8 +37,8 @@ pub struct ValParam {
 
 #[derive(Debug)]
 pub struct FunCall {
-    pub called_fun:     Global,
-    pub val_args:       Vec<ValArg>
+    pub called_fun: Global,
+    pub val_args:   Vec<ValArg>
 }
 
 /* LetExpr */
@@ -55,7 +55,7 @@ pub struct LetExpr {
 #[derive(Debug)]
 pub struct PatMatch {
     pub matched_var: Local,
-    pub pat_cases:   Vec<PatCase>, /* replace by single patcase for now */
+    pub pat_case:    PatCase, /* we only support structs, not enums right now */
 }
 
 /* PatCase */

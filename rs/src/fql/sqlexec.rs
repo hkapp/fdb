@@ -47,18 +47,11 @@ fn rec_inline_filter_sql<'a>(
             rec_inline_filter_sql(body, eval_state)
         }
 
-        PatMatch(ir::PatMatch { matched_var: _, pat_cases }) => {
+        PatMatch(ir::PatMatch { matched_var: _, pat_case }) => {
             /* FIXME might need to pop off state here if the let expression
              * also declares variables whose name conflict with existing ones.
              */
-            if pat_cases.len() > 1 {
-                /* We don't support actual ADTs right now with the SQL backend
-                 * Only structs
-                 */
-                return Err(RuntimeError::TooManyCases(pat_cases.len()));
-            }
-
-            let deconstruct = pat_cases.get(0).unwrap();
+            let deconstruct = pat_case;
             let field_binds = &deconstruct.field_binds;
 
             for field_index in 0..field_binds.len() {
