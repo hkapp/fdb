@@ -1,5 +1,6 @@
 use std::fmt;
 
+/* TODO remove */
 #[derive(Debug)]
 pub struct Decl {
     pub name: Global,
@@ -49,7 +50,8 @@ pub struct FunCall {
 #[derive(Debug)]
 pub enum Operator {
     Noop,
-    LessThanOrEqual
+    LessThanOrEqual,
+    /*ReadRtCol(crate::fql::interpreter::dataflow::ColId),*/
 }
 
 /* LetExpr */

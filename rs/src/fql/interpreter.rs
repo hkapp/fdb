@@ -88,11 +88,11 @@ fn filter_cursor(filter_fun: Rc<objstore::Obj>, child_qplan: &QPlan, db_ctx: &Db
 pub fn to_cursor(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeError> {
     use QPlan::*;
     match qplan {
-        Read { tab_name } =>
-            read_cursor(&tab_name),
+        ReadT(qreadt) =>
+            read_cursor(&qreadt.tab_name),
 
-        Filter { filter_fun, qchild: child_qplan } =>
-            filter_cursor(Rc::clone(filter_fun), &child_qplan, db_ctx),
+        Filter(qfilter) =>
+            filter_cursor(Rc::clone(&qfilter.filter_fun), &qfilter.qchild, db_ctx),
     }
 }
 

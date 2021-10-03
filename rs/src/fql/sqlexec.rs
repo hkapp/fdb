@@ -119,12 +119,12 @@ fn inline_filter_sql(filter_fun: &objstore::Obj, db_ctx: &DbCtx) -> Result<Strin
 fn rec_to_sql(qplan: &QPlan, db_ctx: &DbCtx) -> Result<String, RuntimeError> {
     use QPlan::*;
     let sql = match qplan {
-        Read { tab_name } =>
-            format!("SELECT * FROM {}", tab_name),
+        ReadT(qreadt) =>
+            format!("SELECT * FROM {}", &qreadt.tab_name),
 
-        Filter { filter_fun, qchild: rec_qplan } => {
-            let rec_sql = rec_to_sql(&rec_qplan, db_ctx)?;
-            let where_clause = inline_filter_sql(&filter_fun, db_ctx)?;
+        Filter(qfilter) => {
+            let rec_sql = rec_to_sql(&qfilter.qchild, db_ctx)?;
+            let where_clause = inline_filter_sql(&qfilter.filter_fun, db_ctx)?;
 
             format!("SELECT * FROM ({}) WHERE {}",
                     rec_sql, where_clause)

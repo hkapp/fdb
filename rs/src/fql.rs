@@ -12,8 +12,19 @@ const STRUCT_COL_PREFIX: &str = "col";
 
 #[derive(Clone)]
 pub enum QPlan {
-    Read { tab_name: String },
-    Filter { filter_fun: Rc<objstore::Obj>, qchild: Box<QPlan> }
+    ReadT(QReadT),
+    Filter(QFilter)
+}
+
+#[derive(Clone)]
+pub struct QReadT {
+    tab_name: String
+}
+
+#[derive(Clone)]
+pub struct QFilter {
+    filter_fun: Rc<objstore::Obj>,
+    qchild:     Box<QPlan>
 }
 
 pub type QVal = u32;
@@ -28,9 +39,11 @@ pub enum CompileError {
 /* QUERY CONSTRUCTION */
 
 pub fn read_table(tab_name: &str) -> QPlan {
-    QPlan::Read {
-        tab_name: String::from(tab_name)
-    }
+    QPlan::ReadT(
+        QReadT {
+            tab_name: String::from(tab_name)
+        }
+    )
 }
 
 pub fn filter(prev_plan: &QPlan, fun_name: &str, db_ctx: &DbCtx) -> Result<QPlan, CompileError> {
@@ -62,10 +75,13 @@ pub fn filter(prev_plan: &QPlan, fun_name: &str, db_ctx: &DbCtx) -> Result<QPlan
         };
 
     let prev_plan_cp = Box::new(prev_plan.clone());
-    let new_plan = QPlan::Filter {
-        filter_fun: resolved_fun,
-        qchild:     prev_plan_cp
-    };
+    let new_plan =
+        QPlan::Filter(
+            QFilter {
+                filter_fun: resolved_fun,
+                qchild:     prev_plan_cp
+            }
+        );
                         /* need to clone to ensure Haskell doesn't ask
                          * the same memory to be cleaned twice */
 
