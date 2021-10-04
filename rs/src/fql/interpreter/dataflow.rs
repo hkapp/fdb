@@ -1,8 +1,8 @@
-use super::{QPlan, RuntimeError, ColId, Rowid, RtVal, DataGuide};
+use super::{RuntimeError, ColId, Rowid, RtVal, DataGuide};
 use std::collections::HashMap;
-use crate::ghcdump::ir;
+use crate::ir;
 use crate::objstore;
-use crate::fql;
+use crate::fql::{self, QPlan, QReadT, QFilter};
 
 /* RowFormat / RowVal */
 
@@ -139,51 +139,45 @@ fn rtbag_read<'a, T>(bag: &'a RtBag, row_fmt: &RowFormat, field_path: &[FieldIdx
 
 /* Top-level entry point */
 
-fn apply_data_accesses_qread(tab_name: &str) -> DataGuide {
-    super::new_data_guide(tab_name)
+fn apply_data_accesses_qreadt(qreadt: &QReadT) -> Result<DataGuide, RuntimeError> {
+    super::new_data_guide(&qreadt.tab_name)
 }
 
 /* TODO add support for it in the interpreter runtime */
 const DATA_ACCESS_FUN_NAME: &str = "data_access$";
 
-fn data_access_expr(dg_entry: usize, data_guide: &DataGuide) -> Box<ir::Expr> {
+fn data_access_expr(dg_entry: usize, data_guide: &DataGuide) -> ir::Expr {
     let col_locator = data_guide.0.get(dg_entry).unwrap();
 
-    let tab_name_expr = ir::Expr::RawLit(
-        ir::RawLit::StrLit(
-            String::from(col_locator.tab_name))
-    );
-
-    let col_name_expr = ir::Expr::RawLit(
-        ir::RawLit::StrLit(
-            String::from(col_locator.col_name))
-    );
+    let op = ir::Operator::ReadRtCol(col_locator.clone());
 
     let fun_call = ir::FunCall {
-        called_fun:     ir::Global::from(String::from(DATA_ACCESS_FUN_NAME)),
-        type_args:      Vec::new(), /* we would actually want some type arguments here */
-        typeclass_args: Vec::new(),
-        val_args:       vec![tab_name_expr, col_name_expr] /* FIXME add support for inline values */
+        operator: op,
+        val_args: Vec::new(),
     };
 
-    Box::from(fun_call)
+    ir::Expr::FunCall(fun_call)
 }
 
-fn rec_apply_data_accesses_expr(expr: &mut ir::Expr, data_access_vars: HashMap<ir::Local, DataGuide>) {
+fn rec_apply_data_accesses_expr_box(
+    expr:             Box<ir::Expr>,
+    data_access_vars: &mut HashMap<ir::Local, &DataGuide>)
+    -> Box<ir::Expr>
+{
+    let new_expr = rec_apply_data_accesses_expr(*expr, data_access_vars);
+
+    Box::new(new_expr)
+}
+
+fn rec_apply_data_accesses_expr(expr: ir::Expr, data_access_vars: &mut HashMap<ir::Local, &DataGuide>)
+    -> ir::Expr
+{
     /* Code mostly copied from crate::fql::interpreter::rec_interpret_row_expr */
     use ir::Expr::*;
     match expr {
-        PatMatch( ir::PatMatch { matched_var, pat_cases } ) => {
-            if pat_cases.len() > 1 {
-                /* FIXME we currently don't support product types, only pure sum types */
-                /* FIXME should be a compile error */
-                return Err(RuntimeError::TooManyCases(pat_cases.len()));
-            }
-
-            let deconstruct = pat_cases.get(0).unwrap();
-            let field_binds = &deconstruct.field_binds;
-
-            match data_access_vars.get(matched_var) {
+        PatMatch(mut pat_match) => {
+            /* Are we matching against a row var? */
+            match data_access_vars.get(&pat_match.matched_var) {
                 Some(data_guide) => {
                     /* Replace field references by data accesses
                      *
@@ -197,53 +191,122 @@ fn rec_apply_data_accesses_expr(expr: &mut ir::Expr, data_access_vars: HashMap<i
                      *   let b = DataAccess(..)
                      *   f(a, b)
                      */
+                    /* Start by recursing in the body */
                     /* FIXME with DataGuide, we only support one-level structs, not nested */
-                    /* TODO would be better to loop in reverse order here */
-                    let mut replaced_expr = &mut deconstruct.body;
-                    for field_index in 0..field_binds.len() {
-                        let field_bind = field_binds.get(field_index).unwrap();
+                    let matched_var = pat_match.matched_var;
+                    let mut pat_case = pat_match.pat_case;
+                    let new_body = rec_apply_data_accesses_expr(*pat_case.body, data_access_vars);
 
+                    /* TODO would be better to loop in reverse order here */
+                    let field_binds = pat_case.field_binds;
+                    let mut replaced_expr = new_body;
+                    let mut field_index = 0;
+                    for field_bind in field_binds.into_iter() {
                         if field_bind.is_none() {
                             /* this index is not bound */
+                            field_index += 1;
                             continue;
                         }
-                        let field_bind = field_bind.as_ref().unwrap();
+                        let bind_name = field_bind.unwrap();
 
+                        let data_guide = data_access_vars.get(&matched_var).unwrap();
                         let data_access = data_access_expr(field_index, data_guide);
+
                         replaced_expr =
                             LetExpr (
                                 ir::LetExpr {
-                                    var_name:  field_bind.name,
-                                    var_type:  field_bind.typ,
-                                    var_value: data_access_expr,
-                                    body:      replaced_expr,
+                                    var_name:  bind_name,
+                                    var_value: Box::new(data_access),
+                                    body:      Box::new(replaced_expr),
                                 }
                             );
+                        field_index += 1;
                     }
 
-                    replaced_expr  /* use that to continue recursing */
+                    replaced_expr
                 }
-                None => { /* nothing to do */ }
+
+                None => {
+                    /* Not a row var, nothing to do */
+                    /* Just recurse in the body */
+                    let mut pat_case = pat_match.pat_case;
+                    pat_case.body = rec_apply_data_accesses_expr_box(pat_case.body, data_access_vars);
+                    pat_match.pat_case = pat_case;
+
+                    PatMatch(pat_match)
+                }
             }
-            /* Recurse in the body */
-            rec_apply_data_accesses_expr(&mut deconstruct.body, data_access_vars);
+        }
+
+        AnonFun(mut anon_fun) => { /* can we use 'ref mut' here? */
+            /* Just recurse in the body */
+            anon_fun.body = rec_apply_data_accesses_expr_box(anon_fun.body, data_access_vars);
+            AnonFun(anon_fun)
+        }
+
+        FunCall(ref fun_call) => {
+            /* Any argument might be in the access vars.
+             * If so, we would need to read all the columns and form
+             * the runtime flat struct representation, and pass that
+             * as argument to the function call. Note that we're normally
+             * past the time for making inlining decisions.
+             *
+             * Currently, we don't support operators or function calls
+             * taking struct as argument, so we just validate that
+             * this case doesn't happen.
+             */
+            assert!(!fun_call.val_args
+                        .iter()
+                        .any(|v| data_access_vars.contains_key(v)));
+                        /* should return Err here, annoying for now */
+            /*if fun_call.val_args
+                .iter()
+                .any(|v| data_access_vars.contains_key(v))
+            {
+                return Err(RuntimeError::FlatStructFormatNotAvailable)
+            }*/
+
+            expr
+        }
+
+        LetExpr(mut let_expr) => {
+            /* We don't support "copy assignment", e.g.
+             *
+             *   let a = b;
+             *
+             * Only way would be to use a Noop operator call, but
+             * we don't support it for structs currently.
+             *
+             * For 'let', only need to recurse in both def expr and
+             * body.
+             */
+            let_expr.var_value = rec_apply_data_accesses_expr_box(let_expr.var_value, data_access_vars);
+            let_expr.body      = rec_apply_data_accesses_expr_box(let_expr.body,      data_access_vars);
+
+            LetExpr(let_expr)
+        }
+
+        LitVal(..) => {
+            expr  /* never modified */
         }
     }
 }
 
-fn apply_data_accesses_fun_code(orig_code: &ir::AnonFun, input_dg: &DataGuide)
+fn apply_data_accesses_fun_code(orig_code: ir::AnonFun, input_dg: &DataGuide)
     -> Result<ir::Expr, RuntimeError>
 {
     /* need some context here, no? */
     /* TODO init the context / code with the function arguments */
     /* code copied from crate::fql::interpreter::interpret_row_fun */
-    let val_params = &orig_code.val_params;
+    let mut val_params = orig_code.val_params;
     if val_params.len() != 1 {
         return Err(RuntimeError::TooManyArguments(val_params.len()));
     }
 
-    let param = val_params.get(0).unwrap();
-    let param_name: &ir::Local = &param.name;
+    let param = val_params.remove(0); /* own the vec entry */
+    let param_name = param.name;
+
+    let fun_body = orig_code.body;
 
     if input_dg.0.len() == 1 {
         /* Input is a scalar.
@@ -259,42 +322,51 @@ fn apply_data_accesses_fun_code(orig_code: &ir::AnonFun, input_dg: &DataGuide)
 
         let data_access = data_access_expr(0, input_dg);
 
-        ir::LetExpr {
-            var_name:  param_name,
-            var_type:  param.typ,
-            var_value: data_access,
-            body:      Box::from(orig_code.body.clone()),
-        }
+        let new_code =
+            ir::Expr::LetExpr (
+                ir::LetExpr {
+                    var_name:  param_name,
+                    var_value: Box::new(data_access),
+                    body:      fun_body,
+                }
+            );
+
+        Ok(new_code)
     }
     else {
         let mut data_access_vars = HashMap::new();
-        let mut new_code = orig_code.body.clone();
 
         let conflict = data_access_vars.insert(param_name, input_dg);
         assert!(conflict.is_none());
 
-        rec_apply_data_accesses_expr(&mut new_code, &mut data_access_vars)
+        let new_code = rec_apply_data_accesses_expr(*fun_body, &mut data_access_vars);
+        Ok(new_code)
     }
 }
 
-fn apply_data_accesses_qfilter(filter_fun: &objstore::Obj, qchild: &QPlan)
+fn apply_data_accesses_qfilter(filter_node: &mut QFilter)
     -> Result<DataGuide, RuntimeError>
 {
     /* Step 1: Get row format from child node */
-    let child_dg = apply_data_accesses(qchild);
+    let child_dg = apply_data_accesses(&mut filter_node.qchild)?;
 
     /* Step 2: Replace reads in filter code */
-    let filter_decl = fql::extract_decl(filter_fun)?;
+    /* TODO turn this into QFilter methods */
+    let filter_decl = fql::extract_decl(&filter_node.filter_fun)?;
     let orig_filter_code = fql::check_is_fun_decl(filter_decl)?;
-    let new_filter_code = apply_data_accesses_fun_code(orig_filter_code, child_dg);
+    let mut new_filter_code: ir::AnonFun = orig_filter_code.clone();
+    let new_filter_code = apply_data_accesses_fun_code(new_filter_code, &child_dg)?;
+    filter_node.filter_code = Some(new_filter_code);
+
+    Ok(child_dg)  /* filter still reads from the same location as child (no map) */
 }
 
-pub fn apply_data_accesses(qplan: &mut QPlan) -> RowFormat {
+pub fn apply_data_accesses(qplan: &mut QPlan) -> Result<DataGuide, RuntimeError> {
     match qplan {
-        QPlan::Read { tab_name } =>
-            apply_data_accesses_qread(&tab_name),
+        QPlan::ReadT(qreadt) =>
+            apply_data_accesses_qreadt(&qreadt),
 
-        QPlan::Filter { filter_fun, qchild } =>
-            apply_data_accesses_qfilter(&filter_fun, &qchild),
+        QPlan::Filter(qfilter) =>
+            apply_data_accesses_qfilter(qfilter),
     }
 }

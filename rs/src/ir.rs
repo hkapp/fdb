@@ -9,7 +9,7 @@ pub struct Decl {
 
 /* Expr */
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Expr {
     AnonFun(AnonFun),
     FunCall(FunCall),
@@ -20,7 +20,7 @@ pub enum Expr {
 
 /* AnonFun */
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AnonFun {
     pub val_params: Vec<ValParam>,
     pub body:       Box<Expr>
@@ -28,7 +28,7 @@ pub struct AnonFun {
 
 /* ValParam */
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ValParam {
     pub name: Local,
 }
@@ -41,22 +41,22 @@ pub struct ValParam {
  * OpCall makes it sound not very functional.
  */
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FunCall {
     pub operator: Operator,
     pub val_args: Vec<ValArg>
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Operator {
     Noop,
     LessThanOrEqual,
-    /*ReadRtCol(crate::fql::interpreter::dataflow::ColId),*/
+    ReadRtCol(crate::fql::interpreter::ColId), /* TODO re-design declarations for operator body */
 }
 
 /* LetExpr */
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LetExpr {
     pub var_name:  Local,
     pub var_value: Box<Expr>,
@@ -65,7 +65,7 @@ pub struct LetExpr {
 
 /* PatMatch */
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PatMatch {
     pub matched_var: Local,
     pub pat_case:    PatCase, /* we only support structs, not enums right now */
@@ -73,7 +73,7 @@ pub struct PatMatch {
 
 /* PatCase */
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PatCase {
     pub constructor: Global,
     pub field_binds: Vec<Option<Local>>,  /* order is important here! */
@@ -82,7 +82,7 @@ pub struct PatCase {
 
 /* LitVal */
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LitVal {
     IntLit(i32)
 }

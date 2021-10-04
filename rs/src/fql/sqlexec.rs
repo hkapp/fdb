@@ -96,6 +96,11 @@ fn rec_inline_filter_sql<'a>(
                     let sql = format!("{} <= {}", sql_left, sql_right);
                     Ok(sql)
                 }
+
+                Operator::ReadRtCol(..) => {
+                    /* This opeartor shouldn't appear in the pure SQL backend */
+                    Err(RuntimeError::UnsupportedOperator(operator.clone()))
+                }
             }
         }
 

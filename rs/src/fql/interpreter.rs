@@ -1,4 +1,4 @@
-/*mod dataflow;*/
+mod dataflow;
 
 use crate::ir;
 use super::{QPlan, RuntimeError, QVal, Status};
@@ -99,7 +99,7 @@ pub fn to_cursor(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeError> 
 /* Interpreter: execution step */
 
 #[derive(Debug, Clone)]
-struct ColId {
+pub struct ColId {  /* make private again if possible */
     col_name: String,
     tab_name: String
 }
@@ -120,18 +120,23 @@ fn cursor_fetch_read(cur_read: &mut CurRead) -> Result<Option<Rowid>, RuntimeErr
     Ok(cur_read.rowid_range.next())
 }
 
-fn resolve_dataguide_entry(data_guide: &DataGuide, field_index: usize, rowid: Rowid)
-    -> Result<RtVal, RuntimeError>
+fn read_column_value(column: &ColId, rowid: Rowid) -> Result<RtVal, RuntimeError>
 {
-    let column = data_guide.0.get(field_index)
-                    .ok_or_else(|| RuntimeError::IndexNotInDataGuide(field_index))?;
-
     let query = format!("SELECT {} FROM {} WHERE ROWID = {}",
                         column.col_name, column.tab_name, rowid);
     let col_val = sql_one_row_one_col(&query)?;
     let rt_val = RtVal::UInt32(col_val);
 
     Ok(rt_val)
+}
+
+fn resolve_dataguide_entry(data_guide: &DataGuide, field_index: usize, rowid: Rowid)
+    -> Result<RtVal, RuntimeError>
+{
+    let column = data_guide.0.get(field_index)
+                    .ok_or_else(|| RuntimeError::IndexNotInDataGuide(field_index))?;
+
+    read_column_value(column, rowid)
 }
 
 fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, rowid: Rowid, interpreter: &mut Interpreter<'a>)
@@ -187,7 +192,7 @@ fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, rowid: Rowid, interpreter: &mu
                                     .ok_or_else(|| RuntimeError::UndefinedVariable(
                                                         matched_var.clone()))?;
                 let data_guide = match &matched_val {
-                    RtVal::DataGuide(dg) => dg,
+                    RtVal::DataGuide(dg) => dg, /* TODO remove */
                     _ => return Err(RuntimeError::PatternMatchNonStruct(matched_var.clone())),
                 };
 
@@ -232,6 +237,10 @@ fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, rowid: Rowid, interpreter: &mu
                                     right: val_right.clone()
                                 }),
                     }
+                }
+
+                Operator::ReadRtCol(col_id) => {
+                    read_column_value(&col_id, rowid)
                 }
             }
         }

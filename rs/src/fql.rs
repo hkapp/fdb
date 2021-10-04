@@ -1,5 +1,5 @@
 mod sqlexec;
-mod interpreter;
+pub mod interpreter; /* make private again if possible? */
 
 use crate::ctx::DbCtx;
 use crate::objstore::{self, Symbol};
@@ -23,8 +23,9 @@ pub struct QReadT {
 
 #[derive(Clone)]
 pub struct QFilter {
-    filter_fun: Rc<objstore::Obj>,
-    qchild:     Box<QPlan>
+    filter_fun:  Rc<objstore::Obj>,
+    qchild:      Box<QPlan>,
+    filter_code: Option<ir::Expr>,
 }
 
 pub type QVal = u32;
@@ -78,8 +79,9 @@ pub fn filter(prev_plan: &QPlan, fun_name: &str, db_ctx: &DbCtx) -> Result<QPlan
     let new_plan =
         QPlan::Filter(
             QFilter {
-                filter_fun: resolved_fun,
-                qchild:     prev_plan_cp
+                filter_fun:  resolved_fun,
+                qchild:      prev_plan_cp,
+                filter_code: None
             }
         );
                         /* need to clone to ensure Haskell doesn't ask
@@ -105,7 +107,8 @@ pub enum RuntimeError {
   FilterNotBoolean(interpreter::RtVal),
   UnknownTable(String),
   ScalarRowFormatHasNoFields,
-  FieldPathIncompletelyResolved
+  FieldPathIncompletelyResolved,
+  UnsupportedOperator(ir::Operator),
 }
 
 /* Object store helpers */
