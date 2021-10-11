@@ -1,5 +1,7 @@
 mod sqlexec;
-pub mod interpreter; /* make private again if possible? */
+mod interpreter;
+pub mod comp;
+mod qeval;
 
 use crate::ctx::DbCtx;
 use crate::objstore::{self, Symbol};
@@ -104,11 +106,16 @@ pub enum RuntimeError {
   UndefinedVariable(ir::Local),
   PatternMatchNonStruct(ir::Local),
   UnsupportedComparison { left: interpreter::RtVal, right: interpreter::RtVal },
+  UnsupportedComparison2 { left: comp::RtVal, right: comp::RtVal }, /* TODO: remove */
+  UnsupportedComparison3 { left: qeval::RtVal, right: qeval::RtVal }, /* TODO: remove */
   FilterNotBoolean(interpreter::RtVal),
+  FilterNotBoolean2(comp::RtVal), /* TODO remove */
+  FilterNotBoolean3(qeval::RtVal), /* TODO remove */
   UnknownTable(String),
   ScalarRowFormatHasNoFields,
   FieldPathIncompletelyResolved,
   UnsupportedOperator(ir::Operator),
+  UnsupportedBackend,
 }
 
 /* Object store helpers */
@@ -165,23 +172,35 @@ fn check_is_fun_decl(decl: &ir::Decl) -> Result<&ir::AnonFun, CompileError> {
 type Status = usize;
 
 pub fn exec_into(qplan: &QPlan, db_ctx: &DbCtx, res_buf: &mut [QVal]) -> Result<Status, RuntimeError> {
-    let sqlite_backend = false;
+    enum Backend {
+        SQLite,
+        NaiveInterpreter,
+        Columnar
+    };
+    let curr_backend = Backend::NaiveInterpreter;
 
-    if sqlite_backend {
-        /* Execute on full SQLite backend */
-        let sql_query = sqlexec::to_sql(qplan, db_ctx)?;
+    match curr_backend {
+        Backend::SQLite => {
+            /* Execute on full SQLite backend */
+            let sql_query = sqlexec::to_sql(qplan, db_ctx)?;
 
-        println!("SQLite execution:");
-        println!("{}", sql_query);
+            println!("SQLite execution:");
+            println!("{}", sql_query);
 
-        sqlexec::query_sqlite_into(&sql_query, res_buf)
-    }
-    else {
-        /* Execute on current interpreter backend */
-        let mut cursor = interpreter::to_cursor(qplan, db_ctx)?;
+            sqlexec::query_sqlite_into(&sql_query, res_buf)
+        },
 
-        println!("FDB interpreter:");
-        interpreter::exec_interpreter_into(&mut cursor, res_buf)
+        Backend::NaiveInterpreter => {
+            /* Execute on current interpreter backend */
+            let mut cursor = interpreter::to_cursor(qplan, db_ctx)?;
+
+            println!("FDB interpreter:");
+            interpreter::exec_interpreter_into(&mut cursor, res_buf)
+        },
+
+        Backend::Columnar => {
+            Err(RuntimeError::UnsupportedBackend)
+        }
     }
 }
 

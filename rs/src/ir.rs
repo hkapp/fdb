@@ -51,7 +51,7 @@ pub struct FunCall {
 pub enum Operator {
     Noop,
     LessThanOrEqual,
-    ReadRtCol(crate::fql::interpreter::ColId), /* TODO re-design declarations for operator body */
+    ReadRtCol(crate::fql::comp::ColId), /* TODO re-design declarations for operator body */
 }
 
 /* LetExpr */

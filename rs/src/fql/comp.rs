@@ -1,3 +1,5 @@
+mod dataflow;
+
 use crate::ir;
 use super::{QPlan, RuntimeError, QVal, Status};
 use super::sqlexec;
@@ -230,15 +232,15 @@ fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, rowid: Rowid, interpreter: &mu
 
                         _ =>
                             Err(
-                                RuntimeError::UnsupportedComparison{
+                                RuntimeError::UnsupportedComparison2{
                                     left:  val_left.clone(),
                                     right: val_right.clone()
                                 }),
                     }
                 }
 
-                Operator::ReadRtCol(..) => {
-                    Err(RuntimeError::UnsupportedOperator(operator.clone()))
+                Operator::ReadRtCol(col_id) => {
+                    read_column_value(&col_id, rowid)
                 }
             }
         }
@@ -355,7 +357,7 @@ fn cursor_fetch_filter(cur_filter: &mut CurFilter) -> Result<Option<Rowid>, Runt
 
             val@_ => {
                 return Err(
-                        RuntimeError::FilterNotBoolean(val));
+                        RuntimeError::FilterNotBoolean2(val));
             }
         }
     }

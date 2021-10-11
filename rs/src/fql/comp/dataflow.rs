@@ -169,6 +169,7 @@ fn rec_apply_data_accesses_expr_box(
     Box::new(new_expr)
 }
 
+/* TODO: change to &mut ir::Expr and use '*expr = ...' */
 fn rec_apply_data_accesses_expr(expr: ir::Expr, data_access_vars: &mut HashMap<ir::Local, &DataGuide>)
     -> ir::Expr
 {
