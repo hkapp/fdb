@@ -29,7 +29,7 @@ pub struct QReadT {
 pub struct QFilter {
     filter_fun:  Rc<objstore::Obj>,
     qchild:      Box<QPlan>,
-    filter_code: Option<ir::Expr>,
+    filter_code: Option<ir::Expr>,  /* TODO move only to comp::CFilter */
 }
 
 pub type QVal = u32;
@@ -116,6 +116,7 @@ pub enum RuntimeError {
   FieldPathIncompletelyResolved,
   UnsupportedOperator(ir::Operator),
   UnsupportedBackend,
+  NotAFunction,
 }
 
 /* Object store helpers */
@@ -200,7 +201,7 @@ pub fn exec_into(qplan: &QPlan, db_ctx: &DbCtx, res_buf: &mut [QVal]) -> Result<
 
         Backend::Columnar => {
             /* Execute on new columnar interpreter */
-            let mut cursor = comp::to_cursor(qplan, db_ctx)?;
+            let mut cursor = comp::full_compile(qplan, db_ctx)?;
 
             println!("Columnar interpreter:");
             qeval::exec_interpreter_into(&mut cursor, res_buf)

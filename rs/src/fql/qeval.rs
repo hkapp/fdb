@@ -4,7 +4,7 @@ use super::{RuntimeError, QVal, Status};
 use super::sqlexec;
 use std::collections::HashMap;
 use super::comp;
-use comp::{Cursor, CurRead, CurFilter};
+use comp::{Cursor, CurKind, CurRead, CurFilter};
 
 /* Interpreter: preparation step */
 
@@ -237,19 +237,22 @@ fn new_data_guide(tab_name: &str) -> Result<DataGuide, RuntimeError> {
 }
 
 fn cursor_data_guide(cursor: &Cursor) -> Result<DataGuide, RuntimeError> {
-    match cursor {
-        Cursor::Read(cur_read) =>
+    match &cursor.cur_kind {
+        CurKind::Read(cur_read) =>
             new_data_guide(&cur_read.tab_name),
 
-        Cursor::Filter(cur_filter) =>
+        CurKind::Filter(cur_filter) =>
             /* Filter: unchanged data guide (pass-through only) */
             cursor_data_guide(&cur_filter.child_cursor),
     }
 }
 
 fn cursor_fetch_filter(cur_filter: &mut CurFilter) -> Result<Option<Rowid>, RuntimeError> {
-    let pred_decl = super::extract_decl(&cur_filter.pred_obj)?;
-    let pred_fun = super::check_is_fun_decl(pred_decl)?;
+    /* For now, this code MUST be an anonymous function (no lowerings yet) */
+    let pred_fun = match &cur_filter.filter_code {
+        ir::Expr::AnonFun(anon_fun) => anon_fun,
+        _ => return Err(RuntimeError::NotAFunction),
+    };
     let child_cursor = &mut cur_filter.child_cursor;
     let data_guide = cursor_data_guide(child_cursor)?;
                     /* filter: data guide is unchanged (no map) */
@@ -282,11 +285,11 @@ fn cursor_fetch_filter(cur_filter: &mut CurFilter) -> Result<Option<Rowid>, Runt
 }
 
 fn cursor_fetch(cursor: &mut Cursor) -> Result<Option<Rowid>, RuntimeError> {
-    match cursor {
-        Cursor::Read(cur_read) =>
+    match &mut cursor.cur_kind {
+        CurKind::Read(cur_read) =>
             cursor_fetch_read(cur_read),
 
-        Cursor::Filter(cur_filter) =>
+        CurKind::Filter(cur_filter) =>
             cursor_fetch_filter(cur_filter),
     }
 }

@@ -7,21 +7,28 @@ use std::ops;
 use crate::objstore;
 use std::rc::Rc;
 use crate::data;
+use crate::ir;
 
 /* Interpreter: preparation step */
 
-pub enum Cursor {
-    Read(CurRead),
+pub struct Cursor {
+    pub out_pipe: Option<DataGuide>,  /* is this necessary? */
+    pub cur_kind: CurKind,
+}
+
+pub enum CurKind {
+    Read(CurRead), /* TODO rename enum entry */
     Filter(CurFilter)
 }
 
+/* TODO rename */
 pub struct CurRead {
     pub rowid_range: ops::Range<Rowid>,
     pub tab_name:    String,
 }
 
 pub struct CurFilter {
-    pub pred_obj:     Rc<objstore::Obj>,
+    pub filter_code:  ir::Expr,
     pub child_cursor: Box<Cursor>,
 }
 
@@ -49,30 +56,38 @@ fn read_cursor(tab_name: &str) -> Result<Cursor, RuntimeError> {
             tab_name: String::from(tab_name)
         };
 
-    let cursor = Cursor::Read(cur_read);
+    let cur_kind = CurKind::Read(cur_read);
+    let cursor = Cursor {
+        cur_kind,
+        out_pipe: None
+    };
     Ok(cursor)
 }
 
 fn filter_cursor(filter_fun: Rc<objstore::Obj>, child_qplan: &QPlan, db_ctx: &DbCtx)
     -> Result<Cursor, RuntimeError>
 {
-    let child_cursor = to_cursor(&child_qplan, db_ctx)?;
+    let child_cursor = build_cursor(&child_qplan, db_ctx)?;
 
     let fun_decl = super::extract_decl(&filter_fun)?;
     /* TODO move this check at cursor build time */
-    super::check_is_fun_decl(fun_decl)?;
+    let fun_body = super::check_is_fun_decl(fun_decl)?;
 
     let cur_filter =
         CurFilter {
-            pred_obj:     filter_fun,
+            filter_code:  ir::Expr::AnonFun(fun_body.clone()),
             child_cursor: Box::new(child_cursor)
         };
 
-    let cursor = Cursor::Filter(cur_filter);
+    let cur_kind = CurKind::Filter(cur_filter);
+    let cursor = Cursor {
+        cur_kind,
+        out_pipe: None
+    };
     Ok(cursor)
 }
 
-pub fn to_cursor(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeError> {
+fn build_cursor(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeError> {
     use QPlan::*;
     match qplan {
         ReadT(qreadt) =>
@@ -81,6 +96,14 @@ pub fn to_cursor(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeError> 
         Filter(qfilter) =>
             filter_cursor(Rc::clone(&qfilter.filter_fun), &qfilter.qchild, db_ctx),
     }
+}
+
+pub fn full_compile(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeError> {
+    let mut cursor = build_cursor(qplan, db_ctx)?;
+    /* TODO we're also supposed to get a full list of blocks to allocate here */
+    /*let (final_dg, alloc_plan) = dataflow::apply_data_accesses(cursor)?;
+    Ok((cursor, final_dg, alloc_plan))*/
+    Ok(cursor)
 }
 
 /* Interpreter: execution step */
@@ -127,40 +150,4 @@ fn new_data_guide(tab_name: &str) -> Result<DataGuide, RuntimeError> {
       "pairs" => Ok(dg_pairs(tab_name)),
       _       => Err(RuntimeError::UnknownTable(String::from(tab_name))),
     }
-}
-
-fn cursor_data_guide(cursor: &Cursor) -> Result<DataGuide, RuntimeError> {
-    match cursor {
-        Cursor::Read(cur_read) =>
-            new_data_guide(&cur_read.tab_name),
-
-        Cursor::Filter(cur_filter) =>
-            /* Filter: unchanged data guide (pass-through only) */
-            cursor_data_guide(&cur_filter.child_cursor),
-    }
-}
-
-fn gen_proj_query_from_dataguide(data_guide: &DataGuide, rowid: Rowid) -> String {
-    /* 1. Generate a comma-separated list of column names */
-    let col_names = data_guide.0
-                        .iter()
-                        .map(|e| &e.col_name as &str)
-                        .collect::<Vec<&str>>()
-                        .join(", ");
-    /* FIXME add assert to check table name always the same */
-    let table_name = &data_guide.0.get(0).unwrap().tab_name;
-
-    let sql_query = format!("SELECT {} FROM {} WHERE rowid = {}",
-                            col_names, table_name, rowid);
-
-    return sql_query;
-}
-
-fn query_sqlite_rowid_into(rowid: Rowid, data_guide: &DataGuide, res_buf: &mut [QVal])
-    -> Result<(), RuntimeError>
-{
-    let sql_query = gen_proj_query_from_dataguide(data_guide, rowid);
-    let _nrows = sqlexec::query_sqlite_into(&sql_query, res_buf)?;
-    /* TODO assert that returned number of rows is exactly one */
-    Ok(())
 }
