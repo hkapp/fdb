@@ -1,4 +1,4 @@
-use super::{RuntimeError, ColId, Rowid, DataGuide};
+use super::{RuntimeError, ColId, Rowid, DataGuide, CurKind, Cursor, CurFilter, CurRead};
 use std::collections::HashMap;
 use crate::ir;
 use crate::fql::{self, QPlan, QReadT, QFilter};
@@ -139,8 +139,8 @@ fn rtbag_read<'a, T>(bag: &'a RtBag, row_fmt: &RowFormat, field_path: &[FieldIdx
 
 /* Top-level entry point */
 
-fn apply_data_accesses_qreadt(qreadt: &QReadT) -> Result<DataGuide, RuntimeError> {
-    super::new_data_guide(&qreadt.tab_name)
+fn apply_data_accesses_cur_read(cur_read: &CurRead) -> Result<DataGuide, RuntimeError> {
+    super::new_data_guide(&cur_read.tab_name)
 }
 
 /* TODO add support for it in the interpreter runtime */
@@ -345,29 +345,35 @@ fn apply_data_accesses_fun_code(orig_code: ir::AnonFun, input_dg: &DataGuide)
     }
 }
 
-fn apply_data_accesses_qfilter(filter_node: &mut QFilter)
+fn apply_data_accesses_cur_filter(filter_node: &mut CurFilter)
     -> Result<DataGuide, RuntimeError>
 {
     /* Step 1: Get row format from child node */
-    let child_dg = apply_data_accesses(&mut filter_node.qchild)?;
+    let child_dg = apply_data_accesses(&mut filter_node.child_cursor)?;
 
     /* Step 2: Replace reads in filter code */
     /* TODO turn this into QFilter methods */
-    let filter_decl = fql::extract_decl(&filter_node.filter_fun)?;
-    let orig_filter_code = fql::check_is_fun_decl(filter_decl)?;
-    let mut new_filter_code: ir::AnonFun = orig_filter_code.clone();
+    let orig_filter_code = &filter_node.filter_code;
+    let mut new_filter_code = match orig_filter_code {
+        ir::Expr::AnonFun(anon_fun) => anon_fun.clone(), /* TODO remove this clone */
+        /* At this point, this must be an anon fun node */
+        _  => return Err(RuntimeError::NotAFunction)
+    };
     let new_filter_code = apply_data_accesses_fun_code(new_filter_code, &child_dg)?;
-    filter_node.filter_code = Some(new_filter_code);
+    filter_node.filter_code = new_filter_code;
 
     Ok(child_dg)  /* filter still reads from the same location as child (no map) */
 }
 
-pub fn apply_data_accesses(qplan: &mut QPlan) -> Result<DataGuide, RuntimeError> {
-    match qplan {
-        QPlan::ReadT(qreadt) =>
-            apply_data_accesses_qreadt(&qreadt),
+/* TODO rename
+ *   explicit_data_access?
+ */
+pub fn apply_data_accesses(cursor: &mut Cursor) -> Result<DataGuide, RuntimeError> {
+    match &mut cursor.cur_kind {
+        CurKind::Read(cur_read) =>
+            apply_data_accesses_cur_read(&cur_read),
 
-        QPlan::Filter(qfilter) =>
-            apply_data_accesses_qfilter(qfilter),
+        CurKind::Filter(cur_filter) =>
+            apply_data_accesses_cur_filter(cur_filter),
     }
 }

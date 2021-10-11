@@ -1,7 +1,6 @@
 mod dataflow;
 
-use super::{QPlan, RuntimeError, QVal};
-use super::sqlexec;
+use super::{QPlan, RuntimeError};
 use crate::ctx::DbCtx;
 use std::ops;
 use crate::objstore;
@@ -101,8 +100,8 @@ fn build_cursor(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeError> {
 pub fn full_compile(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeError> {
     let mut cursor = build_cursor(qplan, db_ctx)?;
     /* TODO we're also supposed to get a full list of blocks to allocate here */
-    /*let (final_dg, alloc_plan) = dataflow::apply_data_accesses(cursor)?;
-    Ok((cursor, final_dg, alloc_plan))*/
+    let final_dg /*(final_dg, alloc_plan)*/ = dataflow::apply_data_accesses(&mut cursor)?;
+    //Ok((cursor, final_dg, alloc_plan))
     Ok(cursor)
 }
 
