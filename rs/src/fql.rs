@@ -8,10 +8,12 @@ use crate::objstore::{self, Symbol};
 use rusqlite as sqlite;
 use crate::ir;
 use std::rc::Rc;
+use crate::data::{DB_FILENAME, STRUCT_COL_PREFIX};
 
-const DB_FILENAME: &str = "../data/fdb.db";
-const STRUCT_COL_PREFIX: &str = "col";
-
+/* TODO rename QTree? */
+/* naming: we can rename this phase or module "sprout"
+ *   "to begin to grow; shoot forth, as a plant from a seed."
+ */
 #[derive(Clone)]
 pub enum QPlan {
     ReadT(QReadT),
@@ -106,10 +108,8 @@ pub enum RuntimeError {
   UndefinedVariable(ir::Local),
   PatternMatchNonStruct(ir::Local),
   UnsupportedComparison { left: interpreter::RtVal, right: interpreter::RtVal },
-  UnsupportedComparison2 { left: comp::RtVal, right: comp::RtVal }, /* TODO: remove */
   UnsupportedComparison3 { left: qeval::RtVal, right: qeval::RtVal }, /* TODO: remove */
   FilterNotBoolean(interpreter::RtVal),
-  FilterNotBoolean2(comp::RtVal), /* TODO remove */
   FilterNotBoolean3(qeval::RtVal), /* TODO remove */
   UnknownTable(String),
   ScalarRowFormatHasNoFields,
@@ -177,7 +177,7 @@ pub fn exec_into(qplan: &QPlan, db_ctx: &DbCtx, res_buf: &mut [QVal]) -> Result<
         NaiveInterpreter,
         Columnar
     };
-    let curr_backend = Backend::NaiveInterpreter;
+    let curr_backend = Backend::Columnar;
 
     match curr_backend {
         Backend::SQLite => {
@@ -191,15 +191,19 @@ pub fn exec_into(qplan: &QPlan, db_ctx: &DbCtx, res_buf: &mut [QVal]) -> Result<
         },
 
         Backend::NaiveInterpreter => {
-            /* Execute on current interpreter backend */
+            /* Execute on old naive interpreter */
             let mut cursor = interpreter::to_cursor(qplan, db_ctx)?;
 
-            println!("FDB interpreter:");
+            println!("Naive interpreter:");
             interpreter::exec_interpreter_into(&mut cursor, res_buf)
         },
 
         Backend::Columnar => {
-            Err(RuntimeError::UnsupportedBackend)
+            /* Execute on new columnar interpreter */
+            let mut cursor = comp::to_cursor(qplan, db_ctx)?;
+
+            println!("Columnar interpreter:");
+            qeval::exec_interpreter_into(&mut cursor, res_buf)
         }
     }
 }

@@ -1,98 +1,14 @@
 use crate::ir;
-use super::{QPlan, RuntimeError, QVal, Status};
+use crate::data;
+use super::{RuntimeError, QVal, Status};
 use super::sqlexec;
-use crate::ctx::DbCtx;
-use std::ops;
-use crate::objstore::{self, Symbol};
-use rusqlite as sqlite;
-use std::rc::Rc;
 use std::collections::HashMap;
+use super::comp;
+use comp::{Cursor, CurRead, CurFilter};
 
 /* Interpreter: preparation step */
 
-pub enum Cursor {
-    Read(CurRead),
-    Filter(CurFilter)
-}
-
-pub struct CurRead {
-    rowid_range: ops::Range<Rowid>,
-    tab_name:    String,
-}
-
-pub struct CurFilter {
-    pred_obj:     Rc<objstore::Obj>,
-    child_cursor: Box<Cursor>,
-}
-
 type Rowid = u32;
-
-fn sql_one_row_one_col<T>(query: &str) -> Result<T, RuntimeError>
-    where
-        T: sqlite::types::FromSql
-{
-    let conn = sqlite::Connection::open(super::DB_FILENAME)?;
-
-    let mut stmt = conn.prepare(&query)?;
-    stmt.query_row([], |row| row.get(0))
-        .map_err(Into::into)
-}
-
-fn max_rowid(tab_name: &str) -> Result<Rowid, RuntimeError> {
-    let query = format!("SELECT MAX(ROWID) FROM {}", tab_name);
-    let max_rowid = sql_one_row_one_col(&query)?;
-
-    Ok(max_rowid)
-}
-
-fn read_cursor(tab_name: &str) -> Result<Cursor, RuntimeError> {
-    let max_rowid = max_rowid(tab_name)?;
-
-    let rowid_range =
-        ops::Range {
-            start: 1 /* incl */,
-            end: max_rowid+1 /* excl */
-        };
-
-    let cur_read =
-        CurRead {
-            rowid_range,
-            tab_name: String::from(tab_name)
-        };
-
-    let cursor = Cursor::Read(cur_read);
-    Ok(cursor)
-}
-
-fn filter_cursor(filter_fun: Rc<objstore::Obj>, child_qplan: &QPlan, db_ctx: &DbCtx)
-    -> Result<Cursor, RuntimeError>
-{
-    let child_cursor = to_cursor(&child_qplan, db_ctx)?;
-
-    let fun_decl = super::extract_decl(&filter_fun)?;
-    /* TODO move this check at cursor build time */
-    super::check_is_fun_decl(fun_decl)?;
-
-    let cur_filter =
-        CurFilter {
-            pred_obj:     filter_fun,
-            child_cursor: Box::new(child_cursor)
-        };
-
-    let cursor = Cursor::Filter(cur_filter);
-    Ok(cursor)
-}
-
-pub fn to_cursor(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeError> {
-    use QPlan::*;
-    match qplan {
-        ReadT(qreadt) =>
-            read_cursor(&qreadt.tab_name),
-
-        Filter(qfilter) =>
-            filter_cursor(Rc::clone(&qfilter.filter_fun), &qfilter.qchild, db_ctx),
-    }
-}
 
 /* Interpreter: execution step */
 
@@ -122,7 +38,7 @@ fn read_column_value(column: &ColId, rowid: Rowid) -> Result<RtVal, RuntimeError
 {
     let query = format!("SELECT {} FROM {} WHERE ROWID = {}",
                         column.col_name, column.tab_name, rowid);
-    let col_val = sql_one_row_one_col(&query)?;
+    let col_val = data::sql_one_row_one_col(&query)?;
     let rt_val = RtVal::UInt32(col_val);
 
     Ok(rt_val)

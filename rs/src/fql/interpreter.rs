@@ -3,7 +3,7 @@ use super::{QPlan, RuntimeError, QVal, Status};
 use super::sqlexec;
 use crate::ctx::DbCtx;
 use std::ops;
-use crate::objstore::{self, Symbol};
+use crate::objstore;
 use rusqlite as sqlite;
 use std::rc::Rc;
 use std::collections::HashMap;

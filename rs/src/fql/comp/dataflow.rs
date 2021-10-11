@@ -1,8 +1,8 @@
-use super::{RuntimeError, ColId, Rowid, RtVal, DataGuide};
+use super::{RuntimeError, ColId, Rowid, DataGuide};
 use std::collections::HashMap;
 use crate::ir;
-use crate::objstore;
 use crate::fql::{self, QPlan, QReadT, QFilter};
+use fql::qeval;
 
 /* RowFormat / RowVal */
 
@@ -43,7 +43,7 @@ fn alloc_rt_cols(row_fmt: &RowFormat) -> RtBag {
             RowFormat::RowScalar(
                 RowScalar::RowInline(rt_idx)) =>
             {
-                register_rtcol::<RtVal>(rtcol_map, *rt_idx);
+                register_rtcol::<qeval::RtVal>(rtcol_map, *rt_idx);
             }
 
             RowFormat::RowComposite(fields) => {

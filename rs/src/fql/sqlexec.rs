@@ -113,7 +113,7 @@ fn rec_inline_filter_sql<'a>(
     }
 }
 
-fn inline_filter_sql(filter_fun: &objstore::Obj, db_ctx: &DbCtx) -> Result<String, RuntimeError> {
+fn inline_filter_sql(filter_fun: &objstore::Obj, _db_ctx: &DbCtx) -> Result<String, RuntimeError> {
     let fun_decl = super::extract_decl(&filter_fun)?;
     super::check_is_fun_decl(fun_decl)?;
 
