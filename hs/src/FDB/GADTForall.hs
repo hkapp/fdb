@@ -195,3 +195,6 @@ rowVal (Row _ val) = val
 
 rowRef :: Row a -> RowRef a
 rowRef (Row ref _) = ref
+
+asRowId :: RowRef a -> RowId
+asRowId = undefined

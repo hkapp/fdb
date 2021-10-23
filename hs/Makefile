@@ -37,7 +37,7 @@ clean:
 	find $(SRC_DIR) -name "*.hspp" -exec rm {} \;
 
 # Only compile the Haskell code
-compile:
+compile: $(BIN_DIR)
 	ghc $(GHC_FLAGS) -o $(TEST_BIN) $(TEST_MAIN_HS) $(LIBS_DEV)
 
 test: compile-test
@@ -47,12 +47,15 @@ test-speed: compile-test-speed
 	$(TEST_BIN)
 
 # Compile and generate the dump files
-compile-test: $(RUST_LIB_DEV)
+compile-test: $(RUST_LIB_DEV) $(BIN_DIR)
 	ghc $(GHC_FLAGS) $(GHC_DUMP_FLAGS) -o $(TEST_BIN) $(TEST_MAIN_HS) $(LIBS_DEV)
 
 # Compile and generate the dump files (with the release rust)
-compile-test-speed: $(RUST_LIB_RELEASE)
+compile-test-speed: $(RUST_LIB_RELEASE) $(BIN_DIR)
 	ghc $(GHC_FLAGS) $(GHC_DUMP_FLAGS) -o $(TEST_BIN) $(TEST_MAIN_HS) $(LIBS_RELEASE)
+
+$(BIN_DIR):
+	mkdir $(BIN_DIR)
 
 dump: compile-test
 

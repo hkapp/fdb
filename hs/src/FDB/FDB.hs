@@ -40,6 +40,7 @@ module FDB.FDB
     TableRef,
 
     rowRef,
+    asRowId,
 
     Row,
     RowRef,

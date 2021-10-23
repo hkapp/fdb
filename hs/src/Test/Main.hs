@@ -20,7 +20,7 @@ execQTest = qry >>= execAndPrint
 
 type QVal = CUInt32;
 
-qry = qryb
+qry = qrya
 
 qrya :: IO (Q QVal)
 qrya =
@@ -68,6 +68,7 @@ qryb =
     q2  <- filterQ topLevelFilterB "Main.topLevelFilterB" q1
     return q2
 
+-- FIXME this doesn't get parsed properly with GHC 8.0.2
 topLevelFilterB :: QValB -> Bool
 topLevelFilterB (QValB x y) = x <= y
 
