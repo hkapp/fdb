@@ -7,7 +7,7 @@ import qualified Utils.Dot as Dot
 
 import Foreign (Storable(..))
 import Foreign.Ptr (castPtr)
-import FDB.RustFFI(Q, CUInt32, readT, filterQ, execQ, initDB)
+import FDB.RustFFI(Q, CUInt32, readT, filterQ, execQ, initDB, mapQ)
 import Data.Foldable(traverse_)
 
 main :: IO ()
@@ -20,7 +20,7 @@ execQTest = qry >>= execAndPrint
 
 type QVal = CUInt32;
 
-qry = qrya
+qry = qryc
 
 qrya :: IO (Q QVal)
 qrya =
@@ -71,6 +71,17 @@ qryb =
 -- FIXME this doesn't get parsed properly with GHC 8.0.2
 topLevelFilterB :: QValB -> Bool
 topLevelFilterB (QValB x y) = x <= y
+
+qryc :: IO (Q QVal)
+qryc =
+  do
+    ctx <- initDB
+    q1  <- readT ctx "foo"
+    q2  <- mapQ topLevelMapFun "Main.topLevelMapFun" q1
+    return q2
+
+topLevelMapFun :: QVal -> QVal
+topLevelMapFun x = x + 1
 
 execAndPrint :: (Show a, Storable a) => Q a -> IO ()
 execAndPrint query =
