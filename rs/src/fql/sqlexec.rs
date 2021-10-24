@@ -134,6 +134,12 @@ fn rec_to_sql(qplan: &QPlan, db_ctx: &DbCtx) -> Result<String, RuntimeError> {
             format!("SELECT * FROM ({}) WHERE {}",
                     rec_sql, where_clause)
         },
+
+        Map(qmap) => {
+            return Err(RuntimeError::MapNotSupported {
+                backend: String::from("in SQL backend")
+            });
+        },
     };
     Ok(sql)
 }

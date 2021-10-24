@@ -77,7 +77,6 @@ fn filter_cursor(filter_fun: Rc<objstore::Obj>, child_qplan: &QPlan, db_ctx: &Db
     let child_cursor = to_cursor(&child_qplan, db_ctx)?;
 
     let fun_decl = super::extract_decl(&filter_fun)?;
-    /* TODO move this check at cursor build time */
     super::check_is_fun_decl(fun_decl)?;
 
     let cur_filter =
@@ -90,6 +89,24 @@ fn filter_cursor(filter_fun: Rc<objstore::Obj>, child_qplan: &QPlan, db_ctx: &Db
     Ok(cursor)
 }
 
+fn map_cursor(map_fun: Rc<objstore::Obj>, child_qplan: &QPlan, db_ctx: &DbCtx)
+    -> Result<Cursor, RuntimeError>
+{
+    let child_cursor = to_cursor(&child_qplan, db_ctx)?;
+
+    let fun_decl = super::extract_decl(&map_fun)?;
+    super::check_is_fun_decl(fun_decl)?;
+
+    let cur_map =
+        CurMap {
+            mapfun_obj:   map_fun,
+            child_cursor: Box::new(child_cursor)
+        };
+
+    let cursor = Cursor::Map(cur_map);
+    Ok(cursor)
+}
+
 pub fn to_cursor(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeError> {
     use QPlan::*;
     match qplan {
@@ -98,6 +115,9 @@ pub fn to_cursor(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeError> 
 
         Filter(qfilter) =>
             filter_cursor(Rc::clone(&qfilter.filter_fun), &qfilter.qchild, db_ctx),
+
+        Map(qmap) =>
+            map_cursor(Rc::clone(&qmap.map_fun), &qmap.qchild, db_ctx),
     }
 }
 

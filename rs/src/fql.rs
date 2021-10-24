@@ -17,7 +17,8 @@ use crate::data::{DB_FILENAME, STRUCT_COL_PREFIX};
 #[derive(Clone)]
 pub enum QPlan {
     ReadT(QReadT),
-    Filter(QFilter)
+    Filter(QFilter),
+    Map(QMap),
 }
 
 #[derive(Clone)]
@@ -30,6 +31,12 @@ pub struct QFilter {
     filter_fun:  Rc<objstore::Obj>,
     qchild:      Box<QPlan>,
     filter_code: Option<ir::Expr>,  /* TODO move only to comp::CFilter */
+}
+
+#[derive(Clone)]
+pub struct QMap {
+    map_fun:  Rc<objstore::Obj>,
+    qchild:   Box<QPlan>,
 }
 
 pub type QVal = u32;
@@ -120,6 +127,7 @@ pub enum RuntimeError {
   NoRowWithRowid(String, interpreter::Rowid),
   TooManyRowsWithRowid(String, interpreter::Rowid),
   CantWriteRtValToBuffer(interpreter::RtVal),
+  MapNotSupported { backend: String },
 }
 
 /* Object store helpers */

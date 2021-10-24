@@ -94,6 +94,12 @@ fn build_cursor(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeError> {
 
         Filter(qfilter) =>
             filter_cursor(Rc::clone(&qfilter.filter_fun), &qfilter.qchild, db_ctx),
+
+        Map(qmap) => {
+            return Err(RuntimeError::MapNotSupported {
+                backend: String::from("columnar interpreter")
+            });
+        }
     }
 }
 
