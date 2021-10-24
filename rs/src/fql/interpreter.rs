@@ -10,11 +10,12 @@ use std::collections::HashMap;
 /* Interpreter: preparation step */
 
 pub enum Cursor {
-    Read(CurRead),
-    Filter(CurFilter)
+    ReadT(CurReadT),
+    Filter(CurFilter),
+    Map(CurMap),
 }
 
-pub struct CurRead {
+pub struct CurReadT {
     rowid_range: ops::Range<Rowid>,
     tab_name:    String,
     data_guide:  DataGuide /* TODO rename */
@@ -22,6 +23,11 @@ pub struct CurRead {
 
 pub struct CurFilter {
     pred_obj:     Rc<objstore::Obj>,
+    child_cursor: Box<Cursor>,
+}
+
+pub struct CurMap {
+    mapfun_obj:   Rc<objstore::Obj>,
     child_cursor: Box<Cursor>,
 }
 
@@ -55,13 +61,13 @@ fn read_cursor(tab_name: &str) -> Result<Cursor, RuntimeError> {
         };
 
     let cur_read =
-        CurRead {
+        CurReadT {
             rowid_range,
             tab_name:   String::from(tab_name),
             data_guide: new_data_guide(tab_name)?
         };
 
-    let cursor = Cursor::Read(cur_read);
+    let cursor = Cursor::ReadT(cur_read);
     Ok(cursor)
 }
 
@@ -175,7 +181,7 @@ fn read_row(tab_name: &str, rowid: Rowid, format: &DataGuide) -> Result<RtVal, R
     Ok(row_val)
 }
 
-fn cursor_fetch_read(cur_read: &mut CurRead) -> Result<Option<RtVal>, RuntimeError> {
+fn cursor_fetch_read(cur_read: &mut CurReadT) -> Result<Option<RtVal>, RuntimeError> {
     match cur_read.rowid_range.next() {
         Some(rowid) => {
             let rt_val = read_row(&cur_read.tab_name, rowid, &cur_read.data_guide)?;
@@ -392,13 +398,33 @@ fn cursor_fetch_filter(cur_filter: &mut CurFilter) -> Result<Option<RtVal>, Runt
     return child_res;
 }
 
+fn cursor_fetch_map(cur_map: &mut CurMap) -> Result<Option<RtVal>, RuntimeError> {
+    let child_cursor = &mut cur_map.child_cursor;
+    let child_res = cursor_fetch(child_cursor)?;
+
+    if child_res.is_none() {
+        /* no more rows */
+        return Ok(None);
+    }
+    let child_val = child_res.unwrap();
+
+    let mapfun_decl = super::extract_decl(&cur_map.mapfun_obj)?;
+    let map_fun = super::check_is_fun_decl(mapfun_decl)?;
+
+    let map_res = interpret_row_fun(map_fun, child_val)?;
+    Ok(Some(map_res))
+}
+
 fn cursor_fetch(cursor: &mut Cursor) -> Result<Option<RtVal>, RuntimeError> {
     match cursor {
-        Cursor::Read(cur_read) =>
+        Cursor::ReadT(cur_read) =>
             cursor_fetch_read(cur_read),
 
         Cursor::Filter(cur_filter) =>
             cursor_fetch_filter(cur_filter),
+
+        Cursor::Map(cur_map) =>
+            cursor_fetch_map(cur_map),
     }
 }
 
