@@ -180,7 +180,7 @@ pub fn exec_into(qplan: &QPlan, db_ctx: &DbCtx, res_buf: &mut [QVal]) -> Result<
         SQLite,
         NaiveInterpreter,
         Columnar
-    };
+    }
     let curr_backend = Backend::NaiveInterpreter;
 
     match curr_backend {

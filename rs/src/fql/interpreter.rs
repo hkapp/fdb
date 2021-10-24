@@ -1,6 +1,5 @@
 use crate::ir;
 use super::{QPlan, RuntimeError, QVal, Status};
-use super::sqlexec;
 use crate::ctx::DbCtx;
 use std::ops;
 use crate::objstore;
@@ -111,12 +110,11 @@ pub struct DataGuide(Vec<ColId>);
 pub enum RtVal {
     UInt32(u32),
     Bool(bool),
-    DataGuide(DataGuide),
-    Struct(RtStruct)
+    Struct(RtStruct),
 }
 
 #[derive(Debug, Clone)]
-struct RtStruct {
+pub struct RtStruct {
     fields: Vec<RtVal>
 }
 
@@ -187,25 +185,6 @@ fn cursor_fetch_read(cur_read: &mut CurRead) -> Result<Option<RtVal>, RuntimeErr
         None =>
             Ok(None),
     }
-}
-
-fn read_column_value(column: &ColId, rowid: Rowid) -> Result<RtVal, RuntimeError>
-{
-    let query = format!("SELECT {} FROM {} WHERE ROWID = {}",
-                        column.col_name, column.tab_name, rowid);
-    let col_val = sql_one_row_one_col(&query)?;
-    let rt_val = RtVal::UInt32(col_val);
-
-    Ok(rt_val)
-}
-
-fn resolve_dataguide_entry(data_guide: &DataGuide, field_index: usize, rowid: Rowid)
-    -> Result<RtVal, RuntimeError>
-{
-    let column = data_guide.0.get(field_index)
-                    .ok_or_else(|| RuntimeError::IndexNotInDataGuide(field_index))?;
-
-    read_column_value(column, rowid)
 }
 
 fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, interpreter: &mut Interpreter<'a>)
@@ -326,7 +305,7 @@ fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, interpreter: &mut Interpreter<
 }
 
 /* TODO rename */
-fn interpret_row_fun(predicate: &ir::AnonFun, arg_value: RtVal, data_guide: &DataGuide)
+fn interpret_row_fun(predicate: &ir::AnonFun, arg_value: RtVal)
     -> Result<RtVal, RuntimeError>
 {
     let val_params = &predicate.val_params;
@@ -381,27 +360,14 @@ fn new_data_guide(tab_name: &str) -> Result<DataGuide, RuntimeError> {
     }
 }
 
-fn cursor_data_guide(cursor: &Cursor) -> Result<DataGuide, RuntimeError> {
-    match cursor {
-        Cursor::Read(cur_read) =>
-            new_data_guide(&cur_read.tab_name),
-
-        Cursor::Filter(cur_filter) =>
-            /* Filter: unchanged data guide (pass-through only) */
-            cursor_data_guide(&cur_filter.child_cursor),
-    }
-}
-
 fn cursor_fetch_filter(cur_filter: &mut CurFilter) -> Result<Option<RtVal>, RuntimeError> {
     let pred_decl = super::extract_decl(&cur_filter.pred_obj)?;
     let pred_fun = super::check_is_fun_decl(pred_decl)?;
     let child_cursor = &mut cur_filter.child_cursor;
-    let data_guide = cursor_data_guide(child_cursor)?;
-                    /* filter: data guide is unchanged (no map) */
 
     let mut child_res = cursor_fetch(child_cursor);
     while let Ok(Some(child_row)) = child_res {
-        match interpret_row_fun(pred_fun, child_row.clone(), &data_guide)? {
+        match interpret_row_fun(pred_fun, child_row.clone())? {
             RtVal::Bool(b) => {
                 if b {
                     /* Filter passed, return rowid */
@@ -452,15 +418,6 @@ fn gen_proj_query_from_dataguide(data_guide: &DataGuide, rowid: Rowid) -> String
     return sql_query;
 }
 
-fn query_sqlite_rowid_into(rowid: Rowid, data_guide: &DataGuide, res_buf: &mut [QVal])
-    -> Result<(), RuntimeError>
-{
-    let sql_query = gen_proj_query_from_dataguide(data_guide, rowid);
-    let _nrows = sqlexec::query_sqlite_into(&sql_query, res_buf)?;
-    /* TODO assert that returned number of rows is exactly one */
-    Ok(())
-}
-
 struct BufWriter<'a, T> {
     buffer:  &'a mut [T],
     cur_pos: usize
@@ -484,7 +441,7 @@ fn write_rtval_to_buffer<'a>(row_val: RtVal, output: &mut BufWriter<'a, QVal>) -
     match row_val {
         RtVal::Struct( RtStruct { fields } ) => {
             for field_val in fields {
-                write_rtval_to_buffer(field_val, output);
+                write_rtval_to_buffer(field_val, output)?;
             }
         },
 
@@ -500,7 +457,6 @@ fn write_rtval_to_buffer<'a>(row_val: RtVal, output: &mut BufWriter<'a, QVal>) -
 }
 
 pub fn exec_interpreter_into(cursor: &mut Cursor, res_buf: &mut [QVal]) -> Result<Status, RuntimeError> {
-    let data_guide = cursor_data_guide(cursor)?; /* TODO we should add the final "result conversion / out projection" node in the cursor tree */
     let mut rowcount = 0;
     let mut buf_writer = BufWriter::new(res_buf);
     while let Some(row_val) = cursor_fetch(cursor)? {
