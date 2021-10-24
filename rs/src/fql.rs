@@ -117,6 +117,9 @@ pub enum RuntimeError {
   UnsupportedOperator(ir::Operator),
   UnsupportedBackend,
   NotAFunction,
+  NoRowWithRowid(String, interpreter::Rowid),
+  TooManyRowsWithRowid(String, interpreter::Rowid),
+  CantWriteRtValToBuffer(interpreter::RtVal),
 }
 
 /* Object store helpers */
@@ -178,7 +181,7 @@ pub fn exec_into(qplan: &QPlan, db_ctx: &DbCtx, res_buf: &mut [QVal]) -> Result<
         NaiveInterpreter,
         Columnar
     };
-    let curr_backend = Backend::Columnar;
+    let curr_backend = Backend::NaiveInterpreter;
 
     match curr_backend {
         Backend::SQLite => {
