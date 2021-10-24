@@ -23,6 +23,8 @@ foreign import ccall "readT"
   rs_readT :: Ptr DbCtx -> CString -> CSize -> IO (Ptr (QPlan a))
 foreign import ccall "filterQ"
   rs_filterQ :: Ptr DbCtx -> Ptr (QPlan a) -> CString -> CSize -> IO (Ptr (QPlan a))
+foreign import ccall "mapQ"
+  rs_mapQ :: Ptr DbCtx -> Ptr (QPlan a) -> CString -> CSize -> IO (Ptr (QPlan b))
 foreign import ccall "&release_qplan"
   rs_releaseQPlan :: FunPtr (Ptr (QPlan a) -> IO ())
 
@@ -48,7 +50,7 @@ makeQ ctxFgn planRaw =
     planFgn <- newForeignPtr rs_releaseQPlan planValid
     return (Q ctxFgn planFgn)
 
-makeQFrom :: Q a -> Ptr (QPlan a) -> IO (Q a)
+makeQFrom :: Q a -> Ptr (QPlan b) -> IO (Q b)
 makeQFrom (Q ctxFgn _) = makeQ ctxFgn
 
 withQ :: Q a -> (Ptr DbCtx -> Ptr (QPlan a) -> IO b) -> IO b
@@ -57,7 +59,7 @@ withQ (Q ctxFgn planFgn) f =
       withForeignPtr planFgn (\planRaw -> (
         f ctxRaw planRaw)))
 
-transformQ :: Q a -> (Ptr DbCtx -> Ptr (QPlan a) -> IO (Ptr (QPlan a))) -> IO (Q a)
+transformQ :: Q a -> (Ptr DbCtx -> Ptr (QPlan a) -> IO (Ptr (QPlan b))) -> IO (Q b)
 transformQ qctx f =
   let
     wrapF ctxRaw planRaw =
@@ -108,6 +110,15 @@ filterQ _ funName prevQ =
   in
     transformQ prevQ (\ctxRaw prevPlanRaw ->
       withCStringLen funName (wrapFilterQ ctxRaw prevPlanRaw))
+
+mapQ :: (a -> b) -> String -> Q a -> IO (Q b)
+mapQ _ funName prevQ =
+  let
+    wrapMapQ ctxRaw prevPlanRaw (strBuf, strLen) =
+      rs_mapQ ctxRaw prevPlanRaw strBuf (fromIntegral strLen)
+  in
+    transformQ prevQ (\ctxRaw prevPlanRaw ->
+      withCStringLen funName (wrapMapQ ctxRaw prevPlanRaw))
 
 
 newtype DbCtx = DbCtx Void
