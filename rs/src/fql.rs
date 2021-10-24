@@ -58,35 +58,40 @@ pub fn read_table(tab_name: &str) -> QPlan {
     )
 }
 
-pub fn filter(prev_plan: &QPlan, fun_name: &str, db_ctx: &DbCtx) -> Result<QPlan, CompileError> {
+fn fun_obj(fun_name: &str, db_ctx: &DbCtx) -> Result<Rc<objstore::Obj>, CompileError> {
     let symbol =
         objstore::Symbol::new(
             String::from(fun_name));
 
-    let resolved_fun =
-        match db_ctx.obj_store.find(&symbol) {
-            Some(obj) => {
-                match obj.as_result() {
-                    /* TODO we should also check that the declaration at the end is actually a function
-                     * and not a constant.
-                     */
-                    Ok(_) => obj,
+    match db_ctx.obj_store.find(&symbol) {
+        Some(obj) => {
+            match obj.as_result() {
+                /* TODO we should also check that the declaration at the end is actually a function
+                 * and not a constant.
+                 */
+                Ok(_) => Ok(obj),
 
-                    Err(objstore::FailedObj::ParseError(err_msg)) => {
-                        println!("Object \"{}\" has parsing errors:", fun_name);
-                        println!("{}", &err_msg);
-                        return Err(
-                            CompileError::ObjectHasErrors(symbol));
-                    }
+                Err(objstore::FailedObj::ParseError(err_msg)) => {
+                    println!("Object \"{}\" has parsing errors:", fun_name);
+                    println!("{}", &err_msg);
+                    Err(
+                        CompileError::ObjectHasErrors(symbol))
                 }
             }
+        }
 
-            None =>
-                return Err(
-                    CompileError::SymbolNotDefined(symbol)),
-        };
+        None =>
+            Err(
+                CompileError::SymbolNotDefined(symbol)),
+    }
+}
+
+pub fn filter(prev_plan: &QPlan, fun_name: &str, db_ctx: &DbCtx) -> Result<QPlan, CompileError> {
+    let resolved_fun = fun_obj(fun_name, db_ctx)?;
 
     let prev_plan_cp = Box::new(prev_plan.clone());
+                        /* need to clone to ensure Haskell doesn't ask
+                         * the same memory to be cleaned twice */
     let new_plan =
         QPlan::Filter(
             QFilter {
@@ -95,8 +100,23 @@ pub fn filter(prev_plan: &QPlan, fun_name: &str, db_ctx: &DbCtx) -> Result<QPlan
                 filter_code: None
             }
         );
+
+    Ok(new_plan)
+}
+
+pub fn map(prev_plan: &QPlan, fun_name: &str, db_ctx: &DbCtx) -> Result<QPlan, CompileError> {
+    let resolved_fun = fun_obj(fun_name, db_ctx)?;
+
+    let prev_plan_cp = Box::new(prev_plan.clone());
                         /* need to clone to ensure Haskell doesn't ask
                          * the same memory to be cleaned twice */
+    let new_plan =
+        QPlan::Map(
+            QMap {
+                map_fun:  resolved_fun,
+                qchild:   prev_plan_cp,
+            }
+        );
 
     Ok(new_plan)
 }

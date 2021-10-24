@@ -139,6 +139,34 @@ pub extern fn filterQ(
 }
 
 #[no_mangle]
+pub extern fn mapQ(
+    db_ptr:        *const DbCtx,
+    prev_plan_ptr: *const QPlan,
+    fun_name_buf:  *const c_char,
+    fun_name_len:  c_sizet)
+    -> *const QPlan
+{
+    let db_ctx = unsafe {
+        borrow_hs_ptr(db_ptr)
+    };
+
+    let prev_plan = unsafe {
+        borrow_hs_ptr(prev_plan_ptr)
+    };
+
+    let fun_name: &str = unsafe {
+        str_from_hs(fun_name_buf, fun_name_len)
+            .unwrap()  /* do something more here? */
+    };
+
+    let new_plan = fql::map(prev_plan, fun_name, db_ctx);
+
+    unsafe {
+        to_hs_res(new_plan)
+    }
+}
+
+#[no_mangle]
 pub extern fn execQ(db_ptr: *const DbCtx, plan_ptr: *const QPlan, buf_ptr: *mut QVal, n_alloc: c_sizet)
     -> c_sizet
 {
