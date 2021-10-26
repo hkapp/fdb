@@ -135,7 +135,9 @@ pub enum RuntimeError {
   UndefinedVariable(ir::Local),
   PatternMatchNonStruct(ir::Local),
   UnsupportedComparison { left: interpreter::RtVal, right: interpreter::RtVal },
+  UnsupportedAddition { left: interpreter::RtVal, right: interpreter::RtVal },
   UnsupportedComparison3 { left: qeval::RtVal, right: qeval::RtVal }, /* TODO: remove */
+  UnsupportedAddition3 { left: qeval::RtVal, right: qeval::RtVal }, /* TODO: remove */
   FilterNotBoolean(interpreter::RtVal),
   FilterNotBoolean3(qeval::RtVal), /* TODO remove */
   UnknownTable(String),

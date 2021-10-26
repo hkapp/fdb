@@ -34,7 +34,7 @@ rs-lib:
 rs-lib-release:
 	$(CARGO) build --release
 
-$(DATA_SQLITE): $(DATA_DIR)
+$(DATA_SQLITE): $(DATA_DIR) $(SQL_DIR)/create_foo.sql $(SQL_DIR)/create_pairs.sql
 	echo '.exit' | sqlite3 $(DATA_SQLITE) -init $(SQL_DIR)/create_foo.sql
 	echo '.exit' | sqlite3 $(DATA_SQLITE) -init $(SQL_DIR)/create_pairs.sql
 

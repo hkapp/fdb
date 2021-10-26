@@ -153,6 +153,28 @@ fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, rowid: Rowid, interpreter: &mu
                     }
                 }
 
+                Operator::Plus => {
+                    assert!(val_args.len() == 2);
+                    let arg_left  = val_args.get(0).unwrap();
+                    let arg_right = val_args.get(1).unwrap();
+
+                    let val_left  = interpreter.get(arg_left).unwrap();
+                    let val_right = interpreter.get(arg_right).unwrap();
+
+                    match (val_left, val_right) {
+                        (RtVal::UInt32(int_left), RtVal::UInt32(int_right)) =>
+                            Ok(
+                                RtVal::UInt32(int_left + int_right)),
+
+                        _ =>
+                            Err(
+                                RuntimeError::UnsupportedAddition3{
+                                    left:  val_left.clone(),
+                                    right: val_right.clone()
+                                }),
+                    }
+                }
+
                 Operator::ReadRtCol(..) => {
                     Err(RuntimeError::UnsupportedOperator(operator.clone()))
                 }

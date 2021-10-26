@@ -97,6 +97,18 @@ fn rec_inline_filter_sql<'a>(
                     Ok(sql)
                 }
 
+                Operator::Plus => {
+                    assert!(val_args.len() == 2);
+                    let arg_left  = val_args.get(0).unwrap();
+                    let arg_right = val_args.get(1).unwrap();
+
+                    let sql_left  = eval_state.get(arg_left).unwrap();
+                    let sql_right = eval_state.get(arg_right).unwrap();
+
+                    let sql = format!("({} + {})", sql_left, sql_right);
+                    Ok(sql)
+                }
+
                 Operator::ReadRtCol(..) => {
                     /* This opeartor shouldn't appear in the pure SQL backend */
                     Err(RuntimeError::UnsupportedOperator(operator.clone()))

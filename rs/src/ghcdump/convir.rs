@@ -96,6 +96,9 @@ fn resolve_operator(fun_name: &ghcir::Global) -> Result<cmnir::Operator, ConvErr
         "GHC.Classes.<=" =>
             Ok(Operator::LessThanOrEqual),
 
+        "GHC.Num.+" =>
+            Ok(Operator::Plus),
+
         _ =>
             Err(ConvError::UnknownOperator(fun_name.clone())),
     }

@@ -697,7 +697,7 @@ const PKG_BODY_PAT:   &str = r"[a-zA-Z0-9_]";
 const VAR_START_PAT:  &str = IDEN_START_PAT;
 const VAR_BODY_PAT:   &str = r"[a-zA-Z0-9_]";
 
-const OPERATOR_SYMBOLS: &str = r"[<=]";
+const OPERATOR_SYMBOLS: &str = r"[<=+]";
 
 fn global_regex_pattern() -> String {
     format!(r"^(?:{}{}*\.)*(?:(?:{}{}*)|(?:{}+))",
