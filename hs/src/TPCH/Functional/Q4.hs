@@ -1,4 +1,4 @@
-module Q4 where
+module TPCH.Functional.Q4 where
 
 import TPCH.Functional.Schema
 
