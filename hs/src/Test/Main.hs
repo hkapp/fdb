@@ -20,9 +20,14 @@ allTests =
     testFilterPairs dbCtx;
     testMapFoo dbCtx;
 
-testQry :: (Show a, Storable a) => IO (Q a) -> [a] -> IO ()
-testQry qry _ =
-  qry >>= execAndPrint
+testQry :: (Show a, Storable a, Eq a) => IO (Q a) -> [a] -> IO ()
+testQry qry expected =
+  do
+    qres <- qry >>= execQ
+    traverse_  print qres
+    if qres == expected
+      then print "PASS" -- TODO get rid of printed quotes here
+      else print "FAIL"
 
 execAndPrint :: (Show a, Storable a) => Q a -> IO ()
 execAndPrint query =
@@ -34,7 +39,7 @@ execAndPrint query =
 
 testFilterFoo dbCtx =
   let
-    expectedResult = [1, 2, 3, 4, 5]
+    expectedResult = [1, 2, 3]
     test f n = testQry (filterFoo dbCtx f n) expectedResult
   in
     do
@@ -45,7 +50,7 @@ testFilterFoo dbCtx =
 type QVal = CUInt32;
 
 filterFoo :: DbInst -> (QVal -> Bool) -> String -> IO (Q QVal)
-filterFoo  dbCtx predicate predicateName =
+filterFoo dbCtx predicate predicateName =
   readT dbCtx "foo" >>=
     filterQ predicate predicateName
 
@@ -60,6 +65,10 @@ data QValB = QValB CUInt32 CUInt32
 
 instance Show QValB where
   show (QValB x y) = "(" ++ (show x) ++ ", " ++ (show y) ++ ")"
+
+instance Eq QValB where
+  (==) (QValB x1 y1) (QValB x2 y2) =
+    (x1 == x2) && (y1 == y2)
 
 instance Storable QValB where
   sizeOf _ = sizeOf (undefined :: CUInt32) * 2
