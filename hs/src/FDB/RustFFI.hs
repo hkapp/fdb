@@ -37,6 +37,7 @@ type Void = ();
 newtype QPlan a = QPlan Void;
 
 data Q a = Q (ForeignPtr DbCtx) (ForeignPtr (QPlan a))
+type DbInst = ForeignPtr DbCtx
 
 assertNotNull :: Ptr a -> Ptr a
 assertNotNull ptr = if (ptr == nullPtr)

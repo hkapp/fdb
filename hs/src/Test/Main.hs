@@ -7,7 +7,7 @@ import qualified Utils.Dot as Dot
 
 import Foreign (Storable(..))
 import Foreign.Ptr (castPtr)
-import FDB.RustFFI(Q, CUInt32, readT, filterQ, execQ, initDB, mapQ)
+import FDB.RustFFI(Q, DbInst, CUInt32, readT, filterQ, execQ, initDB, mapQ)
 import Data.Foldable(traverse_)
 
 main :: IO ()
@@ -15,9 +15,10 @@ main = allTests
 
 allTests =
   do
-    testFilterFoo;
-    testFilterPairs;
-    testMapFoo;
+    dbCtx <- initDB
+    testFilterFoo dbCtx;
+    testFilterPairs dbCtx;
+    testMapFoo dbCtx;
 
 testQry :: (Show a, Storable a) => IO (Q a) -> [a] -> IO ()
 testQry qry _ =
@@ -31,10 +32,10 @@ execAndPrint query =
 
 -- Test filterQ on table 'foo'
 
-testFilterFoo =
+testFilterFoo dbCtx =
   let
     expectedResult = [1, 2, 3, 4, 5]
-    test f n = testQry (filterFoo f n) expectedResult
+    test f n = testQry (filterFoo dbCtx f n) expectedResult
   in
     do
       test fooFilter1 "Main.fooFilter1";
@@ -43,19 +44,10 @@ testFilterFoo =
 
 type QVal = CUInt32;
 
-qry = qryc
-
-qrya :: IO (Q QVal)
-qrya =
-  filterFoo fooFilter2 "Main.fooFilter2"
-
-filterFoo :: (QVal -> Bool) -> String -> IO (Q QVal)
-filterFoo predicate predicateName =
-  do
-    ctx <- initDB
-    q1  <- readT ctx "foo"
-    q2  <- filterQ predicate predicateName q1
-    return q2
+filterFoo :: DbInst -> (QVal -> Bool) -> String -> IO (Q QVal)
+filterFoo  dbCtx predicate predicateName =
+  readT dbCtx "foo" >>=
+    filterQ predicate predicateName
 
 fooFilter1 :: QVal -> Bool
 fooFilter1 x = x <= 3
@@ -89,7 +81,7 @@ instance Storable QValB where
 
 -- Test filterQ on table 'pairs'
 
-testFilterPairs =
+testFilterPairs dbCtx =
   let
     expectedResult =
       [
@@ -109,22 +101,15 @@ testFilterPairs =
         QValB 4 5,
         QValB 5 5
       ]
-    test f n = testQry (filterPairs f n) expectedResult
+    test f n = testQry (filterPairs dbCtx f n) expectedResult
   in
     do
       test pairsFilter1 "Main.pairsFilter1";
 
-qryb :: IO (Q QValB)
-qryb =
-  filterPairs pairsFilter1 "Main.pairsFilter1"
-
-filterPairs :: (QValB -> Bool) -> String -> IO (Q QValB)
-filterPairs predicate predicateName =
-  do
-    ctx <- initDB
-    q1  <- readT ctx "pairs"
-    q2  <- filterQ predicate predicateName q1
-    return q2
+filterPairs :: DbInst -> (QValB -> Bool) -> String -> IO (Q QValB)
+filterPairs dbCtx predicate predicateName =
+  readT dbCtx "pairs" >>=
+    filterQ predicate predicateName
 
 -- FIXME this doesn't get parsed properly with GHC 8.0.2
 pairsFilter1 :: QValB -> Bool
@@ -132,7 +117,7 @@ pairsFilter1 (QValB x y) = x <= y
 
 -- Test mapQ on table 'foo'
 
-testMapFoo =
+testMapFoo dbCtx =
   let
     expectedResult =
       [
@@ -142,23 +127,16 @@ testMapFoo =
         5,
         6
       ]
-    test f n = testQry (mapFoo f n) expectedResult
+    test f n = testQry (mapFoo dbCtx f n) expectedResult
   in
     do
       test fooMapFun1 "Main.fooMapFun1";
 
 
-qryc :: IO (Q QVal)
-qryc =
-  mapFoo fooMapFun1 "Main.fooMapFun1"
-
-mapFoo :: (QVal -> a) -> String -> IO (Q a)
-mapFoo mapfun mapfunName =
-  do
-    ctx <- initDB
-    q1  <- readT ctx "foo"
-    q2  <- mapQ mapfun mapfunName q1
-    return q2
+mapFoo :: DbInst -> (QVal -> a) -> String -> IO (Q a)
+mapFoo dbCtx mapfun mapfunName =
+  readT dbCtx "foo" >>=
+    mapQ mapfun mapfunName
 
 fooMapFun1 :: QVal -> QVal
 fooMapFun1 x = x + 1
