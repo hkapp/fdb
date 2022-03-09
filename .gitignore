@@ -5,3 +5,8 @@ hs/bin/
 rs/target/
 *.lock
 data/
+
+*.log
+*.aux
+*.synctex.gz
+*.pdf
