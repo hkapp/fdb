@@ -6,6 +6,8 @@
 
 \newcommand{\ie}[0]{\textit{i.e.}}
 \newcommand{\eg}[0]{\textit{e.g.}}
+\newcommand{\rust}[1]{\texttt{#1}}
+\newcommand{\fql}[1]{\texttt{#1}}
 
 \title{FDB: A Functional Database \\ Design ideas}
 %\subtitle{Design Ideas}
@@ -45,5 +47,44 @@ Rust might be an annoying language as a target for code generation due to its co
 \subsubsection{Pros and cons of other target languages}
 
 \textit{TODO}
+
+\subsection{Which optimizations/information do we need in the FDB compiler?}
+
+\begin{itemize}
+\item full struct field access path (even in the case of nested enums and structs)
+\item auto parameterized cursors (equivalent to bind variables in SQL)
+\end{itemize}
+
+\subsection{IR design (assuming Rust as target language)}
+
+\subsubsection{Design considerations}
+
+Rust is a high-level language.
+FQL is a high-level language.
+As a consequence, \textbf{the IR} used to perform the translation between the two \textbf{must be high-level}.
+
+To generate highly efficient Rust code, we need to give it a lot of information.
+We want to generate the most idiomatic Rust code possible such that the Rust optimizer can do the best job possible and give us the best performance.
+
+In order to generate idiomatic Rust code, \textbf{the IR must retain a lot of the information and structure of the source language}.
+Some simplifications that would typically be done to simplify the IR, and thus the implementation of later compilation stages, cannot be done as it would get in the way of generating idiomatic target code.
+For example, lowering control flow into goto-like statements would make it very hard -- both for the FDB and Rust compiler -- to re-induce loops.
+
+We may still perform lowerings and reduction of the number of constructs in the IR.
+Which constructs can be lowered and/or removed depends on the compilation process of the Rust compiler itself.
+For example, if \rust{for} loops are consistently rewritten as \rust{while} loops by the Rust compiler, and no additional information is gained by the Rust compiler through that process\footnote{
+	For example, I would assume that doing auto-vectorization is much easier if the compiler knows that this was originally a \rust{for} loop.
+}, then it is safe (in terms of performance) to drop the \fql{for} construct in the IR and apply the same lowering.
+Investigating the MIR produced by Rust for various code snippets should give a lot of information as to what it does consistently.
+Note that MIR is pre-optimization in Rust. 
+
+\textit{Incremental principle.}
+Considering the architecture of the compiler, it is possible to start with a small number of constructs, and add more in the IR over time.
+The performance impact of any new construct should be assessed.
+Adding new constructs will become more and more implementation heavy as the number of compilation passes increases.
+
+\section{Runtime implementation}
+
+\textit{Assuming we're using Rust as target language, how do we implement the runtime?}
 
 \end{document}
