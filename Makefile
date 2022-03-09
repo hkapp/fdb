@@ -1,3 +1,5 @@
+# Additional dependencies:
+#  sqlite3 libsqlite3-dev
 
 RS_DIR = rs
 CARGO = cd $(RS_DIR) ; cargo
