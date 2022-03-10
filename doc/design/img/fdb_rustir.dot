@@ -1,0 +1,77 @@
+digraph G {
+  Block
+  Block -> Statement [label=many]
+  Block -> BlockResult [label="result (optional)", arrowhead=empty]
+  BlockResult [label=Variable, style=dashed]
+
+  Statement
+  Statement -> Let [arrowhead=none]
+  Statement -> MutAssign [arrowhead=none]
+  Statement -> PatMatch [arrowhead=none]
+  Statement -> WhileLoop [arrowhead=none]
+
+  Let
+  Let -> LetFields
+  LetFields [shape=record, label="{var_type|mutable}"]
+  Let -> LetVariable
+  LetVariable [label=Variable]
+  Let -> Expr [label=assignment]
+  //Let -> LetExprBody [label=body]
+  //LetExprBody [label=Expr, style=dashed]
+
+  MutAssign
+  MutAssign -> MutAssignTarget
+  MutAssignTarget  [label=AssignTarget]
+  MutAssignTarget -> MutAssignVariable [label="base variable"]
+  MutAssignVariable  [label=Variable, style=dashed]
+  MutAssignTarget -> MutAssignPath [label="field path"]
+  MutAssignPath  [label=FieldName]
+  MutAssign -> MutAssignRHS [label="rhs"]
+  MutAssignRHS [label=Variable, style=dashed]
+
+  Expr
+  Expr -> AnonFun [arrowhead=none]
+  Expr -> Call [arrowhead=none]
+  Expr -> Literal [arrowhead=none]
+
+  AnonFun
+  AnonFun -> AnonFunFields
+  AnonFunFields [shape=record, label="{type_params|typeclass_params|val_params}"]
+  AnonFun -> AnonFunBody [label=body]
+  AnonFunBody [label=Block, style=dashed]
+
+  Call
+  Call -> Operator [arrowhead=none]
+  Call -> CallArgs [label=arguments]
+  CallArgs [label=Variable, style=dashed]
+
+  Operator
+  Operator -> FunCall [arrowhead=none]
+  Operator -> "+" [arrowhead=none]
+  Operator -> EnumCast [arrowhead=none]
+  Operator -> uninitialized [arrowhead=none]
+  Operator -> OtherOperators [arrowhead=none]
+  OtherOperators [label="..."]
+
+  FunCall
+  FunCall -> FunCallFields
+  FunCallFields [shape=record, label="{called_fun|type_args|typeclass_args}"]
+
+  PatMatch
+  PatMatch -> PatMatchedVar [label="matched var"]
+  PatMatchedVar [label=Variable, style=dashed]
+  PatMatch -> PatCase [label=many]
+
+  PatCase
+  PatCase -> PatCaseEnum
+  PatCaseEnum [label=EnumVariant]
+  PatCase -> PatCaseBody
+  PatCaseBody [label=Block, style=dashed]
+
+  WhileLoop
+  WhileLoop -> WhileLoopCond [label=condition]
+  WhileLoopCond [label=Block, style=dashed]
+  WhileLoop -> WhileLoopBody [label=body]
+  WhileLoopBody [label=Block, style=dashed]
+
+}
