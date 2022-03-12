@@ -13,6 +13,8 @@ GHC_DUMP_OPTION_NAME1 = dump-prep
 GHC_DUMP_OPTION_NAME2 = dump-hi
 GHC_DUMP_FLAGS = -d$(GHC_DUMP_OPTION_NAME1) -d$(GHC_DUMP_OPTION_NAME2) -ddump-to-file  -fforce-recomp
 ALL_HS_FILES = $(shell find $(SRC_DIR) -name "*.hs")
+TOKEN_HSDEV = $(BIN_DIR)/token_hsdev
+TOKEN_HSRELEASE = $(BIN_DIR)/token_hsrelease
 TEST_MAIN_DUMP1 = $(BIN_DIR)/$(SRC_DIR)/$(TEST_MAIN_PATH).$(GHC_DUMP_OPTION_NAME1)
 TEST_MAIN_DUMP2 = $(BIN_DIR)/$(SRC_DIR)/$(TEST_MAIN_PATH).$(GHC_DUMP_OPTION_NAME2)
 GHC_DUMP_PRODS = $(TEST_MAIN_DUMP1) $(TEST_MAIN_DUMP2)
@@ -37,27 +39,38 @@ clean:
 	find $(SRC_DIR) -name "*.hspp" -exec rm {} \;
 
 # Only compile the Haskell code
-compile: $(BIN_DIR)
+# NO DUMPS
+compile: compile-no-dump
+
+compile-no-dump: $(BIN_DIR)
 	ghc $(GHC_FLAGS) -o $(TEST_BIN) $(TEST_MAIN_HS) $(LIBS_DEV)
 
-test: compile-test
+test: test-dev
+
+test-dev: $(TOKEN_HSDEV)
 	$(TEST_BIN)
 
-test-speed: compile-test-speed
+test-release: $(TOKEN_HSRELEASE)
 	$(TEST_BIN)
 
 # Compile and generate the dump files
-compile-test: $(RUST_LIB_DEV) $(BIN_DIR)
+# Then generate a token to make Makefile happy
+# Note: depends on the Rust lib version for FFI linking
+$(TOKEN_HSDEV): $(RUST_LIB_DEV) $(BIN_DIR) $(ALL_HS_FILES)
 	ghc $(GHC_FLAGS) $(GHC_DUMP_FLAGS) -o $(TEST_BIN) $(TEST_MAIN_HS) $(LIBS_DEV)
+	touch $(TOKEN_HSDEV)
 
 # Compile and generate the dump files (with the release rust)
-compile-test-speed: $(RUST_LIB_RELEASE) $(BIN_DIR)
+# Then generate a token to make Makefile happy
+# Note: depends on the Rust lib version for FFI linking
+$(TOKEN_HSRELEASE): $(RUST_LIB_RELEASE) $(BIN_DIR) $(ALL_HS_FILES)
 	ghc $(GHC_FLAGS) $(GHC_DUMP_FLAGS) -o $(TEST_BIN) $(TEST_MAIN_HS) $(LIBS_RELEASE)
+	touch $(TOKEN_HSRELEASE)
 
 $(BIN_DIR):
 	mkdir $(BIN_DIR)
 
-dump: compile-test
+dump: $(TOKEN_HSDEV)
 
 # Additional dependencies:
 #  sqlite3 libsqlite3-dev
