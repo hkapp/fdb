@@ -6,7 +6,7 @@ use std::fmt::Debug;
 
 use crate::ctx::DbCtx;
 use crate::ctx;
-use crate::fql::{self, QPlan, QVal};
+use crate::fql::{self, QPlan, SQPlan, QVal};
 
 #[allow(non_camel_case_types)]
 type c_sizet = usize;
@@ -160,6 +160,41 @@ pub extern fn mapQ(
     };
 
     let new_plan = fql::map(prev_plan, fun_name, db_ctx);
+
+    unsafe {
+        to_hs_res(new_plan)
+    }
+}
+
+#[no_mangle]
+pub extern fn foldQ(
+    db_ptr:        *const DbCtx,
+    prev_plan_ptr: *const QPlan,
+    fun_name_buf:  *const c_char,
+    fun_name_len:  c_sizet,
+    zero_name_buf: *const c_char,
+    zero_name_len: c_sizet)
+    -> *const SQPlan
+{
+    let db_ctx = unsafe {
+        borrow_hs_ptr(db_ptr)
+    };
+
+    let prev_plan = unsafe {
+        borrow_hs_ptr(prev_plan_ptr)
+    };
+
+    let fun_name: &str = unsafe {
+        str_from_hs(fun_name_buf, fun_name_len)
+            .unwrap()  /* do something more here? */
+    };
+
+    let zero_name: &str = unsafe {
+        str_from_hs(zero_name_buf, zero_name_len)
+            .unwrap()  /* do something more here? */
+    };
+
+    let new_plan = fql::fold(prev_plan, fun_name, zero_name, db_ctx);
 
     unsafe {
         to_hs_res(new_plan)

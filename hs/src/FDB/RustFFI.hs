@@ -25,6 +25,9 @@ foreign import ccall "filterQ"
   rs_filterQ :: Ptr DbCtx -> Ptr (QPlan a) -> CString -> CSize -> IO (Ptr (QPlan a))
 foreign import ccall "mapQ"
   rs_mapQ :: Ptr DbCtx -> Ptr (QPlan a) -> CString -> CSize -> IO (Ptr (QPlan b))
+foreign import ccall "foldQ"
+  rs_foldQ :: Ptr DbCtx -> Ptr (QPlan a) -> CString -> CSize -> CString -> CSize -> IO (Ptr (SQPlan b))
+                                            {-   agg fun  -}    {-    zero    -}
 foreign import ccall "&release_qplan"
   rs_releaseQPlan :: FunPtr (Ptr (QPlan a) -> IO ())
 
@@ -34,9 +37,14 @@ foreign import ccall "execQ"
 
 {- The pointer returned by Rust is effectively (void *) -}
 type Void = ();
-newtype QPlan a = QPlan Void;
+newtype QPlan a  = QPlan Void;
+newtype SQPlan a = SQPlan Void;
+-- type SQPlan a = QPlan a; {- no real difference, these are all (void *) pointers -}
 
-data Q a = Q (ForeignPtr DbCtx) (ForeignPtr (QPlan a))
+data DbPtr p = DbPtr (ForeignPtr DbCtx) (ForeignPtr p)
+type Q a  = DbPtr (QPlan a)
+type SQ a = DbPtr (SQPlan a)
+-- data Q a = Q (ForeignPtr DbCtx) (ForeignPtr (QPlan a))
 type DbInst = ForeignPtr DbCtx
 
 assertNotNull :: Ptr a -> Ptr a
@@ -44,21 +52,29 @@ assertNotNull ptr = if (ptr == nullPtr)
                       then error "Rust returned a NULL pointer"
                       else ptr
 
-makeQ :: ForeignPtr DbCtx -> Ptr (QPlan a) -> IO (Q a)
-makeQ ctxFgn planRaw =
-  do
-    let planValid = assertNotNull planRaw
-    planFgn <- newForeignPtr rs_releaseQPlan planValid
-    return (Q ctxFgn planFgn)
+type ReleaseFun p = FunPtr (Ptr p -> IO ())
 
-makeQFrom :: Q a -> Ptr (QPlan b) -> IO (Q b)
-makeQFrom (Q ctxFgn _) = makeQ ctxFgn
+makeDbPtr :: ReleaseFun p -> ForeignPtr DbCtx -> Ptr p -> IO (DbPtr p)
+makeDbPtr releaseFun ctxFgn ptrRaw =
+  do
+    let ptrValid = assertNotNull ptrRaw
+    ptrFgn <- newForeignPtr releaseFun ptrValid
+    return (DbPtr ctxFgn ptrFgn)
+
+makeQ :: ForeignPtr DbCtx -> Ptr (QPlan a) -> IO (Q a)
+makeQ = makeDbPtr rs_releaseQPlan
+
+makeQFrom :: DbPtr p -> Ptr (QPlan b) -> IO (Q b)
+makeQFrom (DbPtr ctxFgn _) = makeQ ctxFgn
+
+withDbPtr :: DbPtr p -> (Ptr DbCtx -> Ptr p -> IO b) -> IO b
+withDbPtr (DbPtr ctxFgn ptrFgn) f =
+    withForeignPtr ctxFgn (\ctxRaw ->
+      withForeignPtr ptrFgn (\ptrRaw -> (
+        f ctxRaw ptrRaw)))
 
 withQ :: Q a -> (Ptr DbCtx -> Ptr (QPlan a) -> IO b) -> IO b
-withQ (Q ctxFgn planFgn) f =
-    withForeignPtr ctxFgn (\ctxRaw ->
-      withForeignPtr planFgn (\planRaw -> (
-        f ctxRaw planRaw)))
+withQ = withDbPtr
 
 transformQ :: Q a -> (Ptr DbCtx -> Ptr (QPlan a) -> IO (Ptr (QPlan b))) -> IO (Q b)
 transformQ qctx f =

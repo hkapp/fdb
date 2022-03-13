@@ -39,6 +39,14 @@ pub struct QMap {
     qchild:   Box<QPlan>,
 }
 
+pub enum SQPlan {
+    Fold {
+        fold_fun:  Rc<objstore::Obj>,
+        zero_fun:  Rc<objstore::Obj>,
+        qchild:    Box<QPlan>,
+    },
+}
+
 pub type QVal = u32;
 
 #[derive(Debug)]
@@ -117,6 +125,25 @@ pub fn map(prev_plan: &QPlan, fun_name: &str, db_ctx: &DbCtx) -> Result<QPlan, C
                 qchild:   prev_plan_cp,
             }
         );
+
+    Ok(new_plan)
+}
+
+pub fn fold(prev_plan: &QPlan, fun_name: &str, zero_name: &str, db_ctx: &DbCtx)
+    -> Result<SQPlan, CompileError>
+{
+    let resolved_fun = fun_obj(fun_name, db_ctx)?;
+    let resolved_zero = fun_obj(fun_name, db_ctx)?;
+
+    let prev_plan_cp = Box::new(prev_plan.clone());
+                        /* need to clone to ensure Haskell doesn't ask
+                         * the same memory to be cleaned twice */
+    let new_plan =
+        SQPlan::Fold {
+            fold_fun: resolved_fun,
+            zero_fun: resolved_zero,
+            qchild:   prev_plan_cp,
+        };
 
     Ok(new_plan)
 }
