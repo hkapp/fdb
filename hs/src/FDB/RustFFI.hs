@@ -5,10 +5,11 @@ import GHC.Base (assert)
 import Foreign.Storable
 import Foreign (Storable, Ptr, ForeignPtr, FunPtr,
                 newForeignPtr, withForeignPtr)
-import Foreign.C (CSize(..), CUInt)
+import Foreign.C (CSize(..), CUInt, CUChar(..))
 import Foreign.C.String (CString, withCStringLen)
 import Foreign.Ptr (nullPtr)
 import Foreign.Marshal.Array (allocaArray, peekArray)
+import Foreign.Marshal.Alloc (alloca)
 
 {- Import Rust functions -}
 
@@ -34,6 +35,8 @@ foreign import ccall "&release_qplan"
 {- 3. execQ API -}
 foreign import ccall "execQ"
   rs_execQ :: Ptr DbCtx -> Ptr (QPlan a) -> Ptr a -> CSize -> IO CSize
+foreign import ccall "execSQ"
+  rs_execSQ :: Ptr DbCtx -> Ptr (SQPlan a) -> Ptr a -> IO CUChar
 
 {- The pointer returned by Rust is effectively (void *) -}
 type Void = ();
@@ -75,6 +78,9 @@ withDbPtr (DbPtr ctxFgn ptrFgn) f =
 
 withQ :: Q a -> (Ptr DbCtx -> Ptr (QPlan a) -> IO b) -> IO b
 withQ = withDbPtr
+
+withSQ :: SQ a -> (Ptr DbCtx -> Ptr (SQPlan a) -> IO b) -> IO b
+withSQ = withDbPtr
 
 transformQ :: Q a -> (Ptr DbCtx -> Ptr (QPlan a) -> IO (Ptr (QPlan b))) -> IO (Q b)
 transformQ qctx f =
@@ -147,3 +153,21 @@ initDB =
     let ctxValid = assertNotNull ctxRaw
     ctxFgn      <- newForeignPtr rs_releaseCtx ctxValid
     return ctxFgn
+
+execSQ :: (Storable a) => SQ a -> IO (Maybe a)
+execSQ sqctx =
+  let
+    writeToBuf buffer =
+      do
+        resultExists <- withSQ sqctx (wrapExecSQ buffer)
+        if resultExists == 0 then
+          return Nothing
+        else
+          do
+            resVal <- peek buffer
+            return (Just resVal)
+
+    wrapExecSQ buffer dbctx qplan =
+      rs_execSQ dbctx qplan buffer
+  in
+    alloca writeToBuf

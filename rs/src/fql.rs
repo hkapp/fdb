@@ -40,12 +40,15 @@ pub struct QMap {
 }
 
 pub enum SQPlan {
-    Fold {
-        fold_fun:  Rc<objstore::Obj>,
-        zero_fun:  Rc<objstore::Obj>,
-        qchild:    Box<QPlan>,
-    },
+    Fold(SQFold),
 }
+
+struct SQFold {
+    fold_fun:  Rc<objstore::Obj>,
+    zero_fun:  Rc<objstore::Obj>,
+    qchild:    Box<QPlan>,
+}
+
 
 pub type QVal = u32;
 
@@ -133,17 +136,19 @@ pub fn fold(prev_plan: &QPlan, fun_name: &str, zero_name: &str, db_ctx: &DbCtx)
     -> Result<SQPlan, CompileError>
 {
     let resolved_fun = fun_obj(fun_name, db_ctx)?;
-    let resolved_zero = fun_obj(fun_name, db_ctx)?;
+    let resolved_zero = fun_obj(zero_name, db_ctx)?;
 
     let prev_plan_cp = Box::new(prev_plan.clone());
                         /* need to clone to ensure Haskell doesn't ask
                          * the same memory to be cleaned twice */
     let new_plan =
-        SQPlan::Fold {
-            fold_fun: resolved_fun,
-            zero_fun: resolved_zero,
-            qchild:   prev_plan_cp,
-        };
+        SQPlan::Fold(
+            SQFold {
+                fold_fun: resolved_fun,
+                zero_fun: resolved_zero,
+                qchild:   prev_plan_cp,
+            }
+        );
 
     Ok(new_plan)
 }
@@ -265,6 +270,35 @@ pub fn exec_into(qplan: &QPlan, db_ctx: &DbCtx, res_buf: &mut [QVal]) -> Result<
 
             println!("Columnar interpreter:");
             qeval::exec_interpreter_into(&mut cursor, res_buf)
+        }
+    }
+}
+
+pub fn execsq_into(qplan: &SQPlan, db_ctx: &DbCtx, res_buf: &mut QVal) -> Result<bool, RuntimeError> {
+    enum Backend {
+        SQLite,
+        NaiveInterpreter,
+        Columnar
+    }
+    let curr_backend = Backend::NaiveInterpreter;
+
+    match curr_backend {
+        Backend::SQLite => {
+          Ok(false)
+        },
+
+        Backend::NaiveInterpreter => {
+            /* Execute on old naive interpreter */
+            let mut cursor = interpreter::to_sqcursor(qplan, db_ctx)?;
+
+            println!("Naive interpreter:");
+            interpreter::execsq_interpreter_into(&mut cursor, res_buf)
+        },
+
+        Backend::Columnar => {
+            /* Execute on new columnar interpreter */
+            /* TODO: not implemented for SQ */
+            Ok(false)
         }
     }
 }

@@ -1,5 +1,6 @@
 use crate::ir;
-use super::{QPlan, RuntimeError, QVal, Status};
+use crate::fql;
+use super::{QPlan, SQPlan, RuntimeError, QVal, Status};
 use crate::ctx::DbCtx;
 use std::ops;
 use crate::objstore;
@@ -28,6 +29,16 @@ pub struct CurFilter {
 
 pub struct CurMap {
     mapfun_obj:   Rc<objstore::Obj>,
+    child_cursor: Box<Cursor>,
+}
+
+pub enum SQCursor {
+    Fold(CurFold)
+}
+
+pub struct CurFold {
+    foldfun_obj:  Rc<objstore::Obj>,
+    zerofun_obj:  Rc<objstore::Obj>,
     child_cursor: Box<Cursor>,
 }
 
@@ -118,6 +129,39 @@ pub fn to_cursor(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeError> 
 
         Map(qmap) =>
             map_cursor(Rc::clone(&qmap.map_fun), &qmap.qchild, db_ctx),
+    }
+}
+
+fn fold_sqcursor(sqplan: &fql::SQFold, db_ctx: &DbCtx)
+    -> Result<SQCursor, RuntimeError>
+{
+    let child_cursor = to_cursor(&sqplan.qchild, db_ctx)?;
+
+    let fold_fun = &sqplan.fold_fun;
+    let fun_decl = super::extract_decl(fold_fun)?;
+    super::check_is_fun_decl(fun_decl)?;
+
+    let zero_fun = &sqplan.zero_fun;
+    let zero_decl = super::extract_decl(zero_fun)?;
+    super::check_is_fun_decl(zero_decl)?;
+
+    let cursor =
+        SQCursor::Fold(
+            CurFold {
+                foldfun_obj:  Rc::clone(fold_fun),
+                zerofun_obj:  Rc::clone(zero_fun),
+                child_cursor: Box::new(child_cursor)
+            }
+        );
+
+    Ok(cursor)
+}
+
+pub fn to_sqcursor(sqplan: &SQPlan, db_ctx: &DbCtx) -> Result<SQCursor, RuntimeError> {
+    use SQPlan::*;
+    match sqplan {
+        Fold(fold) =>
+            fold_sqcursor(&fold, db_ctx),
     }
 }
 
@@ -352,25 +396,36 @@ fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, interpreter: &mut Interpreter<
     }
 }
 
-/* TODO rename */
-fn interpret_row_fun(predicate: &ir::AnonFun, arg_value: RtVal)
+fn interpret_fun(function: &ir::AnonFun, arg_values: Vec<RtVal>)
     -> Result<RtVal, RuntimeError>
 {
-    let val_params = &predicate.val_params;
-    if val_params.len() != 1 {
+    let val_params = &function.val_params;
+    if val_params.len() != arg_values.len() {
+        /* TODO change the error message */
         Err(RuntimeError::TooManyArguments(val_params.len()))
     }
     else {
-        let param = val_params.get(0).unwrap();
-        let param_name: &ir::Local = &param.name;
-
         let mut interpreter: Interpreter = HashMap::new();
 
-        let conflict = interpreter.insert(param_name, arg_value);
-        assert!(conflict.is_none());
+        for (param, arg_value) in std::iter::zip(val_params.iter(),
+                                                 arg_values.into_iter())
+        {
+            let param_name: &ir::Local = &param.name;
 
-        rec_interpret_row_expr(&predicate.body, &mut interpreter)
+            let conflict = interpreter.insert(param_name, arg_value);
+            assert!(conflict.is_none());
+        }
+
+        rec_interpret_row_expr(&function.body, &mut interpreter)
     }
+}
+
+/* TODO rename */
+fn interpret_row_fun(function: &ir::AnonFun, arg_value: RtVal)
+    -> Result<RtVal, RuntimeError>
+{
+    let arg_values = vec![arg_value];
+    interpret_fun(function, arg_values)
 }
 
 fn new_data_guide(tab_name: &str) -> Result<DataGuide, RuntimeError> {
@@ -535,4 +590,43 @@ pub fn exec_interpreter_into(cursor: &mut Cursor, res_buf: &mut [QVal]) -> Resul
         rowcount += 1;
     }
     Ok(rowcount)
+}
+
+fn sqcursor_exec_fold(cur_fold: &mut CurFold) -> Result<RtVal, RuntimeError> {
+    let zerofun_decl = super::extract_decl(&cur_fold.zerofun_obj)?;
+    let zero_fun = super::check_is_fun_decl(zerofun_decl)?;
+
+    let zero_args = vec![];
+    let mut curr_val = interpret_fun(zero_fun, zero_args)?;
+
+    let foldfun_decl = super::extract_decl(&cur_fold.foldfun_obj)?;
+    let fold_fun = super::check_is_fun_decl(foldfun_decl)?;
+
+    let child_cursor = &mut cur_fold.child_cursor;
+    while let Some(child_res) = cursor_fetch(child_cursor)? {
+        let fold_args = vec![curr_val, child_res];
+        curr_val = interpret_fun(fold_fun, fold_args)?;
+    }
+
+    Ok(curr_val)
+}
+
+fn sqcursor_exec(cursor: &mut SQCursor) -> Result<RtVal, RuntimeError> {
+    match cursor {
+        SQCursor::Fold(cur_fold) =>
+            sqcursor_exec_fold(cur_fold),
+    }
+}
+
+pub fn execsq_interpreter_into(cursor: &mut SQCursor, res_buf: &mut QVal) -> Result<bool, RuntimeError> {
+    let cursor_res = sqcursor_exec(cursor)?;
+    match cursor_res {
+        RtVal::UInt32(int_val) => {
+            *res_buf = int_val;
+            Ok(true)
+        }
+        _ => {
+            Err(RuntimeError::CantWriteRtValToBuffer(cursor_res))
+        }
+    }
 }

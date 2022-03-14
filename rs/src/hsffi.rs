@@ -1,6 +1,6 @@
 use std::str;
 use std::slice;
-use std::os::raw::c_char;
+use std::os::raw::{c_char, c_uchar};
 use std::ptr;
 use std::fmt::Debug;
 
@@ -222,4 +222,37 @@ pub extern fn execQ(db_ptr: *const DbCtx, plan_ptr: *const QPlan, buf_ptr: *mut 
             println!("{:?}", e);
             0  /* TODO change to -1? requires moving from usize to isize */
         })
+}
+
+fn bool_to_c_convention(b: bool) -> u8 {
+    if b {
+       1
+    }
+    else {
+        0
+    }
+}
+
+#[no_mangle]
+pub extern fn execSQ(db_ptr: *const DbCtx, plan_ptr: *const SQPlan, buf_ptr: *mut QVal)
+    -> c_uchar
+{
+    let db_ctx = unsafe {
+        borrow_hs_ptr(db_ptr)
+    };
+
+    let qplan = unsafe {
+        borrow_hs_ptr(plan_ptr)
+    };
+
+    let res_buf = unsafe {
+        &mut *buf_ptr
+    };
+
+    let valid_result = fql::execsq_into(qplan, db_ctx, res_buf)
+                        .unwrap_or_else(|e| {
+                            println!("{:?}", e);
+                            false
+                        });
+    return bool_to_c_convention(valid_result)
 }
