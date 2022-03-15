@@ -31,10 +31,10 @@ compile: rs-lib
 	$(HS_MAKE) compile
 
 rs-lib:
-	$(CARGO) build
+	$(CARGO) rustc -- -Awarnings
 
 rs-lib-release:
-	$(CARGO) build --release
+	$(CARGO) rustc -- -Awarnings --release
 
 $(DATA_SQLITE): $(DATA_DIR) $(SQL_DIR)/create_foo.sql $(SQL_DIR)/create_pairs.sql
 	echo '.exit' | sqlite3 $(DATA_SQLITE) -init $(SQL_DIR)/create_foo.sql
