@@ -8,7 +8,8 @@ import qualified Utils.Dot as Dot
 
 import Foreign (Storable(..))
 import Foreign.Ptr (castPtr)
-import FDB.RustFFI(Q, DbInst, CUInt32, readT, filterQ, execQ, initDB, mapQ)
+import FDB.RustFFI(Q, SQ, DbInst, CUInt32,
+                   readT, filterQ, execQ, initDB, mapQ, foldQ, execSQ)
 import Data.Foldable(traverse_)
 
 main :: IO ()
@@ -26,15 +27,27 @@ allTests =
     putStrLn "Skipping testFilterPairs: incompatible GHC version";
 #endif
     testMapFoo dbCtx;
+    testFoldFoo dbCtx;
+
+testEqual :: (Eq a) => a -> a -> IO ()
+testEqual x y =
+  if x == y
+    then  putStrLn "PASS"
+    else putStrLn "FAIL"
 
 testQry :: (Show a, Storable a, Eq a) => IO (Q a) -> [a] -> IO ()
 testQry qry expected =
   do
     qres <- qry >>= execQ
     traverse_  print qres
-    if qres == expected
-      then putStrLn "PASS"
-      else putStrLn "FAIL"
+    testEqual qres expected
+
+testScalQry :: (Show a, Storable a, Eq a) => IO (SQ a) -> a -> IO ()
+testScalQry qry expected =
+  do
+    qres <- qry >>= execSQ
+    print qres
+    testEqual qres expected
 
 execAndPrint :: (Show a, Storable a) => Q a -> IO ()
 execAndPrint query =
@@ -156,6 +169,32 @@ mapFoo dbCtx mapfun mapfunName =
 
 fooMapFun1 :: QVal -> QVal
 fooMapFun1 x = x + 1
+
+-- Test foldQ on table 'foo'
+
+testFoldFoo dbCtx =
+  let
+    expectedResult = 5
+    test ff nf fz nz = testScalQry (foldFoo dbCtx ff nf fz nz) expectedResult
+  in
+    do
+      test fooFoldFun1 "Main.fooFoldFun1" fooFoldZero1 "Main.fooFoldZero1";
+
+
+-- TODO mutualize this code
+-- TODO hide the IO inside Q and SQ
+foldFoo :: DbInst -> (a -> QVal -> a) -> String -> a -> String -> IO (SQ a)
+foldFoo dbCtx foldFun foldFunName zeroFun zeroFunName =
+  readT dbCtx "foo" >>=
+    foldQ foldFun foldFunName zeroFun zeroFunName
+
+-- functions for fold sum
+
+fooFoldFun1 :: QVal -> QVal -> QVal
+fooFoldFun1 s n = s + n
+
+fooFoldZero1 :: QVal
+fooFoldZero1 = 0
 
 
 

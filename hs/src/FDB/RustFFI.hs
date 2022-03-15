@@ -31,6 +31,8 @@ foreign import ccall "foldQ"
                                             {-   agg fun  -}    {-    zero    -}
 foreign import ccall "&release_qplan"
   rs_releaseQPlan :: FunPtr (Ptr (QPlan a) -> IO ())
+foreign import ccall "&release_sqplan"
+  rs_releaseSQPlan :: FunPtr (Ptr (SQPlan a) -> IO ())
 
 {- 3. execQ API -}
 foreign import ccall "execQ"
@@ -57,18 +59,30 @@ assertNotNull ptr = if (ptr == nullPtr)
 
 type ReleaseFun p = FunPtr (Ptr p -> IO ())
 
-makeDbPtr :: ReleaseFun p -> ForeignPtr DbCtx -> Ptr p -> IO (DbPtr p)
-makeDbPtr releaseFun ctxFgn ptrRaw =
+class RustOwn a where
+  rustFree :: ReleaseFun a
+
+instance RustOwn (QPlan a) where
+  rustFree = rs_releaseQPlan
+
+instance RustOwn (SQPlan a) where
+  rustFree = rs_releaseSQPlan
+
+makeDbPtr :: (RustOwn p) => ForeignPtr DbCtx -> Ptr p -> IO (DbPtr p)
+makeDbPtr ctxFgn ptrRaw =
   do
     let ptrValid = assertNotNull ptrRaw
-    ptrFgn <- newForeignPtr releaseFun ptrValid
+    ptrFgn <- newForeignPtr rustFree ptrValid
     return (DbPtr ctxFgn ptrFgn)
 
 makeQ :: ForeignPtr DbCtx -> Ptr (QPlan a) -> IO (Q a)
-makeQ = makeDbPtr rs_releaseQPlan
+makeQ = makeDbPtr
+
+makeDbPtrFrom :: (RustOwn b) => DbPtr a -> Ptr b -> IO (DbPtr b)
+makeDbPtrFrom (DbPtr ctxFgn _) = makeDbPtr ctxFgn
 
 makeQFrom :: DbPtr p -> Ptr (QPlan b) -> IO (Q b)
-makeQFrom (DbPtr ctxFgn _) = makeQ ctxFgn
+makeQFrom = makeDbPtrFrom
 
 withDbPtr :: DbPtr p -> (Ptr DbCtx -> Ptr p -> IO b) -> IO b
 withDbPtr (DbPtr ctxFgn ptrFgn) f =
@@ -82,6 +96,15 @@ withQ = withDbPtr
 withSQ :: SQ a -> (Ptr DbCtx -> Ptr (SQPlan a) -> IO b) -> IO b
 withSQ = withDbPtr
 
+transformDbPtr :: (RustOwn b) => DbPtr a -> (Ptr DbCtx -> Ptr a -> IO (Ptr b)) -> IO (DbPtr b)
+transformDbPtr dbptr f =
+  let
+    wrapF ctxRaw ptrRaw =
+      (f ctxRaw ptrRaw) >>= (makeDbPtrFrom dbptr)
+  in
+    withDbPtr dbptr wrapF
+
+-- TODO call transformDbPtr
 transformQ :: Q a -> (Ptr DbCtx -> Ptr (QPlan a) -> IO (Ptr (QPlan b))) -> IO (Q b)
 transformQ qctx f =
   let
@@ -143,6 +166,15 @@ mapQ _ funName prevQ =
     transformQ prevQ (\ctxRaw prevPlanRaw ->
       withCStringLen funName (wrapMapQ ctxRaw prevPlanRaw))
 
+foldQ :: (a -> b -> a) -> String -> a -> String -> Q b -> IO (SQ a)
+foldQ _ foldName _ zeroName prevQ =
+  let
+    wrapFoldQ ctxRaw prevPlanRaw (foldStrBuf, foldStrLen) (zeroStrBuf, zeroStrLen) =
+      rs_foldQ ctxRaw prevPlanRaw foldStrBuf (fromIntegral foldStrLen) zeroStrBuf (fromIntegral zeroStrLen)
+  in
+    transformDbPtr prevQ (\ctxRaw prevPlanRaw ->
+      withCStringLen foldName (\foldCStr ->
+        withCStringLen zeroName (wrapFoldQ ctxRaw prevPlanRaw foldCStr)))
 
 newtype DbCtx = DbCtx Void
 
@@ -154,18 +186,15 @@ initDB =
     ctxFgn      <- newForeignPtr rs_releaseCtx ctxValid
     return ctxFgn
 
-execSQ :: (Storable a) => SQ a -> IO (Maybe a)
+execSQ :: (Storable a) => SQ a -> IO a
 execSQ sqctx =
   let
+    isCTrue n = n /= 0
+
     writeToBuf buffer =
       do
         resultExists <- withSQ sqctx (wrapExecSQ buffer)
-        if resultExists == 0 then
-          return Nothing
-        else
-          do
-            resVal <- peek buffer
-            return (Just resVal)
+        assert (isCTrue resultExists) (peek buffer)
 
     wrapExecSQ buffer dbctx qplan =
       rs_execSQ dbctx qplan buffer
