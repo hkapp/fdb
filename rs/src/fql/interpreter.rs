@@ -143,7 +143,7 @@ fn fold_sqcursor(sqplan: &fql::SQFold, db_ctx: &DbCtx)
 
     let zero_fun = &sqplan.zero_fun;
     let zero_decl = super::extract_decl(zero_fun)?;
-    super::check_is_fun_decl(zero_decl)?;
+    //super::check_is_fun_decl(zero_decl)?;
 
     let cursor =
         SQCursor::Fold(
@@ -188,7 +188,35 @@ pub struct RtStruct {
     fields: Vec<RtVal>
 }
 
-type Interpreter<'a> = HashMap<&'a ir::Local, RtVal>;
+struct Interpreter<'a> {
+    var_state: HashMap<&'a ir::Local, RtVal>
+}
+
+impl<'a> Interpreter<'a> {
+    fn new() -> Self {
+        Interpreter {
+            var_state: HashMap::new(),
+        }
+    }
+
+    fn read_var(&self, var_name: &ir::Local) -> Result<&RtVal, RuntimeError> {
+        self.var_state
+            .get(var_name)
+            .ok_or_else(||
+                RuntimeError::UndefinedVariable(var_name.clone()))
+    }
+
+    fn let_var(&mut self, var_name: &'a ir::Local, var_value: RtVal) -> Result<(), RuntimeError> {
+        let conflict = self.var_state.insert(var_name, var_value);
+
+        if conflict.is_some() {
+            Err(RuntimeError::ConflictingDefForVar(var_name.clone()))
+        }
+        else {
+            Ok(())
+        }
+    }
+}
 
 /* TODO rename DataGuide if only for this use */
 fn read_row(tab_name: &str, rowid: Rowid, format: &DataGuide) -> Result<RtVal, RuntimeError>
@@ -273,11 +301,7 @@ fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, interpreter: &mut Interpreter<
              */
             let rt_val = rec_interpret_row_expr(var_value, interpreter)?;
 
-            let conflict = interpreter.insert(var_name, rt_val);
-
-            if conflict.is_some() {
-                return Err(RuntimeError::ConflictingDefForVar(var_name.clone()));
-            }
+            interpreter.let_var(var_name, rt_val)?;
 
             rec_interpret_row_expr(body, interpreter)
         }
@@ -307,20 +331,14 @@ fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, interpreter: &mut Interpreter<
                 }
                 let field_bind = field_bind.as_ref().unwrap();
 
-                let matched_val = interpreter.get(&matched_var)
-                                    .ok_or_else(|| RuntimeError::UndefinedVariable(
-                                                        matched_var.clone()))?;
+                let matched_val = interpreter.read_var(&matched_var)?;
                 let rt_struct = match &matched_val { /* TODO move outside the loop */
                     RtVal::Struct(s) => s,
                     _ => return Err(RuntimeError::PatternMatchNonStruct(matched_var.clone())),
                 };
 
                 let field_val = rt_struct.fields.get(field_index).unwrap().clone();
-                let conflict = interpreter.insert(&field_bind, field_val);
-
-                if conflict.is_some() {
-                    return Err(RuntimeError::ConflictingDefForVar(field_bind.clone()));
-                }
+                interpreter.let_var(&field_bind, field_val)?;
             }
 
             rec_interpret_row_expr(&deconstruct.body, interpreter)
@@ -332,7 +350,7 @@ fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, interpreter: &mut Interpreter<
                 Operator::Noop => {
                     assert!(val_args.len() == 1);
                     let arg_name = val_args.get(0).unwrap();
-                    let arg_val = interpreter.get(arg_name).unwrap();
+                    let arg_val = interpreter.read_var(arg_name)?;
                     Ok(arg_val.clone())
                 }
 
@@ -341,8 +359,8 @@ fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, interpreter: &mut Interpreter<
                     let arg_left  = val_args.get(0).unwrap();
                     let arg_right = val_args.get(1).unwrap();
 
-                    let val_left  = interpreter.get(arg_left).unwrap();
-                    let val_right = interpreter.get(arg_right).unwrap();
+                    let val_left  = interpreter.read_var(arg_left)?;
+                    let val_right = interpreter.read_var(arg_right)?;
 
                     match (val_left, val_right) {
                         (RtVal::UInt32(int_left), RtVal::UInt32(int_right)) =>
@@ -363,8 +381,8 @@ fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, interpreter: &mut Interpreter<
                     let arg_left  = val_args.get(0).unwrap();
                     let arg_right = val_args.get(1).unwrap();
 
-                    let val_left  = interpreter.get(arg_left).unwrap();
-                    let val_right = interpreter.get(arg_right).unwrap();
+                    let val_left  = interpreter.read_var(arg_left)?;
+                    let val_right = interpreter.read_var(arg_right)?;
 
                     match (val_left, val_right) {
                         (RtVal::UInt32(int_left), RtVal::UInt32(int_right)) =>
@@ -396,6 +414,11 @@ fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, interpreter: &mut Interpreter<
     }
 }
 
+fn interpret_expr(expr: &ir::Expr) -> Result<RtVal, RuntimeError> {
+    let mut interpreter = Interpreter::new();
+    rec_interpret_row_expr(&expr, &mut interpreter)
+}
+
 fn interpret_fun(function: &ir::AnonFun, arg_values: Vec<RtVal>)
     -> Result<RtVal, RuntimeError>
 {
@@ -405,15 +428,13 @@ fn interpret_fun(function: &ir::AnonFun, arg_values: Vec<RtVal>)
         Err(RuntimeError::TooManyArguments(val_params.len()))
     }
     else {
-        let mut interpreter: Interpreter = HashMap::new();
+        let mut interpreter = Interpreter::new();
 
         for (param, arg_value) in std::iter::zip(val_params.iter(),
                                                  arg_values.into_iter())
         {
             let param_name: &ir::Local = &param.name;
-
-            let conflict = interpreter.insert(param_name, arg_value);
-            assert!(conflict.is_none());
+            interpreter.let_var(param_name, arg_value)?;
         }
 
         rec_interpret_row_expr(&function.body, &mut interpreter)
@@ -594,10 +615,9 @@ pub fn exec_interpreter_into(cursor: &mut Cursor, res_buf: &mut [QVal]) -> Resul
 
 fn sqcursor_exec_fold(cur_fold: &mut CurFold) -> Result<RtVal, RuntimeError> {
     let zerofun_decl = super::extract_decl(&cur_fold.zerofun_obj)?;
-    let zero_fun = super::check_is_fun_decl(zerofun_decl)?;
+    //let zero_fun = super::check_is_fun_decl(zerofun_decl)?;
 
-    let zero_args = vec![];
-    let mut curr_val = interpret_fun(zero_fun, zero_args)?;
+    let mut curr_val = interpret_expr(&zerofun_decl.body)?;
 
     let foldfun_decl = super::extract_decl(&cur_fold.foldfun_obj)?;
     let fold_fun = super::check_is_fun_decl(foldfun_decl)?;
