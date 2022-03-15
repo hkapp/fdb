@@ -174,11 +174,11 @@ fooMapFun1 x = x + 1
 
 testFoldFoo dbCtx =
   let
-    expectedResult = 5
+    expectedResult = 15
     test ff nf fz nz = testScalQry (foldFoo dbCtx ff nf fz nz) expectedResult
   in
     do
-      test fooFoldFun1 "Main.fooFoldFun1" fooFoldZero1 "Main.fooFoldZero1";
+      test fooFoldFun1 "Main.fooFoldFun1" (fromIntegral fooFoldZero1) "Main.fooFoldZero1";
 
 
 -- TODO mutualize this code
@@ -193,7 +193,10 @@ foldFoo dbCtx foldFun foldFunName zeroFun zeroFunName =
 fooFoldFun1 :: QVal -> QVal -> QVal
 fooFoldFun1 s n = s + n
 
-fooFoldZero1 :: QVal
+-- NOTE: enforce the type of 'zero' to be Int and NOT QVal
+-- Otherwise, this generates a separate top-level variable in the dumps, and
+-- we don't support that atm
+fooFoldZero1 :: Int
 fooFoldZero1 = 0
 
 
