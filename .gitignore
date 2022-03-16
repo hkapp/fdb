@@ -5,6 +5,7 @@ hs/bin/
 rs/target/
 *.lock
 data/
+sql/tpch-gen/tpch-dbgen/
 
 *.log
 *.aux
