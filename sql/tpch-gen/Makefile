@@ -1,11 +1,13 @@
 # Set up and generate TPCH data
 # TPCH data generator can be found here: https://github.com/dragansah/tpch-dbgen
+# TODO switch to https://github.com/electrum/tpch-dbgen
+#   The currently used repo's HEAD is broken (generates invalid CSV)
 # Additional instructions on how to generate data: https://github.com/tvondra/pg_tpch
 
 TPCHGEN_DIR = tpch-dbgen
 # Some dependency on a file in the directory
 # Much better than depending on the directory itself
-TPCHGEN_SRC = $(TPCHGEN_DIR)/Makefile
+TPCHGEN_SRC = $(TPCHGEN_DIR)/Makefile $(TPCHGEN_DIR)/print.c
 TPCHGEN_GIT = git@github.com:dragansah/tpch-dbgen.git
 TPCHGEN_BINNM = dbgen
 TPCHGEN_BIN = $(TPCHGEN_DIR)/$(TPCHGEN_BINNM)
@@ -26,16 +28,16 @@ clean:
 #   -s 0.001  -- scale factor 0.001 (generates ~1500 rows)
 #   -T L      -- only table lineitem
 #   -v        -- verbose
+#   -f        -- replace existing output, if any
 # We keep only 10 lines
 $(LINEITEM_V1): $(TPCHGEN_BIN)
-	$(TPCHGEN_EXEC) -s 0.001 -T L -v \
-		| head -10 \
-		> $(TPCHGEN_OUTDIR)/$(LINEITEM_V1)
+	$(TPCHGEN_EXEC) -s 0.001 -T L -v -f
+	head -10 $(TPCHGEN_DIR)/lineitem.tbl > $(LINEITEM_V1)
 
 # Amount of data generated for 'lineitem' per scale factor:
 #
 # Scale factor |  Size  | #rows
-# -------------+--------+------
+# -------------+--------+-------
 #      1       | 700 MB |  1.5 M
 #      0.1     |  70 MB |  150 k
 #      0.01    |   7 MB |   15 k
@@ -48,3 +50,5 @@ $(TPCHGEN_BIN): $(TPCHGEN_SRC)
 
 $(TPCHGEN_SRC):
 	git clone $(TPCHGEN_GIT)
+	cd $(TPCHGEN_DIR) ; git checkout 95ba44c20cb876916fc305c66819584bf72b4336
+# TODO also consider replacing CCFLAGS=-g in the makefile by CCFLAGS=-O3
