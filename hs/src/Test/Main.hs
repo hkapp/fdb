@@ -13,7 +13,8 @@ import FDB.RustFFI(Q, SQ, DbInst, CUInt32,
 import Data.Foldable(traverse_)
 
 main :: IO ()
-main = allTests
+main = testQ6
+-- main = allTests
 
 allTests =
   do
@@ -178,7 +179,7 @@ testFoldFoo dbCtx =
     test ff nf fz nz = testScalQry (foldFoo dbCtx ff nf fz nz) expectedResult
   in
     do
-      test fooFoldFun1 "Main.fooFoldFun1" (fromIntegral fooFoldZero1) "Main.fooFoldZero1";
+      test fooFoldFun1 "Main.fooFoldFun1" fooFoldZero1 "Main.fooFoldZero1i";
 
 
 foldFoo :: DbInst -> (a -> QVal -> a) -> String -> a -> String -> IO (SQ a)
@@ -194,14 +195,70 @@ fooFoldFun1 s n = s + n
 -- NOTE: enforce the type of 'zero' to be Int and NOT QVal
 -- Otherwise, this generates a separate top-level variable in the dumps, and
 -- we don't support that atm
-fooFoldZero1 :: Int
-fooFoldZero1 = 0
+fooFoldZero1i :: Int
+fooFoldZero1i = 0
+
+fooFoldZero1 :: QVal
+fooFoldZero1 = fromIntegral fooFoldZero1i
 
 
 -- TPCH Q6 v1
 
+data LineItem = LineItem {
+  -- l_orderref      :: TableRef Order,
+  -- l_partref       :: TableRef Part,
+  -- l_suppref       :: TableRef Supplier,
+  -- l_linenumber    :: Int,
+  l_quantity      :: QVal, -- Decimal,
+  l_extendedprice :: QVal, -- Decimal,
+  l_discount      :: QVal, -- Decimal,
+  -- l_tax           :: Decimal,
+  -- l_returnflag    :: Char,
+  -- l_linestatus    :: Char,
+  l_shipdate      :: QVal -- Date,
+  -- l_commitdate    :: Date,
+  -- l_receiptdate   :: Date,
+  -- l_shipinstruct  :: String,
+  -- l_shipmode      :: String,
+  -- l_comment       :: String
+}
 
+q6 dbCtx oldDate tgtDiscount maxQty =
+  let
+    inDateRange l = (l_shipdate l >= oldDate) && (l_shipdate l < oldDate + 1)
+    -- inDateRange l = (l_shipdate l >= oldDate) && (l_shipdate l < oldDate `plusInterval` Years 1)
 
+    -- itemsInDateRange = filterQ inDateRange "Main.inDateRange" allItems
+    -- itemsInDateRange = filterQ inDateRange allItems
+
+    discountRangeRadius = 1
+    -- discountRangeRadius = 0.01
+    discountAroundTarget l = (l_discount l >= tgtDiscount - discountRangeRadius)
+                              && (l_discount l < tgtDiscount + discountRangeRadius)
+    -- itemsWithDiscount = filterQ discountAroundTarget itemsInDateRange
+
+    lessQuantity l = l_quantity l < maxQty
+    -- consideredItems = filterQ lessQuantity itemsWithDiscount
+
+    plannedPrice l = l_extendedprice l * l_discount l
+    sumOf f q = foldQ (\x y -> x + f y) "abc" fooFoldZero1 "Main.fooFoldZero1i" q
+    -- sumOf f q = foldQ (\x y -> x + f y) fooFoldZero1 q
+    -- sumOf f q = mapAgg sumAgg f q
+  in
+    do
+      allItems <- readT dbCtx "lineitem"
+      itemsInDateRange <- filterQ inDateRange "Main.inDateRange" allItems
+      itemsWithDiscount <- filterQ discountAroundTarget "Main.discountAroundTarget" itemsInDateRange
+      consideredItems <- filterQ lessQuantity "Main.lessQuantity" itemsWithDiscount
+      sumOf plannedPrice consideredItems
+
+testQ6 :: IO ()
+testQ6 =
+  do
+    dbCtx <- initDB
+    q <- q6 dbCtx 1 2 3
+    res <- execSQ q
+    print res
 
 -- Old query Test
 
