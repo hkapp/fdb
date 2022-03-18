@@ -67,7 +67,7 @@ fn conv_anon_fun(anon_fun: &ghcir::AnonFun) -> Result<cmnir::AnonFun, ConvError>
 
 /* FunCall */
 fn conv_fun_call(ghc_fun_call: &ghcir::FunCall) -> Result<cmnir::FunCall, ConvError> {
-    let conv_operator = resolve_operator(&ghc_fun_call.called_fun)?;
+    let conv_operator = resolve_operator(&ghc_fun_call)?;
     let conv_val_args = ghc_fun_call.val_args
                             .iter()
                             .map(conv_local)
@@ -82,12 +82,20 @@ fn conv_fun_call(ghc_fun_call: &ghcir::FunCall) -> Result<cmnir::FunCall, ConvEr
     Ok(conv_fun_call)
 }
 
-fn resolve_operator(fun_name: &ghcir::Global) -> Result<cmnir::Operator, ConvError> {
+fn resolve_operator(ghc_fun_call: &ghcir::FunCall) -> Result<cmnir::Operator, ConvError> {
     /* TODO this might be better done as a separate lowering phase.
      * Right now, we don't support generic function calls so we can't
      * create the arbitrarily-named nodes.
      */
-    /* Do we know this Haskell function? */
+    /* 1. If the function call doesn't have arguments, this is just a local var copy. */
+    if ghc_fun_call.val_args.len() == 0 {
+        return Ok(Operator::Noop)
+    }
+
+    /* 2. Otherwise, check if we know this Haskell function */
+    /* Note: user-defined function calls are currently not supported */
+    let fun_name = &ghc_fun_call.called_fun;
+
     use cmnir::Operator;
     match &fun_name.0[0..] {
         "GHC.Num.fromInteger" =>

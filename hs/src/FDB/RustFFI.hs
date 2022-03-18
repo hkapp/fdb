@@ -1,5 +1,18 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
-module FDB.RustFFI where
+module FDB.RustFFI (
+  Q,
+  SQ,
+  DbInst,
+  CUInt32,
+  readT,
+  filterQ,
+  execQ,
+  initDB,
+  mapQ,
+  foldQ,
+  execSQ
+)
+  where
 
 import GHC.Base (assert)
 import Foreign.Storable

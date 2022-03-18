@@ -476,11 +476,31 @@ fn new_data_guide(tab_name: &str) -> Result<DataGuide, RuntimeError> {
         DataGuide(cols)
     }
 
+    fn dg_lineitem(tab_name: &str) -> DataGuide {
+        /* WARNING keep in sync with Q6_v1.hs */
+        let col_names = vec!["l_quantity", "l_extendedprice",
+                             "l_discount", "l_shipdate"];
+        let mut cols = Vec::new();
+
+        for col_name in col_names {
+            let column =
+                ColId {
+                    col_name: String::from(col_name),
+                    tab_name: String::from(tab_name)
+                };
+
+            cols.push(column)
+        }
+
+        DataGuide(cols)
+    }
+
     /* FIXME for now the table schemas are hardcoded */
     match tab_name {
-      "foo"   => Ok(dg_foo(tab_name)),
-      "pairs" => Ok(dg_pairs(tab_name)),
-      _       => Err(RuntimeError::UnknownTable(String::from(tab_name))),
+      "foo"      => Ok(dg_foo(tab_name)),
+      "pairs"    => Ok(dg_pairs(tab_name)),
+      "lineitem" => Ok(dg_lineitem(tab_name)),
+      _          => Err(RuntimeError::UnknownTable(String::from(tab_name))),
     }
 }
 
