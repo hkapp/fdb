@@ -81,9 +81,6 @@ makeQ = makeDbPtr
 makeDbPtrFrom :: (RustOwn b) => DbPtr a -> Ptr b -> IO (DbPtr b)
 makeDbPtrFrom (DbPtr ctxFgn _) = makeDbPtr ctxFgn
 
-makeQFrom :: DbPtr p -> Ptr (QPlan b) -> IO (Q b)
-makeQFrom = makeDbPtrFrom
-
 withDbPtr :: DbPtr p -> (Ptr DbCtx -> Ptr p -> IO b) -> IO b
 withDbPtr (DbPtr ctxFgn ptrFgn) f =
     withForeignPtr ctxFgn (\ctxRaw ->
@@ -104,14 +101,8 @@ transformDbPtr dbptr f =
   in
     withDbPtr dbptr wrapF
 
--- TODO call transformDbPtr
 transformQ :: Q a -> (Ptr DbCtx -> Ptr (QPlan a) -> IO (Ptr (QPlan b))) -> IO (Q b)
-transformQ qctx f =
-  let
-    wrapF ctxRaw planRaw =
-      (f ctxRaw planRaw) >>= (makeQFrom qctx)
-  in
-    withQ qctx wrapF
+transformQ = transformDbPtr
 
 type CUInt32 = CUInt
 

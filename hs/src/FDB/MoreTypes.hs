@@ -8,7 +8,7 @@ dateFromString = undefined
 tryDateFromString :: String -> Maybe Date
 tryDateFromString = undefined
 
-data DateInterval = Days Int | Weeks Int | Months Int
+data DateInterval = Days Int | Weeks Int | Months Int | Years Int
 
 minusInterval :: Date -> DateInterval -> Date
 minusInterval = undefined

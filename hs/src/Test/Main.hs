@@ -181,8 +181,6 @@ testFoldFoo dbCtx =
       test fooFoldFun1 "Main.fooFoldFun1" (fromIntegral fooFoldZero1) "Main.fooFoldZero1";
 
 
--- TODO mutualize this code
--- TODO hide the IO inside Q and SQ
 foldFoo :: DbInst -> (a -> QVal -> a) -> String -> a -> String -> IO (SQ a)
 foldFoo dbCtx foldFun foldFunName zeroFun zeroFunName =
   readT dbCtx "foo" >>=
@@ -198,6 +196,9 @@ fooFoldFun1 s n = s + n
 -- we don't support that atm
 fooFoldZero1 :: Int
 fooFoldZero1 = 0
+
+
+-- TPCH Q6 v1
 
 
 
