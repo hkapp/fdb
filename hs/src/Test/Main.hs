@@ -1,5 +1,4 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
-{-# LANGUAGE CPP #-} -- C pre-processor to check GHC version
 module Main where
 
 import TPCH.Functional.Q1 (q1)
@@ -20,13 +19,7 @@ allTests =
   do
     dbCtx <- initDB
     testFilterFoo dbCtx;
--- pairsFilter1 is not parsed properly with GHC 8.0.2
--- https://stackoverflow.com/questions/28292476/ghc-version-check-in-code
-#if __GLASGOW_HASKELL__ > 800
     testFilterPairs dbCtx;
-#else
-    putStrLn "Skipping testFilterPairs: incompatible GHC version";
-#endif
     testMapFoo dbCtx;
     testFoldFoo dbCtx;
     testQ6 dbCtx;

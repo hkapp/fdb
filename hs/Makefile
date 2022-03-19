@@ -56,15 +56,19 @@ test-release: $(TOKEN_HSRELEASE)
 # Compile and generate the dump files
 # Then generate a token to make Makefile happy
 # Note: depends on the Rust lib version for FFI linking
-$(TOKEN_HSDEV): $(RUST_LIB_DEV) $(BIN_DIR) $(ALL_HS_FILES)
+$(TOKEN_HSDEV): $(RUST_LIB_DEV) $(BIN_DIR) $(ALL_HS_FILES) patch_hs_dump.sh
 	ghc $(GHC_FLAGS) $(GHC_DUMP_FLAGS) -o $(TEST_BIN) $(TEST_MAIN_HS) $(LIBS_DEV)
+	bash patch_hs_dump.sh bin/src/Test/Main.dump-prep
+	bash patch_hs_dump.sh bin/src/Test/Q6_v1.dump-prep
 	touch $(TOKEN_HSDEV)
 
 # Compile and generate the dump files (with the release rust)
 # Then generate a token to make Makefile happy
 # Note: depends on the Rust lib version for FFI linking
-$(TOKEN_HSRELEASE): $(RUST_LIB_RELEASE) $(BIN_DIR) $(ALL_HS_FILES)
+$(TOKEN_HSRELEASE): $(RUST_LIB_RELEASE) $(BIN_DIR) $(ALL_HS_FILES) patch_hs_dump.sh
 	ghc $(GHC_FLAGS) $(GHC_DUMP_FLAGS) -o $(TEST_BIN) $(TEST_MAIN_HS) $(LIBS_RELEASE)
+	bash patch_hs_dump.sh bin/src/Test/Main.dump-prep
+	bash patch_hs_dump.sh bin/src/Test/Q6_v1.dump-prep
 	touch $(TOKEN_HSRELEASE)
 
 $(BIN_DIR):
