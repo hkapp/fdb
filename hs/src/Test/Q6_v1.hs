@@ -26,7 +26,7 @@ data LineItem = LineItem {
 -- q6 dbCtx oldDate tgtDiscount maxQty =
 q6 dbCtx =
   do
-    allItems <- readT dbCtx "lineitem"
+    allItems <- readT dbCtx "lineitem_v1"
     itemsInDateRange <- filterQ inDateRange "Test.Q6_v1.inDateRange" allItems
     itemsWithDiscount <- filterQ discountAroundTarget "Test.Q6_v1.discountAroundTarget" itemsInDateRange
     consideredItems <- filterQ lessQuantity "Test.Q6_v1.lessQuantity" itemsWithDiscount
@@ -43,7 +43,7 @@ q6 dbCtx =
 -- inDateRange oldDate l =
 inDateRange l =
   let
-    oldDate = 1
+    oldDate = 19960313
   in
     l_shipdate l <= oldDate + 1
     -- (l_shipdate l >= oldDate) && (l_shipdate l < oldDate + 1)
@@ -53,7 +53,7 @@ inDateRange l =
 -- discountAroundTarget tgtDiscount l =
 discountAroundTarget l =
   let
-    tgtDiscount = 2
+    tgtDiscount = 9
     discountRangeRadius = 1
     -- discountRangeRadius = 0.01
   in
@@ -64,7 +64,7 @@ discountAroundTarget l =
 -- lessQuantity maxQty l = l_quantity l < maxQty
 lessQuantity l =
   let
-    maxQty = 3
+    maxQty = 32
   in
     l_quantity l <= maxQty
     -- l_quantity l < maxQty

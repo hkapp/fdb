@@ -23,9 +23,11 @@ TOKEN_FOO = $(DATA_DIR)/token_foo
 TOKEN_PAIRS = $(DATA_DIR)/token_pairs
 # lineitem_v1
 TOKEN_LIV1 = $(DATA_DIR)/token_liv1
+# lineitem 10 rows
+TOKEN_LIR10 = $(DATA_DIR)/token_lir10
 ALL_TOKENS = $(TOKEN_FOO) $(TOKEN_PAIRS) $(TOKEN_LIV1)
 
-DATA_LIV1 = $(DATA_DIR)/lineitem_v1.csv
+DATA_LIR10 = $(DATA_DIR)/lineitem_v1.csv
 
 # TARGETS
 
@@ -69,10 +71,15 @@ $(TOKEN_PAIRS): $(TOKEN_DIR) $(SQL_DUMMY)/create_pairs.sql
 	$(SQLITE) -init $(SQL_DUMMY)/create_pairs.sql
 	touch $(TOKEN_PAIRS)
 
-$(TOKEN_LIV1): $(TOKEN_DIR) $(DATA_LIV1) $(SQL_TPCH)/tpch-create.sqlite.sql
-	$(SQLITE) -init $(SQL_TPCH)/tpch-create.sqlite.sql
-	$(SQLITE) -cmd '.mode csv' -cmd '.separator |' -cmd '.import $(DATA_LIV1) lineitem'
-	touch $(TOKEN_LIV1)
+$(TOKEN_LIV1): $(TOKEN_DIR) $(SQL_DUMMY)/create_lineitem_v1.sql
+	$(SQLITE) -init $(SQL_DUMMY)/create_lineitem_v1.sql
+	$(SQLITE) -init $(SQL_DUMMY)/q6_v1.sql > $(TOKEN_LIV1)
+	cat $(TOKEN_LIV1)
 
-$(DATA_LIV1):
+$(TOKEN_LIR10): $(TOKEN_DIR) $(DATA_LIR10) $(SQL_TPCH)/tpch-create.sqlite.sql
+	$(SQLITE) -init $(SQL_TPCH)/tpch-create.sqlite.sql
+	$(SQLITE) -cmd '.mode csv' -cmd '.separator |' -cmd '.import $(DATA_LIR10) lineitem'
+	touch $(TOKEN_LIR10)
+
+$(DATA_LIR10):
 	cd sql/tpch-gen ; make

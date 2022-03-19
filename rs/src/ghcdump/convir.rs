@@ -67,11 +67,28 @@ fn conv_anon_fun(anon_fun: &ghcir::AnonFun) -> Result<cmnir::AnonFun, ConvError>
 
 /* FunCall */
 fn conv_fun_call(ghc_fun_call: &ghcir::FunCall) -> Result<cmnir::FunCall, ConvError> {
-    let conv_operator = resolve_operator(&ghc_fun_call)?;
-    let conv_val_args = ghc_fun_call.val_args
-                            .iter()
-                            .map(conv_local)
-                            .collect();
+    let fun_name = &ghc_fun_call.called_fun;
+
+    let (conv_operator, conv_val_args) =
+        if ghc_fun_call.val_args.len() == 0 {
+            /* Local variable copies are parsed as function calls with no arguments */
+            /* Explicit the semantics in the FQL IR */
+            let cp_var = cmnir::Local(fun_name.0.clone());
+            let cp_args = vec![cp_var];
+            (cmnir::Operator::Noop, cp_args)
+        }
+        else {
+            /* We don't support user defined function calls at the moment.
+             * Any function call must be an operator.
+             */
+            let conv_operator = resolve_operator(&ghc_fun_call.called_fun)?;
+            let conv_val_args = ghc_fun_call.val_args
+                                    .iter()
+                                    .map(conv_local)
+                                    .collect();
+
+            (conv_operator, conv_val_args)
+        };
 
     let conv_fun_call =
         cmnir::FunCall {
@@ -82,20 +99,12 @@ fn conv_fun_call(ghc_fun_call: &ghcir::FunCall) -> Result<cmnir::FunCall, ConvEr
     Ok(conv_fun_call)
 }
 
-fn resolve_operator(ghc_fun_call: &ghcir::FunCall) -> Result<cmnir::Operator, ConvError> {
+fn resolve_operator(fun_name: &ghcir::Global) -> Result<cmnir::Operator, ConvError> {
     /* TODO this might be better done as a separate lowering phase.
      * Right now, we don't support generic function calls so we can't
      * create the arbitrarily-named nodes.
      */
-    /* 1. If the function call doesn't have arguments, this is just a local var copy. */
-    if ghc_fun_call.val_args.len() == 0 {
-        return Ok(Operator::Noop)
-    }
-
-    /* 2. Otherwise, check if we know this Haskell function */
-    /* Note: user-defined function calls are currently not supported */
-    let fun_name = &ghc_fun_call.called_fun;
-
+    /* Do we know this Haskell function? */
     use cmnir::Operator;
     match &fun_name.0[0..] {
         "GHC.Num.fromInteger" =>

@@ -14,8 +14,7 @@ import Data.Foldable(traverse_)
 import Test.Q6_v1(q6)
 
 main :: IO ()
-main = testQ6
--- main = allTests
+main = allTests
 
 allTests =
   do
@@ -30,6 +29,7 @@ allTests =
 #endif
     testMapFoo dbCtx;
     testFoldFoo dbCtx;
+    testQ6 dbCtx;
 
 testEqual :: (Eq a) => a -> a -> IO ()
 testEqual x y =
@@ -205,13 +205,7 @@ fooFoldZero1 = fromIntegral fooFoldZero1i
 
 -- TPCH Q6 v1
 
-testQ6 :: IO ()
-testQ6 =
-  do
-    dbCtx <- initDB
-    q <- q6 dbCtx
-    res <- execSQ q
-    print res
+testQ6 dbCtx = testScalQry (q6 dbCtx) 8276586
 
 -- Old query Test
 
