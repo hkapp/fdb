@@ -1,0 +1,90 @@
+digraph G {
+
+  foldQ2 -> mapQ2
+  mapQ2 -> readT2
+
+  foldQ2 -> g2
+  mapQ2 -> f2
+  readT2 -> rowid2
+
+  rowid2 [shape=rect]
+  f2 [shape=circle]
+
+  node [shape=rect]
+  rowid2 -> w
+  rowid2 -> x
+  rowid2 -> y
+  rowid2 -> z
+
+  w [style=dotted]
+
+  x -> f2
+  y -> f2
+  z -> f2 [style=dotted]
+
+  f2 -> fw2 [style=dotted]
+  f2 -> fx2
+  f2 -> fy2 [style=dotted]
+  f2 -> fz2 [style=dotted]
+
+  fw2 [label="fw=2", style=dotted]
+  fx2 [label="fx=x+y"]
+  fy2 [label="fy=z", style=dotted]
+  fz2 [label="fz=z", style=dotted]
+
+  fx2 -> g2
+  fy2 -> g2 [style=dotted]
+  fw2 -> g2 [style=dotted]
+  z -> g2
+
+  g2 [shape=rect, label="if z (fy) then fx else 2 (fw)"]
+
+  /*************************************/
+
+  foldQ3 -> mapQ3
+  mapQ3 -> readT3
+  readT3 [shape=ellipse]
+
+  foldQ3 -> g3
+  mapQ3 -> f3
+  readT3 -> rowid3 [label=store]
+
+  node [shape=rect]
+
+  rowid3 [shape=rect, color=red]
+  rowid3 -> rowidF3 [arrowhead=none, label=read]
+  rowid3 -> rowidG3 [arrowhead=none, label=read]
+  rowidF3 [label=rowid, color=green]
+  rowidG3 [label=rowid, color=green]
+
+  f3 [shape=circle]
+
+  f3 -> rowidF3
+  rowidF3 -> readXF3
+  rowidF3 -> readYF3
+  readXF3 -> fx3
+  readYF3 -> fx3
+
+  readXF3 [label="readCol(x)", shape=ellipse, color=blue]
+  readYF3 [label="readCol(y)", shape=ellipse, color=blue]
+  readZG3 [label="readCol(z)", shape=ellipse, color=blue]
+
+  f3 -> fx3 [label=store]
+  fx3 [label="fx=x+y", color=red]
+
+  fx3 -> gout3 [label=read, arrowhead=none]
+
+  g3 [shape=circle]
+  g3 -> rowidG3
+  rowidG3 -> readZG3
+  readZG3 -> gout3
+
+  g3 -> gout3
+  gout3 [shape=rect, label="if z (fy) then fx else 2 (fw)"]
+
+  /* row-by-row processing: must materialize into row-like frame
+   * batch processing: can decide to do row format or columnar format
+   *   columnar better for vectorization and GPU processing
+   *   row better cache locality on control-flow heavy code that touches a lot of the variables
+   */
+}

@@ -1,0 +1,66 @@
+digraph G {
+  overlap=false
+
+  foldQ -> mapQ
+  mapQ -> readT
+
+  foldQ -> g:w
+  mapQ -> fout:w
+  readT -> tab
+
+  g [shape=rect, label="if fy then fx else fw"]
+
+  tab [shape=record, label="{{w|<x> x|<y> y|<z> z}}"]
+
+  tab:x -> fout:x
+  tab:y -> fout:x
+  tab:z -> fout:y
+  tab:z -> fout:z
+
+  fout [shape=record, label="{{<w> fw=2|<x> fx=x+y|<y> fy=z|<z> fz=z}}"]
+
+  fout:w -> g
+  fout:x -> g
+  fout:y -> g
+
+  /*************************************/
+
+  foldQ2 -> mapQ2
+  mapQ2 -> readT2
+
+  foldQ2 -> g2
+  mapQ2 -> f2
+  readT2 -> rowid2
+
+  rowid2 [shape=rect]
+  f2 [shape=circle]
+
+  node [shape=rect]
+  rowid2 -> w
+  rowid2 -> x
+  rowid2 -> y
+  rowid2 -> z
+
+  w [style=dotted]
+
+  x -> f2
+  y -> f2
+  z -> f2 [style=dotted]
+
+  f2 -> fw2 [style=dotted]
+  f2 -> fx2
+  f2 -> fy2 [style=dotted]
+  f2 -> fz2 [style=dotted]
+
+  fw2 [label="fw=2", style=dotted]
+  fx2 [label="fx=x+y"]
+  fy2 [label="fy=z", style=dotted]
+  fz2 [label="fz=z", style=dotted]
+
+  fx2 -> g2
+  fy2 -> g2 [style=dotted]
+  fw2 -> g2 [style=dotted]
+  z -> g2
+
+  g2 [shape=rect, label="if z (fy) then fx else 2 (fw)"]
+}

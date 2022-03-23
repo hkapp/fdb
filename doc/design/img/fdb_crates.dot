@@ -1,0 +1,33 @@
+digraph G {
+  rankdir=BT
+
+  Haskell -> fdb_fql
+  gen_rust -> fdb_rt
+  fdb_rt -> fdb_shared
+
+  fdb_fql [shape=rect, xlabel="lib->bin"]
+  fdb_rt [shape=rect, xlabel=lib]
+  fdb_shared [shape=rect, xlabel="lib? block cache~"]
+  gen_rust [shape=rect, style=dashed, xlabel=bin]
+
+  // components contained in each piece
+  edge [arrowhead=none]
+  fdb_fql -> metadata
+  fdb_fql -> code_generator
+  fdb_fql -> compiler
+  fdb_fql -> type_system
+  fdb_fql -> optimizer
+
+  fdb_shared -> data_layer
+  fdb_shared -> block_cache
+  fdb_shared -> type_repr
+
+  // inter-component dependencies
+  edge [arrowhead=empty]
+  compiler -> type_repr
+  optimizer -> statistics
+  statistics -> data_layer
+  metadata -> data_layer
+
+  code_generator -> gen_rust [arrowhead=vee, style=dashed]
+}
