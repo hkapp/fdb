@@ -87,4 +87,5 @@ digraph G {
    *   columnar better for vectorization and GPU processing
    *   row better cache locality on control-flow heavy code that touches a lot of the variables
    */
+  /* also, need one frame per source-sink portion */
 }

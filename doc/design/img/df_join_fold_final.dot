@@ -1,0 +1,103 @@
+digraph G {
+
+  foldQ -> join
+  join -> readT1
+  join -> readT2
+  readT1 [shape=ellipse]
+  readT2 [shape=ellipse]
+
+  foldQ -> g
+  join -> p
+  readT1 -> rowid1 [label=store]
+  readT2 -> rowid2 [label=store]
+
+  node [shape=rect]
+
+  subgraph cluster1 {
+    label="Frame 1"
+    rowid1 [shape=rect, color=red]
+  }
+  rowid1 -> rowid1P [arrowhead=none, label=read]
+  rowid1P [label=rowid1, color=green]
+
+  subgraph cluster2 {
+    label="Frame 2"
+    rowid2 [shape=rect, color=red]
+  }
+  rowid2 -> rowid2P [arrowhead=none, label=read]
+  rowid2P [label=rowid2, color=green]
+
+  subgraph cluster3 {
+    label="Frame 3 (join)"
+    rowid1f3 [shape=rect, color=red, label="rowid1"]
+    //rowid2f3 [shape=rect, color=red, label="rowid2"]
+    xf3 [shape=rect, color=red, label="x"]
+  }
+  rowid1 -> rowid1f3
+  //rowid2 -> rowid2f3
+
+  rowid1f3 -> rowid1G [arrowhead=none, label=read]
+  rowid1G [label=rowid1, color=green]
+  //rowid2f3 -> rowid2G [arrowhead=none, label=read]
+  //rowid2G [label=rowid2, color=green]
+  xf3 -> xg [arrowhead=none, label=read]
+  xg [label=x, color=green]
+
+  p [shape=circle]
+
+  p -> rowid1P
+  p -> rowid2P
+  rowid1P -> readAP
+  rowid2P -> readXP
+  readAP -> pout
+  readXP -> pout
+  readXP -> xf3 [label=store]
+  pout -> xf3
+  pout -> rowid1f3
+
+  readAP [label="readCol(a)", shape=ellipse, color=blue]
+  readXP [label="readCol(x)", shape=ellipse, color=blue]
+  readBG [label="readCol(b)", shape=ellipse, color=blue]
+  //readXG [label="readCol(x)", shape=ellipse, color=blue]
+
+  p -> pout
+  pout [label="a > x ?", color=blue]
+
+  //pout -> gout [label=read, arrowhead=none]
+
+  g [shape=circle]
+  g -> rowid1G
+  //g -> rowid2G
+  g -> xg
+  rowid1G -> readBG
+  //rowid2G -> readXG
+  readBG -> gout
+  xg -> gout
+  //readXG -> gout
+
+  g -> gout
+  gout [shape=rect, label="b * x"]
+
+  /* note: with a nested loop join, the frame for rowid1
+   * remains the same for a while, until all rows from
+   * Table 2 have been seen.
+   * -> the "read"s and "join" are in separate source-sink portions,
+   *   so they use different frames
+   *   -> then, how can g read from these frames?
+   *     -> either the frame must be query-wide
+   *        (which can be efficient if we reuse unused portions)
+   *        or the join must copy data into a new frame
+   *
+   * copying is good if the predicate has high selectivity
+   *   good locality afterwards
+   * pushing indexes can be good if the predicate has high selectivity
+   * *and* the index datatype is very small (e.g u8)
+   *   always has poor locality
+   * -> may be preferrable to be row-oriented in the interpreter
+   *    yet keep the columnar form for late column accesses
+   *    (only need to transport the rowid)
+   *
+   * this problem is also relevant for the code-generated backend
+   *   joins can't be implemented only with local variables!
+   */
+}
