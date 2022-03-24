@@ -1,0 +1,46 @@
+digraph G {
+
+  /* Operator tree */
+
+  allItems [label=readT, xlabel=allItems]
+  allItems -> lineitem_v1
+
+  itemsInDateRange [label=filterQ, xlabel=itemsInDateRange]
+  itemsInDateRange -> allItems
+  itemsInDateRange -> inDateRange
+
+  itemsWithDiscount [label=filterQ, xlabel=itemsWithDiscount]
+  itemsWithDiscount -> itemsInDateRange
+  itemsWithDiscount -> discountAroundTarget
+
+  consideredItems [label=filterQ, xlabel=consideredItems]
+  consideredItems -> itemsWithDiscount
+  consideredItems -> lessQuantity
+
+  q6_v1 [label=foldQ, xlabel=q6_v1]
+  q6_v1 -> consideredItems
+  q6_v1 -> sumExpectedPrice
+  q6_v1 -> zero
+
+  /* code content */
+  lineitem_v1 [shape=rect]
+
+  inDateRange [shape=rect, xlabel=inDateRange,
+               fontname=ubuntu, fontsize=11,
+               label="let oldDate = 19960313\lin l_shipdate <= oldDate + 1"]
+
+  discountAroundTarget [shape=rect, xlabel=discountAroundTarget,
+                        fontname=ubuntu, fontsize=11,
+                        label="let tgtDiscount = 9\llet discountRangeRadius = 1\lin l_discount <= tgtDiscount + discountRangeRadius"]
+
+  lessQuantity [shape=rect, xlabel=lessQuantity,
+                fontname=ubuntu, fontsize=11,
+                label="let maxQty = 32\lin l_quantity <= maxQty"]
+
+  sumExpectedPrice [shape=rect, xlabel=sumExpectedPrice,
+                    fontname=ubuntu, fontsize=11,
+                    label="let expectedPrice = l_extendedprice + l_discount\lin s + expectedPrice"]
+  zero [shape=rect, xlabel=zero,
+        fontname=ubuntu, fontsize=11,
+        label="0"]
+}
