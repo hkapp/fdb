@@ -1,6 +1,10 @@
 mod dataflow;
+mod qeval;
 
-use super::{QPlan, RuntimeError};
+pub use qeval::{exec_interpreter_into, RtVal};
+use super::{DB_FILENAME, STRUCT_COL_PREFIX};
+
+use crate::fql::{QPlan, RuntimeError};
 use crate::ctx::DbCtx;
 use std::ops;
 use crate::objstore;

@@ -2,7 +2,7 @@ use super::{RuntimeError, ColId, Rowid, DataGuide, CurKind, Cursor, CurFilter, C
 use std::collections::HashMap;
 use crate::ir;
 use crate::fql::{self, QPlan, QReadT, QFilter};
-use fql::qeval;
+use super::qeval;
 
 /* RowFormat / RowVal */
 

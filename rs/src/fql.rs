@@ -1,7 +1,4 @@
-mod sqlexec;
-mod interpreter;
-pub mod comp;
-mod qeval;
+pub mod backend;
 
 use crate::ctx::DbCtx;
 use crate::objstore::{self, Symbol};
@@ -9,6 +6,7 @@ use rusqlite as sqlite;
 use crate::ir;
 use std::rc::Rc;
 use crate::data::{DB_FILENAME, STRUCT_COL_PREFIX};
+use backend::{sqlexec, dri, dci};
 
 /* TODO rename QTree? */
 /* naming: we can rename this phase or module "sprout"
@@ -166,21 +164,21 @@ pub enum RuntimeError {
   UnsupportedExpression(String),
   UndefinedVariable(ir::Local),
   PatternMatchNonStruct(ir::Local),
-  UnsupportedComparison { left: interpreter::RtVal, right: interpreter::RtVal },
-  UnsupportedAddition { left: interpreter::RtVal, right: interpreter::RtVal },
-  UnsupportedComparison3 { left: qeval::RtVal, right: qeval::RtVal }, /* TODO: remove */
-  UnsupportedAddition3 { left: qeval::RtVal, right: qeval::RtVal }, /* TODO: remove */
-  FilterNotBoolean(interpreter::RtVal),
-  FilterNotBoolean3(qeval::RtVal), /* TODO remove */
+  UnsupportedComparison { left: dri::RtVal, right: dri::RtVal },
+  UnsupportedAddition { left: dri::RtVal, right: dri::RtVal },
+  UnsupportedComparison3 { left: dci::RtVal, right: dci::RtVal }, /* TODO: remove */
+  UnsupportedAddition3 { left: dci::RtVal, right: dci::RtVal }, /* TODO: remove */
+  FilterNotBoolean(dri::RtVal),
+  FilterNotBoolean3(dci::RtVal), /* TODO remove */
   UnknownTable(String),
   ScalarRowFormatHasNoFields,
   FieldPathIncompletelyResolved,
   UnsupportedOperator(ir::Operator),
   UnsupportedBackend,
   NotAFunction,
-  NoRowWithRowid(String, interpreter::Rowid),
-  TooManyRowsWithRowid(String, interpreter::Rowid),
-  CantWriteRtValToBuffer(interpreter::RtVal),
+  NoRowWithRowid(String, dri::Rowid),
+  TooManyRowsWithRowid(String, dri::Rowid),
+  CantWriteRtValToBuffer(dri::RtVal),
   MapNotSupported { backend: String },
 }
 
@@ -190,48 +188,6 @@ fn resolve_symbol(symbol: &Symbol, db_ctx: &DbCtx) -> Result<Rc<objstore::Obj>, 
     /* Retrieve the declaration */
     db_ctx.obj_store.find(symbol)
         .ok_or_else(|| CompileError::SymbolNotDefined(symbol.clone()))
-}
-
-fn extract_decl(obj: &objstore::Obj) -> Result<&ir::Decl, CompileError> {
-    obj.as_result()
-        .map_err(|e|
-            match e {
-                objstore::FailedObj::ParseError(err_msg) => {
-                    let symbol = obj.obj_name();
-                    println!("Object \"{}\" has parsing errors:", symbol);
-                    println!("{}", &err_msg);
-                    CompileError::ObjectHasErrors(symbol.clone())
-                }
-            }
-        )
-}
-
-fn check_is_fun_decl(decl: &ir::Decl) -> Result<&ir::AnonFun, CompileError> {
-    use ir::Expr::*;
-    match &decl.body {
-        /* This is the only accepted case */
-        AnonFun(anon_fun) => Ok(&anon_fun),
-
-        /* Every other case is an error */
-        _ => {
-            /* Gather exactly what it was for the error message */
-            let what = match &decl.body {
-                FunCall(_)  => "Function call",
-                LetExpr(_)  => "Let expression",
-                PatMatch(_) => "Pattern matching",
-                LitVal(_)   => "Literal value",
-
-                AnonFun(_)  => unreachable!(),
-            };
-            let fun_name = Symbol::new(decl.name.0.clone());
-
-            Err(
-                CompileError::NotAFunction {
-                    symbol:      fun_name,
-                    resolves_to: String::from(what)
-                })
-        }
-    }
 }
 
 /* TODO add enum codes like "HasMoreEntries" */
@@ -257,19 +213,19 @@ pub fn exec_into(qplan: &QPlan, db_ctx: &DbCtx, res_buf: &mut [QVal]) -> Result<
         },
 
         Backend::NaiveInterpreter => {
-            /* Execute on old naive interpreter */
-            let mut cursor = interpreter::to_cursor(qplan, db_ctx)?;
+            /* Execute on old naive dri */
+            let mut cursor = dri::to_cursor(qplan, db_ctx)?;
 
             println!("Naive interpreter:");
-            interpreter::exec_interpreter_into(&mut cursor, res_buf)
+            dri::exec_interpreter_into(&mut cursor, res_buf)
         },
 
         Backend::Columnar => {
-            /* Execute on new columnar interpreter */
-            let mut cursor = comp::full_compile(qplan, db_ctx)?;
+            /* Execute on new columnar dri */
+            let mut cursor = dci::full_compile(qplan, db_ctx)?;
 
             println!("Columnar interpreter:");
-            qeval::exec_interpreter_into(&mut cursor, res_buf)
+            dci::exec_interpreter_into(&mut cursor, res_buf)
         }
     }
 }
@@ -288,15 +244,15 @@ pub fn execsq_into(qplan: &SQPlan, db_ctx: &DbCtx, res_buf: &mut QVal) -> Result
         },
 
         Backend::NaiveInterpreter => {
-            /* Execute on old naive interpreter */
-            let mut cursor = interpreter::to_sqcursor(qplan, db_ctx)?;
+            /* Execute on old naive dri */
+            let mut cursor = dri::to_sqcursor(qplan, db_ctx)?;
 
             println!("Naive interpreter:");
-            interpreter::execsq_interpreter_into(&mut cursor, res_buf)
+            dri::execsq_interpreter_into(&mut cursor, res_buf)
         },
 
         Backend::Columnar => {
-            /* Execute on new columnar interpreter */
+            /* Execute on new columnar dri */
             /* TODO: not implemented for SQ */
             Ok(false)
         }

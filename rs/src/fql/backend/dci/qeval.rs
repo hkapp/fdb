@@ -1,10 +1,9 @@
 use crate::ir;
 use crate::data;
-use super::{RuntimeError, QVal, Status};
-use super::sqlexec;
+use super::super::{RuntimeError, QVal, Status};
+use crate::fql::backend::sqlexec;
 use std::collections::HashMap;
-use super::comp;
-use comp::{Cursor, CurKind, CurRead, CurFilter};
+use super::{Cursor, CurKind, CurRead, CurFilter};
 
 /* Interpreter: preparation step */
 

@@ -1,6 +1,6 @@
 use crate::ir;
 use crate::fql;
-use super::{QPlan, SQPlan, RuntimeError, QVal, Status};
+use crate::fql::{QPlan, SQPlan, RuntimeError, QVal, Status};
 use crate::ctx::DbCtx;
 use std::ops;
 use crate::objstore;
