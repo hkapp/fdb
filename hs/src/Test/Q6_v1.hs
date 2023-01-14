@@ -23,6 +23,18 @@ data LineItem = LineItem {
   -- l_comment       :: String
 }
 
+{- Set comprehension form:
+
+q6 oldDate tgtDicsount maxQty = Q [
+  l <- readT lineitem
+  if l.shipdate >= oldDate
+     && l.shipdate < (oldDate + year 1)
+     && between l.discount (tgtDiscount - 0.01) (tgtDiscount + 0.01)
+     && l.quantity < maxQty
+  return sum |l.extendedprice * l.discount|
+]
+-}
+
 -- q6 dbCtx oldDate tgtDiscount maxQty =
 q6 dbCtx =
   do
