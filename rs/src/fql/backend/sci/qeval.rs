@@ -1,11 +1,25 @@
+/**
+ * Execution of the sci interpreter
+ *
+ * The communication between the row op nodes is done via a columnar format.
+ * At cursor compilation time, abstract block stream identifiers, called [Pipe]s are identified.
+ * These stream identifiers are used at runtime to read from the proper main memory data block.
+ * Each row op performs its action on every entry of its children blocks.
+ * Currently, block size = 1;
+ *
+ * The interpretation of the function code is still done on a runtime-typed [RtVal].
+ * There are no data-flow optimizations done yet.
+ * This means that every row op writes its full output every time.
+ */
+
 use crate::ir;
 use crate::data;
-use super::super::{RuntimeError, QVal, Status};
+use super::super::{RuntimeError, QVal, Status, dri};
 use crate::fql::backend::sqlexec;
 use std::collections::HashMap;
-use super::{Cursor, CurKind, CurRead, CurFilter};
-use super::super::dri;
+use super::{Cursor, RowOp, FilterOp, TableScan, OpTree};
 pub use dri::RtVal;
+use std::cell::{RefCell, RefMut};
 
 /* Interpreter: preparation step */
 
@@ -23,7 +37,62 @@ pub struct ColId {  /* make private again if possible */
 #[derive(Debug, Clone)]
 pub struct DataGuide(Vec<ColId>);
 */
-struct BlockMgr(Vec<Option<Block>>);
+struct BlockMgr {
+    mapping: Vec<RefCell<Option<Block>>>
+};
+
+// Necessary because Option<Block> does not have Clone to use `vec![None; size]` syntax
+macro_rules! vec_repval {
+    ($val: expr; $n: expr) => {
+        {
+            let n = $n;
+            let mut vec = Vec::with_capacity(n);
+            for _ in 0..n {
+                vec.push($val);
+            }
+            vec
+        }
+    };
+}
+
+macro_rules! typed_write_ref {
+    ($bm: expr, $pipe: expr, $typ: ident) => {
+        {
+            let refmut = $bm.write_ref($pipe);
+            refmut.map(|mb_block| {
+                if mb_block.is_none() {
+                    *mb_block = Some(Block::$typ(Vec::new()))
+                }
+                mb_block.as_mut_ref().uwnrap()
+            })
+        }
+    };
+}
+
+impl BlockMgr {
+    fn new(pipe_count: usize) -> Self {
+        BlockMgr {
+            mapping: vec_repval![RefCell::new(None); pipe_count]
+        }
+    }
+
+    fn write_ref(&self, pipe: Pipe) -> RefMut<Option<Block>> {
+        //fn any_new_block() -> Block {
+            //Block::Bool(Vec::new())
+        //}
+
+        let refmut = self.mapping[pipe.idx].borrow_mut();
+        refmut
+        //refmut.map(|mb_block| {
+            //match mb_block {
+                //Some(block) => block,
+                //None    => {
+                    //*mb_block = Some()
+                //}
+            //}
+        //})
+    }
+}
 
 /*#[derive(Debug, Clone)]
 pub enum RtVal {
@@ -39,7 +108,13 @@ enum Block {
 
 type Interpreter<'a> = HashMap<&'a ir::Local, RtVal>;
 
-fn cursor_pull_read(cur_read: &mut CurRead, block_mgr: &BlockMgr) -> Result<Option<usize>, RuntimeError> {
+const BLOCK_SIZE: usize = 1;
+
+fn pull_ts(cur_read: &mut CurRead, block_mgr: &BlockMgr) -> Result<Option<usize>, RuntimeError> {
+    fn execute_query(query: &str, rowid: Rowid) -> data::Row {
+        data::execute_with_bind(query, rowid)
+    }
+
     cur_read.rowid_range
         .next()
         .map(|rowid| {
@@ -48,6 +123,7 @@ fn cursor_pull_read(cur_read: &mut CurRead, block_mgr: &BlockMgr) -> Result<Opti
                 let col_val = sql_row.get(sql_col);
                 let block = block_mgr.write_ref(pipe);
                 // Note we do blocks of size 1 for now
+                assert_eq!(BLOCK_SIZE, 1);
                 block.clear();
                 block.push(col_val);
             }
@@ -56,7 +132,7 @@ fn cursor_pull_read(cur_read: &mut CurRead, block_mgr: &BlockMgr) -> Result<Opti
         .transpose()
 }
 
-fn read_column_value(column: &ColId, rowid: Rowid) -> Result<RtVal, RuntimeError>
+/*fn read_column_value(column: &ColId, rowid: Rowid) -> Result<RtVal, RuntimeError>
 {
     let query = format!("SELECT {} FROM {} WHERE ROWID = {}",
                         column.col_name, column.tab_name, rowid);
@@ -64,7 +140,7 @@ fn read_column_value(column: &ColId, rowid: Rowid) -> Result<RtVal, RuntimeError
     let rt_val = RtVal::UInt32(col_val);
 
     Ok(rt_val)
-}
+}*/
 
 /*fn resolve_dataguide_entry_(data_guide: &DataGuide, field_index: usize, rowid: Rowid)
     -> Result<RtVal, RuntimeError>
@@ -290,34 +366,41 @@ fn interpret_row_fun(predicate: &ir::AnonFun, block_mgr: &BlockMgr, row_format: 
         CurKind::Read(cur_read) =>
             new_data_guide(&cur_read.tab_name),
 
-        CurKind::Filter(cur_filter) =>
+        CurKind::Filter(filter_op) =>
             /* Filter: unchanged data guide (pass-through only) */
-            cursor_data_guide(&cur_filter.child_cursor),
+            cursor_data_guide(&filter_op.child_cursor),
     }
 }*/
 
-fn cursor_pull_filter(cur_filter: &mut CurFilter, block_mgr: &BlockMgr) -> Result<Option<usize>, RuntimeError> {
+fn pull_filter(filter_node: &mut OpTree, block_mgr: &BlockMgr) -> Result<Option<usize>, RuntimeError> {
     /* For now, this code MUST be an anonymous function (no lowerings yet) */
-    let pred_fun = match &cur_filter.filter_code {
-        ir::Expr::AnonFun(anon_fun) => anon_fun,
+    let pred_fun = match &filter_op.filter_code {
+        ir::Expr::AnonFun(anon_fun) => &anon_fun,
         _ => return Err(RuntimeError::NotAFunction),
     };
-    let child_cursor = &mut cur_filter.child_cursor;
+    let child_cursor = &mut filter_op.child_cursor;
     //let data_guide = cursor_data_guide(child_cursor)?;
                     /* filter: data guide is unchanged (no map) */
 
-    let mut child_row = next_row(block_mgr, child_cursor, cur_filter.input_format);
+    let mut child_row = next_row(child_cursor, block_mgr);
+    let mut output_signal = None;
+    /* FIXME we should do this only once */
     while let Ok(Some(row_val)) = child_row {
         match interpret_fun(pred_fun, row_val)? {
             RtVal::Bool(b) => {
                 if b {
                     /* Filter passed, return rowid */
-                    return child_row;
+                    assert_eq!(BLOCK_SIZE, 1);
+                    filter_op.output_fmt.write_val(row_val, block_mgr);
+                    let curr_row_count = output_signal.unwrap_or(0);
+                    output_signal = Some(curr_row_count + 1);
                 }
                 else {
                     /* Filter failed */
+                    /* We have seen some rows, but filtered out */
+                    output_signal = output_signal.or(Some(0));
                     /* Fetch the next row from the child, then loop */
-                    child_row = next_row(block_mgr, child_cursor, cur_filter.input_format);
+                    child_row = next_row(child_cursor, block_mgr);
                 }
             },
 
@@ -328,19 +411,40 @@ fn cursor_pull_filter(cur_filter: &mut CurFilter, block_mgr: &BlockMgr) -> Resul
         }
     }
 
-    /* The child row was either Err(_) or Ok(None) */
-    /* Return that row in either case */
-    return child_row;
+    Ok(output_signal)
 }
 
-fn cursor_pull(cursor: &mut Cursor, block_mgr: &BlockMgr) -> Result<Option<usize>, RuntimeError> {
-    match &mut cursor.cur_kind {
-        CurKind::Read(cur_read) =>
-            cursor_pull_read(cur_read, block_mgr),
+fn cursor_pull(cursor: &mut OpTree, block_mgr: &BlockMgr) -> Result<Option<usize>, RuntimeError> {
+    match &mut cursor.row_op {
+        RowOp::TableScan(cur_read) =>
+            pull_ts(cur_read, block_mgr),
 
-        CurKind::Filter(cur_filter) =>
-            cursor_pull_filter(cur_filter, block_mgr),
+        RowOp::Filter(filter_op) =>
+            pull_filter(&mut filter_op, block_mgr),
     }
+}
+
+/* FIXME this won't work with multi-row */
+fn next_row(op_tree: &mut OpTree, block_mgr: &BlockMgr) -> Result<Option<RtVal>, RuntimeError> {
+    while true {
+        match cursor_pull(row_op, block_mgr)? {
+            Some(1) => {
+                let row_val = op_tree.output_fmt.build_val(block_mgr);
+                return Ok(Some(row_val));
+            }
+            Some(0) => {
+                /* rows were filtered out */
+                /* try again */
+            }
+            Some(_) => {
+                return Err(RuntimeError::MultiColNotSupported);
+            }
+            None => {
+                return Ok(None)
+            }
+        }
+    }
+    unreachable!()
 }
 
 /*fn gen_proj_query_from_dataguide(data_guide: &DataGuide, rowid: Rowid) -> String {
@@ -368,15 +472,15 @@ fn cursor_pull(cursor: &mut Cursor, block_mgr: &BlockMgr) -> Result<Option<usize
     Ok(())
 }*/
 
-pub fn exec_interpreter_into(cursor: &mut Cursor, res_buf: &mut [QVal]) -> Result<Status, RuntimeError> {
+pub fn exec_interpreter_into(cursor: &mut Cursor, mut res_buf: &mut [QVal]) -> Result<Status, RuntimeError> {
     //let data_guide = cursor_data_guide(cursor)?; /* TODO we should add the final "result conversion / out projection" node in the cursor tree */
     //let ncols = data_guide.0.len();
     let mut rowcount = 0;
     let block_mgr = BlockMgr::new(cursor.pipe_count);
-    while let Some(rt_val) = cursor_pull(cursor, block_mgr)? {
-        let buf_idx = ncols * rowcount;
+    while let Some(rt_val) = next_row(&mut cursor.op_tree, &block_mgr)? {
+        //let buf_idx = ncols * rowcount;
         //query_sqlite_rowid_into(rowid, &data_guide, &mut res_buf[buf_idx..])?;
-        write_rt_val_into(rt_val, &mut res_buf[buf_idx..])?;
+        dri::write_rt_val_into(rt_val, &mut res_buf /* TODO this needs to move the slice forward */)?;
         rowcount += 1;
     }
     Ok(rowcount)

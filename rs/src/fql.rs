@@ -183,6 +183,7 @@ pub enum RuntimeError {
   UnsupportedBackend,
   NotAFunction,
   MapNotSupported { backend: String },
+  MultiColNotSupported,
 }
 
 /* Object store helpers */

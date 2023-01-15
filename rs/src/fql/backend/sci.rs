@@ -15,24 +15,29 @@ use crate::ir;
 /* Interpreter: preparation step */
 
 pub struct Cursor {
-    pub out_pipe: Option<DataGuide>,  /* is this necessary? */
-    pub cur_kind: CurKind,
+    pub pipe_count: usize,
+    pub op_tree:    OpTree,
 }
 
-pub enum CurKind {
-    Read(CurRead), /* TODO rename enum entry */
-    Filter(CurFilter)
+struct OpTree {
+    output_fmt: RowFmt,
+    row_op:     RowOp,
+}
+
+pub enum RowOp {
+    TableScan(TableScan),
+    Filter(FilterOp)
 }
 
 /* TODO rename */
-pub struct CurRead {
+pub struct TableScan {
     pub rowid_range: ops::Range<Rowid>,
-    pub tab_name:    String,
+    query:           String,
 }
 
-pub struct CurFilter {
-    pub filter_code:  ir::Expr,
-    pub child_cursor: Box<Cursor>,
+pub struct FilterOp {
+    filter_code:  ir::Expr,
+    child_cursor: Box<OpTree>,
 }
 
 type Rowid = u32;
@@ -44,7 +49,7 @@ fn max_rowid(tab_name: &str) -> Result<Rowid, RuntimeError> {
     Ok(max_rowid)
 }
 
-fn read_cursor(tab_name: &str) -> Result<Cursor, RuntimeError> {
+fn ts_node(tab_name: &str) -> Result<OpTree, RuntimeError> {
     let max_rowid = max_rowid(tab_name)?;
 
     let rowid_range =
@@ -53,51 +58,52 @@ fn read_cursor(tab_name: &str) -> Result<Cursor, RuntimeError> {
             end: max_rowid+1 /* excl */
         };
 
+    let query = data::all_columns_query(tab_name);
+
     let cur_read =
-        CurRead {
+        TableScan {
             rowid_range,
-            tab_name: String::from(tab_name)
+            query
         };
 
-    let cur_kind = CurKind::Read(cur_read);
-    let cursor = Cursor {
-        cur_kind,
-        out_pipe: None
+    let row_op = RowOp::TableScan(cur_read);
+    let op_tree = OpTree {
+        output_fmt,
+        row_op,
     };
-    Ok(cursor)
+    Ok(op_tree)
 }
 
-fn filter_cursor(filter_fun: Rc<objstore::Obj>, child_qplan: &QPlan, db_ctx: &DbCtx)
-    -> Result<Cursor, RuntimeError>
+fn filter_node(filter_fun: Rc<objstore::Obj>, child_qplan: &QPlan, db_ctx: &DbCtx)
+    -> Result<OpTree, RuntimeError>
 {
-    let child_cursor = build_cursor(&child_qplan, db_ctx)?;
+    let subtree = build_op_tree(&child_qplan, db_ctx)?;
 
     let fun_decl = super::extract_decl(&filter_fun)?;
-    /* TODO move this check at cursor build time */
     let fun_body = super::check_is_fun_decl(fun_decl)?;
 
     let cur_filter =
-        CurFilter {
+        FilterOp {
             filter_code:  ir::Expr::AnonFun(fun_body.clone()),
-            child_cursor: Box::new(child_cursor)
+            child_cursor: Box::new(subtree)
         };
 
-    let cur_kind = CurKind::Filter(cur_filter);
-    let cursor = Cursor {
-        cur_kind,
-        out_pipe: None
+    let row_op = RowOp::Filter(cur_filter);
+    let op_tree = OpTree {
+        output_fmt,
+        row_op,
     };
-    Ok(cursor)
+    Ok(op_tree)
 }
 
-fn build_cursor(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeError> {
+fn build_op_tree(qplan: &QPlan, db_ctx: &DbCtx) -> Result<OpTree, RuntimeError> {
     use QPlan::*;
     match qplan {
-        ReadT(qreadt) =>
-            read_cursor(&qreadt.tab_name),
+        TableScanT(qreadt) =>
+            ts_node(&qreadt.tab_name),
 
         Filter(qfilter) =>
-            filter_cursor(Rc::clone(&qfilter.filter_fun), &qfilter.qchild, db_ctx),
+            filter_node(Rc::clone(&qfilter.filter_fun), &qfilter.qchild, db_ctx),
 
         Map(qmap) => {
             return Err(RuntimeError::MapNotSupported {
