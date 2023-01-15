@@ -145,7 +145,7 @@ fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, rowid: Rowid, interpreter: &mu
 
                         _ =>
                             Err(
-                                RuntimeError::UnsupportedComparison3{
+                                RuntimeError::UnsupportedComparisonSci{
                                     left:  val_left.clone(),
                                     right: val_right.clone()
                                 }),
@@ -167,7 +167,7 @@ fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, rowid: Rowid, interpreter: &mu
 
                         _ =>
                             Err(
-                                RuntimeError::UnsupportedAddition3{
+                                RuntimeError::UnsupportedAdditionSci{
                                     left:  val_left.clone(),
                                     right: val_right.clone()
                                 }),
@@ -295,7 +295,7 @@ fn cursor_fetch_filter(cur_filter: &mut CurFilter) -> Result<Option<Rowid>, Runt
 
             val@_ => {
                 return Err(
-                        RuntimeError::FilterNotBoolean3(val));
+                        RuntimeError::FilterNotBooleanSci(val));
             }
         }
     }

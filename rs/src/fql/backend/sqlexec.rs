@@ -109,7 +109,7 @@ fn rec_inline_filter_sql<'a>(
                     Ok(sql)
                 }
 
-                Operator::ReadRtCol(..) => {
+                _ => {
                     /* This opeartor shouldn't appear in the pure SQL backend */
                     Err(RuntimeError::UnsupportedOperator(operator.clone()))
                 }

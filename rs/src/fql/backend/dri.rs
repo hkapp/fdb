@@ -398,7 +398,7 @@ fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, interpreter: &mut Interpreter<
                     }
                 }
 
-                Operator::ReadRtCol(..) => {
+                _ => {
                     Err(RuntimeError::UnsupportedOperator(operator.clone()))
                 }
             }

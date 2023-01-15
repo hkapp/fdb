@@ -6,7 +6,7 @@ use rusqlite as sqlite;
 use crate::ir;
 use std::rc::Rc;
 use crate::data::{DB_FILENAME, STRUCT_COL_PREFIX};
-use backend::{sqlexec, dri, dci};
+use backend::{sqlexec, dri, dci, sci};
 
 /* TODO rename QTree? */
 /* naming: we can rename this phase or module "sprout"
@@ -164,21 +164,24 @@ pub enum RuntimeError {
   UnsupportedExpression(String),
   UndefinedVariable(ir::Local),
   PatternMatchNonStruct(ir::Local),
+  NoRowWithRowid(String, dri::Rowid),
+  TooManyRowsWithRowid(String, dri::Rowid),
+  CantWriteRtValToBuffer(dri::RtVal),
   UnsupportedComparison { left: dri::RtVal, right: dri::RtVal },
   UnsupportedAddition { left: dri::RtVal, right: dri::RtVal },
+  FilterNotBoolean(dri::RtVal),
   UnsupportedComparison3 { left: dci::RtVal, right: dci::RtVal }, /* TODO: remove */
   UnsupportedAddition3 { left: dci::RtVal, right: dci::RtVal }, /* TODO: remove */
-  FilterNotBoolean(dri::RtVal),
   FilterNotBoolean3(dci::RtVal), /* TODO remove */
+  UnsupportedComparisonSci { left: sci::RtVal, right: sci::RtVal }, /* TODO: remove */
+  UnsupportedAdditionSci { left: sci::RtVal, right: sci::RtVal }, /* TODO: remove */
+  FilterNotBooleanSci(sci::RtVal), /* TODO remove */
   UnknownTable(String),
   ScalarRowFormatHasNoFields,
   FieldPathIncompletelyResolved,
   UnsupportedOperator(ir::Operator),
   UnsupportedBackend,
   NotAFunction,
-  NoRowWithRowid(String, dri::Rowid),
-  TooManyRowsWithRowid(String, dri::Rowid),
-  CantWriteRtValToBuffer(dri::RtVal),
   MapNotSupported { backend: String },
 }
 
