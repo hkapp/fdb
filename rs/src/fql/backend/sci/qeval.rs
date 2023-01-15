@@ -4,6 +4,8 @@ use super::super::{RuntimeError, QVal, Status};
 use crate::fql::backend::sqlexec;
 use std::collections::HashMap;
 use super::{Cursor, CurKind, CurRead, CurFilter};
+use super::super::dri;
+pub use dri::RtVal;
 
 /* Interpreter: preparation step */
 
@@ -17,20 +19,41 @@ pub struct ColId {  /* make private again if possible */
     tab_name: String
 }
 
+/*
 #[derive(Debug, Clone)]
 pub struct DataGuide(Vec<ColId>);
+*/
+struct BlockMgr(Vec<Option<Block>>);
 
-#[derive(Debug, Clone)]
+/*#[derive(Debug, Clone)]
 pub enum RtVal {
     UInt32(u32),
     Bool(bool),
     DataGuide(DataGuide)
+}*/
+
+enum Block {
+    UInt32(Vec<u32>),
+    Bool(Vec<bool>),
 }
 
 type Interpreter<'a> = HashMap<&'a ir::Local, RtVal>;
 
-fn cursor_fetch_read(cur_read: &mut CurRead) -> Result<Option<Rowid>, RuntimeError> {
-    Ok(cur_read.rowid_range.next())
+fn cursor_pull_read(cur_read: &mut CurRead, block_mgr: &BlockMgr) -> Result<Option<usize>, RuntimeError> {
+    cur_read.rowid_range
+        .next()
+        .map(|rowid| {
+            let sql_row = execute_query(cur_read.query, rowid)?;
+            for (sql_col, pipe) in cur_read.spec {
+                let col_val = sql_row.get(sql_col);
+                let block = block_mgr.write_ref(pipe);
+                // Note we do blocks of size 1 for now
+                block.clear();
+                block.push(col_val);
+            }
+            Ok(1 as usize)
+        })
+        .transpose()
 }
 
 fn read_column_value(column: &ColId, rowid: Rowid) -> Result<RtVal, RuntimeError>
@@ -43,16 +66,16 @@ fn read_column_value(column: &ColId, rowid: Rowid) -> Result<RtVal, RuntimeError
     Ok(rt_val)
 }
 
-fn resolve_dataguide_entry(data_guide: &DataGuide, field_index: usize, rowid: Rowid)
+/*fn resolve_dataguide_entry_(data_guide: &DataGuide, field_index: usize, rowid: Rowid)
     -> Result<RtVal, RuntimeError>
 {
     let column = data_guide.0.get(field_index)
                     .ok_or_else(|| RuntimeError::IndexNotInDataGuide(field_index))?;
 
     read_column_value(column, rowid)
-}
+}*/
 
-fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, rowid: Rowid, interpreter: &mut Interpreter<'a>)
+/*fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, rowid: Rowid, interpreter: &mut Interpreter<'a>)
     -> Result<RtVal, RuntimeError>
 {
     use ir::Expr::*;
@@ -188,9 +211,13 @@ fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, rowid: Rowid, interpreter: &mu
             }
         }
     }
+}*/
+
+fn interpret_fun(fun: &ir::AnonFun, row_arg: RtVal) -> Result<RtVal, RuntimeError> {
+    dri::interpret_row_fun(fun, row_arg)
 }
 
-fn interpret_row_fun(predicate: &ir::AnonFun, rowid: Rowid, data_guide: &DataGuide)
+fn interpret_row_fun(predicate: &ir::AnonFun, block_mgr: &BlockMgr, row_format: &RowFmt)
     -> Result<RtVal, RuntimeError>
 {
     let val_params = &predicate.val_params;
@@ -203,8 +230,8 @@ fn interpret_row_fun(predicate: &ir::AnonFun, rowid: Rowid, data_guide: &DataGui
 
         let mut interpreter: Interpreter = HashMap::new();
 
-        let arg_value =
-          if data_guide.0.len() == 1 {
+        let arg_value = row_format.build_value(block_mgr);
+          /*if data_guide.0.len() == 1 {
             /* single column: treat as actual values
              * FIXME: need to consider type vs. newtype here
              */
@@ -213,16 +240,17 @@ fn interpret_row_fun(predicate: &ir::AnonFun, rowid: Rowid, data_guide: &DataGui
           else {
             /* struct argument. Value is the data guide. */
             RtVal::DataGuide(data_guide.clone())
-          };
+          };*/
 
         let conflict = interpreter.insert(param_name, arg_value);
         assert!(conflict.is_none());
 
-        rec_interpret_row_expr(&predicate.body, rowid, &mut interpreter)
+        //rec_interpret_row_expr(&predicate.body, rowid, &mut interpreter)
+        dri::interpret_row_fun(&predicate, arg_value)
     }
 }
 
-fn new_data_guide(tab_name: &str) -> Result<DataGuide, RuntimeError> {
+/*fn new_data_guide(tab_name: &str) -> Result<DataGuide, RuntimeError> {
     fn dg_foo(tab_name: &str) -> DataGuide {
         let bar_col = ColId {
             col_name: String::from("bar"),
@@ -255,9 +283,9 @@ fn new_data_guide(tab_name: &str) -> Result<DataGuide, RuntimeError> {
       "pairs" => Ok(dg_pairs(tab_name)),
       _       => Err(RuntimeError::UnknownTable(String::from(tab_name))),
     }
-}
+}*/
 
-fn cursor_data_guide(cursor: &Cursor) -> Result<DataGuide, RuntimeError> {
+/*fn cursor_data_guide(cursor: &Cursor) -> Result<DataGuide, RuntimeError> {
     match &cursor.cur_kind {
         CurKind::Read(cur_read) =>
             new_data_guide(&cur_read.tab_name),
@@ -266,21 +294,21 @@ fn cursor_data_guide(cursor: &Cursor) -> Result<DataGuide, RuntimeError> {
             /* Filter: unchanged data guide (pass-through only) */
             cursor_data_guide(&cur_filter.child_cursor),
     }
-}
+}*/
 
-fn cursor_fetch_filter(cur_filter: &mut CurFilter) -> Result<Option<Rowid>, RuntimeError> {
+fn cursor_pull_filter(cur_filter: &mut CurFilter, block_mgr: &BlockMgr) -> Result<Option<usize>, RuntimeError> {
     /* For now, this code MUST be an anonymous function (no lowerings yet) */
     let pred_fun = match &cur_filter.filter_code {
         ir::Expr::AnonFun(anon_fun) => anon_fun,
         _ => return Err(RuntimeError::NotAFunction),
     };
     let child_cursor = &mut cur_filter.child_cursor;
-    let data_guide = cursor_data_guide(child_cursor)?;
+    //let data_guide = cursor_data_guide(child_cursor)?;
                     /* filter: data guide is unchanged (no map) */
 
-    let mut child_row = cursor_fetch(child_cursor);
-    while let Ok(Some(child_rowid)) = child_row {
-        match interpret_row_fun(pred_fun, child_rowid, &data_guide)? {
+    let mut child_row = next_row(block_mgr, child_cursor, cur_filter.input_format);
+    while let Ok(Some(row_val)) = child_row {
+        match interpret_fun(pred_fun, row_val)? {
             RtVal::Bool(b) => {
                 if b {
                     /* Filter passed, return rowid */
@@ -289,7 +317,7 @@ fn cursor_fetch_filter(cur_filter: &mut CurFilter) -> Result<Option<Rowid>, Runt
                 else {
                     /* Filter failed */
                     /* Fetch the next row from the child, then loop */
-                    child_row = cursor_fetch(child_cursor);
+                    child_row = next_row(block_mgr, child_cursor, cur_filter.input_format);
                 }
             },
 
@@ -305,17 +333,17 @@ fn cursor_fetch_filter(cur_filter: &mut CurFilter) -> Result<Option<Rowid>, Runt
     return child_row;
 }
 
-fn cursor_fetch(cursor: &mut Cursor) -> Result<Option<Rowid>, RuntimeError> {
+fn cursor_pull(cursor: &mut Cursor, block_mgr: &BlockMgr) -> Result<Option<usize>, RuntimeError> {
     match &mut cursor.cur_kind {
         CurKind::Read(cur_read) =>
-            cursor_fetch_read(cur_read),
+            cursor_pull_read(cur_read, block_mgr),
 
         CurKind::Filter(cur_filter) =>
-            cursor_fetch_filter(cur_filter),
+            cursor_pull_filter(cur_filter, block_mgr),
     }
 }
 
-fn gen_proj_query_from_dataguide(data_guide: &DataGuide, rowid: Rowid) -> String {
+/*fn gen_proj_query_from_dataguide(data_guide: &DataGuide, rowid: Rowid) -> String {
     /* 1. Generate a comma-separated list of column names */
     let col_names = data_guide.0
                         .iter()
@@ -329,27 +357,26 @@ fn gen_proj_query_from_dataguide(data_guide: &DataGuide, rowid: Rowid) -> String
                             col_names, table_name, rowid);
 
     return sql_query;
-}
+}*/
 
-fn query_sqlite_rowid_into(rowid: Rowid, data_guide: &DataGuide, res_buf: &mut [QVal])
+/*fn query_sqlite_rowid_into(rowid: Rowid, data_guide: &DataGuide, res_buf: &mut [QVal])
     -> Result<(), RuntimeError>
 {
     let sql_query = gen_proj_query_from_dataguide(data_guide, rowid);
     let _nrows = sqlexec::query_sqlite_into(&sql_query, res_buf)?;
     /* TODO assert that returned number of rows is exactly one */
     Ok(())
-}
+}*/
 
 pub fn exec_interpreter_into(cursor: &mut Cursor, res_buf: &mut [QVal]) -> Result<Status, RuntimeError> {
-    let data_guide = cursor_data_guide(cursor)?; /* TODO we should add the final "result conversion / out projection" node in the cursor tree */
-    let ncols = data_guide.0.len();
+    //let data_guide = cursor_data_guide(cursor)?; /* TODO we should add the final "result conversion / out projection" node in the cursor tree */
+    //let ncols = data_guide.0.len();
     let mut rowcount = 0;
-    while let Some(rowid) = cursor_fetch(cursor)? {
-        /* TODO: read row values from rowid
-         *   base code off of query_sqlite_into?
-         */
+    let block_mgr = BlockMgr::new(cursor.pipe_count);
+    while let Some(rt_val) = cursor_pull(cursor, block_mgr)? {
         let buf_idx = ncols * rowcount;
-        query_sqlite_rowid_into(rowid, &data_guide, &mut res_buf[buf_idx..])?;
+        //query_sqlite_rowid_into(rowid, &data_guide, &mut res_buf[buf_idx..])?;
+        write_rt_val_into(rt_val, &mut res_buf[buf_idx..])?;
         rowcount += 1;
     }
     Ok(rowcount)

@@ -442,7 +442,8 @@ fn interpret_fun(function: &ir::AnonFun, arg_values: Vec<RtVal>)
 }
 
 /* TODO rename */
-fn interpret_row_fun(function: &ir::AnonFun, arg_value: RtVal)
+// Public because it is used in sci
+pub fn interpret_row_fun(function: &ir::AnonFun, arg_value: RtVal)
     -> Result<RtVal, RuntimeError>
 {
     let arg_values = vec![arg_value];
