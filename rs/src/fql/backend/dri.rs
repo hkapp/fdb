@@ -7,6 +7,7 @@ use crate::objstore;
 use rusqlite as sqlite;
 use std::rc::Rc;
 use std::collections::HashMap;
+use super::BufWriter;
 
 /* Interpreter: preparation step */
 
@@ -583,26 +584,7 @@ fn gen_proj_query_from_dataguide(data_guide: &DataGuide, rowid: Rowid) -> String
     return sql_query;
 }
 
-struct BufWriter<'a, T> {
-    buffer:  &'a mut [T],
-    cur_pos: usize
-}
-
-impl<'a, T> BufWriter<'a, T> {
-    fn new(target_buf: &'a mut [T]) -> Self {
-        BufWriter {
-            buffer:  target_buf,
-            cur_pos: 0
-        }
-    }
-
-    fn push(&mut self, val: T) {
-        self.buffer[self.cur_pos] = val;
-        self.cur_pos += 1;
-    }
-}
-
-fn write_rtval_to_buffer<'a>(row_val: RtVal, output: &mut BufWriter<'a, QVal>) -> Result<(), RuntimeError> {
+pub fn write_rtval_to_buffer<'a>(row_val: RtVal, output: &mut BufWriter<'a, QVal>) -> Result<(), RuntimeError> {
     match row_val {
         RtVal::Struct( RtStruct { fields } ) => {
             for field_val in fields {

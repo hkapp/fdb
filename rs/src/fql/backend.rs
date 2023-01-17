@@ -51,3 +51,22 @@ fn extract_decl(obj: &objstore::Obj) -> Result<&ir::Decl, CompileError> {
             }
         )
 }
+
+struct BufWriter<'a, T> {
+    buffer:  &'a mut [T],
+    cur_pos: usize
+}
+
+impl<'a, T> BufWriter<'a, T> {
+    fn new(target_buf: &'a mut [T]) -> Self {
+        BufWriter {
+            buffer:  target_buf,
+            cur_pos: 0
+        }
+    }
+
+    fn push(&mut self, val: T) {
+        self.buffer[self.cur_pos] = val;
+        self.cur_pos += 1;
+    }
+}

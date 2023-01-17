@@ -1,4 +1,4 @@
-mod dataflow;
+//mod dataflow;
 mod qeval;
 
 pub use qeval::{exec_interpreter_into, RtVal};
@@ -16,12 +16,7 @@ use crate::ir;
 
 pub struct Cursor {
     pub pipe_count: usize,
-    pub op_tree:    OpTree,
-}
-
-struct OpTree {
-    output_fmt: RowFmt,
-    row_op:     RowOp,
+    pub op_tree:    RowOp,
 }
 
 pub enum RowOp {
@@ -32,13 +27,54 @@ pub enum RowOp {
 /* TODO rename */
 pub struct TableScan {
     pub rowid_range: ops::Range<Rowid>,
-    query:           String,
+    tab_name:           String,
 }
 
 pub struct FilterOp {
     filter_code:  ir::Expr,
-    child_cursor: Box<OpTree>,
+    child_cursor: Box<RowOp>,
 }
+
+/* RowFmt */
+
+struct Pipe {
+    idx: usize
+}
+
+enum RowFmt {
+    Scalar(Pipe),
+    Composite(Vec<Pipe>),
+}
+
+trait OpTree {
+    fn output_fmt(&self) -> RowFmt;
+}
+
+impl OpTree for RowOp {
+    fn output_fmt(&self) -> RowFmt {
+        use RowOp::*;
+        match self {
+            TableScan(ts) => ts.output_fmt(),
+            Filter(filter) => filter.output_fmt(),
+        }
+    }
+}
+
+impl OpTree for FilterOp {
+    fn output_fmt(&self) -> RowFmt {
+        self.child_cursor.output_fmt()
+    }
+}
+
+impl OpTree for TableScan {
+    fn output_fmt(&self) -> RowFmt {
+        match &self.tab_name {
+
+        }
+    }
+}
+
+/* Logic */
 
 type Rowid = u32;
 
@@ -49,7 +85,7 @@ fn max_rowid(tab_name: &str) -> Result<Rowid, RuntimeError> {
     Ok(max_rowid)
 }
 
-fn ts_node(tab_name: &str) -> Result<OpTree, RuntimeError> {
+fn ts_node(tab_name: &str) -> Result<RowOp, RuntimeError> {
     let max_rowid = max_rowid(tab_name)?;
 
     let rowid_range =
@@ -58,24 +94,18 @@ fn ts_node(tab_name: &str) -> Result<OpTree, RuntimeError> {
             end: max_rowid+1 /* excl */
         };
 
-    let query = data::all_columns_query(tab_name);
-
     let cur_read =
         TableScan {
             rowid_range,
-            query
+            tab_name: String::from(tab_name)
         };
 
     let row_op = RowOp::TableScan(cur_read);
-    let op_tree = OpTree {
-        output_fmt,
-        row_op,
-    };
-    Ok(op_tree)
+    Ok(row_op)
 }
 
 fn filter_node(filter_fun: Rc<objstore::Obj>, child_qplan: &QPlan, db_ctx: &DbCtx)
-    -> Result<OpTree, RuntimeError>
+    -> Result<RowOp, RuntimeError>
 {
     let subtree = build_op_tree(&child_qplan, db_ctx)?;
 
@@ -89,17 +119,13 @@ fn filter_node(filter_fun: Rc<objstore::Obj>, child_qplan: &QPlan, db_ctx: &DbCt
         };
 
     let row_op = RowOp::Filter(cur_filter);
-    let op_tree = OpTree {
-        output_fmt,
-        row_op,
-    };
-    Ok(op_tree)
+    Ok(row_op)
 }
 
-fn build_op_tree(qplan: &QPlan, db_ctx: &DbCtx) -> Result<OpTree, RuntimeError> {
+fn build_op_tree(qplan: &QPlan, db_ctx: &DbCtx) -> Result<RowOp, RuntimeError> {
     use QPlan::*;
     match qplan {
-        TableScanT(qreadt) =>
+        ReadT(qreadt) =>
             ts_node(&qreadt.tab_name),
 
         Filter(qfilter) =>
@@ -113,10 +139,39 @@ fn build_op_tree(qplan: &QPlan, db_ctx: &DbCtx) -> Result<OpTree, RuntimeError> 
     }
 }
 
+fn compute_pipe_count(op_tree: &RowOp) -> usize {
+    fn fmt_pipe_count(fmt: &RowFmt) -> usize {
+        match fmt {
+            RowFmt::Scalar(_)         => 1,
+            RowFmt::Composite(fields) => fields.len(), // we don't support nested structs yet
+        }
+    }
+
+    let mut next_node = Some(op_tree);
+    let mut pipe_count = 0;
+    use RowOp::*;
+    while let Some(curr_node) = next_node {
+        pipe_count += fmt_pipe_count(&curr_node.output_fmt());
+        next_node = match curr_node {
+            TableScan(ts)  => None,
+            Filter(filter) => Some(&filter.child_cursor),
+        };
+    }
+    return pipe_count;
+}
+
+fn build_cursor(op_tree: RowOp, db_ctx: &DbCtx) -> Cursor {
+    Cursor {
+        pipe_count: compute_pipe_count(&op_tree),
+        op_tree,
+    }
+}
+
 pub fn full_compile(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeError> {
-    let mut cursor = build_cursor(qplan, db_ctx)?;
+    let op_tree = build_op_tree(qplan, db_ctx)?;
+    let cursor = build_cursor(op_tree, db_ctx);
     /* TODO we're also supposed to get a full list of blocks to allocate here */
-    let final_dg /*(final_dg, alloc_plan)*/ = dataflow::apply_data_accesses(&mut cursor)?;
+    //let final_dg /*(final_dg, alloc_plan)*/ = dataflow::apply_data_accesses(&mut cursor)?;
     //Ok((cursor, final_dg, alloc_plan))
     Ok(cursor)
 }
