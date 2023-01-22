@@ -7,7 +7,6 @@ use sqlite::types::FromSql;
 pub type DataError = sqlite::Error;
 
 pub const DB_FILENAME: &str = "../data/fdb.db";
-pub const STRUCT_COL_PREFIX: &str = "col";
 
 pub fn sql_one_row_one_col<T>(query: &str) -> Result<T, DataError>
     where

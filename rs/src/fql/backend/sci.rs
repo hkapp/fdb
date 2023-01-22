@@ -2,10 +2,11 @@
 mod qeval;
 
 pub use qeval::{exec_interpreter_into, RtVal};
-use super::{DB_FILENAME, STRUCT_COL_PREFIX};
+use super::DB_FILENAME;
 
 use crate::fql::{QPlan, RuntimeError};
 use crate::ctx::DbCtx;
+use crate::tables;
 use std::ops;
 use crate::objstore;
 use std::rc::Rc;
@@ -38,6 +39,7 @@ pub struct FilterOp {
 
 /* RowFmt */
 
+#[derive(Copy, Clone)]
 struct Pipe {
     idx: usize
 }
@@ -63,14 +65,29 @@ impl OpTree for RowOp {
 
 impl OpTree for FilterOp {
     fn output_fmt(&self) -> RowFmt {
-        self.child_cursor.output_fmt()
+        /* FIXME we need to increase the pipe numbers here */
+        //self.child_cursor.output_fmt()
     }
 }
 
 impl OpTree for TableScan {
     fn output_fmt(&self) -> RowFmt {
-        match &self.tab_name {
-
+        let table = tables::resolve(&self.tab_name)
+                        .ok_or(RuntimeError::UnknownTable(String::from(&self.tab_name)))
+                        .unwrap();
+        match table.columns.len() {
+            1   => {
+                /* FIXME this allocation only works with a single Table Scan node
+                 * in the entire QPlan
+                 */
+                RowFmt::Scalar(Pipe { idx: 0 })
+            },
+            n => {
+                let pipes = (0..n)
+                                .map(|idx| Pipe { idx })
+                                .collect();
+                RowFmt::Composite(pipes)
+            },
         }
     }
 }
@@ -181,42 +198,4 @@ pub fn full_compile(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeErro
 pub struct ColId {  /* make private again if possible */
     col_name: String,
     tab_name: String
-}
-
-#[derive(Debug, Clone)]
-pub struct DataGuide(Vec<ColId>);
-
-fn new_data_guide(tab_name: &str) -> Result<DataGuide, RuntimeError> {
-    fn dg_foo(tab_name: &str) -> DataGuide {
-        let bar_col = ColId {
-            col_name: String::from("bar"),
-            tab_name: String::from(tab_name)
-        };
-        DataGuide(vec![bar_col])
-    }
-
-    fn dg_pairs(tab_name: &str) -> DataGuide {
-        let ncols = 2;
-        let mut cols = Vec::new();
-
-        for col_idx in 0..ncols {
-            let col_name = format!("{}{}", super::STRUCT_COL_PREFIX, col_idx);
-            let column =
-                ColId {
-                    col_name,
-                    tab_name: String::from(tab_name)
-                };
-
-            cols.push(column)
-        }
-
-        DataGuide(cols)
-    }
-
-    /* FIXME for now the table schemas are hardcoded */
-    match tab_name {
-      "foo"   => Ok(dg_foo(tab_name)),
-      "pairs" => Ok(dg_pairs(tab_name)),
-      _       => Err(RuntimeError::UnknownTable(String::from(tab_name))),
-    }
 }

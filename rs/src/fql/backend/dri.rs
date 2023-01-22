@@ -8,6 +8,7 @@ use rusqlite as sqlite;
 use std::rc::Rc;
 use std::collections::HashMap;
 use super::BufWriter;
+use crate::tables::TABLE_PAIRS;
 
 /* Interpreter: preparation step */
 
@@ -465,7 +466,7 @@ fn new_data_guide(tab_name: &str) -> Result<DataGuide, RuntimeError> {
         let mut cols = Vec::new();
 
         for col_idx in 0..ncols {
-            let col_name = format!("{}{}", super::STRUCT_COL_PREFIX, col_idx);
+            let col_name = TABLE_PAIRS.columns[col_idx];
             let column =
                 ColId {
                     col_name,

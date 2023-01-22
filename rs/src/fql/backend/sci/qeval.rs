@@ -70,7 +70,7 @@ macro_rules! vec_repval {
 macro_rules! ensure_block_init {
     ($mb_block: expr, $typ: ident) => {
         {
-            let mb_ref = $mb_block;
+            let mb_ref: &mut Option<Block> = $mb_block;
             if mb_ref.is_none() {
                 *mb_ref = Some(Block::$typ(Vec::new()));
             }
@@ -146,7 +146,7 @@ type Interpreter<'a> = HashMap<&'a ir::Local, RtVal>;
 const BLOCK_SIZE: usize = 1;
 
 impl RowFmt {
-    fn pipe_iter(&self) -> Box<dyn Iterator<Item=&Pipe>> {
+    fn pipe_iter(&self) -> Box<dyn Iterator<Item=&Pipe> + '_> {
         match self {
             RowFmt::Scalar(pipe)     => Box::from(Vec::into_iter(vec![pipe])),
             RowFmt::Composite(pipes) => Box::from(pipes.iter()),
@@ -163,7 +163,8 @@ fn pull_ts(cur_read: &mut TableScan, block_mgr: &BlockMgr) -> Result<Option<usiz
                                     .pipe_iter()
                                     .zip(sql_row.into_iter())
             {
-                let block_data = ensure_block_init!(block_mgr.write_ref(*pipe), UInt32)?;
+                let mut block_ref = block_mgr.write_ref(*pipe);
+                let block_data = ensure_block_init!(&mut block_ref, UInt32)?;
                 // Note we do blocks of size 1 for now
                 assert_eq!(BLOCK_SIZE, 1);
                 block_data.clear();
@@ -346,8 +347,6 @@ fn interpret_row_fun(predicate: &ir::AnonFun, block_mgr: &BlockMgr, row_format: 
         let param = val_params.get(0).unwrap();
         let param_name: &ir::Local = &param.name;
 
-        let mut interpreter: Interpreter = HashMap::new();
-
         let arg_value = row_format.build_val(block_mgr);
           /*if data_guide.0.len() == 1 {
             /* single column: treat as actual values
@@ -359,9 +358,6 @@ fn interpret_row_fun(predicate: &ir::AnonFun, block_mgr: &BlockMgr, row_format: 
             /* struct argument. Value is the data guide. */
             RtVal::DataGuide(data_guide.clone())
           };*/
-
-        let conflict = interpreter.insert(param_name, arg_value);
-        assert!(conflict.is_none());
 
         //rec_interpret_row_expr(&predicate.body, rowid, &mut interpreter)
         dri::interpret_row_fun(&predicate, arg_value)
@@ -473,7 +469,7 @@ fn pull_filter(filter_op: &mut FilterOp, block_mgr: &BlockMgr) -> Result<Option<
     let mut output_signal = None;
     /* FIXME we should do this only once */
     while let Ok(Some(row_val)) = child_row {
-        match interpret_fun(pred_fun, row_val)? {
+        match interpret_fun(pred_fun, row_val.clone())? {
             RtVal::Bool(b) => {
                 if b {
                     /* Filter passed, return rowid */
@@ -486,9 +482,10 @@ fn pull_filter(filter_op: &mut FilterOp, block_mgr: &BlockMgr) -> Result<Option<
                     /* Filter failed */
                     /* We have seen some rows, but filtered out */
                     output_signal = output_signal.or(Some(0));
-                    /* Fetch the next row from the child, then loop */
-                    child_row = next_row(child_cursor, block_mgr);
                 }
+                /* Fetch the next row from the child, then loop */
+                let child_cursor = &mut filter_op.child_cursor;
+                child_row = next_row(child_cursor, block_mgr);
             },
 
             val@_ => {
@@ -502,12 +499,12 @@ fn pull_filter(filter_op: &mut FilterOp, block_mgr: &BlockMgr) -> Result<Option<
 }
 
 fn cursor_pull(cursor: &mut RowOp, block_mgr: &BlockMgr) -> Result<Option<usize>, RuntimeError> {
-    match &mut cursor {
+    match cursor {
         RowOp::TableScan(cur_read) =>
             pull_ts(cur_read, block_mgr),
 
         RowOp::Filter(filter_op) =>
-            pull_filter(&mut filter_op, block_mgr),
+            pull_filter(filter_op, block_mgr),
     }
 }
 

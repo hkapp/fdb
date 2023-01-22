@@ -3,7 +3,7 @@ pub mod dri; /* Dynamically-typed Row-based Interpreter */
 pub mod dci; /* Dynamically-typed Column-based Interpreter */
 pub mod sci; /* Statically-typed Column-based Interpreter */
 
-use crate::data::{DB_FILENAME, STRUCT_COL_PREFIX};
+use crate::data::DB_FILENAME;
 use crate::ir;
 use crate::objstore::{self, Symbol};
 use super::{CompileError, RuntimeError, QVal, Status};

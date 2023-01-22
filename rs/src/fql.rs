@@ -5,7 +5,7 @@ use crate::objstore::{self, Symbol};
 use rusqlite as sqlite;
 use crate::ir;
 use std::rc::Rc;
-use crate::data::{DB_FILENAME, STRUCT_COL_PREFIX};
+use crate::data::DB_FILENAME;
 use backend::{sqlexec, dri, dci, sci};
 
 /* TODO rename QTree? */

@@ -2,6 +2,7 @@ use crate::fql::{QVal, RuntimeError, QPlan};
 use rusqlite as sqlite;
 use crate::ctx::DbCtx;
 use crate::ir;
+use crate::tables::TABLE_PAIRS;
 use std::collections::HashMap;
 use crate::objstore;
 
@@ -64,7 +65,7 @@ fn rec_inline_filter_sql<'a>(
                 let field_bind = field_bind.as_ref().unwrap();
 
                 /* FIXME this only works for a single level of nesting */
-                let sql_col = format!("{}{}", super::STRUCT_COL_PREFIX, field_index);
+                let sql_col = TABLE_PAIRS.columns[field_index];
                 let conflict = eval_state.insert(&field_bind, sql_col);
 
                 if conflict.is_some() {

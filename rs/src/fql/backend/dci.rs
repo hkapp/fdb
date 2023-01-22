@@ -2,8 +2,8 @@ mod dataflow;
 mod qeval;
 
 pub use qeval::{exec_interpreter_into, RtVal};
-use super::{DB_FILENAME, STRUCT_COL_PREFIX};
-
+use super::DB_FILENAME;
+use crate::tables::TABLE_PAIRS;
 use crate::fql::{QPlan, RuntimeError};
 use crate::ctx::DbCtx;
 use std::ops;
@@ -136,19 +136,13 @@ fn new_data_guide(tab_name: &str) -> Result<DataGuide, RuntimeError> {
     }
 
     fn dg_pairs(tab_name: &str) -> DataGuide {
-        let ncols = 2;
-        let mut cols = Vec::new();
-
-        for col_idx in 0..ncols {
-            let col_name = format!("{}{}", super::STRUCT_COL_PREFIX, col_idx);
-            let column =
-                ColId {
-                    col_name,
-                    tab_name: String::from(tab_name)
-                };
-
-            cols.push(column)
-        }
+        let cols = TABLE_PAIRS.columns
+                        .iter()
+                        .map(|col_name| ColId {
+                            col_name: String::from(col_name),
+                            tab_name: String::from(tab_name)
+                        })
+                        .collect();
 
         DataGuide(cols)
     }
