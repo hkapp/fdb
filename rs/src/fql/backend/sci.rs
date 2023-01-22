@@ -29,12 +29,14 @@ pub enum RowOp {
 /* TODO rename */
 pub struct TableScan {
     pub rowid_range: ops::Range<RowId>,
-    tab_name:           String,
+    tab_name:        String,
+    output_fmt_:     RowFmt
 }
 
 pub struct FilterOp {
     filter_code:  ir::Expr,
     child_cursor: Box<RowOp>,
+    output_fmt_:  RowFmt,
 }
 
 /* RowFmt */
@@ -50,30 +52,44 @@ enum RowFmt {
 }
 
 trait OpTree {
-    fn output_fmt(&self) -> RowFmt;
+    fn output_fmt(&self) -> &RowFmt;
 }
 
 impl OpTree for RowOp {
-    fn output_fmt(&self) -> RowFmt {
+    fn output_fmt(&self) -> &RowFmt {
         use RowOp::*;
         match self {
-            TableScan(ts) => ts.output_fmt(),
+            TableScan(ts)  => ts.output_fmt(),
             Filter(filter) => filter.output_fmt(),
         }
     }
 }
 
 impl OpTree for FilterOp {
-    fn output_fmt(&self) -> RowFmt {
-        /* FIXME we need to increase the pipe numbers here */
-        //self.child_cursor.output_fmt()
+    fn output_fmt(&self) -> &RowFmt {
+        &self.output_fmt_
     }
 }
 
 impl OpTree for TableScan {
-    fn output_fmt(&self) -> RowFmt {
-        let table = tables::resolve(&self.tab_name)
-                        .ok_or(RuntimeError::UnknownTable(String::from(&self.tab_name)))
+    fn output_fmt(&self) -> &RowFmt {
+        &self.output_fmt_
+    }
+}
+
+/* Logic */
+
+fn max_rowid(tab_name: &str) -> Result<RowId, RuntimeError> {
+    let query = format!("SELECT MAX(ROWID) FROM {}", tab_name);
+    let max_rowid = data::sql_one_row_one_col(&query)?;
+
+    Ok(max_rowid)
+}
+
+fn ts_node(tab_name: &str) -> Result<RowOp, RuntimeError> {
+    fn build_ts_fmt(tab_name: &str) -> RowFmt {
+        let table = tables::resolve(tab_name)
+                        .ok_or(RuntimeError::UnknownTable(String::from(tab_name)))
                         .unwrap();
         match table.columns.len() {
             1   => {
@@ -90,18 +106,7 @@ impl OpTree for TableScan {
             },
         }
     }
-}
 
-/* Logic */
-
-fn max_rowid(tab_name: &str) -> Result<RowId, RuntimeError> {
-    let query = format!("SELECT MAX(ROWID) FROM {}", tab_name);
-    let max_rowid = data::sql_one_row_one_col(&query)?;
-
-    Ok(max_rowid)
-}
-
-fn ts_node(tab_name: &str) -> Result<RowOp, RuntimeError> {
     let max_rowid = max_rowid(tab_name)?;
 
     let rowid_range =
@@ -113,7 +118,8 @@ fn ts_node(tab_name: &str) -> Result<RowOp, RuntimeError> {
     let cur_read =
         TableScan {
             rowid_range,
-            tab_name: String::from(tab_name)
+            tab_name:    String::from(tab_name),
+            output_fmt_: build_ts_fmt(tab_name)
         };
 
     let row_op = RowOp::TableScan(cur_read);
@@ -123,15 +129,38 @@ fn ts_node(tab_name: &str) -> Result<RowOp, RuntimeError> {
 fn filter_node(filter_fun: Rc<objstore::Obj>, child_qplan: &QPlan, db_ctx: &DbCtx)
     -> Result<RowOp, RuntimeError>
 {
+    fn row_fmt_inc_from_child(child_fmt: &RowFmt) -> RowFmt {
+        match child_fmt {
+            RowFmt::Scalar(child_pipe) => {
+                let mut pipe = child_pipe.clone();
+                pipe.idx += 1;
+                RowFmt::Scalar(pipe)
+            },
+            RowFmt::Composite(child_pipes) => {
+                let inc = child_pipes.iter()
+                                .map(|p| p.idx)
+                                .max()
+                                .unwrap();
+                let mut pipes = child_pipes.clone();
+                pipes.iter_mut()
+                    .for_each(|p| p.idx += inc);
+                RowFmt::Composite(pipes)
+            },
+        }
+    }
+
     let subtree = build_op_tree(&child_qplan, db_ctx)?;
 
     let fun_decl = super::extract_decl(&filter_fun)?;
     let fun_body = super::check_is_fun_decl(fun_decl)?;
 
+    let output_fmt_ = row_fmt_inc_from_child(subtree.output_fmt());
+
     let cur_filter =
         FilterOp {
             filter_code:  ir::Expr::AnonFun(fun_body.clone()),
-            child_cursor: Box::new(subtree)
+            child_cursor: Box::new(subtree),
+            output_fmt_
         };
 
     let row_op = RowOp::Filter(cur_filter);

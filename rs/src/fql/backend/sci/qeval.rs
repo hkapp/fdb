@@ -12,6 +12,16 @@
  * This means that every row op writes its full output every time.
  */
 
+/* TODO
+ *   compute the pipes at compile time
+ *   add types
+ *   support map
+ *   support multi-row blocks
+ *     all rows of same #values
+ *     all rows of same byte size
+ *   read values from blocks directly in the interpreter (avoid materializing row values)
+ *   avoid copy for read-through columns (on map, not on filter)
+ */
 use crate::ir;
 use crate::data::{self, RowId};
 use super::super::{RuntimeError, QVal, Status, dri, BufWriter};
@@ -458,7 +468,7 @@ impl RowFmt {
 fn pull_filter(filter_op: &mut FilterOp, block_mgr: &BlockMgr) -> Result<Option<usize>, RuntimeError> {
     /* For now, this code MUST be an anonymous function (no lowerings yet) */
     let pred_fun = match &filter_op.filter_code {
-        ir::Expr::AnonFun(anon_fun) => &anon_fun,
+        ir::Expr::AnonFun(anon_fun) => anon_fun,
         _ => return Err(RuntimeError::NotAFunction),
     };
     let child_cursor = &mut filter_op.child_cursor;

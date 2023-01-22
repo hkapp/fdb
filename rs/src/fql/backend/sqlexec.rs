@@ -65,7 +65,10 @@ fn rec_inline_filter_sql<'a>(
                 let field_bind = field_bind.as_ref().unwrap();
 
                 /* FIXME this only works for a single level of nesting */
-                let sql_col = TABLE_PAIRS.columns[field_index];
+                let sql_col = TABLE_PAIRS.columns
+                                .get(field_index)
+                                .unwrap()
+                                .clone();
                 let conflict = eval_state.insert(&field_bind, sql_col);
 
                 if conflict.is_some() {

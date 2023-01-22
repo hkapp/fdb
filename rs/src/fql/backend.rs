@@ -52,7 +52,7 @@ fn extract_decl(obj: &objstore::Obj) -> Result<&ir::Decl, CompileError> {
         )
 }
 
-struct BufWriter<'a, T> {
+pub struct BufWriter<'a, T> {
     buffer:  &'a mut [T],
     cur_pos: usize
 }

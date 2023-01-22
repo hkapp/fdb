@@ -187,7 +187,7 @@ pub enum RtVal {
 
 #[derive(Debug, Clone)]
 pub struct RtStruct {
-    fields: Vec<RtVal>
+    pub fields: Vec<RtVal>
 }
 
 struct Interpreter<'a> {
@@ -462,19 +462,13 @@ fn new_data_guide(tab_name: &str) -> Result<DataGuide, RuntimeError> {
     }
 
     fn dg_pairs(tab_name: &str) -> DataGuide {
-        let ncols = 2;
-        let mut cols = Vec::new();
-
-        for col_idx in 0..ncols {
-            let col_name = TABLE_PAIRS.columns[col_idx];
-            let column =
-                ColId {
-                    col_name,
-                    tab_name: String::from(tab_name)
-                };
-
-            cols.push(column)
-        }
+        let cols = TABLE_PAIRS.columns
+                        .iter()
+                        .map(|col_name| ColId {
+                            col_name: col_name.clone(),
+                            tab_name: String::from(tab_name)
+                        })
+                        .collect();
 
         DataGuide(cols)
     }

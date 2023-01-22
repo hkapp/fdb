@@ -21,7 +21,7 @@ pub fn sql_one_row_one_col<T>(query: &str) -> Result<T, DataError>
 
 pub type RowId = u64;
 
-trait FromRow: Sized {
+pub trait FromRow: Sized {
     fn from_row(row: &Row<'_>) -> Result<Self, DataError>;
 }
 
