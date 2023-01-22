@@ -184,6 +184,9 @@ pub enum RuntimeError {
   NotAFunction,
   MapNotSupported { backend: String },
   MultiColNotSupported,
+  IncorrectBlockType,
+  CantWriteStructInBlock,
+  MismatchedTypes,
 }
 
 /* Object store helpers */

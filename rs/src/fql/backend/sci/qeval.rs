@@ -18,8 +18,8 @@ use super::super::{RuntimeError, QVal, Status, dri, BufWriter};
 use crate::fql::backend::sqlexec;
 use std::collections::HashMap;
 use super::{Cursor, RowOp, FilterOp, TableScan, OpTree, RowFmt, Pipe};
-pub use dri::RtVal;
-use std::cell::{RefCell, RefMut};
+pub use dri::{RtVal, RtStruct};
+use std::cell::{RefCell, RefMut, Ref};
 
 /* Interpreter: preparation step */
 
@@ -55,7 +55,7 @@ macro_rules! vec_repval {
     };
 }
 
-macro_rules! typed_write_ref {
+/*macro_rules! typed_write_ref {
     ($bm: expr, $pipe: expr, $typ: ident) => {
         {
             let refmut = $bm.write_ref($pipe);
@@ -67,6 +67,21 @@ macro_rules! typed_write_ref {
                     mb_block.as_mut().unwrap()
                 }
             )
+        }
+    };
+}*/
+
+macro_rules! ensure_block_init {
+    ($mb_block: expr, $typ: ident) => {
+        {
+            let mb_ref = $mb_block;
+            if mb_ref.is_none() {
+                *mb_ref = Some(Block::$typ(Vec::new()));
+            }
+            match mb_ref.as_mut().unwrap() {
+                Block::$typ(vec) => Ok(vec),
+                _                => Err(RuntimeError::IncorrectBlockType),
+            }
         }
     };
 }
@@ -104,14 +119,14 @@ enum Block {
     Bool(Vec<bool>),
 }
 
-macro_rules! block_vec_op {
+/*macro_rules! block_vec_op {
     ($block: expr . $f: ident ( $($args: expr),* )) => {
         match $block {
             UInt32(vec) => vec.$f($($args: expr),*),
             Bool(vec)   => vec.$f($($args: expr),*),
         }
     }
-}
+}*/
 
 impl Block {
     fn clear(&mut self) {
@@ -119,6 +134,13 @@ impl Block {
         match self {
             UInt32(vec) => vec.clear(),
             Bool(vec)   => vec.clear(),
+        }
+    }
+
+    fn read_as_rtval(&self, idx: usize) -> Option<RtVal> {
+        match self {
+            Block::Bool(vec)   => vec.get(idx).map(|b| RtVal::Bool(*b)),
+            Block::UInt32(vec) => vec.get(idx).map(|n| RtVal::UInt32(*n)),
         }
     }
 }
@@ -135,11 +157,11 @@ fn pull_ts(cur_read: &mut TableScan, block_mgr: &BlockMgr) -> Result<Option<usiz
             let mut fmt_iter = TSFmtIter { cur_read.output_fmt() };
             for (sql_col, pipe) in fmt_iter {
                 let col_val = sql_row.get(sql_col);
-                let block = typed_write_ref!(block_mgr, pipe, UInt32);
+                let block_data = ensure_block_init!(block_mgr.write_ref(pipe), UInt32)?;
                 // Note we do blocks of size 1 for now
                 assert_eq!(BLOCK_SIZE, 1);
-                block.clear();
-                block_vec_op!(block.push(col_val));
+                block_data.clear();
+                block_data.push(col_val);
             }
             Ok(1 as usize)
         })
@@ -386,6 +408,51 @@ fn interpret_row_fun(predicate: &ir::AnonFun, block_mgr: &BlockMgr, row_format: 
     }
 }*/
 
+fn write_scalar_in_block(block: &mut Option<Block>, val: &RtVal) -> Result<(), RuntimeError> {
+    assert_eq!(BLOCK_SIZE, 1);
+
+    fn write<T>(vec: &mut Vec<T>, val: T) -> Result<(), RuntimeError> {
+        vec.clear();
+        vec.push(val);
+        Ok(())
+    }
+
+    match val {
+        RtVal::Bool(b) => {
+            write(ensure_block_init!(block, Bool)?, *b)
+        }
+        RtVal::UInt32(n) => {
+            write(ensure_block_init!(block, UInt32)?, *n)
+        }
+        _ => {
+            Err(RuntimeError::CantWriteStructInBlock)
+        }
+    }
+}
+
+impl RowFmt {
+    fn write_val(&self, rt_val: &RtVal, block_mgr: &BlockMgr) -> Result<(), RuntimeError> {
+        match self {
+            RowFmt::Scalar(pipe) => {
+                write_scalar_in_block(&mut block_mgr.write_ref(*pipe), rt_val)
+            },
+            RowFmt::Composite(pipes) => {
+                match rt_val {
+                    RtVal::Struct(RtStruct { fields }) => {
+                        for (p, f) in pipes.iter().zip(fields.iter()) {
+                            write_scalar_in_block(&mut block_mgr.write_ref(*p), f)?;
+                        }
+                        Ok(())
+                    }
+                    _ => {
+                        Err(RuntimeError::MismatchedTypes)
+                    }
+                }
+            }
+        }
+    }
+}
+
 fn pull_filter(filter_op: &mut FilterOp, block_mgr: &BlockMgr) -> Result<Option<usize>, RuntimeError> {
     /* For now, this code MUST be an anonymous function (no lowerings yet) */
     let pred_fun = match &filter_op.filter_code {
@@ -405,7 +472,7 @@ fn pull_filter(filter_op: &mut FilterOp, block_mgr: &BlockMgr) -> Result<Option<
                 if b {
                     /* Filter passed, return rowid */
                     assert_eq!(BLOCK_SIZE, 1);
-                    filter_op.output_fmt().write_val(row_val, block_mgr);
+                    filter_op.output_fmt().write_val(&row_val, block_mgr);
                     let curr_row_count = output_signal.unwrap_or(0);
                     output_signal = Some(curr_row_count + 1);
                 }
@@ -442,13 +509,22 @@ impl RowFmt {
     fn build_val(&self, block_mgr: &BlockMgr) -> RtVal {
         assert_eq!(BLOCK_SIZE, 1);
         use RowFmt::*;
+
+        fn scalar(block_mgr: &BlockMgr, pipe: Pipe) -> RtVal {
+            /* Without BLOCK_SIZE == 1, this unwrap is not "safe" */
+            block_mgr
+                .read_block(pipe)
+                .read_as_rtval(0)
+                .unwrap()
+        }
+
         match self {
-            Scalar(pipe)     => block_mgr.read_block(pipe).read_as_value(0),
+            Scalar(pipe)     => scalar(block_mgr, *pipe),
             Composite(pipes) => {
                 let field_vals = pipes.iter()
-                                    .map(|p| block_mgr.read_block(p).read_as_value(0))
+                                    .map(|p| scalar(block_mgr, *p))
                                     .collect();
-                RtVal::Struct(Struct { field_vals })
+                RtVal::Struct(RtStruct { fields: field_vals })
             },
         }
     }
