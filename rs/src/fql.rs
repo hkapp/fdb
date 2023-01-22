@@ -183,7 +183,7 @@ pub enum RuntimeError {
   UnsupportedBackend,
   NotAFunction,
   MapNotSupported { backend: String },
-  MultiColNotSupported,
+  MultiRowNotSupported(usize),
   IncorrectBlockType,
   CantWriteStructInBlock,
   MismatchedTypes,
@@ -204,9 +204,10 @@ pub fn exec_into(qplan: &QPlan, db_ctx: &DbCtx, res_buf: &mut [QVal]) -> Result<
     enum Backend {
         SQLite,
         NaiveInterpreter,
-        Columnar
+        Columnar,
+        StaticColumnar
     }
-    let curr_backend = Backend::NaiveInterpreter;
+    let curr_backend = Backend::StaticColumnar;
 
     match curr_backend {
         Backend::SQLite => {
@@ -233,7 +234,15 @@ pub fn exec_into(qplan: &QPlan, db_ctx: &DbCtx, res_buf: &mut [QVal]) -> Result<
 
             println!("Columnar interpreter:");
             dci::exec_interpreter_into(&mut cursor, res_buf)
-        }
+        },
+
+        Backend::StaticColumnar => {
+            /* Execute on new columnar dri */
+            let mut cursor = sci::full_compile(qplan, db_ctx)?;
+
+            println!("Static columnar interpreter:");
+            sci::exec_interpreter_into(&mut cursor, res_buf)
+        },
     }
 }
 

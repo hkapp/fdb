@@ -475,37 +475,30 @@ fn pull_filter(filter_op: &mut FilterOp, block_mgr: &BlockMgr) -> Result<Option<
     //let data_guide = cursor_data_guide(child_cursor)?;
                     /* filter: data guide is unchanged (no map) */
 
-    let mut child_row = next_row(child_cursor, block_mgr);
-    let mut output_signal = None;
-    /* FIXME we should do this only once */
-    while let Ok(Some(row_val)) = child_row {
-        match interpret_fun(pred_fun, row_val.clone())? {
-            RtVal::Bool(b) => {
-                if b {
-                    /* Filter passed, return rowid */
-                    assert_eq!(BLOCK_SIZE, 1);
-                    filter_op.output_fmt().write_val(&row_val, block_mgr);
-                    let curr_row_count = output_signal.unwrap_or(0);
-                    output_signal = Some(curr_row_count + 1);
-                }
-                else {
-                    /* Filter failed */
-                    /* We have seen some rows, but filtered out */
-                    output_signal = output_signal.or(Some(0));
-                }
-                /* Fetch the next row from the child, then loop */
-                let child_cursor = &mut filter_op.child_cursor;
-                child_row = next_row(child_cursor, block_mgr);
-            },
+    assert_eq!(BLOCK_SIZE, 1);
+    match next_row(child_cursor, block_mgr)? {
+        Some(row_val) => {
+            match interpret_fun(pred_fun, row_val.clone())? {
+                RtVal::Bool(b) => {
+                    if b {
+                        /* Filter passed, write value */
+                        filter_op.output_fmt().write_val(&row_val, block_mgr);
+                        Ok(Some(1))
+                    }
+                    else {
+                        /* Filter failed */
+                        /* We have seen some rows, but filtered out */
+                        Ok(Some(0))
+                    }
+                },
 
-            val@_ => {
-                return Err(
-                        RuntimeError::FilterNotBooleanSci(val));
+                val@_ => {
+                    Err(RuntimeError::FilterNotBooleanSci(val))
+                }
             }
         }
+        None => Ok(None)
     }
-
-    Ok(output_signal)
 }
 
 fn cursor_pull(cursor: &mut RowOp, block_mgr: &BlockMgr) -> Result<Option<usize>, RuntimeError> {
@@ -555,8 +548,8 @@ fn next_row(op_tree: &mut RowOp, block_mgr: &BlockMgr) -> Result<Option<RtVal>, 
                 /* rows were filtered out */
                 /* try again */
             }
-            Some(_) => {
-                return Err(RuntimeError::MultiColNotSupported);
+            Some(n) => {
+                return Err(RuntimeError::MultiRowNotSupported(n));
             }
             None => {
                 return Ok(None)

@@ -43,7 +43,7 @@ impl<T: FromSql> FromRow for Vec<T> {
 pub fn table_row<T: FromRow>(tab_name: &str, rowid: RowId) -> Result<T, DataError> {
     let conn = sqlite::Connection::open(DB_FILENAME)?;
 
-    let query = format!("SELECT * FROM {}", tab_name);
+    let query = format!("SELECT * FROM {} WHERE rowid={}", tab_name, rowid);
     let mut stmt = conn.prepare(&query)?;
     stmt.query_row([], |row| FromRow::from_row(row))
 }
