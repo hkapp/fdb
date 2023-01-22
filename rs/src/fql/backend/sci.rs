@@ -11,6 +11,7 @@ use crate::objstore;
 use std::rc::Rc;
 use crate::data;
 use crate::ir;
+use data::RowId;
 
 /* Interpreter: preparation step */
 
@@ -26,7 +27,7 @@ pub enum RowOp {
 
 /* TODO rename */
 pub struct TableScan {
-    pub rowid_range: ops::Range<Rowid>,
+    pub rowid_range: ops::Range<RowId>,
     tab_name:           String,
 }
 
@@ -76,9 +77,7 @@ impl OpTree for TableScan {
 
 /* Logic */
 
-type Rowid = u32;
-
-fn max_rowid(tab_name: &str) -> Result<Rowid, RuntimeError> {
+fn max_rowid(tab_name: &str) -> Result<RowId, RuntimeError> {
     let query = format!("SELECT MAX(ROWID) FROM {}", tab_name);
     let max_rowid = data::sql_one_row_one_col(&query)?;
 

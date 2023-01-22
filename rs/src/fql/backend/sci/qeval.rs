@@ -13,17 +13,13 @@
  */
 
 use crate::ir;
-use crate::data;
+use crate::data::{self, RowId};
 use super::super::{RuntimeError, QVal, Status, dri, BufWriter};
 use crate::fql::backend::sqlexec;
 use std::collections::HashMap;
 use super::{Cursor, RowOp, FilterOp, TableScan, OpTree, RowFmt, Pipe};
 pub use dri::{RtVal, RtStruct};
 use std::cell::{RefCell, RefMut, Ref};
-
-/* Interpreter: preparation step */
-
-type Rowid = u32;
 
 /* Interpreter: execution step */
 
@@ -149,15 +145,25 @@ type Interpreter<'a> = HashMap<&'a ir::Local, RtVal>;
 
 const BLOCK_SIZE: usize = 1;
 
+impl RowFmt {
+    fn pipe_iter(&self) -> Box<dyn Iterator<Item=&Pipe>> {
+        match self {
+            RowFmt::Scalar(pipe)     => Box::from(Vec::into_iter(vec![pipe])),
+            RowFmt::Composite(pipes) => Box::from(pipes.iter()),
+        }
+    }
+}
+
 fn pull_ts(cur_read: &mut TableScan, block_mgr: &BlockMgr) -> Result<Option<usize>, RuntimeError> {
     cur_read.rowid_range
         .next()
         .map(|rowid| {
-            let sql_row = data::table_row(&cur_read.tab_name, rowid)?;
-            let mut fmt_iter = TSFmtIter { cur_read.output_fmt() };
-            for (sql_col, pipe) in fmt_iter {
-                let col_val = sql_row.get(sql_col);
-                let block_data = ensure_block_init!(block_mgr.write_ref(pipe), UInt32)?;
+            let sql_row: Vec<u32> = data::table_row(&cur_read.tab_name, rowid)?;
+            for (pipe, col_val) in cur_read.output_fmt()
+                                    .pipe_iter()
+                                    .zip(sql_row.into_iter())
+            {
+                let block_data = ensure_block_init!(block_mgr.write_ref(*pipe), UInt32)?;
                 // Note we do blocks of size 1 for now
                 assert_eq!(BLOCK_SIZE, 1);
                 block_data.clear();
