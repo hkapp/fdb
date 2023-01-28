@@ -1,12 +1,13 @@
-use crate::ir;
-use crate::fql;
-use crate::fql::{QPlan, SQPlan, RuntimeError, QVal, Status};
 use crate::ctx::DbCtx;
-use std::ops;
+use crate::ir;
+use crate::fql::{self, QPlan, SQPlan, RuntimeError, QVal, Status};
 use crate::objstore;
-use rusqlite as sqlite;
-use std::rc::Rc;
+use crate::tables::TABLE_PAIRS;
+use rusqlite as sqlite; /* TODO remove and replace with `data` APIs */
 use std::collections::HashMap;
+use std::ops;
+use std::rc::Rc;
+use super::BufWriter;
 
 /* Interpreter: preparation step */
 
@@ -142,8 +143,6 @@ fn fold_sqcursor(sqplan: &fql::SQFold, db_ctx: &DbCtx)
     super::check_is_fun_decl(fun_decl)?;
 
     let zero_fun = &sqplan.zero_fun;
-    let zero_decl = super::extract_decl(zero_fun)?;
-    //super::check_is_fun_decl(zero_decl)?;
 
     let cursor =
         SQCursor::Fold(
@@ -168,13 +167,13 @@ pub fn to_sqcursor(sqplan: &SQPlan, db_ctx: &DbCtx) -> Result<SQCursor, RuntimeE
 /* Interpreter: execution step */
 
 #[derive(Debug, Clone)]
-pub struct ColId {  /* make private again if possible */
+struct ColId {
     col_name: String,
     tab_name: String
 }
 
 #[derive(Debug, Clone)]
-pub struct DataGuide(Vec<ColId>);
+struct DataGuide(Vec<ColId>);
 
 #[derive(Debug, Clone)]
 pub enum RtVal {
@@ -185,7 +184,7 @@ pub enum RtVal {
 
 #[derive(Debug, Clone)]
 pub struct RtStruct {
-    fields: Vec<RtVal>
+    pub fields: Vec<RtVal>
 }
 
 struct Interpreter<'a> {
@@ -397,10 +396,6 @@ fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, interpreter: &mut Interpreter<
                                 }),
                     }
                 }
-
-                Operator::ReadRtCol(..) => {
-                    Err(RuntimeError::UnsupportedOperator(operator.clone()))
-                }
             }
         }
 
@@ -442,7 +437,8 @@ fn interpret_fun(function: &ir::AnonFun, arg_values: Vec<RtVal>)
 }
 
 /* TODO rename */
-fn interpret_row_fun(function: &ir::AnonFun, arg_value: RtVal)
+// Public because it is used in cri
+pub fn interpret_row_fun(function: &ir::AnonFun, arg_value: RtVal)
     -> Result<RtVal, RuntimeError>
 {
     let arg_values = vec![arg_value];
@@ -459,19 +455,13 @@ fn new_data_guide(tab_name: &str) -> Result<DataGuide, RuntimeError> {
     }
 
     fn dg_pairs(tab_name: &str) -> DataGuide {
-        let ncols = 2;
-        let mut cols = Vec::new();
-
-        for col_idx in 0..ncols {
-            let col_name = format!("{}{}", super::STRUCT_COL_PREFIX, col_idx);
-            let column =
-                ColId {
-                    col_name,
-                    tab_name: String::from(tab_name)
-                };
-
-            cols.push(column)
-        }
+        let cols = TABLE_PAIRS.columns
+                        .iter()
+                        .map(|col_name| ColId {
+                            col_name: col_name.clone(),
+                            tab_name: String::from(tab_name)
+                        })
+                        .collect();
 
         DataGuide(cols)
     }
@@ -582,26 +572,7 @@ fn gen_proj_query_from_dataguide(data_guide: &DataGuide, rowid: Rowid) -> String
     return sql_query;
 }
 
-struct BufWriter<'a, T> {
-    buffer:  &'a mut [T],
-    cur_pos: usize
-}
-
-impl<'a, T> BufWriter<'a, T> {
-    fn new(target_buf: &'a mut [T]) -> Self {
-        BufWriter {
-            buffer:  target_buf,
-            cur_pos: 0
-        }
-    }
-
-    fn push(&mut self, val: T) {
-        self.buffer[self.cur_pos] = val;
-        self.cur_pos += 1;
-    }
-}
-
-fn write_rtval_to_buffer<'a>(row_val: RtVal, output: &mut BufWriter<'a, QVal>) -> Result<(), RuntimeError> {
+pub fn write_rtval_to_buffer<'a>(row_val: RtVal, output: &mut BufWriter<'a, QVal>) -> Result<(), RuntimeError> {
     match row_val {
         RtVal::Struct( RtStruct { fields } ) => {
             for field_val in fields {

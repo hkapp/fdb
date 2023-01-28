@@ -1,12 +1,11 @@
 pub mod backend;
 
+use backend::{sqlexec, dri, lmi, cri, Backend};
 use crate::ctx::DbCtx;
-use crate::objstore::{self, Symbol};
-use rusqlite as sqlite;
+use crate::data::DataError;
 use crate::ir;
+use crate::objstore::{self, Symbol};
 use std::rc::Rc;
-use crate::data::{DB_FILENAME, STRUCT_COL_PREFIX};
-use backend::{sqlexec, dri, dci};
 
 /* TODO rename QTree? */
 /* naming: we can rename this phase or module "sprout"
@@ -28,7 +27,6 @@ pub struct QReadT {
 pub struct QFilter {
     filter_fun:  Rc<objstore::Obj>,
     qchild:      Box<QPlan>,
-    filter_code: Option<ir::Expr>,  /* TODO move only to comp::CFilter */
 }
 
 #[derive(Clone)]
@@ -41,7 +39,7 @@ pub enum SQPlan {
     Fold(SQFold),
 }
 
-struct SQFold {
+pub struct SQFold {
     fold_fun:  Rc<objstore::Obj>,
     zero_fun:  Rc<objstore::Obj>,
     qchild:    Box<QPlan>,
@@ -101,12 +99,12 @@ pub fn filter(prev_plan: &QPlan, fun_name: &str, db_ctx: &DbCtx) -> Result<QPlan
     let prev_plan_cp = Box::new(prev_plan.clone());
                         /* need to clone to ensure Haskell doesn't ask
                          * the same memory to be cleaned twice */
+                        /* TODO use Rc */
     let new_plan =
         QPlan::Filter(
             QFilter {
                 filter_fun:  resolved_fun,
                 qchild:      prev_plan_cp,
-                filter_code: None
             }
         );
 
@@ -155,7 +153,7 @@ pub fn fold(prev_plan: &QPlan, fun_name: &str, zero_name: &str, db_ctx: &DbCtx)
 
 #[derive(Debug)]
 pub enum RuntimeError {
-  SqliteError(sqlite::Error),
+  SqliteError(DataError),
   CompileError(CompileError),
   TooManyArguments(usize),
   ConflictingDefForVar(ir::Local),
@@ -164,42 +162,33 @@ pub enum RuntimeError {
   UnsupportedExpression(String),
   UndefinedVariable(ir::Local),
   PatternMatchNonStruct(ir::Local),
-  UnsupportedComparison { left: dri::RtVal, right: dri::RtVal },
-  UnsupportedAddition { left: dri::RtVal, right: dri::RtVal },
-  UnsupportedComparison3 { left: dci::RtVal, right: dci::RtVal }, /* TODO: remove */
-  UnsupportedAddition3 { left: dci::RtVal, right: dci::RtVal }, /* TODO: remove */
-  FilterNotBoolean(dri::RtVal),
-  FilterNotBoolean3(dci::RtVal), /* TODO remove */
-  UnknownTable(String),
-  ScalarRowFormatHasNoFields,
-  FieldPathIncompletelyResolved,
-  UnsupportedOperator(ir::Operator),
-  UnsupportedBackend,
-  NotAFunction,
   NoRowWithRowid(String, dri::Rowid),
   TooManyRowsWithRowid(String, dri::Rowid),
   CantWriteRtValToBuffer(dri::RtVal),
+  UnsupportedComparison { left: dri::RtVal, right: dri::RtVal },
+  UnsupportedAddition { left: dri::RtVal, right: dri::RtVal },
+  FilterNotBoolean(dri::RtVal),
+  UnsupportedComparison3 { left: lmi::RtVal, right: lmi::RtVal }, /* TODO: remove */
+  UnsupportedAddition3 { left: lmi::RtVal, right: lmi::RtVal }, /* TODO: remove */
+  FilterNotBoolean3(lmi::RtVal), /* TODO remove */
+  FilterNotBooleanSci(cri::RtVal), /* TODO remove */
+  UnknownTable(String),
+  NotAFunction,
   MapNotSupported { backend: String },
+  MultiRowNotSupported(usize),
+  IncorrectBlockType,
+  CantWriteStructInBlock,
+  MismatchedTypes,
 }
 
 /* Object store helpers */
-
-fn resolve_symbol(symbol: &Symbol, db_ctx: &DbCtx) -> Result<Rc<objstore::Obj>, CompileError> {
-    /* Retrieve the declaration */
-    db_ctx.obj_store.find(symbol)
-        .ok_or_else(|| CompileError::SymbolNotDefined(symbol.clone()))
-}
 
 /* TODO add enum codes like "HasMoreEntries" */
 type Status = usize;
 
 pub fn exec_into(qplan: &QPlan, db_ctx: &DbCtx, res_buf: &mut [QVal]) -> Result<Status, RuntimeError> {
-    enum Backend {
-        SQLite,
-        NaiveInterpreter,
-        Columnar
-    }
-    let curr_backend = Backend::NaiveInterpreter;
+    /* TODO have this specified in Haskell when creating the DB context */
+    let curr_backend = Backend::Columnar;
 
     match curr_backend {
         Backend::SQLite => {
@@ -220,22 +209,25 @@ pub fn exec_into(qplan: &QPlan, db_ctx: &DbCtx, res_buf: &mut [QVal]) -> Result<
             dri::exec_interpreter_into(&mut cursor, res_buf)
         },
 
+        Backend::LazyMaterialize => {
+            /* Execute on new columnar dri */
+            let mut cursor = lmi::full_compile(qplan, db_ctx)?;
+
+            println!("Lazy materialize interpreter:");
+            lmi::exec_interpreter_into(&mut cursor, res_buf)
+        },
+
         Backend::Columnar => {
             /* Execute on new columnar dri */
-            let mut cursor = dci::full_compile(qplan, db_ctx)?;
+            let mut cursor = cri::full_compile(qplan, db_ctx)?;
 
             println!("Columnar interpreter:");
-            dci::exec_interpreter_into(&mut cursor, res_buf)
-        }
+            cri::exec_interpreter_into(&mut cursor, res_buf)
+        },
     }
 }
 
 pub fn execsq_into(qplan: &SQPlan, db_ctx: &DbCtx, res_buf: &mut QVal) -> Result<bool, RuntimeError> {
-    enum Backend {
-        SQLite,
-        NaiveInterpreter,
-        Columnar
-    }
     let curr_backend = Backend::NaiveInterpreter;
 
     match curr_backend {
@@ -251,8 +243,8 @@ pub fn execsq_into(qplan: &SQPlan, db_ctx: &DbCtx, res_buf: &mut QVal) -> Result
             dri::execsq_interpreter_into(&mut cursor, res_buf)
         },
 
-        Backend::Columnar => {
-            /* Execute on new columnar dri */
+        _ => {
+            /* Execute on new columnar interpreters */
             /* TODO: not implemented for SQ */
             Ok(false)
         }
@@ -261,9 +253,9 @@ pub fn execsq_into(qplan: &SQPlan, db_ctx: &DbCtx, res_buf: &mut QVal) -> Result
 
 /* Error conversion */
 
-impl From<sqlite::Error> for RuntimeError {
-    fn from(sql_err: sqlite::Error) -> Self {
-        RuntimeError::SqliteError(sql_err)
+impl From<DataError> for RuntimeError {
+    fn from(data_err: DataError) -> Self {
+        RuntimeError::SqliteError(data_err)
     }
 }
 

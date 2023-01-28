@@ -1,8 +1,17 @@
 pub mod sqlexec;
 pub mod dri; /* Dynamically-typed Row-based Interpreter */
-pub mod dci; /* Dynamically-typed Column-based Interpreter */
+pub mod lmi; /* Late Materialize Interpreter */
+pub mod cri; /* Columnar-data Row-by-row Interpreter */
 
-use crate::data::{DB_FILENAME, STRUCT_COL_PREFIX};
+#[allow(unused)]
+pub enum Backend {
+    SQLite,
+    NaiveInterpreter,
+    LazyMaterialize,
+    Columnar
+}
+
+use crate::data::DB_FILENAME;
 use crate::ir;
 use crate::objstore::{self, Symbol};
 use super::{CompileError, RuntimeError, QVal, Status};
@@ -49,4 +58,23 @@ fn extract_decl(obj: &objstore::Obj) -> Result<&ir::Decl, CompileError> {
                 }
             }
         )
+}
+
+pub struct BufWriter<'a, T> {
+    buffer:  &'a mut [T],
+    cur_pos: usize
+}
+
+impl<'a, T> BufWriter<'a, T> {
+    fn new(target_buf: &'a mut [T]) -> Self {
+        BufWriter {
+            buffer:  target_buf,
+            cur_pos: 0
+        }
+    }
+
+    fn push(&mut self, val: T) {
+        self.buffer[self.cur_pos] = val;
+        self.cur_pos += 1;
+    }
 }

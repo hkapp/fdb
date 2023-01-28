@@ -1,38 +1,44 @@
-mod dataflow;
+/*!
+ * Late Materialization Interpreter
+ *
+ * This interpreter works by only passing [Rowid] values during execution.
+ * Column values are read from the table directly using the ([Rowid], ColId) pair.
+ *
+ * Note that this architecture prevents the implementation of Map.
+ */
+
 mod qeval;
-
 pub use qeval::{exec_interpreter_into, RtVal};
-use super::{DB_FILENAME, STRUCT_COL_PREFIX};
 
-use crate::fql::{QPlan, RuntimeError};
 use crate::ctx::DbCtx;
-use std::ops;
-use crate::objstore;
-use std::rc::Rc;
 use crate::data;
+use crate::fql::{QPlan, RuntimeError};
 use crate::ir;
+use crate::objstore;
+use crate::tables::TABLE_PAIRS;
+use std::ops;
+use std::rc::Rc;
 
 /* Interpreter: preparation step */
 
 pub struct Cursor {
-    pub out_pipe: Option<DataGuide>,  /* is this necessary? */
-    pub cur_kind: CurKind,
+    cur_kind: CurKind,
 }
 
-pub enum CurKind {
+enum CurKind {
     Read(CurRead), /* TODO rename enum entry */
     Filter(CurFilter)
 }
 
 /* TODO rename */
-pub struct CurRead {
-    pub rowid_range: ops::Range<Rowid>,
-    pub tab_name:    String,
+struct CurRead {
+    rowid_range: ops::Range<Rowid>,
+    tab_name:    String,
 }
 
-pub struct CurFilter {
-    pub filter_code:  ir::Expr,
-    pub child_cursor: Box<Cursor>,
+struct CurFilter {
+    filter_code:  ir::Expr,
+    child_cursor: Box<Cursor>,
 }
 
 type Rowid = u32;
@@ -62,7 +68,6 @@ fn read_cursor(tab_name: &str) -> Result<Cursor, RuntimeError> {
     let cur_kind = CurKind::Read(cur_read);
     let cursor = Cursor {
         cur_kind,
-        out_pipe: None
     };
     Ok(cursor)
 }
@@ -85,7 +90,6 @@ fn filter_cursor(filter_fun: Rc<objstore::Obj>, child_qplan: &QPlan, db_ctx: &Db
     let cur_kind = CurKind::Filter(cur_filter);
     let cursor = Cursor {
         cur_kind,
-        out_pipe: None
     };
     Ok(cursor)
 }
@@ -99,7 +103,7 @@ fn build_cursor(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeError> {
         Filter(qfilter) =>
             filter_cursor(Rc::clone(&qfilter.filter_fun), &qfilter.qchild, db_ctx),
 
-        Map(qmap) => {
+        Map(_qmap) => {
             return Err(RuntimeError::MapNotSupported {
                 backend: String::from("columnar interpreter")
             });
@@ -108,17 +112,15 @@ fn build_cursor(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeError> {
 }
 
 pub fn full_compile(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeError> {
-    let mut cursor = build_cursor(qplan, db_ctx)?;
+    let cursor = build_cursor(qplan, db_ctx)?;
     /* TODO we're also supposed to get a full list of blocks to allocate here */
-    let final_dg /*(final_dg, alloc_plan)*/ = dataflow::apply_data_accesses(&mut cursor)?;
-    //Ok((cursor, final_dg, alloc_plan))
     Ok(cursor)
 }
 
 /* Interpreter: execution step */
 
 #[derive(Debug, Clone)]
-pub struct ColId {  /* make private again if possible */
+struct ColId {
     col_name: String,
     tab_name: String
 }
@@ -136,19 +138,13 @@ fn new_data_guide(tab_name: &str) -> Result<DataGuide, RuntimeError> {
     }
 
     fn dg_pairs(tab_name: &str) -> DataGuide {
-        let ncols = 2;
-        let mut cols = Vec::new();
-
-        for col_idx in 0..ncols {
-            let col_name = format!("{}{}", super::STRUCT_COL_PREFIX, col_idx);
-            let column =
-                ColId {
-                    col_name,
-                    tab_name: String::from(tab_name)
-                };
-
-            cols.push(column)
-        }
+        let cols = TABLE_PAIRS.columns
+                        .iter()
+                        .map(|col_name| ColId {
+                            col_name: String::from(col_name),
+                            tab_name: String::from(tab_name)
+                        })
+                        .collect();
 
         DataGuide(cols)
     }

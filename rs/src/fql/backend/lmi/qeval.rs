@@ -1,24 +1,18 @@
+/*! The runtime code for the [Late Materialization Interpreter][super]
+ */
+
 use crate::ir;
 use crate::data;
 use super::super::{RuntimeError, QVal, Status};
 use crate::fql::backend::sqlexec;
 use std::collections::HashMap;
-use super::{Cursor, CurKind, CurRead, CurFilter};
+use super::{Cursor, CurKind, CurRead, CurFilter, new_data_guide, DataGuide, ColId};
 
 /* Interpreter: preparation step */
 
 type Rowid = u32;
 
 /* Interpreter: execution step */
-
-#[derive(Debug, Clone)]
-pub struct ColId {  /* make private again if possible */
-    col_name: String,
-    tab_name: String
-}
-
-#[derive(Debug, Clone)]
-pub struct DataGuide(Vec<ColId>);
 
 #[derive(Debug, Clone)]
 pub enum RtVal {
@@ -173,10 +167,6 @@ fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, rowid: Rowid, interpreter: &mu
                                 }),
                     }
                 }
-
-                Operator::ReadRtCol(..) => {
-                    Err(RuntimeError::UnsupportedOperator(operator.clone()))
-                }
             }
         }
 
@@ -219,41 +209,6 @@ fn interpret_row_fun(predicate: &ir::AnonFun, rowid: Rowid, data_guide: &DataGui
         assert!(conflict.is_none());
 
         rec_interpret_row_expr(&predicate.body, rowid, &mut interpreter)
-    }
-}
-
-fn new_data_guide(tab_name: &str) -> Result<DataGuide, RuntimeError> {
-    fn dg_foo(tab_name: &str) -> DataGuide {
-        let bar_col = ColId {
-            col_name: String::from("bar"),
-            tab_name: String::from(tab_name)
-        };
-        DataGuide(vec![bar_col])
-    }
-
-    fn dg_pairs(tab_name: &str) -> DataGuide {
-        let ncols = 2;
-        let mut cols = Vec::new();
-
-        for col_idx in 0..ncols {
-            let col_name = format!("{}{}", super::STRUCT_COL_PREFIX, col_idx);
-            let column =
-                ColId {
-                    col_name,
-                    tab_name: String::from(tab_name)
-                };
-
-            cols.push(column)
-        }
-
-        DataGuide(cols)
-    }
-
-    /* FIXME for now the table schemas are hardcoded */
-    match tab_name {
-      "foo"   => Ok(dg_foo(tab_name)),
-      "pairs" => Ok(dg_pairs(tab_name)),
-      _       => Err(RuntimeError::UnknownTable(String::from(tab_name))),
     }
 }
 

@@ -1,9 +1,10 @@
-use crate::fql::{QVal, RuntimeError, QPlan};
-use rusqlite as sqlite;
 use crate::ctx::DbCtx;
+use crate::fql::{QVal, RuntimeError, QPlan};
 use crate::ir;
-use std::collections::HashMap;
 use crate::objstore;
+use crate::tables::TABLE_PAIRS;
+use rusqlite as sqlite; /* Note: for this module we can't really replace by APIs from `data` */
+use std::collections::HashMap;
 
 /* Conversion QPlan -> SQL */
 
@@ -64,7 +65,10 @@ fn rec_inline_filter_sql<'a>(
                 let field_bind = field_bind.as_ref().unwrap();
 
                 /* FIXME this only works for a single level of nesting */
-                let sql_col = format!("{}{}", super::STRUCT_COL_PREFIX, field_index);
+                let sql_col = TABLE_PAIRS.columns
+                                .get(field_index)
+                                .unwrap()
+                                .clone();
                 let conflict = eval_state.insert(&field_bind, sql_col);
 
                 if conflict.is_some() {
@@ -108,11 +112,6 @@ fn rec_inline_filter_sql<'a>(
                     let sql = format!("({} + {})", sql_left, sql_right);
                     Ok(sql)
                 }
-
-                Operator::ReadRtCol(..) => {
-                    /* This opeartor shouldn't appear in the pure SQL backend */
-                    Err(RuntimeError::UnsupportedOperator(operator.clone()))
-                }
             }
         }
 
@@ -147,7 +146,7 @@ fn rec_to_sql(qplan: &QPlan, db_ctx: &DbCtx) -> Result<String, RuntimeError> {
                     rec_sql, where_clause)
         },
 
-        Map(qmap) => {
+        Map(_qmap) => {
             return Err(RuntimeError::MapNotSupported {
                 backend: String::from("in SQL backend")
             });
