@@ -1,7 +1,7 @@
 pub mod sqlexec;
 pub mod dri; /* Dynamically-typed Row-based Interpreter */
 pub mod lmi; /* Late Materialize Interpreter */
-pub mod sci; /* Statically-typed Column-based Interpreter */
+pub mod cri; /* Columnar-data Row-by-row Interpreter */
 
 use crate::data::DB_FILENAME;
 use crate::ir;

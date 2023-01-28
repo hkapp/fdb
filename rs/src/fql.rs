@@ -6,7 +6,7 @@ use rusqlite as sqlite;
 use crate::ir;
 use std::rc::Rc;
 use crate::data::DB_FILENAME;
-use backend::{sqlexec, dri, lmi, sci};
+use backend::{sqlexec, dri, lmi, cri};
 
 /* TODO rename QTree? */
 /* naming: we can rename this phase or module "sprout"
@@ -173,9 +173,9 @@ pub enum RuntimeError {
   UnsupportedComparison3 { left: lmi::RtVal, right: lmi::RtVal }, /* TODO: remove */
   UnsupportedAddition3 { left: lmi::RtVal, right: lmi::RtVal }, /* TODO: remove */
   FilterNotBoolean3(lmi::RtVal), /* TODO remove */
-  UnsupportedComparisonSci { left: sci::RtVal, right: sci::RtVal }, /* TODO: remove */
-  UnsupportedAdditionSci { left: sci::RtVal, right: sci::RtVal }, /* TODO: remove */
-  FilterNotBooleanSci(sci::RtVal), /* TODO remove */
+  UnsupportedComparisonSci { left: cri::RtVal, right: cri::RtVal }, /* TODO: remove */
+  UnsupportedAdditionSci { left: cri::RtVal, right: cri::RtVal }, /* TODO: remove */
+  FilterNotBooleanSci(cri::RtVal), /* TODO remove */
   UnknownTable(String),
   ScalarRowFormatHasNoFields,
   FieldPathIncompletelyResolved,
@@ -204,10 +204,10 @@ pub fn exec_into(qplan: &QPlan, db_ctx: &DbCtx, res_buf: &mut [QVal]) -> Result<
     enum Backend {
         SQLite,
         NaiveInterpreter,
-        Columnar,
-        StaticColumnar
+        LazyMaterialize,
+        Columnar
     }
-    let curr_backend = Backend::StaticColumnar;
+    let curr_backend = Backend::Columnar;
 
     match curr_backend {
         Backend::SQLite => {
@@ -228,20 +228,20 @@ pub fn exec_into(qplan: &QPlan, db_ctx: &DbCtx, res_buf: &mut [QVal]) -> Result<
             dri::exec_interpreter_into(&mut cursor, res_buf)
         },
 
-        Backend::Columnar => {
+        Backend::LazyMaterialize => {
             /* Execute on new columnar dri */
             let mut cursor = lmi::full_compile(qplan, db_ctx)?;
 
-            println!("Columnar interpreter:");
+            println!("Lazy materialize interpreter:");
             lmi::exec_interpreter_into(&mut cursor, res_buf)
         },
 
-        Backend::StaticColumnar => {
+        Backend::Columnar => {
             /* Execute on new columnar dri */
-            let mut cursor = sci::full_compile(qplan, db_ctx)?;
+            let mut cursor = cri::full_compile(qplan, db_ctx)?;
 
-            println!("Static columnar interpreter:");
-            sci::exec_interpreter_into(&mut cursor, res_buf)
+            println!("Columnar interpreter:");
+            cri::exec_interpreter_into(&mut cursor, res_buf)
         },
     }
 }
