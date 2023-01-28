@@ -1,3 +1,6 @@
+/*! The runtime code for the [Late Materialization Interpreter][super]
+ */
+
 use crate::ir;
 use crate::data;
 use super::super::{RuntimeError, QVal, Status};

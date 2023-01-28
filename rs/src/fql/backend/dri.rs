@@ -1,14 +1,13 @@
-use crate::ir;
-use crate::fql;
-use crate::fql::{QPlan, SQPlan, RuntimeError, QVal, Status};
 use crate::ctx::DbCtx;
-use std::ops;
+use crate::ir;
+use crate::fql::{self, QPlan, SQPlan, RuntimeError, QVal, Status};
 use crate::objstore;
-use rusqlite as sqlite;
-use std::rc::Rc;
-use std::collections::HashMap;
-use super::BufWriter;
 use crate::tables::TABLE_PAIRS;
+use rusqlite as sqlite; /* TODO remove and replace with `data` APIs */
+use std::collections::HashMap;
+use std::ops;
+use std::rc::Rc;
+use super::BufWriter;
 
 /* Interpreter: preparation step */
 
@@ -144,8 +143,6 @@ fn fold_sqcursor(sqplan: &fql::SQFold, db_ctx: &DbCtx)
     super::check_is_fun_decl(fun_decl)?;
 
     let zero_fun = &sqplan.zero_fun;
-    //let zero_decl = super::extract_decl(zero_fun)?;
-    //super::check_is_fun_decl(zero_decl)?;
 
     let cursor =
         SQCursor::Fold(
@@ -170,13 +167,13 @@ pub fn to_sqcursor(sqplan: &SQPlan, db_ctx: &DbCtx) -> Result<SQCursor, RuntimeE
 /* Interpreter: execution step */
 
 #[derive(Debug, Clone)]
-pub struct ColId {  /* make private again if possible */
+struct ColId {
     col_name: String,
     tab_name: String
 }
 
 #[derive(Debug, Clone)]
-pub struct DataGuide(Vec<ColId>);
+struct DataGuide(Vec<ColId>);
 
 #[derive(Debug, Clone)]
 pub enum RtVal {
@@ -440,7 +437,7 @@ fn interpret_fun(function: &ir::AnonFun, arg_values: Vec<RtVal>)
 }
 
 /* TODO rename */
-// Public because it is used in sci
+// Public because it is used in cri
 pub fn interpret_row_fun(function: &ir::AnonFun, arg_value: RtVal)
     -> Result<RtVal, RuntimeError>
 {

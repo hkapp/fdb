@@ -1,10 +1,10 @@
-use crate::fql::{QVal, RuntimeError, QPlan};
-use rusqlite as sqlite;
 use crate::ctx::DbCtx;
+use crate::fql::{QVal, RuntimeError, QPlan};
 use crate::ir;
-use crate::tables::TABLE_PAIRS;
-use std::collections::HashMap;
 use crate::objstore;
+use crate::tables::TABLE_PAIRS;
+use rusqlite as sqlite; /* Note: for this module we can't really replace by APIs from `data` */
+use std::collections::HashMap;
 
 /* Conversion QPlan -> SQL */
 

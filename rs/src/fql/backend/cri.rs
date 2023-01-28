@@ -1,4 +1,3 @@
-//mod dataflow;
 mod qeval;
 
 pub use qeval::{exec_interpreter_into, RtVal};
@@ -13,7 +12,7 @@ use crate::data;
 use crate::ir;
 use data::RowId;
 
-/* Interpreter: preparation step */
+/* Cursor node tree */
 
 pub struct Cursor {
     pub pipe_count: usize,
@@ -25,7 +24,6 @@ pub enum RowOp {
     Filter(FilterOp)
 }
 
-/* TODO rename */
 pub struct TableScan {
     pub rowid_range: ops::Range<RowId>,
     tab_name:        String,
@@ -215,15 +213,5 @@ pub fn full_compile(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeErro
     let op_tree = build_op_tree(qplan, db_ctx)?;
     let cursor = build_cursor(op_tree);
     /* TODO we're also supposed to get a full list of blocks to allocate here */
-    //let final_dg /*(final_dg, alloc_plan)*/ = dataflow::apply_data_accesses(&mut cursor)?;
-    //Ok((cursor, final_dg, alloc_plan))
     Ok(cursor)
 }
-
-/* Interpreter: execution step */
-
-/*#[derive(Debug, Clone)]
-pub struct ColId {  /* make private again if possible */
-    col_name: String,
-    tab_name: String
-}*/
