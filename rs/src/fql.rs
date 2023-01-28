@@ -6,7 +6,7 @@ use rusqlite as sqlite;
 use crate::ir;
 use std::rc::Rc;
 use crate::data::DB_FILENAME;
-use backend::{sqlexec, dri, dci, sci};
+use backend::{sqlexec, dri, lmi, sci};
 
 /* TODO rename QTree? */
 /* naming: we can rename this phase or module "sprout"
@@ -170,9 +170,9 @@ pub enum RuntimeError {
   UnsupportedComparison { left: dri::RtVal, right: dri::RtVal },
   UnsupportedAddition { left: dri::RtVal, right: dri::RtVal },
   FilterNotBoolean(dri::RtVal),
-  UnsupportedComparison3 { left: dci::RtVal, right: dci::RtVal }, /* TODO: remove */
-  UnsupportedAddition3 { left: dci::RtVal, right: dci::RtVal }, /* TODO: remove */
-  FilterNotBoolean3(dci::RtVal), /* TODO remove */
+  UnsupportedComparison3 { left: lmi::RtVal, right: lmi::RtVal }, /* TODO: remove */
+  UnsupportedAddition3 { left: lmi::RtVal, right: lmi::RtVal }, /* TODO: remove */
+  FilterNotBoolean3(lmi::RtVal), /* TODO remove */
   UnsupportedComparisonSci { left: sci::RtVal, right: sci::RtVal }, /* TODO: remove */
   UnsupportedAdditionSci { left: sci::RtVal, right: sci::RtVal }, /* TODO: remove */
   FilterNotBooleanSci(sci::RtVal), /* TODO remove */
@@ -230,10 +230,10 @@ pub fn exec_into(qplan: &QPlan, db_ctx: &DbCtx, res_buf: &mut [QVal]) -> Result<
 
         Backend::Columnar => {
             /* Execute on new columnar dri */
-            let mut cursor = dci::full_compile(qplan, db_ctx)?;
+            let mut cursor = lmi::full_compile(qplan, db_ctx)?;
 
             println!("Columnar interpreter:");
-            dci::exec_interpreter_into(&mut cursor, res_buf)
+            lmi::exec_interpreter_into(&mut cursor, res_buf)
         },
 
         Backend::StaticColumnar => {
