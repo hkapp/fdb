@@ -23,21 +23,19 @@
  *   avoid copy for read-through columns (on map, not on filter)
  */
 use crate::ir;
-use crate::data::{self, RowId};
+use crate::data;
 use super::super::{RuntimeError, QVal, Status, dri, BufWriter};
-use crate::fql::backend::sqlexec;
-use std::collections::HashMap;
 use super::{Cursor, RowOp, FilterOp, TableScan, OpTree, RowFmt, Pipe};
 pub use dri::{RtVal, RtStruct};
 use std::cell::{RefCell, RefMut, Ref};
 
 /* Interpreter: execution step */
 
-#[derive(Debug, Clone)]
+/*#[derive(Debug, Clone)]
 pub struct ColId {  /* make private again if possible */
     col_name: String,
     tab_name: String
-}
+}*/
 
 /*
 #[derive(Debug, Clone)]
@@ -135,13 +133,13 @@ enum Block {
 }*/
 
 impl Block {
-    fn clear(&mut self) {
+    /*fn clear(&mut self) {
         use Block::*;
         match self {
             UInt32(vec) => vec.clear(),
             Bool(vec)   => vec.clear(),
         }
-    }
+    }*/
 
     fn read_as_rtval(&self, idx: usize) -> Option<RtVal> {
         match self {
@@ -151,7 +149,7 @@ impl Block {
     }
 }
 
-type Interpreter<'a> = HashMap<&'a ir::Local, RtVal>;
+/*type Interpreter<'a> = HashMap<&'a ir::Local, RtVal>;*/
 
 const BLOCK_SIZE: usize = 1;
 
@@ -346,7 +344,7 @@ fn interpret_fun(fun: &ir::AnonFun, row_arg: RtVal) -> Result<RtVal, RuntimeErro
     dri::interpret_row_fun(fun, row_arg)
 }
 
-fn interpret_row_fun(predicate: &ir::AnonFun, block_mgr: &BlockMgr, row_format: &RowFmt)
+/*fn interpret_row_fun(predicate: &ir::AnonFun, block_mgr: &BlockMgr, row_format: &RowFmt)
     -> Result<RtVal, RuntimeError>
 {
     let val_params = &predicate.val_params;
@@ -372,7 +370,7 @@ fn interpret_row_fun(predicate: &ir::AnonFun, block_mgr: &BlockMgr, row_format: 
         //rec_interpret_row_expr(&predicate.body, rowid, &mut interpreter)
         dri::interpret_row_fun(&predicate, arg_value)
     }
-}
+}*/
 
 /*fn new_data_guide(tab_name: &str) -> Result<DataGuide, RuntimeError> {
     fn dg_foo(tab_name: &str) -> DataGuide {
@@ -482,7 +480,7 @@ fn pull_filter(filter_op: &mut FilterOp, block_mgr: &BlockMgr) -> Result<Option<
                 RtVal::Bool(b) => {
                     if b {
                         /* Filter passed, write value */
-                        filter_op.output_fmt().write_val(&row_val, block_mgr);
+                        filter_op.output_fmt().write_val(&row_val, block_mgr)?;
                         Ok(Some(1))
                     }
                     else {
@@ -538,7 +536,7 @@ impl RowFmt {
 
 /* FIXME this won't work with multi-row */
 fn next_row(op_tree: &mut RowOp, block_mgr: &BlockMgr) -> Result<Option<RtVal>, RuntimeError> {
-    while true {
+    loop {
         match cursor_pull(op_tree, block_mgr)? {
             Some(1) => {
                 let row_val = op_tree.output_fmt().build_val(block_mgr);
@@ -556,7 +554,6 @@ fn next_row(op_tree: &mut RowOp, block_mgr: &BlockMgr) -> Result<Option<RtVal>, 
             }
         }
     }
-    unreachable!()
 }
 
 /*fn gen_proj_query_from_dataguide(data_guide: &DataGuide, rowid: Rowid) -> String {
@@ -584,7 +581,7 @@ fn next_row(op_tree: &mut RowOp, block_mgr: &BlockMgr) -> Result<Option<RtVal>, 
     Ok(())
 }*/
 
-pub fn exec_interpreter_into(cursor: &mut Cursor, mut res_buf: &mut [QVal]) -> Result<Status, RuntimeError> {
+pub fn exec_interpreter_into(cursor: &mut Cursor, res_buf: &mut [QVal]) -> Result<Status, RuntimeError> {
     //let data_guide = cursor_data_guide(cursor)?; /* TODO we should add the final "result conversion / out projection" node in the cursor tree */
     //let ncols = data_guide.0.len();
     let mut rowcount = 0;

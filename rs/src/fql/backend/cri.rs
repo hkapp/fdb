@@ -2,7 +2,6 @@
 mod qeval;
 
 pub use qeval::{exec_interpreter_into, RtVal};
-use super::DB_FILENAME;
 
 use crate::fql::{QPlan, RuntimeError};
 use crate::ctx::DbCtx;
@@ -176,7 +175,7 @@ fn build_op_tree(qplan: &QPlan, db_ctx: &DbCtx) -> Result<RowOp, RuntimeError> {
         Filter(qfilter) =>
             filter_node(Rc::clone(&qfilter.filter_fun), &qfilter.qchild, db_ctx),
 
-        Map(qmap) => {
+        Map(_qmap) => {
             return Err(RuntimeError::MapNotSupported {
                 backend: String::from("columnar interpreter")
             });
@@ -198,14 +197,14 @@ fn compute_pipe_count(op_tree: &RowOp) -> usize {
     while let Some(curr_node) = next_node {
         pipe_count += fmt_pipe_count(&curr_node.output_fmt());
         next_node = match curr_node {
-            TableScan(ts)  => None,
+            TableScan(_ts)  => None,
             Filter(filter) => Some(&filter.child_cursor),
         };
     }
     return pipe_count;
 }
 
-fn build_cursor(op_tree: RowOp, db_ctx: &DbCtx) -> Cursor {
+fn build_cursor(op_tree: RowOp) -> Cursor {
     Cursor {
         pipe_count: compute_pipe_count(&op_tree),
         op_tree,
@@ -214,7 +213,7 @@ fn build_cursor(op_tree: RowOp, db_ctx: &DbCtx) -> Cursor {
 
 pub fn full_compile(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeError> {
     let op_tree = build_op_tree(qplan, db_ctx)?;
-    let cursor = build_cursor(op_tree, db_ctx);
+    let cursor = build_cursor(op_tree);
     /* TODO we're also supposed to get a full list of blocks to allocate here */
     //let final_dg /*(final_dg, alloc_plan)*/ = dataflow::apply_data_accesses(&mut cursor)?;
     //Ok((cursor, final_dg, alloc_plan))
@@ -223,8 +222,8 @@ pub fn full_compile(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeErro
 
 /* Interpreter: execution step */
 
-#[derive(Debug, Clone)]
+/*#[derive(Debug, Clone)]
 pub struct ColId {  /* make private again if possible */
     col_name: String,
     tab_name: String
-}
+}*/

@@ -32,7 +32,7 @@ impl<T: FromSql> FromRow for Vec<T> {
         loop {
             match row.get(i) {
                 Ok(x)     => vec.push(x),
-                Err(InvalidColumnIndex) => return Ok(vec),
+                Err(sqlite::Error::InvalidColumnIndex(..)) => return Ok(vec),
                 Err(err@_) => return Err(err),
             }
             i += 1;

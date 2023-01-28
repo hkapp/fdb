@@ -1,6 +1,5 @@
 use crate::ir;
 use crate::data;
-use crate::tables::TABLE_PAIRS;
 use super::super::{RuntimeError, QVal, Status};
 use crate::fql::backend::sqlexec;
 use std::collections::HashMap;
@@ -164,10 +163,6 @@ fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, rowid: Rowid, interpreter: &mu
                                     right: val_right.clone()
                                 }),
                     }
-                }
-
-                _ => {
-                    Err(RuntimeError::UnsupportedOperator(operator.clone()))
                 }
             }
         }

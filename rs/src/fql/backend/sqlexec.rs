@@ -112,11 +112,6 @@ fn rec_inline_filter_sql<'a>(
                     let sql = format!("({} + {})", sql_left, sql_right);
                     Ok(sql)
                 }
-
-                _ => {
-                    /* This opeartor shouldn't appear in the pure SQL backend */
-                    Err(RuntimeError::UnsupportedOperator(operator.clone()))
-                }
             }
         }
 
@@ -151,7 +146,7 @@ fn rec_to_sql(qplan: &QPlan, db_ctx: &DbCtx) -> Result<String, RuntimeError> {
                     rec_sql, where_clause)
         },
 
-        Map(qmap) => {
+        Map(_qmap) => {
             return Err(RuntimeError::MapNotSupported {
                 backend: String::from("in SQL backend")
             });

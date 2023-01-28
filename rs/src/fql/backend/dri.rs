@@ -144,7 +144,7 @@ fn fold_sqcursor(sqplan: &fql::SQFold, db_ctx: &DbCtx)
     super::check_is_fun_decl(fun_decl)?;
 
     let zero_fun = &sqplan.zero_fun;
-    let zero_decl = super::extract_decl(zero_fun)?;
+    //let zero_decl = super::extract_decl(zero_fun)?;
     //super::check_is_fun_decl(zero_decl)?;
 
     let cursor =
@@ -398,10 +398,6 @@ fn rec_interpret_row_expr<'a>(expr: &'a ir::Expr, interpreter: &mut Interpreter<
                                     right: val_right.clone()
                                 }),
                     }
-                }
-
-                _ => {
-                    Err(RuntimeError::UnsupportedOperator(operator.clone()))
                 }
             }
         }

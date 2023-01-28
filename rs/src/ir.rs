@@ -52,8 +52,6 @@ pub enum Operator {
     Noop,
     LessThanOrEqual,
     Plus,
-    ReadRtCol(crate::fql::backend::lmi::ColId), /* TODO re-design declarations for operator body */
-    ReadRtColSci(crate::fql::backend::cri::ColId), /* TODO re-design declarations for operator body */
 }
 
 /* LetExpr */

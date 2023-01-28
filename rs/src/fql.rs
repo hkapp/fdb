@@ -5,8 +5,7 @@ use crate::objstore::{self, Symbol};
 use rusqlite as sqlite;
 use crate::ir;
 use std::rc::Rc;
-use crate::data::DB_FILENAME;
-use backend::{sqlexec, dri, lmi, cri};
+use backend::{sqlexec, dri, lmi, cri, Backend};
 
 /* TODO rename QTree? */
 /* naming: we can rename this phase or module "sprout"
@@ -28,7 +27,7 @@ pub struct QReadT {
 pub struct QFilter {
     filter_fun:  Rc<objstore::Obj>,
     qchild:      Box<QPlan>,
-    filter_code: Option<ir::Expr>,  /* TODO move only to comp::CFilter */
+    //filter_code: Option<ir::Expr>,  /* TODO move only to comp::CFilter */
 }
 
 #[derive(Clone)]
@@ -41,7 +40,7 @@ pub enum SQPlan {
     Fold(SQFold),
 }
 
-struct SQFold {
+pub struct SQFold {
     fold_fun:  Rc<objstore::Obj>,
     zero_fun:  Rc<objstore::Obj>,
     qchild:    Box<QPlan>,
@@ -106,7 +105,7 @@ pub fn filter(prev_plan: &QPlan, fun_name: &str, db_ctx: &DbCtx) -> Result<QPlan
             QFilter {
                 filter_fun:  resolved_fun,
                 qchild:      prev_plan_cp,
-                filter_code: None
+                //filter_code: None
             }
         );
 
@@ -173,14 +172,8 @@ pub enum RuntimeError {
   UnsupportedComparison3 { left: lmi::RtVal, right: lmi::RtVal }, /* TODO: remove */
   UnsupportedAddition3 { left: lmi::RtVal, right: lmi::RtVal }, /* TODO: remove */
   FilterNotBoolean3(lmi::RtVal), /* TODO remove */
-  UnsupportedComparisonSci { left: cri::RtVal, right: cri::RtVal }, /* TODO: remove */
-  UnsupportedAdditionSci { left: cri::RtVal, right: cri::RtVal }, /* TODO: remove */
   FilterNotBooleanSci(cri::RtVal), /* TODO remove */
   UnknownTable(String),
-  ScalarRowFormatHasNoFields,
-  FieldPathIncompletelyResolved,
-  UnsupportedOperator(ir::Operator),
-  UnsupportedBackend,
   NotAFunction,
   MapNotSupported { backend: String },
   MultiRowNotSupported(usize),
@@ -191,22 +184,16 @@ pub enum RuntimeError {
 
 /* Object store helpers */
 
-fn resolve_symbol(symbol: &Symbol, db_ctx: &DbCtx) -> Result<Rc<objstore::Obj>, CompileError> {
+/*fn resolve_symbol(symbol: &Symbol, db_ctx: &DbCtx) -> Result<Rc<objstore::Obj>, CompileError> {
     /* Retrieve the declaration */
     db_ctx.obj_store.find(symbol)
         .ok_or_else(|| CompileError::SymbolNotDefined(symbol.clone()))
-}
+}*/
 
 /* TODO add enum codes like "HasMoreEntries" */
 type Status = usize;
 
 pub fn exec_into(qplan: &QPlan, db_ctx: &DbCtx, res_buf: &mut [QVal]) -> Result<Status, RuntimeError> {
-    enum Backend {
-        SQLite,
-        NaiveInterpreter,
-        LazyMaterialize,
-        Columnar
-    }
     let curr_backend = Backend::Columnar;
 
     match curr_backend {
@@ -247,11 +234,6 @@ pub fn exec_into(qplan: &QPlan, db_ctx: &DbCtx, res_buf: &mut [QVal]) -> Result<
 }
 
 pub fn execsq_into(qplan: &SQPlan, db_ctx: &DbCtx, res_buf: &mut QVal) -> Result<bool, RuntimeError> {
-    enum Backend {
-        SQLite,
-        NaiveInterpreter,
-        Columnar
-    }
     let curr_backend = Backend::NaiveInterpreter;
 
     match curr_backend {
@@ -267,8 +249,8 @@ pub fn execsq_into(qplan: &SQPlan, db_ctx: &DbCtx, res_buf: &mut QVal) -> Result
             dri::execsq_interpreter_into(&mut cursor, res_buf)
         },
 
-        Backend::Columnar => {
-            /* Execute on new columnar dri */
+        _ => {
+            /* Execute on new columnar interpreters */
             /* TODO: not implemented for SQ */
             Ok(false)
         }

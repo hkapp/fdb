@@ -3,6 +3,14 @@ pub mod dri; /* Dynamically-typed Row-based Interpreter */
 pub mod lmi; /* Late Materialize Interpreter */
 pub mod cri; /* Columnar-data Row-by-row Interpreter */
 
+#[allow(unused)]
+pub enum Backend {
+    SQLite,
+    NaiveInterpreter,
+    LazyMaterialize,
+    Columnar
+}
+
 use crate::data::DB_FILENAME;
 use crate::ir;
 use crate::objstore::{self, Symbol};

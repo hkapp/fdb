@@ -1,8 +1,7 @@
-mod dataflow;
+//mod dataflow;
 mod qeval;
 
 pub use qeval::{exec_interpreter_into, RtVal};
-use super::DB_FILENAME;
 use crate::tables::TABLE_PAIRS;
 use crate::fql::{QPlan, RuntimeError};
 use crate::ctx::DbCtx;
@@ -99,7 +98,7 @@ fn build_cursor(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeError> {
         Filter(qfilter) =>
             filter_cursor(Rc::clone(&qfilter.filter_fun), &qfilter.qchild, db_ctx),
 
-        Map(qmap) => {
+        Map(_qmap) => {
             return Err(RuntimeError::MapNotSupported {
                 backend: String::from("columnar interpreter")
             });
@@ -108,9 +107,9 @@ fn build_cursor(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeError> {
 }
 
 pub fn full_compile(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeError> {
-    let mut cursor = build_cursor(qplan, db_ctx)?;
+    let cursor = build_cursor(qplan, db_ctx)?;
     /* TODO we're also supposed to get a full list of blocks to allocate here */
-    let final_dg /*(final_dg, alloc_plan)*/ = dataflow::apply_data_accesses(&mut cursor)?;
+    /*let final_dg /*(final_dg, alloc_plan)*/ = dataflow::apply_data_accesses(&mut cursor)?;*/
     //Ok((cursor, final_dg, alloc_plan))
     Ok(cursor)
 }
