@@ -4,13 +4,13 @@ pub use qeval::{exec_interpreter_into, RtVal};
 
 use crate::fql::{QPlan, RuntimeError};
 use crate::ctx::DbCtx;
+use crate::data::{self, RowId};
+use crate::ir;
+use crate::objstore;
 use crate::tables;
 use std::ops;
-use crate::objstore;
 use std::rc::Rc;
-use crate::data;
-use crate::ir;
-use data::RowId;
+use super::Backend;
 
 /* Cursor node tree */
 
@@ -175,7 +175,7 @@ fn build_op_tree(qplan: &QPlan, db_ctx: &DbCtx) -> Result<RowOp, RuntimeError> {
 
         Map(_qmap) => {
             return Err(RuntimeError::MapNotSupported {
-                backend: String::from("columnar interpreter")
+                backend: Backend::Columnar
             });
         }
     }

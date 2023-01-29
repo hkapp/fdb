@@ -174,7 +174,7 @@ pub enum RuntimeError {
   FilterNotBooleanSci(cri::RtVal), /* TODO remove */
   UnknownTable(String),
   NotAFunction,
-  MapNotSupported { backend: String },
+  MapNotSupported { backend: Backend },
   MultiRowNotSupported(usize),
   IncorrectBlockType,
   CantWriteStructInBlock,

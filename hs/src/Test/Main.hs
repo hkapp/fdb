@@ -30,7 +30,7 @@ tryTest test =
   do
     res <- try test :: IO (Either SomeException ())
     case res of
-      Left err   -> putStrLn $ "Test raised an error: " ++ (show err)
+      Left err   -> putStrLn $ "FAIL Test raised an error: " ++ (show err)
       Right succ -> return succ
 
 allUnitTests :: [DbInst -> IO ()]

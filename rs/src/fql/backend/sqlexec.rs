@@ -5,6 +5,7 @@ use crate::objstore;
 use crate::tables::{TABLE_FOO, TABLE_PAIRS};
 use rusqlite as sqlite; /* Note: for this module we can't really replace by APIs from `data` */
 use std::collections::HashMap;
+use super::Backend;
 
 /* Conversion QPlan -> SQL */
 
@@ -148,7 +149,7 @@ fn rec_to_sql(qplan: &QPlan, db_ctx: &DbCtx) -> Result<String, RuntimeError> {
 
         Map(_qmap) => {
             return Err(RuntimeError::MapNotSupported {
-                backend: String::from("in SQL backend")
+                backend: Backend::SQLite
             });
         },
     };
