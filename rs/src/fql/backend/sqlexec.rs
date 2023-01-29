@@ -2,7 +2,7 @@ use crate::ctx::DbCtx;
 use crate::fql::{QVal, RuntimeError, QPlan};
 use crate::ir;
 use crate::objstore;
-use crate::tables::TABLE_PAIRS;
+use crate::tables::{TABLE_FOO, TABLE_PAIRS};
 use rusqlite as sqlite; /* Note: for this module we can't really replace by APIs from `data` */
 use std::collections::HashMap;
 
@@ -24,7 +24,7 @@ fn rec_inline_filter_sql<'a>(
             else {
                 let param = val_params.get(0).unwrap();
                 let param_name: &ir::Local = &param.name;
-                let column_name = String::from("col0");
+                let column_name = String::from(&TABLE_FOO.columns[0]);
 
                 let conflict = eval_state.insert(param_name, column_name);
                 assert!(conflict.is_none());
