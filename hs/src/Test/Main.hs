@@ -5,6 +5,7 @@ import TPCH.Functional.Q1 (q1)
 import FDB.Dot (toDotGraph)
 import qualified Utils.Dot as Dot
 
+import Control.Exception (try, SomeException)
 import Foreign (Storable(..))
 import Foreign.Ptr (castPtr)
 import FDB.RustFFI
@@ -13,16 +14,34 @@ import Data.Foldable(traverse_)
 import Test.Q6_v1(q6)
 
 main :: IO ()
-main = allTests
+main = runAllTestsAllConfigs
 
-allTests =
+runAllTestsAllConfigs :: IO ()
+runAllTestsAllConfigs = traverse_ (runTestsWithConfig allUnitTests) allBackends
+
+runTestsWithConfig :: [DbInst -> IO ()] -> Backend -> IO ()
+runTestsWithConfig tests backend =
   do
-    dbCtx <- initDB
-    testFilterFoo dbCtx;
-    testFilterPairs dbCtx;
-    testMapFoo dbCtx;
-    testFoldFoo dbCtx;
-    testQ6 dbCtx;
+    dbCtx <- initDB backend
+    traverse_ (\t -> tryTest (t dbCtx)) tests
+
+tryTest :: IO () -> IO ()
+tryTest test =
+  do
+    res <- try test :: IO (Either SomeException ())
+    case res of
+      Left err   -> putStrLn $ "FAIL Test raised an error: " ++ (show err)
+      Right succ -> return succ
+
+allUnitTests :: [DbInst -> IO ()]
+allUnitTests =
+  [
+    testFilterFoo,
+    testFilterPairs,
+    testMapFoo,
+    testFoldFoo,
+    testQ6
+  ]
 
 testEqual :: (Eq a) => a -> a -> IO ()
 testEqual x y =

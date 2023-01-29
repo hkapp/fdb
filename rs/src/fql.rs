@@ -174,7 +174,7 @@ pub enum RuntimeError {
   FilterNotBooleanSci(cri::RtVal), /* TODO remove */
   UnknownTable(String),
   NotAFunction,
-  MapNotSupported { backend: String },
+  MapNotSupported { backend: Backend },
   MultiRowNotSupported(usize),
   IncorrectBlockType,
   CantWriteStructInBlock,
@@ -187,10 +187,7 @@ pub enum RuntimeError {
 type Status = usize;
 
 pub fn exec_into(qplan: &QPlan, db_ctx: &DbCtx, res_buf: &mut [QVal]) -> Result<Status, RuntimeError> {
-    /* TODO have this specified in Haskell when creating the DB context */
-    let curr_backend = Backend::Columnar;
-
-    match curr_backend {
+    match db_ctx.backend {
         Backend::SQLite => {
             /* Execute on full SQLite backend */
             let sql_query = sqlexec::to_sql(qplan, db_ctx)?;
@@ -228,9 +225,7 @@ pub fn exec_into(qplan: &QPlan, db_ctx: &DbCtx, res_buf: &mut [QVal]) -> Result<
 }
 
 pub fn execsq_into(qplan: &SQPlan, db_ctx: &DbCtx, res_buf: &mut QVal) -> Result<bool, RuntimeError> {
-    let curr_backend = Backend::NaiveInterpreter;
-
-    match curr_backend {
+    match db_ctx.backend {
         Backend::SQLite => {
           Ok(false)
         },

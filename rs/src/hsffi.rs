@@ -7,6 +7,7 @@ use std::fmt::Debug;
 use crate::ctx::DbCtx;
 use crate::ctx;
 use crate::fql::{self, QPlan, SQPlan, QVal};
+use fql::backend::Backend;
 
 #[allow(non_camel_case_types)]
 type c_sizet = usize;
@@ -70,12 +71,18 @@ unsafe fn release_hs_ptr<T>(ptr: *mut T) {
 /* DB FFI */
 
 #[no_mangle]
-pub extern fn initDB() -> *const DbCtx {
-    let ctx = ctx::init_db();
+pub unsafe extern fn initDB(hs_backend: c_uchar) -> *const DbCtx {
+    let backend = match hs_backend {
+        0 => Backend::SQLite,
+        1 => Backend::NaiveInterpreter,
+        2 => Backend::LazyMaterialize,
+        3 => Backend::Columnar,
+        _ => return to_hs_res(Err(format!("Invalid backend identifier: {}", hs_backend))),
+    };
 
-    unsafe {
-        to_hs_res(ctx)
-    }
+    let ctx = ctx::init_db(backend);
+
+    to_hs_res(ctx)
 }
 
 #[no_mangle]

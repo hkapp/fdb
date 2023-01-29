@@ -18,6 +18,7 @@ use crate::objstore;
 use crate::tables::TABLE_PAIRS;
 use std::ops;
 use std::rc::Rc;
+use super::Backend;
 
 /* Interpreter: preparation step */
 
@@ -105,7 +106,7 @@ fn build_cursor(qplan: &QPlan, db_ctx: &DbCtx) -> Result<Cursor, RuntimeError> {
 
         Map(_qmap) => {
             return Err(RuntimeError::MapNotSupported {
-                backend: String::from("columnar interpreter")
+                backend: Backend::LazyMaterialize
             });
         }
     }

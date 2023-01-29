@@ -4,6 +4,7 @@ pub mod lmi; /* Late Materialize Interpreter */
 pub mod cri; /* Columnar-data Row-by-row Interpreter */
 
 #[allow(unused)]
+#[derive(Debug)]
 pub enum Backend {
     SQLite,
     NaiveInterpreter,
