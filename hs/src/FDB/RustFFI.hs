@@ -3,6 +3,7 @@ module FDB.RustFFI (
   Q,
   SQ,
   DbInst,
+  Backend,
   CUInt32,
   readT,
   filterQ,
@@ -10,7 +11,8 @@ module FDB.RustFFI (
   initDB,
   mapQ,
   foldQ,
-  execSQ
+  execSQ,
+  allBackends
 )
   where
 
@@ -28,7 +30,7 @@ import Foreign.Marshal.Alloc (alloca)
 
 {- 1. Ctx API -}
 foreign import ccall "initDB"
-  rs_initDB :: IO (Ptr DbCtx)
+  rs_initDB :: CUChar -> IO (Ptr DbCtx)
 foreign import ccall "&release_ctx"
   rs_releaseCtx :: FunPtr (Ptr DbCtx -> IO ())
 
@@ -64,6 +66,10 @@ type Q a  = DbPtr (QPlan a)
 type SQ a = DbPtr (SQPlan a)
 -- data Q a = Q (ForeignPtr DbCtx) (ForeignPtr (QPlan a))
 type DbInst = ForeignPtr DbCtx
+
+data Backend = RawSQL | NaiveRow | LazyMat | RowColumnar {- To be kept in sync with fql::backend::Backend -}
+
+allBackends = [RawSQL, NaiveRow, LazyMat, RowColumnar]
 
 assertNotNull :: Ptr a -> Ptr a
 assertNotNull ptr = if (ptr == nullPtr)
@@ -182,13 +188,19 @@ foldQ _ foldName _ zeroName prevQ =
 
 newtype DbCtx = DbCtx Void
 
-initDB :: IO (ForeignPtr DbCtx)
-initDB =
+initDB :: Backend -> IO (ForeignPtr DbCtx)
+initDB backend =
   do
-    ctxRaw      <- rs_initDB
+    ctxRaw      <- rs_initDB backend_ffi
     let ctxValid = assertNotNull ctxRaw
     ctxFgn      <- newForeignPtr rs_releaseCtx ctxValid
     return ctxFgn
+  where
+    backend_ffi = case backend of {- To be kept in sync with Rust -}
+                    RawSQL      -> 0
+                    NaiveRow    -> 1
+                    LazyMat     -> 2
+                    RowColumnar -> 3
 
 execSQ :: (Storable a) => SQ a -> IO a
 execSQ sqctx =

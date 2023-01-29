@@ -13,11 +13,12 @@ import Data.Foldable(traverse_)
 import Test.Q6_v1(q6)
 
 main :: IO ()
-main = allTests
+main = traverse_ allTests allBackends
 
-allTests =
+allTests :: Backend -> IO ()
+allTests backend =
   do
-    dbCtx <- initDB
+    dbCtx <- initDB backend
     testFilterFoo dbCtx;
     testFilterPairs dbCtx;
     testMapFoo dbCtx;
